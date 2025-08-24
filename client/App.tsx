@@ -19,9 +19,7 @@ const queryClient = new QueryClient();
 function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        {children}
-      </TooltipProvider>
+      <TooltipProvider>{children}</TooltipProvider>
     </QueryClientProvider>
   );
 }

@@ -11,16 +11,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
       <DashboardSidebar />
-      
+
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
         <DashboardHeader />
-        
+
         {/* Content */}
-        <main className="flex-1 overflow-y-auto">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>
   );

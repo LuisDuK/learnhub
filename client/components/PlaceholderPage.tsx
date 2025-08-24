@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Construction } from "lucide-react";
 
@@ -22,7 +28,8 @@ export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
         </CardHeader>
         <CardContent className="text-center">
           <p className="text-sm text-muted-foreground mb-4">
-            Trang này đang được phát triển. Hãy tiếp tục hỏi để tôi hoàn thiện nội dung cho trang này.
+            Trang này đang được phát triển. Hãy tiếp tục hỏi để tôi hoàn thiện
+            nội dung cho trang này.
           </p>
           <Button variant="outline" onClick={() => window.history.back()}>
             Quay lại

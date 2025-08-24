@@ -1,29 +1,47 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Play, 
-  Clock, 
-  BookOpen, 
-  Users, 
-  Star, 
+import {
+  Play,
+  Clock,
+  BookOpen,
+  Users,
+  Star,
   Search,
   Filter,
   Calendar,
-  Award
+  Award,
 } from "lucide-react";
 
 // Course status types
 type CourseStatus = "not-started" | "in-progress" | "completed";
-type CourseCategory = "frontend" | "backend" | "design" | "mobile" | "data" | "devops";
+type CourseCategory =
+  | "frontend"
+  | "backend"
+  | "design"
+  | "mobile"
+  | "data"
+  | "devops";
 
 interface Course {
   id: number;
@@ -51,7 +69,8 @@ const mockCourses: Course[] = [
     id: 1,
     title: "JavaScript Nâng cao",
     instructor: "Trần Văn A",
-    description: "Học các concept nâng cao của JavaScript bao gồm async/await, closures, prototypes và design patterns",
+    description:
+      "Học các concept nâng cao của JavaScript bao gồm async/await, closures, prototypes và design patterns",
     category: "frontend",
     status: "in-progress",
     progress: 75,
@@ -64,13 +83,14 @@ const mockCourses: Course[] = [
     thumbnail: "/placeholder.svg",
     tags: ["ES6", "Async", "OOP"],
     lastAccessed: "2 giờ trước",
-    estimatedCompletion: "1 tuần"
+    estimatedCompletion: "1 tuần",
   },
   {
     id: 2,
     title: "React.js Complete",
     instructor: "Nguyễn Thị B",
-    description: "Khóa học toàn diện về React từ cơ bản đến nâng cao, bao gồm hooks, context, và testing",
+    description:
+      "Khóa học toàn diện về React từ cơ bản đến nâng cao, bao gồm hooks, context, và testing",
     category: "frontend",
     status: "in-progress",
     progress: 60,
@@ -83,7 +103,7 @@ const mockCourses: Course[] = [
     thumbnail: "/placeholder.svg",
     tags: ["React", "Hooks", "Testing"],
     lastAccessed: "1 ngày trước",
-    estimatedCompletion: "3 tuần"
+    estimatedCompletion: "3 tuần",
   },
   {
     id: 3,
@@ -102,13 +122,14 @@ const mockCourses: Course[] = [
     thumbnail: "/placeholder.svg",
     tags: ["Node.js", "Express", "MongoDB"],
     lastAccessed: "3 ngày trước",
-    estimatedCompletion: "5 tuần"
+    estimatedCompletion: "5 tuần",
   },
   {
     id: 4,
     title: "Database Management",
     instructor: "Phạm Văn D",
-    description: "Quản lý cơ sở dữ liệu với SQL, PostgreSQL và optimization techniques",
+    description:
+      "Quản lý cơ sở dữ liệu với SQL, PostgreSQL và optimization techniques",
     category: "backend",
     status: "completed",
     progress: 100,
@@ -120,7 +141,7 @@ const mockCourses: Course[] = [
     level: "Cơ bản",
     thumbnail: "/placeholder.svg",
     tags: ["SQL", "PostgreSQL", "Optimization"],
-    lastAccessed: "1 tuần trước"
+    lastAccessed: "1 tuần trước",
   },
   {
     id: 5,
@@ -137,7 +158,7 @@ const mockCourses: Course[] = [
     rating: 4.5,
     level: "Cơ bản",
     thumbnail: "/placeholder.svg",
-    tags: ["Figma", "Design", "Research"]
+    tags: ["Figma", "Design", "Research"],
   },
   {
     id: 6,
@@ -154,7 +175,7 @@ const mockCourses: Course[] = [
     rating: 4.4,
     level: "Nâng cao",
     thumbnail: "/placeholder.svg",
-    tags: ["React Native", "iOS", "Android"]
+    tags: ["React Native", "iOS", "Android"],
   },
   {
     id: 7,
@@ -173,7 +194,7 @@ const mockCourses: Course[] = [
     thumbnail: "/placeholder.svg",
     tags: ["Python", "Pandas", "ML"],
     lastAccessed: "5 ngày trước",
-    estimatedCompletion: "10 tuần"
+    estimatedCompletion: "10 tuần",
   },
   {
     id: 8,
@@ -191,44 +212,50 @@ const mockCourses: Course[] = [
     level: "Trung cấp",
     thumbnail: "/placeholder.svg",
     tags: ["Docker", "Kubernetes", "AWS"],
-    lastAccessed: "2 tuần trước"
-  }
+    lastAccessed: "2 tuần trước",
+  },
 ];
 
 const statusLabels = {
   "not-started": "Chưa học",
   "in-progress": "Đang học",
-  "completed": "Hoàn thành"
+  completed: "Hoàn thành",
 };
 
 const categoryLabels = {
-  "frontend": "Frontend",
-  "backend": "Backend", 
-  "design": "Design",
-  "mobile": "Mobile",
-  "data": "Data Science",
-  "devops": "DevOps"
+  frontend: "Frontend",
+  backend: "Backend",
+  design: "Design",
+  mobile: "Mobile",
+  data: "Data Science",
+  devops: "DevOps",
 };
 
 const statusColors = {
   "not-started": "secondary",
   "in-progress": "default",
-  "completed": "secondary"
+  completed: "secondary",
 } as const;
 
 export default function Courses() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<CourseCategory[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<
+    CourseCategory[]
+  >([]);
   const [selectedStatuses, setSelectedStatuses] = useState<CourseStatus[]>([]);
   const [sortBy, setSortBy] = useState<string>("recent");
 
   // Filter courses based on search and filters
-  const filteredCourses = mockCourses.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(course.category);
-    const matchesStatus = selectedStatuses.length === 0 || selectedStatuses.includes(course.status);
-    
+  const filteredCourses = mockCourses.filter((course) => {
+    const matchesSearch =
+      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(course.category);
+    const matchesStatus =
+      selectedStatuses.length === 0 || selectedStatuses.includes(course.status);
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
@@ -249,18 +276,18 @@ export default function Courses() {
   });
 
   const toggleCategory = (category: CourseCategory) => {
-    setSelectedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category],
     );
   };
 
   const toggleStatus = (status: CourseStatus) => {
-    setSelectedStatuses(prev =>
+    setSelectedStatuses((prev) =>
       prev.includes(status)
-        ? prev.filter(s => s !== status)
-        : [...prev, status]
+        ? prev.filter((s) => s !== status)
+        : [...prev, status],
     );
   };
 
@@ -273,8 +300,12 @@ export default function Courses() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Khóa học của tôi</h1>
-                <p className="text-gray-600">Quản lý và theo dõi tiến độ các khóa học bạn đang tham gia</p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Khóa học của tôi
+                </h1>
+                <p className="text-gray-600">
+                  Quản lý và theo dõi tiến độ các khóa học bạn đang tham gia
+                </p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="relative">
@@ -307,7 +338,9 @@ export default function Courses() {
                   <div className="flex items-center gap-2">
                     <BookOpen className="h-5 w-5 text-primary" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Tổng khóa học</p>
+                      <p className="text-sm text-muted-foreground">
+                        Tổng khóa học
+                      </p>
                       <p className="text-2xl font-bold">{mockCourses.length}</p>
                     </div>
                   </div>
@@ -319,7 +352,12 @@ export default function Courses() {
                     <Play className="h-5 w-5 text-blue-500" />
                     <div>
                       <p className="text-sm text-muted-foreground">Đang học</p>
-                      <p className="text-2xl font-bold">{mockCourses.filter(c => c.status === "in-progress").length}</p>
+                      <p className="text-2xl font-bold">
+                        {
+                          mockCourses.filter((c) => c.status === "in-progress")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -329,8 +367,15 @@ export default function Courses() {
                   <div className="flex items-center gap-2">
                     <Award className="h-5 w-5 text-green-500" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Hoàn thành</p>
-                      <p className="text-2xl font-bold">{mockCourses.filter(c => c.status === "completed").length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Hoàn thành
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {
+                          mockCourses.filter((c) => c.status === "completed")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -340,8 +385,15 @@ export default function Courses() {
                   <div className="flex items-center gap-2">
                     <Calendar className="h-5 w-5 text-orange-500" />
                     <div>
-                      <p className="text-sm text-muted-foreground">Chưa bắt đầu</p>
-                      <p className="text-2xl font-bold">{mockCourses.filter(c => c.status === "not-started").length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Chưa bắt đầu
+                      </p>
+                      <p className="text-2xl font-bold">
+                        {
+                          mockCourses.filter((c) => c.status === "not-started")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -352,7 +404,10 @@ export default function Courses() {
           {/* Course Grid */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {sortedCourses.map((course) => (
-              <Card key={course.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <Card
+                key={course.id}
+                className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+              >
                 <CardContent className="p-0">
                   {/* Course Image */}
                   <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/5 rounded-t-lg flex items-center justify-center relative overflow-hidden">
@@ -365,7 +420,7 @@ export default function Courses() {
                     <div className="absolute top-3 right-3">
                       <Badge variant="outline">{course.level}</Badge>
                     </div>
-                    
+
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="text-white text-center p-4">
@@ -394,13 +449,18 @@ export default function Courses() {
                       <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
                         {course.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground">Giảng viên: {course.instructor}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Giảng viên: {course.instructor}
+                      </p>
                     </div>
 
                     {/* Progress */}
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span>{course.completedLessons}/{course.totalLessons} bài học</span>
+                        <span>
+                          {course.completedLessons}/{course.totalLessons} bài
+                          học
+                        </span>
                         <span className="font-medium">{course.progress}%</span>
                       </div>
                       <Progress value={course.progress} className="h-2" />
@@ -409,7 +469,11 @@ export default function Courses() {
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1">
                       {course.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {tag}
                         </Badge>
                       ))}
@@ -423,13 +487,18 @@ export default function Courses() {
                     )}
 
                     {/* Action Button */}
-                    <Button 
-                      className="w-full" 
-                      variant={course.status === "not-started" ? "outline" : "default"}
+                    <Button
+                      className="w-full"
+                      variant={
+                        course.status === "not-started" ? "outline" : "default"
+                      }
                     >
                       <Play className="h-4 w-4 mr-2" />
-                      {course.status === "not-started" ? "Bắt đầu học" : 
-                       course.status === "completed" ? "Ôn tập" : "Tiếp tục học"}
+                      {course.status === "not-started"
+                        ? "Bắt đầu học"
+                        : course.status === "completed"
+                          ? "Ôn tập"
+                          : "Tiếp tục học"}
                     </Button>
                   </div>
                 </CardContent>
@@ -441,8 +510,12 @@ export default function Courses() {
           {sortedCourses.length === 0 && (
             <div className="text-center py-12">
               <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Không tìm thấy khóa học</h3>
-              <p className="text-gray-600">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Không tìm thấy khóa học
+              </h3>
+              <p className="text-gray-600">
+                Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm
+              </p>
             </div>
           )}
         </div>
@@ -457,17 +530,24 @@ export default function Courses() {
           <div className="space-y-6">
             {/* Category Filter */}
             <div>
-              <Label className="text-sm font-medium mb-3 block">Chuyên ngành</Label>
+              <Label className="text-sm font-medium mb-3 block">
+                Chuyên ngành
+              </Label>
               <div className="space-y-2">
                 {Object.entries(categoryLabels).map(([key, label]) => (
                   <div key={key} className="flex items-center space-x-2">
                     <Checkbox
                       id={key}
-                      checked={selectedCategories.includes(key as CourseCategory)}
-                      onCheckedChange={() => toggleCategory(key as CourseCategory)}
+                      checked={selectedCategories.includes(
+                        key as CourseCategory,
+                      )}
+                      onCheckedChange={() =>
+                        toggleCategory(key as CourseCategory)
+                      }
                     />
                     <Label htmlFor={key} className="text-sm cursor-pointer">
-                      {label} ({mockCourses.filter(c => c.category === key).length})
+                      {label} (
+                      {mockCourses.filter((c) => c.category === key).length})
                     </Label>
                   </div>
                 ))}
@@ -478,7 +558,9 @@ export default function Courses() {
 
             {/* Status Filter */}
             <div>
-              <Label className="text-sm font-medium mb-3 block">Trạng thái</Label>
+              <Label className="text-sm font-medium mb-3 block">
+                Trạng thái
+              </Label>
               <div className="space-y-2">
                 {Object.entries(statusLabels).map(([key, label]) => (
                   <div key={key} className="flex items-center space-x-2">
@@ -488,7 +570,8 @@ export default function Courses() {
                       onCheckedChange={() => toggleStatus(key as CourseStatus)}
                     />
                     <Label htmlFor={key} className="text-sm cursor-pointer">
-                      {label} ({mockCourses.filter(c => c.status === key).length})
+                      {label} (
+                      {mockCourses.filter((c) => c.status === key).length})
                     </Label>
                   </div>
                 ))}
@@ -498,8 +581,8 @@ export default function Courses() {
             <Separator />
 
             {/* Clear Filters */}
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full"
               onClick={() => {
                 setSelectedCategories([]);

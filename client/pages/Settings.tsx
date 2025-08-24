@@ -4,7 +4,7 @@ import { PlaceholderPage } from "@/components/PlaceholderPage";
 export default function Settings() {
   return (
     <DashboardLayout>
-      <PlaceholderPage 
+      <PlaceholderPage
         title="Cài đặt cá nhân"
         description="Quản lý thông tin cá nhân và tùy chỉnh trải nghiệm học tập"
       />

@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
-import { 
-  BarChart3, 
-  BookOpen, 
-  Calendar, 
-  MessageCircle, 
-  TrendingUp, 
+import {
+  BarChart3,
+  BookOpen,
+  Calendar,
+  MessageCircle,
+  TrendingUp,
   Settings,
   Home,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -71,19 +71,19 @@ export function DashboardSidebar() {
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                 isActive
                   ? "bg-primary/10 text-primary"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
               )}
             >
-              <item.icon 
+              <item.icon
                 className={cn(
                   "h-5 w-5 transition-colors",
-                  isActive ? "text-primary" : "text-gray-400 group-hover:text-gray-600"
-                )} 
+                  isActive
+                    ? "text-primary"
+                    : "text-gray-400 group-hover:text-gray-600",
+                )}
               />
               <span className="flex-1">{item.title}</span>
-              {isActive && (
-                <ChevronRight className="h-4 w-4 text-primary" />
-              )}
+              {isActive && <ChevronRight className="h-4 w-4 text-primary" />}
             </Link>
           );
         })}
@@ -93,15 +93,15 @@ export function DashboardSidebar() {
       <div className="border-t border-gray-200 p-4">
         <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
           <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-sm font-medium text-primary-foreground">NMĐ</span>
+            <span className="text-sm font-medium text-primary-foreground">
+              NMĐ
+            </span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 truncate">
               Nguyễn Minh Đức
             </p>
-            <p className="text-xs text-gray-500 truncate">
-              Học viên
-            </p>
+            <p className="text-xs text-gray-500 truncate">Học viên</p>
           </div>
         </div>
       </div>

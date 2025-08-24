@@ -1,7 +1,13 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileQuestion } from "lucide-react";
 
@@ -23,7 +29,9 @@ const NotFound = () => {
             <div className="flex justify-center mb-4">
               <FileQuestion className="h-12 w-12 text-muted-foreground" />
             </div>
-            <CardTitle className="text-xl">404 - Không tìm thấy trang</CardTitle>
+            <CardTitle className="text-xl">
+              404 - Không tìm thấy trang
+            </CardTitle>
             <CardDescription className="text-center">
               Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.
             </CardDescription>
