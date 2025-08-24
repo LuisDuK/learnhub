@@ -1,5 +1,9 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FileQuestion } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
@@ -12,15 +16,26 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <DashboardLayout>
+      <div className="flex-1 p-6">
+        <Card className="max-w-md mx-auto mt-20">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-4">
+              <FileQuestion className="h-12 w-12 text-muted-foreground" />
+            </div>
+            <CardTitle className="text-xl">404 - Không tìm thấy trang</CardTitle>
+            <CardDescription className="text-center">
+              Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <Button asChild>
+              <Link to="/">Về trang chủ</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
