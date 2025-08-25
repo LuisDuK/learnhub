@@ -18,6 +18,7 @@ import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Lesson from "./pages/Lesson";
 import Exercise from "./pages/Exercise";
+import ExerciseResults from "./pages/ExerciseResults";
 import Quiz from "./pages/Quiz";
 import NotFound from "./pages/NotFound";
 
@@ -46,6 +47,10 @@ function AppRoutes() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/lesson/:id" element={<Lesson />} />
         <Route path="/lesson/:lessonId/exercise/:id" element={<Exercise />} />
+        <Route
+          path="/lesson/:lessonId/exercise/:id/results"
+          element={<ExerciseResults />}
+        />
         <Route path="/lesson/:lessonId/quiz/:id" element={<Quiz />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
