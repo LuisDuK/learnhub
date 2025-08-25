@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import {
   Card,
@@ -240,6 +241,7 @@ const statusColors = {
 } as const;
 
 export default function Courses() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<
     CourseCategory[]
@@ -524,7 +526,10 @@ export default function Courses() {
                     )}
 
                     {/* Action Button */}
-                    <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg">
+                    <Button
+                      onClick={() => navigate(`/lesson/${course.id}`)}
+                      className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
+                    >
                       <Play className="h-4 w-4 mr-2" />
                       {course.status === "not-started"
                         ? "🚀 Bắt đầu học!"
