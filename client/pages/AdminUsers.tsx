@@ -48,14 +48,6 @@ import {
 const mockUsers = [
   {
     id: 1,
-    name: "Nguyễn Minh Đức",
-    email: "duc@example.com",
-    role: "Học sinh",
-    status: "Hoạt động",
-    createdAt: "2024-01-15",
-  },
-  {
-    id: 2,
     name: "Trần Thị Mai",
     email: "mai.tran@example.com",
     role: "Giáo viên",
@@ -63,20 +55,28 @@ const mockUsers = [
     createdAt: "2024-01-10",
   },
   {
-    id: 3,
-    name: "Lê Văn An",
-    email: "an.le@example.com",
-    role: "Học sinh",
-    status: "Tạm khóa",
-    createdAt: "2024-01-20",
-  },
-  {
-    id: 4,
+    id: 2,
     name: "Phạm Thị Hoa",
     email: "hoa.pham@example.com",
     role: "Quản trị viên",
     status: "Hoạt động",
     createdAt: "2024-01-05",
+  },
+  {
+    id: 3,
+    name: "Lê Văn An",
+    email: "an.le@example.com",
+    role: "Giáo viên",
+    status: "Tạm khóa",
+    createdAt: "2024-01-20",
+  },
+  {
+    id: 4,
+    name: "Nguyễn Văn Bình",
+    email: "binh.nguyen@example.com",
+    role: "Quản trị viên",
+    status: "Ho��t động",
+    createdAt: "2024-01-15",
   },
 ];
 
@@ -125,8 +125,6 @@ export default function AdminUsers() {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case "Học sinh":
-        return "bg-blue-100 text-blue-800";
       case "Giáo viên":
         return "bg-green-100 text-green-800";
       case "Quản trị viên":
@@ -157,7 +155,7 @@ export default function AdminUsers() {
               👥 Quản lý người dùng
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý học sinh, giáo viên và quản trị viên
+              Quản lý giáo viên và quản trị viên hệ thống
             </p>
           </div>
 
@@ -172,7 +170,7 @@ export default function AdminUsers() {
               <DialogHeader>
                 <DialogTitle>Thêm người dùng mới</DialogTitle>
                 <DialogDescription>
-                  Tạo tài khoản mới cho học sinh, giáo viên hoặc quản trị viên
+                  Tạo tài khoản mới cho giáo viên hoặc quản trị viên
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -217,7 +215,6 @@ export default function AdminUsers() {
                       <SelectValue placeholder="Chọn vai trò" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Học sinh">Học sinh</SelectItem>
                       <SelectItem value="Giáo viên">Giáo viên</SelectItem>
                       <SelectItem value="Quản trị viên">
                         Quản trị viên
@@ -265,7 +262,6 @@ export default function AdminUsers() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả vai trò</SelectItem>
-              <SelectItem value="Học sinh">Học sinh</SelectItem>
               <SelectItem value="Giáo viên">Giáo viên</SelectItem>
               <SelectItem value="Quản trị viên">Quản trị viên</SelectItem>
             </SelectContent>
@@ -350,12 +346,6 @@ export default function AdminUsers() {
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">
-              {users.filter((u) => u.role === "Học sinh").length}
-            </div>
-            <div className="text-sm text-blue-600">Học sinh</div>
-          </div>
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">
               {users.filter((u) => u.role === "Giáo viên").length}
@@ -367,6 +357,12 @@ export default function AdminUsers() {
               {users.filter((u) => u.role === "Quản trị viên").length}
             </div>
             <div className="text-sm text-purple-600">Quản trị viên</div>
+          </div>
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div className="text-2xl font-bold text-blue-600">
+              {users.length}
+            </div>
+            <div className="text-sm text-blue-600">Tổng người dùng</div>
           </div>
         </div>
       </div>
