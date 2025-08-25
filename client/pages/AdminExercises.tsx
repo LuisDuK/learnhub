@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -461,7 +461,7 @@ export default function AdminExercises() {
                   <TableCell>
                     <div className="text-sm">
                       <div className="text-gray-900 font-medium">{exercise.submissions} bài nộp</div>
-                      <div className="text-gray-500">Điểm TB: {exercise.avgScore}</div>
+                      <div className="text-gray-500">Đi��m TB: {exercise.avgScore}</div>
                     </div>
                   </TableCell>
                   <TableCell>
