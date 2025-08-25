@@ -17,12 +17,9 @@ import {
 
 // Mock data for demo
 const subjectData = [
-  { subject: "Toán học", students: 120 },
-  { subject: "Tiếng Việt", students: 95 },
-  { subject: "Tiếng Anh", students: 80 },
-  { subject: "Khoa học", students: 75 },
-  { subject: "Lịch sử", students: 60 },
-  { subject: "Địa lý", students: 55 },
+  { subject: "Toán", students: 120 },
+  { subject: "Văn", students: 95 },
+  { subject: "Anh", students: 80 },
 ];
 
 const progressData = [
@@ -95,8 +92,8 @@ export default function AdminDashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">24</div>
-              <p className="text-xs text-blue-600 mt-1">6 môn học chính</p>
+              <div className="text-2xl font-bold text-green-600">12</div>
+              <p className="text-xs text-blue-600 mt-1">3 môn học chính</p>
             </CardContent>
           </Card>
 
@@ -218,7 +215,7 @@ export default function AdminDashboard() {
                 <Users className="h-8 w-8 text-blue-600 mb-2" />
                 <h3 className="font-semibold text-blue-700">Thêm học sinh</h3>
                 <p className="text-sm text-gray-600">
-                  Tạo tài khoản mới cho học sinh
+                  Tạo tài khoản mới cho học sinh (3 môn: Toán, Văn, Anh)
                 </p>
               </div>
               <div className="p-4 border border-orange-200 rounded-lg hover:bg-orange-50 cursor-pointer transition-colors">
