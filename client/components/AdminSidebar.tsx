@@ -47,6 +47,11 @@ const menuItems = [
     href: "/admin/reports",
   },
   {
+    title: "🤖 Cấu hình AI",
+    icon: Settings,
+    href: "/admin/ai-config",
+  },
+  {
     title: "⚙️ Cài đặt hệ thống",
     icon: Settings,
     href: "/admin/settings",
