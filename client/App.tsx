@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FloatingChatbot } from "@/components/FloatingChatbot";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import EmailVerification from "./pages/EmailVerification";
 import Courses from "./pages/Courses";
 import StudyPlan from "./pages/StudyPlan";
 import Chatbot from "./pages/Chatbot";
@@ -35,6 +36,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/email-verification" element={<EmailVerification />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/study-plan" element={<StudyPlan />} />
         <Route path="/chatbot" element={<Chatbot />} />
