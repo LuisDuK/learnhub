@@ -559,7 +559,7 @@ export default function Settings() {
                             🕗 20:00 (8:00 PM)
                           </SelectItem>
                           <SelectItem value="21:00">
-                            �� 21:00 (9:00 PM)
+                            🕗 21:00 (9:00 PM)
                           </SelectItem>
                         </SelectContent>
                       </Select>
