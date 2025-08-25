@@ -197,7 +197,7 @@ export function FloatingChatbot() {
           <>
             {/* Messages */}
             <CardContent className="p-0 flex-1">
-              <ScrollArea className="h-64 p-4">
+              <ScrollArea className="h-80 p-4">
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div
