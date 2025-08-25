@@ -204,12 +204,17 @@ export default function AdminAIConfig() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-              🤖 Cấu hình AI
-              <Settings className="h-8 w-8 text-blue-600" />
+              <Brain className="h-8 w-8 text-blue-600" />
+              Cấu hình AI (Chỉ Quản trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý cấu hình và tham số của hệ thống AI
+              Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh
             </p>
+            <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài, tạo lộ trình, sinh bài tập) được điều khiển hoàn toàn bởi quản trị viên thông qua các prompt và cấu hình này.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -375,9 +380,9 @@ export default function AdminAIConfig() {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[600px]">
                       <DialogHeader>
-                        <DialogTitle>Thêm Prompt mới</DialogTitle>
+                        <DialogTitle>Thêm Prompt mới (Quản trị viên)</DialogTitle>
                         <DialogDescription>
-                          Tạo prompt mẫu cho các module AI
+                          Tạo prompt mẫu cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-4">
@@ -517,12 +522,12 @@ export default function AdminAIConfig() {
                     <div className="flex items-center justify-between p-4 border border-purple-200 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
-                          ✅
+                          <Settings className="h-5 w-5 text-purple-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI chấm bài</h3>
+                          <h3 className="font-medium">AI chấm bài (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Tự động chấm điểm bài tập của học sinh
+                            Tự động chấm điểm bài tập thông qua prompt do admin thiết lập
                           </p>
                         </div>
                       </div>
@@ -537,12 +542,12 @@ export default function AdminAIConfig() {
                     <div className="flex items-center justify-between p-4 border border-purple-200 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                          🗺️
+                          <FileText className="h-5 w-5 text-green-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI sinh lộ trình</h3>
+                          <h3 className="font-medium">AI sinh lộ trình (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Tạo lộ trình học tập cá nhân hóa
+                            Tạo lộ trình học tập theo mẫu prompt admin thiết lập
                           </p>
                         </div>
                       </div>
@@ -557,12 +562,12 @@ export default function AdminAIConfig() {
                     <div className="flex items-center justify-between p-4 border border-purple-200 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                          ✏️
+                          <Edit className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI tạo bài tập</h3>
+                          <h3 className="font-medium">AI tạo bài tập (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Sinh tự động các bài tập phù hợp
+                            Sinh bài tập theo template và prompt do admin quản lý
                           </p>
                         </div>
                       </div>
@@ -577,12 +582,12 @@ export default function AdminAIConfig() {
                     <div className="flex items-center justify-between p-4 border border-purple-200 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
-                          📈
+                          <Activity className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI báo cáo tiến độ</h3>
+                          <h3 className="font-medium">AI báo cáo tiến độ (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Phân tích và báo cáo tiến độ học tập
+                            Phân tích dữ liệu theo cấu hình admin thiết lập
                           </p>
                         </div>
                       </div>
@@ -596,8 +601,9 @@ export default function AdminAIConfig() {
                   </div>
 
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-medium text-blue-900 mb-2">
-                      📊 Thống kê sử dụng tính năng
+                    <h4 className="font-medium text-blue-900 mb-2 flex items-center gap-2">
+                      <Activity className="h-4 w-4" />
+                      Thống kê sử dụng tính năng AI (Do quản trị viên kiểm soát)
                     </h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
