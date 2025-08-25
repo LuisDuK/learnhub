@@ -56,32 +56,73 @@ import {
   Activity,
 } from "lucide-react";
 
-// Mock data
+// Mock data with enhanced variables
 const mockPrompts = [
   {
     id: 1,
     name: "Prompt tạo bài tập toán",
     content:
-      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {grade} về chủ đề {topic}. Bài tập cần có {difficulty} độ khó và bao gồm {questions} câu hỏi.",
+      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao gồm {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
     module: "Bài tập",
+    variables: [
+      { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "Lớp học" },
+      { name: "topic", type: "text", description: "Chủ đề bài học" },
+      { name: "difficulty", type: "select", options: ["dễ", "trung bình", "khó"], description: "Độ khó" },
+      { name: "questions", type: "number", min: 1, max: 20, description: "Số câu hỏi" },
+      { name: "format", type: "select", options: ["trắc nghiệm", "tự luận", "hỗn hợp"], description: "Dạng bài tập" },
+      { name: "duration", type: "number", min: 5, max: 60, description: "Thời gian làm bài (phút)" }
+    ],
     createdAt: "2024-01-15",
   },
   {
     id: 2,
     name: "Prompt sinh lộ trình học",
     content:
-      "Dựa trên mục tiêu học tập '{goal}' trong thời gian {duration}, hãy tạo một lộ trình học chi tiết cho học sinh có trình độ {level}.",
+      "Dựa trên mục tiêu học tập '{{goal}}' trong thời gian {{duration}}, hãy tạo một lộ trình học chi tiết cho học sinh {{age_group}} có trình độ {{level}}. Môn học: {{subject}}. Số buổi học: {{sessions}} buổi. Mỗi buổi {{session_duration}} phút.",
     module: "Lộ trình",
+    variables: [
+      { name: "goal", type: "text", description: "Mục tiêu học tập" },
+      { name: "duration", type: "select", options: ["1 tuần", "2 tuần", "1 tháng", "2 tháng", "3 tháng"], description: "Thời gian học" },
+      { name: "age_group", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi" },
+      { name: "level", type: "select", options: ["mới bắt đầu", "cơ bản", "trung bình", "nâng cao"], description: "Trình độ hiện tại" },
+      { name: "subject", type: "select", options: ["Toán", "Văn", "Anh"], description: "Môn học" },
+      { name: "sessions", type: "number", min: 3, max: 20, description: "Số buổi học" },
+      { name: "session_duration", type: "number", min: 15, max: 60, description: "Thời lượng mỗi buổi (phút)" }
+    ],
     createdAt: "2024-01-20",
   },
   {
     id: 3,
     name: "Prompt chatbot hỗ trợ",
     content:
-      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học. Hãy trả lời câu hỏi '{question}' một cách đơn giản, dễ hiểu và khuyến khích.",
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
     module: "Chatbot",
+    variables: [
+      { name: "age", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi học sinh" },
+      { name: "question", type: "text", description: "Câu hỏi của học sinh" },
+      { name: "subject", type: "select", options: ["Toán", "Văn", "Anh", "tổng hợp"], description: "Môn học" },
+      { name: "tone", type: "select", options: ["vui vẻ", "khuyến khích", "tự nhiên", "năng động"], description: "Giọng điệu" },
+      { name: "complexity", type: "select", options: ["đơn giản", "dễ hiểu", "chi tiết hơn"], description: "Độ phức tạp" },
+      { name: "language", type: "select", options: ["tiếng Việt", "tiếng Anh", "song ngữ"], description: "Ngôn ngữ trả lời" }
+    ],
     createdAt: "2024-01-10",
   },
+  {
+    id: 4,
+    name: "Prompt chấm bài tự động",
+    content:
+      "Hãy chấm bài làm của học sinh về môn {{subject}}. Bài làm: {{student_answer}}. Đáp án đúng: {{correct_answer}}. Tiêu chí chấm: {{criteria}}. Hãy đưa ra điểm số ({{max_score}} điểm), nhận xét {{feedback_style}} và gợi ý cải thiện.",
+    module: "Chấm bài",
+    variables: [
+      { name: "subject", type: "select", options: ["Toán", "Văn", "Anh"], description: "Môn học" },
+      { name: "student_answer", type: "textarea", description: "Bài làm của học sinh" },
+      { name: "correct_answer", type: "textarea", description: "Đáp án chính xác" },
+      { name: "criteria", type: "textarea", description: "Tiêu chí chấm điểm" },
+      { name: "max_score", type: "number", min: 1, max: 100, description: "Điểm tối đa" },
+      { name: "feedback_style", type: "select", options: ["khuyến khích", "chi tiết", "tóm tắt", "xây dựng"], description: "Kiểu phản hồi" }
+    ],
+    createdAt: "2024-01-25",
+  }
 ];
 
 const mockAILogs = [
@@ -136,7 +177,21 @@ export default function AdminAIConfig() {
     name: "",
     module: "",
     content: "",
+    variables: [],
   });
+
+  const [currentVariable, setCurrentVariable] = useState({
+    name: "",
+    type: "text",
+    description: "",
+    options: [],
+    min: 0,
+    max: 100,
+  });
+
+  const [isEditingPrompt, setIsEditingPrompt] = useState(false);
+  const [editingPromptId, setEditingPromptId] = useState(null);
+  const [showVariableEditor, setShowVariableEditor] = useState(false);
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
@@ -145,15 +200,73 @@ export default function AdminAIConfig() {
 
   const handleAddPrompt = () => {
     if (newPrompt.name && newPrompt.module && newPrompt.content) {
-      const prompt = {
-        id: prompts.length + 1,
-        ...newPrompt,
-        createdAt: new Date().toISOString().split("T")[0],
-      };
-      setPrompts([...prompts, prompt]);
-      setNewPrompt({ name: "", module: "", content: "" });
+      if (isEditingPrompt) {
+        // Update existing prompt
+        const updatedPrompts = prompts.map(p =>
+          p.id === editingPromptId ? { ...newPrompt, id: editingPromptId } : p
+        );
+        setPrompts(updatedPrompts);
+        setIsEditingPrompt(false);
+        setEditingPromptId(null);
+      } else {
+        // Add new prompt
+        const prompt = {
+          id: prompts.length + 1,
+          ...newPrompt,
+          createdAt: new Date().toISOString().split("T")[0],
+        };
+        setPrompts([...prompts, prompt]);
+      }
+      setNewPrompt({ name: "", module: "", content: "", variables: [] });
       setIsAddPromptDialogOpen(false);
     }
+  };
+
+  const handleEditPrompt = (prompt) => {
+    setNewPrompt({
+      name: prompt.name,
+      module: prompt.module,
+      content: prompt.content,
+      variables: prompt.variables || []
+    });
+    setIsEditingPrompt(true);
+    setEditingPromptId(prompt.id);
+    setIsAddPromptDialogOpen(true);
+  };
+
+  const handleAddVariable = () => {
+    if (currentVariable.name && currentVariable.description) {
+      const newVar = { ...currentVariable };
+      if (newVar.type === "select" && typeof newVar.options === "string") {
+        newVar.options = newVar.options.split(",").map(opt => opt.trim());
+      }
+      setNewPrompt({
+        ...newPrompt,
+        variables: [...newPrompt.variables, newVar]
+      });
+      setCurrentVariable({
+        name: "",
+        type: "text",
+        description: "",
+        options: [],
+        min: 0,
+        max: 100,
+      });
+      setShowVariableEditor(false);
+    }
+  };
+
+  const handleRemoveVariable = (index) => {
+    const updatedVariables = newPrompt.variables.filter((_, i) => i !== index);
+    setNewPrompt({ ...newPrompt, variables: updatedVariables });
+  };
+
+  const insertVariableIntoPrompt = (variableName) => {
+    const cursorPosition = document.getElementById("promptContent")?.selectionStart || newPrompt.content.length;
+    const beforeCursor = newPrompt.content.slice(0, cursorPosition);
+    const afterCursor = newPrompt.content.slice(cursorPosition);
+    const newContent = beforeCursor + `{{${variableName}}}` + afterCursor;
+    setNewPrompt({ ...newPrompt, content: newContent });
   };
 
   const handleDeletePrompt = (id: number) => {
