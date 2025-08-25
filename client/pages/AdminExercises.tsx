@@ -58,7 +58,7 @@ const mockExercises = [
     id: 1,
     title: "Phép cộng và trừ trong phạm vi 100",
     type: "Trắc nghiệm",
-    subject: "Toán học",
+    subject: "Toán",
     creator: "Cô Nguyễn Thị Mai",
     createdAt: "2024-01-15",
     totalQuestions: 10,
@@ -70,7 +70,7 @@ const mockExercises = [
     id: 2,
     title: "Viết đoạn văn tả cảnh thiên nhiên",
     type: "Tự luận",
-    subject: "Tiếng Việt",
+    subject: "Văn",
     creator: "Cô Trần Thị Lan",
     createdAt: "2024-01-20",
     totalQuestions: 1,
@@ -82,7 +82,7 @@ const mockExercises = [
     id: 3,
     title: "Colors and Numbers",
     type: "Trắc nghiệm",
-    subject: "Tiếng Anh",
+    subject: "Anh",
     creator: "Thầy John Smith",
     createdAt: "2024-01-10",
     totalQuestions: 15,
@@ -94,7 +94,7 @@ const mockExercises = [
     id: 4,
     title: "Quan sát và mô tả hiện tượng",
     type: "Tự luận",
-    subject: "Khoa học",
+    subject: "Toán",
     creator: "Cô Lê Thị Hoa",
     createdAt: "2024-01-25",
     totalQuestions: 3,
@@ -106,12 +106,9 @@ const mockExercises = [
 
 const subjects = [
   "Tất cả",
-  "Toán học",
-  "Tiếng Việt",
-  "Tiếng Anh",
-  "Khoa học",
-  "Lịch sử",
-  "Địa lý",
+  "Toán",
+  "Văn",
+  "Anh",
 ];
 const types = ["Tất cả", "Trắc nghiệm", "Tự luận"];
 const difficulties = ["Dễ", "Trung bình", "Khó"];
