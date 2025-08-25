@@ -333,7 +333,7 @@ export default function StudyPlan() {
                 Mục tiêu học tập
               </CardTitle>
               <CardDescription>
-                Ch���n mục tiêu để xem lộ trình phù hợp
+                Chọn mục tiêu để xem lộ trình phù hợp
               </CardDescription>
             </CardHeader>
             <CardContent>
