@@ -68,7 +68,7 @@ function AppRoutes() {
         <Route path="/admin/learning-paths" element={<AdminLearningPaths />} />
         <Route path="/admin/exercises" element={<AdminExercises />} />
         <Route path="/admin/reports" element={<AdminReports />} />
-        <Route path="/admin/settings" element={<PlaceholderPage />} />
+        <Route path="/admin/settings" element={<PlaceholderPage title="Cài đặt hệ thống" description="Quản lý cấu hình và thiết lập hệ thống" />} />
 
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
