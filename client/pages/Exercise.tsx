@@ -36,7 +36,8 @@ const mockExercises = {
     id: 1,
     lessonId: 1,
     title: "🔢 Bài tập phép cộng và trừ",
-    description: "Hoàn thành các bài tập sau để củng cố kiến thức về phép cộng và phép trừ trong phạm vi 100.",
+    description:
+      "Hoàn thành các bài tập sau để củng cố kiến thức về phép cộng và phép trừ trong phạm vi 100.",
     timeLimit: 30, // minutes
     totalPoints: 100,
     questions: [
@@ -50,26 +51,28 @@ const mockExercises = {
       {
         id: 2,
         question: "Tính kết quả của phép tính: 78 - 29 = ?",
-        type: "text", 
+        type: "text",
         points: 20,
         hint: "Nhớ vay khi trừ hàng đơn vị",
       },
       {
         id: 3,
-        question: "Giải bài toán: Lan có 56 viên kẹo, Lan cho bạn 18 viên. Hỏi Lan còn lại bao nhiêu viên kẹo?",
+        question:
+          "Giải bài toán: Lan có 56 viên kẹo, Lan cho bạn 18 viên. Hỏi Lan còn lại bao nhiêu viên kẹo?",
         type: "text",
         points: 30,
         hint: "Đây là bài toán phép trừ",
       },
       {
         id: 4,
-        question: "Vẽ hình minh họa cho bài toán trên (có thể chụp ảnh hoặc vẽ trên máy)",
+        question:
+          "Vẽ hình minh họa cho bài toán trên (có thể chụp ảnh hoặc vẽ trên máy)",
         type: "image",
         points: 30,
         hint: "Có thể vẽ các hình tròn nhỏ để biểu diễn viên kẹo",
       },
-    ]
-  }
+    ],
+  },
 };
 
 interface Answer {
@@ -83,14 +86,17 @@ export default function Exercise() {
   const { lessonId, id } = useParams();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [uploadingImages, setUploadingImages] = useState<{[key: number]: boolean}>({});
+  const [uploadingImages, setUploadingImages] = useState<{
+    [key: number]: boolean;
+  }>({});
 
-  const exercise = mockExercises[parseInt(id || "1") as keyof typeof mockExercises];
+  const exercise =
+    mockExercises[parseInt(id || "1") as keyof typeof mockExercises];
 
   if (!exercise) {
     return (
@@ -113,18 +119,23 @@ export default function Exercise() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getAnswer = (questionId: number): Answer | undefined => {
-    return answers.find(a => a.questionId === questionId);
+    return answers.find((a) => a.questionId === questionId);
   };
 
-  const updateAnswer = (questionId: number, content: string, type: "text" | "image", imageFile?: File) => {
-    setAnswers(prev => {
-      const existing = prev.findIndex(a => a.questionId === questionId);
+  const updateAnswer = (
+    questionId: number,
+    content: string,
+    type: "text" | "image",
+    imageFile?: File,
+  ) => {
+    setAnswers((prev) => {
+      const existing = prev.findIndex((a) => a.questionId === questionId);
       const newAnswer: Answer = { questionId, type, content, imageFile };
-      
+
       if (existing >= 0) {
         const updated = [...prev];
         updated[existing] = newAnswer;
@@ -136,23 +147,24 @@ export default function Exercise() {
   };
 
   const handleFileUpload = async (questionId: number, file: File) => {
-    if (!file.type.startsWith('image/')) {
-      alert('Vui lòng chỉ chọn file ảnh!');
+    if (!file.type.startsWith("image/")) {
+      alert("Vui lòng chỉ chọn file ảnh!");
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) { // 5MB limit
-      alert('Kích thước file quá lớn! Vui lòng chọn ảnh nhỏ hơn 5MB.');
+    if (file.size > 5 * 1024 * 1024) {
+      // 5MB limit
+      alert("Kích thước file quá lớn! Vui lòng chọn ảnh nhỏ hơn 5MB.");
       return;
     }
 
-    setUploadingImages(prev => ({ ...prev, [questionId]: true }));
+    setUploadingImages((prev) => ({ ...prev, [questionId]: true }));
 
     // Simulate upload delay
     setTimeout(() => {
       const imageUrl = URL.createObjectURL(file);
       updateAnswer(questionId, imageUrl, "image", file);
-      setUploadingImages(prev => ({ ...prev, [questionId]: false }));
+      setUploadingImages((prev) => ({ ...prev, [questionId]: false }));
     }, 1000);
   };
 
@@ -161,18 +173,18 @@ export default function Exercise() {
     if (answer?.content) {
       URL.revokeObjectURL(answer.content);
     }
-    setAnswers(prev => prev.filter(a => a.questionId !== questionId));
+    setAnswers((prev) => prev.filter((a) => a.questionId !== questionId));
   };
 
   const handleSubmit = () => {
     if (answers.length === 0) {
-      alert('Vui lòng trả lời ít nhất một câu hỏi!');
+      alert("Vui lòng trả lời ít nhất một câu hỏi!");
       return;
     }
 
     setIsSubmitted(true);
     // Here you would submit to backend
-    console.log('Submitting answers:', answers);
+    console.log("Submitting answers:", answers);
   };
 
   const handleReset = () => {
@@ -194,23 +206,26 @@ export default function Exercise() {
                 Chúc mừng bé!
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                Bé đã hoàn thành bài tập thành công! Thầy cô sẽ chấm bài và gửi kết quả sớm nhất có thể.
+                Bé đã hoàn thành bài tập thành công! Thầy cô sẽ chấm bài và gửi
+                kết quả sớm nhất có thể.
               </p>
               <div className="flex flex-col gap-4">
                 <div className="bg-primary/10 rounded-lg p-4">
                   <div className="flex items-center justify-center gap-4 text-primary">
                     <CheckCircle className="h-6 w-6" />
-                    <span className="font-bold">Đã nộp {answers.length}/{exercise.questions.length} câu</span>
+                    <span className="font-bold">
+                      Đã nộp {answers.length}/{exercise.questions.length} câu
+                    </span>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <Button 
+                  <Button
                     onClick={() => navigate(`/lesson/${lessonId}`)}
                     className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80"
                   >
                     Quay lại bài học
                   </Button>
-                  <Button 
+                  <Button
                     onClick={() => navigate(`/lesson/${lessonId}/quiz`)}
                     variant="outline"
                     className="flex-1 border-accent text-accent hover:bg-accent hover:text-white"
@@ -232,8 +247,8 @@ export default function Exercise() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate(`/lesson/${lessonId}`)}
               className="border-primary/20 hover:bg-primary/5"
             >
@@ -244,7 +259,9 @@ export default function Exercise() {
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 {exercise.title}
               </h1>
-              <p className="text-muted-foreground mt-1">{exercise.description}</p>
+              <p className="text-muted-foreground mt-1">
+                {exercise.description}
+              </p>
             </div>
           </div>
 
@@ -253,9 +270,13 @@ export default function Exercise() {
             <CardContent className="p-4">
               <div className="flex items-center gap-2 text-accent">
                 <Clock className="h-5 w-5" />
-                <span className="font-bold text-lg">{formatTime(timeRemaining)}</span>
+                <span className="font-bold text-lg">
+                  {formatTime(timeRemaining)}
+                </span>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Thời gian còn lại</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Thời gian còn lại
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -265,7 +286,9 @@ export default function Exercise() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Tiến độ làm bài</span>
-              <span className="text-sm font-bold text-primary">{Math.round(progress)}%</span>
+              <span className="text-sm font-bold text-primary">
+                {Math.round(progress)}%
+              </span>
             </div>
             <Progress value={progress} className="h-3" />
             <p className="text-xs text-muted-foreground mt-2">
@@ -288,7 +311,9 @@ export default function Exercise() {
                   key={q.id}
                   variant={currentQuestion === q.id ? "default" : "outline"}
                   className={`w-full justify-start text-left ${
-                    getAnswer(q.id) ? "border-green-500 bg-green-50 hover:bg-green-100" : ""
+                    getAnswer(q.id)
+                      ? "border-green-500 bg-green-50 hover:bg-green-100"
+                      : ""
                   }`}
                   onClick={() => setCurrentQuestion(q.id)}
                 >
@@ -298,11 +323,17 @@ export default function Exercise() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        {q.type === "image" ? <FileImage className="h-4 w-4" /> : <Type className="h-4 w-4" />}
+                        {q.type === "image" ? (
+                          <FileImage className="h-4 w-4" />
+                        ) : (
+                          <Type className="h-4 w-4" />
+                        )}
                         <span className="text-xs">{q.points} điểm</span>
                       </div>
                     </div>
-                    {getAnswer(q.id) && <CheckCircle className="h-4 w-4 text-green-600" />}
+                    {getAnswer(q.id) && (
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    )}
                   </div>
                 </Button>
               ))}
@@ -312,18 +343,27 @@ export default function Exercise() {
           {/* Main Question Area */}
           <div className="lg:col-span-3 space-y-6">
             {exercise.questions
-              .filter(q => q.id === currentQuestion)
-              .map(question => (
+              .filter((q) => q.id === currentQuestion)
+              .map((question) => (
                 <Card key={question.id} className="border-primary/20 shadow-lg">
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <CardTitle className="flex items-center gap-2">
-                        Câu {exercise.questions.findIndex(q => q.id === question.id) + 1}
-                        <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                        Câu{" "}
+                        {exercise.questions.findIndex(
+                          (q) => q.id === question.id,
+                        ) + 1}
+                        <Badge
+                          variant="outline"
+                          className="bg-primary/10 text-primary border-primary/20"
+                        >
                           {question.points} điểm
                         </Badge>
                       </CardTitle>
-                      <Badge variant="outline" className="bg-accent/10 text-accent border-accent/20">
+                      <Badge
+                        variant="outline"
+                        className="bg-accent/10 text-accent border-accent/20"
+                      >
                         {question.type === "image" ? "📷 Ảnh" : "✏️ Văn bản"}
                       </Badge>
                     </div>
@@ -346,7 +386,9 @@ export default function Exercise() {
                         <Textarea
                           placeholder="Nhập câu trả lời của bé ở đây..."
                           value={getAnswer(question.id)?.content || ""}
-                          onChange={(e) => updateAnswer(question.id, e.target.value, "text")}
+                          onChange={(e) =>
+                            updateAnswer(question.id, e.target.value, "text")
+                          }
                           className="min-h-[120px] border-primary/20 focus:border-primary resize-none"
                         />
                         <p className="text-xs text-muted-foreground">
@@ -356,16 +398,22 @@ export default function Exercise() {
                     ) : (
                       <Tabs defaultValue="upload" className="w-full">
                         <TabsList className="grid w-full grid-cols-2">
-                          <TabsTrigger value="upload" className="flex items-center gap-2">
+                          <TabsTrigger
+                            value="upload"
+                            className="flex items-center gap-2"
+                          >
                             <Upload className="h-4 w-4" />
                             Tải ảnh lên
                           </TabsTrigger>
-                          <TabsTrigger value="camera" className="flex items-center gap-2">
+                          <TabsTrigger
+                            value="camera"
+                            className="flex items-center gap-2"
+                          >
                             <Camera className="h-4 w-4" />
                             Chụp ảnh
                           </TabsTrigger>
                         </TabsList>
-                        
+
                         <TabsContent value="upload" className="space-y-4">
                           <div className="border-2 border-dashed border-primary/20 rounded-lg p-8 text-center hover:border-primary/40 transition-colors">
                             <input
@@ -378,11 +426,13 @@ export default function Exercise() {
                               }}
                               className="hidden"
                             />
-                            
+
                             {uploadingImages[question.id] ? (
                               <div className="space-y-2">
                                 <div className="text-4xl">⏳</div>
-                                <p className="text-sm text-muted-foreground">Đang tải ảnh lên...</p>
+                                <p className="text-sm text-muted-foreground">
+                                  Đang tải ảnh lên...
+                                </p>
                               </div>
                             ) : getAnswer(question.id) ? (
                               <div className="space-y-3">
@@ -395,7 +445,9 @@ export default function Exercise() {
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => fileInputRef.current?.click()}
+                                    onClick={() =>
+                                      fileInputRef.current?.click()
+                                    }
                                     className="border-primary/20 text-primary hover:bg-primary hover:text-white"
                                   >
                                     <Upload className="h-4 w-4 mr-2" />
@@ -413,12 +465,14 @@ export default function Exercise() {
                                 </div>
                               </div>
                             ) : (
-                              <div 
+                              <div
                                 className="space-y-2 cursor-pointer"
                                 onClick={() => fileInputRef.current?.click()}
                               >
                                 <div className="text-4xl">📁</div>
-                                <p className="text-sm font-medium">Nhấp để chọn ảnh</p>
+                                <p className="text-sm font-medium">
+                                  Nhấp để chọn ảnh
+                                </p>
                                 <p className="text-xs text-muted-foreground">
                                   Hỗ trợ JPG, PNG, GIF (tối đa 5MB)
                                 </p>
@@ -426,15 +480,22 @@ export default function Exercise() {
                             )}
                           </div>
                         </TabsContent>
-                        
+
                         <TabsContent value="camera" className="space-y-4">
                           <div className="border-2 border-dashed border-accent/20 rounded-lg p-8 text-center">
                             <div className="text-4xl mb-2">📷</div>
-                            <p className="text-sm font-medium mb-2">Chụp ảnh trực tiếp</p>
-                            <p className="text-xs text-muted-foreground mb-4">
-                              Tính năng này sẽ được cập nhật trong phiên bản tiếp theo
+                            <p className="text-sm font-medium mb-2">
+                              Chụp ảnh trực tiếp
                             </p>
-                            <Button variant="outline" disabled className="border-accent/20">
+                            <p className="text-xs text-muted-foreground mb-4">
+                              Tính năng này sẽ được cập nhật trong phiên bản
+                              tiếp theo
+                            </p>
+                            <Button
+                              variant="outline"
+                              disabled
+                              className="border-accent/20"
+                            >
                               <Camera className="h-4 w-4 mr-2" />
                               Mở camera
                             </Button>
@@ -451,12 +512,18 @@ export default function Exercise() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  const currentIndex = exercise.questions.findIndex(q => q.id === currentQuestion);
+                  const currentIndex = exercise.questions.findIndex(
+                    (q) => q.id === currentQuestion,
+                  );
                   if (currentIndex > 0) {
                     setCurrentQuestion(exercise.questions[currentIndex - 1].id);
                   }
                 }}
-                disabled={exercise.questions.findIndex(q => q.id === currentQuestion) === 0}
+                disabled={
+                  exercise.questions.findIndex(
+                    (q) => q.id === currentQuestion,
+                  ) === 0
+                }
                 className="border-secondary/20 text-secondary hover:bg-secondary hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -472,7 +539,7 @@ export default function Exercise() {
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Làm lại
                 </Button>
-                
+
                 <Button
                   onClick={handleSubmit}
                   className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold px-8"
@@ -485,12 +552,19 @@ export default function Exercise() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  const currentIndex = exercise.questions.findIndex(q => q.id === currentQuestion);
+                  const currentIndex = exercise.questions.findIndex(
+                    (q) => q.id === currentQuestion,
+                  );
                   if (currentIndex < exercise.questions.length - 1) {
                     setCurrentQuestion(exercise.questions[currentIndex + 1].id);
                   }
                 }}
-                disabled={exercise.questions.findIndex(q => q.id === currentQuestion) === exercise.questions.length - 1}
+                disabled={
+                  exercise.questions.findIndex(
+                    (q) => q.id === currentQuestion,
+                  ) ===
+                  exercise.questions.length - 1
+                }
                 className="border-accent/20 text-accent hover:bg-accent hover:text-white"
               >
                 Câu tiếp

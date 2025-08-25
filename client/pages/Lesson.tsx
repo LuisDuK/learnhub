@@ -40,7 +40,8 @@ const mockLessons = {
     duration: "25 phút",
     difficulty: "Dễ",
     instructor: "Thầy Minh vui vẻ",
-    description: "Bài học này sẽ giúp các em làm quen với phép cộng và phép trừ trong phạm vi 100 thông qua các ví dụ thú vị và dễ hiểu.",
+    description:
+      "Bài học này sẽ giúp các em làm quen với phép cộng và phép trừ trong phạm vi 100 thông qua các ví dụ thú vị và dễ hiểu.",
     videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // placeholder
     objectives: [
       "Hiểu được khái niệm phép cộng và phép trừ",
@@ -57,18 +58,19 @@ const mockLessons = {
       {
         type: "example",
         title: "Ví dụ minh họa",
-        content: "45 + 23 = ? \nTa có thể tính như sau: 45 + 20 + 3 = 65 + 3 = 68"
+        content:
+          "45 + 23 = ? \nTa có thể tính như sau: 45 + 20 + 3 = 65 + 3 = 68",
       },
       {
         type: "practice",
         title: "Luyện tập cùng thầy",
         duration: "5 phút",
-        exercises: ["25 + 34 = ?", "67 - 28 = ?", "56 + 29 = ?"]
-      }
+        exercises: ["25 + 34 = ?", "67 - 28 = ?", "56 + 29 = ?"],
+      },
     ],
     hasExercise: true,
     hasQuiz: true,
-  }
+  },
 };
 
 export default function Lesson() {
@@ -108,8 +110,8 @@ export default function Lesson() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate("/courses")}
               className="border-primary/20 hover:bg-primary/5"
             >
@@ -121,19 +123,28 @@ export default function Lesson() {
                 {lesson.title}
               </h1>
               <div className="flex items-center gap-4 mt-2">
-                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                <Badge
+                  variant="outline"
+                  className="bg-primary/10 text-primary border-primary/20"
+                >
                   {lesson.subject}
                 </Badge>
-                <Badge variant="outline" className="bg-accent/10 text-accent border-accent/20">
+                <Badge
+                  variant="outline"
+                  className="bg-accent/10 text-accent border-accent/20"
+                >
                   {lesson.grade}
                 </Badge>
-                <Badge variant="outline" className="bg-secondary/10 text-secondary border-secondary/20">
+                <Badge
+                  variant="outline"
+                  className="bg-secondary/10 text-secondary border-secondary/20"
+                >
                   {lesson.difficulty}
                 </Badge>
               </div>
             </div>
           </div>
-          
+
           {isCompleted && (
             <div className="flex items-center gap-2 text-green-600">
               <CheckCircle className="h-6 w-6" />
@@ -147,7 +158,9 @@ export default function Lesson() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Tiến độ bài học</span>
-              <span className="text-sm font-bold text-primary">{currentProgress}%</span>
+              <span className="text-sm font-bold text-primary">
+                {currentProgress}%
+              </span>
             </div>
             <Progress value={currentProgress} className="h-3" />
           </CardContent>
@@ -167,7 +180,7 @@ export default function Lesson() {
                     className="w-full h-full"
                     allowFullScreen
                   ></iframe>
-                  
+
                   {/* Custom controls overlay */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="flex items-center gap-4 text-white">
@@ -177,7 +190,11 @@ export default function Lesson() {
                         onClick={() => setIsPlaying(!isPlaying)}
                         className="text-white hover:bg-white/20"
                       >
-                        {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                        {isPlaying ? (
+                          <Pause className="h-4 w-4" />
+                        ) : (
+                          <Play className="h-4 w-4" />
+                        )}
                       </Button>
                       <SkipBack className="h-4 w-4 cursor-pointer hover:text-primary" />
                       <SkipForward className="h-4 w-4 cursor-pointer hover:text-primary" />
@@ -187,9 +204,11 @@ export default function Lesson() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="p-4">
-                  <h3 className="font-bold text-lg mb-2">{lesson.content[0].title}</h3>
+                  <h3 className="font-bold text-lg mb-2">
+                    {lesson.content[0].title}
+                  </h3>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
@@ -216,7 +235,9 @@ export default function Lesson() {
               <CardContent className="space-y-6">
                 {/* Learning Objectives */}
                 <div>
-                  <h4 className="font-bold mb-3 text-primary">🎯 Mục tiêu học tập:</h4>
+                  <h4 className="font-bold mb-3 text-primary">
+                    🎯 Mục tiêu học tập:
+                  </h4>
                   <ul className="space-y-2">
                     {lesson.objectives.map((objective, index) => (
                       <li key={index} className="flex items-start gap-2">
@@ -230,12 +251,17 @@ export default function Lesson() {
                 <Separator />
 
                 {/* Examples */}
-                {lesson.content.find(c => c.type === "example") && (
+                {lesson.content.find((c) => c.type === "example") && (
                   <div>
-                    <h4 className="font-bold mb-3 text-accent">💡 Ví dụ minh họa:</h4>
+                    <h4 className="font-bold mb-3 text-accent">
+                      💡 Ví dụ minh họa:
+                    </h4>
                     <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
                       <pre className="text-sm whitespace-pre-wrap font-mono">
-                        {lesson.content.find(c => c.type === "example")?.content}
+                        {
+                          lesson.content.find((c) => c.type === "example")
+                            ?.content
+                        }
                       </pre>
                     </div>
                   </div>
@@ -244,16 +270,25 @@ export default function Lesson() {
                 <Separator />
 
                 {/* Practice Exercises */}
-                {lesson.content.find(c => c.type === "practice") && (
+                {lesson.content.find((c) => c.type === "practice") && (
                   <div>
-                    <h4 className="font-bold mb-3 text-secondary">🏃‍♂️ Luyện tập:</h4>
+                    <h4 className="font-bold mb-3 text-secondary">
+                      🏃‍♂️ Luyện tập:
+                    </h4>
                     <div className="grid gap-3">
-                      {lesson.content.find(c => c.type === "practice")?.exercises?.map((exercise, index) => (
-                        <div key={index} className="bg-secondary/10 rounded-lg p-3 border border-secondary/20">
-                          <span className="font-medium text-secondary">Bài {index + 1}: </span>
-                          <span>{exercise}</span>
-                        </div>
-                      ))}
+                      {lesson.content
+                        .find((c) => c.type === "practice")
+                        ?.exercises?.map((exercise, index) => (
+                          <div
+                            key={index}
+                            className="bg-secondary/10 rounded-lg p-3 border border-secondary/20"
+                          >
+                            <span className="font-medium text-secondary">
+                              Bài {index + 1}:{" "}
+                            </span>
+                            <span>{exercise}</span>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -279,7 +314,7 @@ export default function Lesson() {
                   </>
                 )}
               </Button>
-              
+
               {lesson.hasExercise && (
                 <Button
                   onClick={() => navigate(`/lesson/${id}/exercise`)}
@@ -290,7 +325,7 @@ export default function Lesson() {
                   Làm bài tập
                 </Button>
               )}
-              
+
               {lesson.hasQuiz && (
                 <Button
                   onClick={() => navigate(`/lesson/${id}/quiz`)}
@@ -313,7 +348,9 @@ export default function Lesson() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Thời lượng:</span>
+                  <span className="text-sm text-muted-foreground">
+                    Thời lượng:
+                  </span>
                   <Badge variant="outline">{lesson.duration}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
@@ -321,8 +358,12 @@ export default function Lesson() {
                   <Badge variant="outline">{lesson.difficulty}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Giảng viên:</span>
-                  <span className="text-sm font-medium">{lesson.instructor}</span>
+                  <span className="text-sm text-muted-foreground">
+                    Giảng viên:
+                  </span>
+                  <span className="text-sm font-medium">
+                    {lesson.instructor}
+                  </span>
                 </div>
               </CardContent>
             </Card>

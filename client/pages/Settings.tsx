@@ -411,17 +411,26 @@ export default function Settings() {
                       <Shield className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-blue-700">Xác thực 2 bước</h4>
-                      <p className="text-sm text-blue-600">Bảo vệ tài khoản với mã OTP qua email</p>
+                      <h4 className="font-semibold text-blue-700">
+                        Xác thực 2 bước
+                      </h4>
+                      <p className="text-sm text-blue-600">
+                        Bảo vệ tài khoản với mã OTP qua email
+                      </p>
                     </div>
                   </div>
-                  <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-orange-300">
+                  <Badge
+                    variant="secondary"
+                    className="bg-orange-100 text-orange-700 border-orange-300"
+                  >
                     Chưa kích hoạt
                   </Badge>
                 </div>
 
                 <div className="bg-green-50 p-4 rounded-xl border border-green-200">
-                  <h4 className="font-bold text-green-700 mb-2">✨ Lợi ích của xác thực 2 bước:</h4>
+                  <h4 className="font-bold text-green-700 mb-2">
+                    ✨ Lợi ích của xác thực 2 bước:
+                  </h4>
                   <ul className="text-sm text-green-600 space-y-1">
                     <li>• Bảo vệ tài khoản khỏi truy cập trái phép</li>
                     <li>• Được thông báo ngay khi có đăng nhập đáng ngờ</li>

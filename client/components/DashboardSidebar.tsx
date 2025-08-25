@@ -53,11 +53,11 @@ export function DashboardSidebar() {
 
   const handleLogout = () => {
     // Clear any stored user data (localStorage, sessionStorage, etc.)
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
     sessionStorage.clear();
 
     // Navigate to login page
-    navigate('/login');
+    navigate("/login");
   };
 
   return (

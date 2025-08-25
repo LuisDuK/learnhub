@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
-import { 
+import {
   Shield,
   Mail,
   Smartphone,
@@ -23,13 +23,15 @@ import {
   Sparkles,
   Lock,
   RefreshCw,
-  Settings
+  Settings,
 } from "lucide-react";
 
 export default function TwoFactorAuth() {
   const navigate = useNavigate();
   const [isEnabled, setIsEnabled] = useState(false);
-  const [setupStep, setSetupStep] = useState<"settings" | "verify" | "complete">("settings");
+  const [setupStep, setSetupStep] = useState<
+    "settings" | "verify" | "complete"
+  >("settings");
   const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [verificationError, setVerificationError] = useState(false);
@@ -49,7 +51,7 @@ export default function TwoFactorAuth() {
 
     setIsLoading(true);
     setVerificationError(false);
-    
+
     // Simulate verification
     setTimeout(() => {
       setIsLoading(false);
@@ -100,23 +102,32 @@ export default function TwoFactorAuth() {
             {setupStep === "complete" && "✅ Hoàn tất thiết lập"}
           </CardTitle>
           <CardDescription className="text-blue-100 text-base">
-            {setupStep === "settings" && "Tăng cường bảo mật cho tài khoản của bạn"}
+            {setupStep === "settings" &&
+              "Tăng cường bảo mật cho tài khoản của bạn"}
             {setupStep === "verify" && "Xác nhận mã để hoàn tất thiết lập"}
             {setupStep === "complete" && "Xác thực 2 bước đã được kích hoạt"}
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="p-6">
           {/* Settings Step */}
           {setupStep === "settings" && (
             <div className="space-y-6">
               {/* Current Status */}
-              <Alert className={`${isEnabled ? 'border-green-200 bg-green-50' : 'border-orange-200 bg-orange-50'}`}>
-                <Shield className={`h-4 w-4 ${isEnabled ? 'text-green-600' : 'text-orange-600'}`} />
-                <AlertDescription className={isEnabled ? 'text-green-800' : 'text-orange-800'}>
+              <Alert
+                className={`${isEnabled ? "border-green-200 bg-green-50" : "border-orange-200 bg-orange-50"}`}
+              >
+                <Shield
+                  className={`h-4 w-4 ${isEnabled ? "text-green-600" : "text-orange-600"}`}
+                />
+                <AlertDescription
+                  className={isEnabled ? "text-green-800" : "text-orange-800"}
+                >
                   <div className="flex items-center justify-between">
                     <span>
-                      {isEnabled ? '🟢 Xác thực 2 bước đã được bật' : '🟡 Xác thực 2 bước chưa được bật'}
+                      {isEnabled
+                        ? "🟢 Xác thực 2 bước đã được bật"
+                        : "🟡 Xác thực 2 bước chưa được bật"}
                     </span>
                     <Badge variant={isEnabled ? "default" : "secondary"}>
                       {isEnabled ? "Đã bật" : "Chưa bật"}
@@ -127,8 +138,10 @@ export default function TwoFactorAuth() {
 
               {/* 2FA Methods */}
               <div className="space-y-4">
-                <h3 className="font-bold text-gray-700">📞 Phương thức xác thực có sẵn:</h3>
-                
+                <h3 className="font-bold text-gray-700">
+                  📞 Phương thức xác thực có sẵn:
+                </h3>
+
                 <div className="space-y-3">
                   {/* Email method */}
                   <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200">
@@ -137,11 +150,18 @@ export default function TwoFactorAuth() {
                         <Mail className="h-5 w-5 text-white" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-blue-700">Email OTP</h4>
-                        <p className="text-sm text-blue-600">Nhận mã qua email</p>
+                        <h4 className="font-semibold text-blue-700">
+                          Email OTP
+                        </h4>
+                        <p className="text-sm text-blue-600">
+                          Nhận mã qua email
+                        </p>
                       </div>
                     </div>
-                    <Badge variant="outline" className="bg-blue-100 text-blue-700 border-blue-300">
+                    <Badge
+                      variant="outline"
+                      className="bg-blue-100 text-blue-700 border-blue-300"
+                    >
                       Khuyến nghị
                     </Badge>
                   </div>
@@ -154,12 +174,12 @@ export default function TwoFactorAuth() {
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-700">SMS OTP</h4>
-                        <p className="text-sm text-gray-600">Nhận mã qua tin nhắn</p>
+                        <p className="text-sm text-gray-600">
+                          Nhận mã qua tin nhắn
+                        </p>
                       </div>
                     </div>
-                    <Badge variant="secondary">
-                      Sắp có
-                    </Badge>
+                    <Badge variant="secondary">Sắp có</Badge>
                   </div>
                 </div>
               </div>
@@ -169,8 +189,12 @@ export default function TwoFactorAuth() {
                 <div className="flex items-center gap-3">
                   <Lock className="h-5 w-5 text-purple-600" />
                   <div>
-                    <h4 className="font-semibold text-purple-700">Kích hoạt xác thực 2 bước</h4>
-                    <p className="text-sm text-purple-600">Bảo vệ tài khoản với lớp bảo mật thêm</p>
+                    <h4 className="font-semibold text-purple-700">
+                      Kích hoạt xác thực 2 bước
+                    </h4>
+                    <p className="text-sm text-purple-600">
+                      Bảo vệ tài khoản với lớp bảo mật thêm
+                    </p>
                   </div>
                 </div>
                 <Switch
@@ -188,7 +212,9 @@ export default function TwoFactorAuth() {
 
               {/* Benefits */}
               <div className="bg-green-50 p-4 rounded-xl border border-green-200">
-                <h4 className="font-bold text-green-700 mb-2">✨ Lợi ích của xác thực 2 bước:</h4>
+                <h4 className="font-bold text-green-700 mb-2">
+                  ✨ Lợi ích của xác thực 2 bước:
+                </h4>
                 <ul className="text-sm text-green-600 space-y-1">
                   <li>• Bảo vệ tài khoản khỏi truy cập trái phép</li>
                   <li>• Được thông báo ngay khi có đăng nhập đáng ngờ</li>
@@ -207,13 +233,18 @@ export default function TwoFactorAuth() {
                 <AlertDescription className="text-blue-800">
                   📧 Chúng tôi đã gửi mã xác thực 6 số đến email của bạn.
                   <br />
-                  <span className="text-sm">Vui lòng kiểm tra hộp thư và nhập mã để hoàn tất thiết lập.</span>
+                  <span className="text-sm">
+                    Vui lòng kiểm tra hộp thư và nhập mã để hoàn tất thiết lập.
+                  </span>
                 </AlertDescription>
               </Alert>
 
               <form onSubmit={handleVerify2FA} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="verification-code" className="text-purple-700 font-semibold flex items-center gap-2">
+                  <Label
+                    htmlFor="verification-code"
+                    className="text-purple-700 font-semibold flex items-center gap-2"
+                  >
                     <Key className="h-4 w-4" />
                     Mã xác thực (6 chữ số)
                   </Label>
@@ -222,13 +253,20 @@ export default function TwoFactorAuth() {
                     type="text"
                     placeholder="123456"
                     value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    onChange={(e) =>
+                      setVerificationCode(
+                        e.target.value.replace(/\D/g, "").slice(0, 6),
+                      )
+                    }
                     className="border-purple-200 focus:border-purple-500 rounded-xl h-12 text-center text-xl font-mono tracking-widest"
                     maxLength={6}
                     required
                   />
                   <p className="text-xs text-gray-600 text-center">
-                    💡 Để test, sử dụng mã: <span className="font-mono bg-gray-100 px-2 py-1 rounded">123456</span>
+                    💡 Để test, sử dụng mã:{" "}
+                    <span className="font-mono bg-gray-100 px-2 py-1 rounded">
+                      123456
+                    </span>
                   </p>
                 </div>
 
@@ -268,7 +306,10 @@ export default function TwoFactorAuth() {
               </form>
 
               <div className="text-center">
-                <Button variant="link" className="text-blue-600 hover:text-blue-700 text-sm">
+                <Button
+                  variant="link"
+                  className="text-blue-600 hover:text-blue-700 text-sm"
+                >
                   📧 Gửi lại mã xác thực
                 </Button>
               </div>
@@ -287,7 +328,8 @@ export default function TwoFactorAuth() {
               <Alert className="border-green-200 bg-green-50">
                 <CheckCircle className="h-4 w-4 text-green-600" />
                 <AlertDescription className="text-green-800">
-                  🎉 <strong>Xác thực 2 bước đã được kích hoạt thành công!</strong>
+                  🎉{" "}
+                  <strong>Xác thực 2 bước đã được kích hoạt thành công!</strong>
                   <br />
                   Tài khoản của bạn giờ đây được bảo vệ tốt hơn.
                 </AlertDescription>
@@ -295,7 +337,9 @@ export default function TwoFactorAuth() {
 
               <div className="space-y-4">
                 <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                  <h4 className="font-bold text-blue-700 mb-2">🔒 Từ bây giờ khi đăng nhập:</h4>
+                  <h4 className="font-bold text-blue-700 mb-2">
+                    🔒 Từ bây giờ khi đăng nhập:
+                  </h4>
                   <ol className="text-sm text-blue-600 space-y-1 text-left">
                     <li>1. Nhập email và mật khẩu như bình thường</li>
                     <li>2. Nhận mã OTP qua email</li>

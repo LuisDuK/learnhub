@@ -20,11 +20,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Sparkles, 
-  BookOpen, 
-  Calculator, 
-  Globe, 
+import {
+  Sparkles,
+  BookOpen,
+  Calculator,
+  Globe,
   Mail,
   Lock,
   User,
@@ -32,7 +32,7 @@ import {
   EyeOff,
   CheckCircle,
   Shield,
-  Loader2
+  Loader2,
 } from "lucide-react";
 
 export default function Login() {
@@ -41,7 +41,8 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
-  const [showForgotPasswordDialog, setShowForgotPasswordDialog] = useState(false);
+  const [showForgotPasswordDialog, setShowForgotPasswordDialog] =
+    useState(false);
   const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
@@ -97,10 +98,12 @@ export default function Login() {
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
               📚 EduSmart
             </h1>
-            <p className="text-xl text-gray-600 font-medium">Hệ thống học tập cá nhân hóa</p>
+            <p className="text-xl text-gray-600 font-medium">
+              Hệ thống học tập cá nhân hóa
+            </p>
           </div>
         </div>
-        
+
         {/* 3 Main Subjects */}
         <div className="flex items-center justify-center gap-8">
           <div className="text-center group cursor-pointer">
@@ -119,7 +122,9 @@ export default function Login() {
             <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform shadow-lg">
               <Globe className="h-8 w-8 text-white" />
             </div>
-            <span className="text-sm font-bold text-purple-700">🌍 Tiếng Anh</span>
+            <span className="text-sm font-bold text-purple-700">
+              🌍 Tiếng Anh
+            </span>
           </div>
         </div>
       </div>
@@ -131,25 +136,28 @@ export default function Login() {
             {activeTab === "login" ? "🎯 Đăng nhập" : "✨ Đăng ký"}
           </CardTitle>
           <CardDescription className="text-blue-100 text-lg">
-            {activeTab === "login" 
+            {activeTab === "login"
               ? "Chào mừng bé quay trở lại!"
-              : "Tạo tài khoản để bắt đầu học!"
-            }
+              : "Tạo tài khoản để bắt đầu học!"}
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="p-6">
           {registerSuccess ? (
             <Alert className="border-green-200 bg-green-50 text-center">
               <CheckCircle className="h-5 w-5 text-green-600 mx-auto mb-2" />
               <AlertDescription className="text-green-800 font-medium">
-                🎉 Đăng ký thành công! 
+                🎉 Đăng ký thành công!
                 <br />
-                <span className="text-sm">Vui lòng kiểm tra email để xác nhận tài khoản.</span>
+                <span className="text-sm">
+                  Vui lòng kiểm tra email để xác nhận tài khoản.
+                </span>
               </AlertDescription>
               <div className="flex gap-2 mt-4">
                 <Button
-                  onClick={() => navigate("/email-verification?email=banhoc@email.com")}
+                  onClick={() =>
+                    navigate("/email-verification?email=banhoc@email.com")
+                  }
                   className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
                 >
                   📧 Xác thực ngay
@@ -167,7 +175,11 @@ export default function Login() {
               </div>
             </Alert>
           ) : (
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
               <TabsList className="grid w-full grid-cols-2 bg-blue-50 p-1 rounded-xl">
                 <TabsTrigger
                   value="login"
@@ -187,7 +199,10 @@ export default function Login() {
               <TabsContent value="login" className="space-y-6 mt-6">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-blue-700 font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="email"
+                      className="text-blue-700 font-semibold flex items-center gap-2"
+                    >
                       <Mail className="h-4 w-4" />
                       Email
                     </Label>
@@ -199,9 +214,12 @@ export default function Login() {
                       className="border-blue-200 focus:border-blue-500 rounded-xl h-12 text-base"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="text-blue-700 font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="password"
+                      className="text-blue-700 font-semibold flex items-center gap-2"
+                    >
                       <Lock className="h-4 w-4" />
                       Mật khẩu
                     </Label>
@@ -220,7 +238,11 @@ export default function Login() {
                         className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -241,7 +263,10 @@ export default function Login() {
                   </Button>
 
                   <div className="text-center">
-                    <Dialog open={showForgotPasswordDialog} onOpenChange={setShowForgotPasswordDialog}>
+                    <Dialog
+                      open={showForgotPasswordDialog}
+                      onOpenChange={setShowForgotPasswordDialog}
+                    >
                       <DialogTrigger asChild>
                         <Button
                           type="button"
@@ -253,7 +278,9 @@ export default function Login() {
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-md">
                         <DialogHeader>
-                          <DialogTitle className="text-blue-700">🔐 Đặt lại mật khẩu</DialogTitle>
+                          <DialogTitle className="text-blue-700">
+                            🔐 Đặt lại mật khẩu
+                          </DialogTitle>
                           <DialogDescription>
                             Nhập email để nhận hướng dẫn đặt lại mật khẩu
                           </DialogDescription>
@@ -262,16 +289,22 @@ export default function Login() {
                           <Alert className="border-green-200 bg-green-50">
                             <CheckCircle className="h-4 w-4 text-green-600" />
                             <AlertDescription className="text-green-800">
-                              ✅ Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến email của bạn.
+                              ✅ Chúng tôi đã gửi hướng dẫn đặt lại mật khẩu đến
+                              email của bạn.
                             </AlertDescription>
                           </Alert>
                         ) : (
-                          <form onSubmit={handleForgotPassword} className="space-y-4">
+                          <form
+                            onSubmit={handleForgotPassword}
+                            className="space-y-4"
+                          >
                             <Input
                               type="email"
                               placeholder="Nhập email của bạn"
                               value={forgotPasswordEmail}
-                              onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                              onChange={(e) =>
+                                setForgotPasswordEmail(e.target.value)
+                              }
                               required
                               className="border-blue-200 focus:border-blue-500 rounded-xl"
                             />
@@ -299,7 +332,9 @@ export default function Login() {
                       <span className="w-full border-t border-gray-300" />
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="bg-white px-2 text-gray-500">Hoặc đăng nhập bằng</span>
+                      <span className="bg-white px-2 text-gray-500">
+                        Hoặc đăng nhập bằng
+                      </span>
                     </div>
                   </div>
 
@@ -313,12 +348,14 @@ export default function Login() {
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-5 h-5 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full flex items-center justify-center">
-                          <span className="text-xs text-white font-bold">G</span>
+                          <span className="text-xs text-white font-bold">
+                            G
+                          </span>
                         </div>
                         <span className="font-medium">Google</span>
                       </div>
                     </Button>
-                    
+
                     <Button
                       type="button"
                       variant="outline"
@@ -328,7 +365,9 @@ export default function Login() {
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-5 h-5 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center">
-                          <span className="text-xs text-white font-bold">M</span>
+                          <span className="text-xs text-white font-bold">
+                            M
+                          </span>
                         </div>
                         <span className="font-medium">Microsoft</span>
                       </div>
@@ -341,7 +380,10 @@ export default function Login() {
               <TabsContent value="register" className="space-y-6 mt-6">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName" className="text-orange-700 font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="fullName"
+                      className="text-orange-700 font-semibold flex items-center gap-2"
+                    >
                       <User className="h-4 w-4" />
                       Họ và tên
                     </Label>
@@ -355,7 +397,10 @@ export default function Login() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="registerEmail" className="text-orange-700 font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="registerEmail"
+                      className="text-orange-700 font-semibold flex items-center gap-2"
+                    >
                       <Mail className="h-4 w-4" />
                       Email
                     </Label>
@@ -369,7 +414,10 @@ export default function Login() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="registerPassword" className="text-orange-700 font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="registerPassword"
+                      className="text-orange-700 font-semibold flex items-center gap-2"
+                    >
                       <Lock className="h-4 w-4" />
                       Mật khẩu
                     </Label>
@@ -388,13 +436,20 @@ export default function Login() {
                         className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-orange-700 font-semibold flex items-center gap-2">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-orange-700 font-semibold flex items-center gap-2"
+                    >
                       <Shield className="h-4 w-4" />
                       Xác nhận mật khẩu
                     </Label>
@@ -411,9 +466,15 @@ export default function Login() {
                         variant="ghost"
                         size="sm"
                         className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                       >
-                        {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showConfirmPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </Button>
                     </div>
                   </div>
@@ -438,8 +499,9 @@ export default function Login() {
                 <Alert className="border-blue-200 bg-blue-50">
                   <Shield className="h-4 w-4 text-blue-600" />
                   <AlertDescription className="text-blue-800 text-sm">
-                    🔐 <strong>Bảo mật:</strong> Sau khi đăng ký, hệ thống sẽ gửi email xác thực. 
-                    Bạn cần xác nhận email để kích hoạt tài khoản và hỗ trợ xác thực 2 bước.
+                    🔐 <strong>Bảo mật:</strong> Sau khi đăng ký, hệ thống sẽ
+                    gửi email xác thực. Bạn cần xác nhận email để kích hoạt tài
+                    khoản và hỗ trợ xác thực 2 bước.
                   </AlertDescription>
                 </Alert>
               </TabsContent>

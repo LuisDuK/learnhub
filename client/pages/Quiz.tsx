@@ -36,7 +36,8 @@ const mockQuizzes = {
     id: 1,
     lessonId: 1,
     title: "🧪 Kiểm tra: Phép cộng và trừ trong phạm vi 100",
-    description: "Bài kiểm tra này gồm 10 câu hỏi về phép cộng và phép trừ. Thời gian làm bài: 20 phút",
+    description:
+      "Bài kiểm tra này gồm 10 câu hỏi về phép cộng và phép trừ. Thời gian làm bài: 20 phút",
     timeLimit: 20, // minutes
     totalPoints: 100,
     passingScore: 70,
@@ -48,7 +49,7 @@ const mockQuizzes = {
         options: ["60", "62", "58", "64"],
         correctAnswer: "62",
         points: 10,
-        explanation: "25 + 37 = 62. Ta có thể tính: 25 + 30 + 7 = 55 + 7 = 62"
+        explanation: "25 + 37 = 62. Ta có thể tính: 25 + 30 + 7 = 55 + 7 = 62",
       },
       {
         id: 2,
@@ -57,7 +58,7 @@ const mockQuizzes = {
         options: ["55", "57", "53", "59"],
         correctAnswer: "55",
         points: 10,
-        explanation: "84 - 29 = 55. Ta vay 1 từ hàng chục: 84 - 29 = 55"
+        explanation: "84 - 29 = 55. Ta vay 1 từ hàng chục: 84 - 29 = 55",
       },
       {
         id: 3,
@@ -65,7 +66,7 @@ const mockQuizzes = {
         question: "Phép tính 45 + 28 = 73 là đúng.",
         correctAnswer: "true",
         points: 10,
-        explanation: "Đúng! 45 + 28 = 73"
+        explanation: "Đúng! 45 + 28 = 73",
       },
       {
         id: 4,
@@ -74,15 +75,18 @@ const mockQuizzes = {
         options: ["30 + 20", "60 - 10", "25 + 25", "70 - 30"],
         correctAnswers: ["30 + 20", "25 + 25"],
         points: 15,
-        explanation: "30 + 20 = 50 và 25 + 25 = 50 là đúng. 60 - 10 = 50 và 70 - 30 = 40"
+        explanation:
+          "30 + 20 = 50 và 25 + 25 = 50 là đúng. 60 - 10 = 50 và 70 - 30 = 40",
       },
       {
         id: 5,
         type: "essay",
-        question: "Giải bài toán: Mẹ mua 48 quả cam, gia đình ăn hết 19 quả. Hỏi còn lại bao nhiêu quả cam? Trình bày cách giải.",
+        question:
+          "Giải bài toán: Mẹ mua 48 quả cam, gia đình ăn hết 19 quả. Hỏi còn lại bao nhiêu quả cam? Trình bày cách giải.",
         points: 25,
         sampleAnswer: "Phép tính: 48 - 19 = 29. Vậy còn lại 29 quả cam.",
-        explanation: "Đây là bài toán phép trừ. Ta lấy số cam ban đầu trừ đi số cam đã ăn."
+        explanation:
+          "Đây là bài toán phép trừ. Ta lấy số cam ban đầu trừ đi số cam đã ăn.",
       },
       {
         id: 6,
@@ -91,18 +95,21 @@ const mockQuizzes = {
         options: ["20", "22", "24", "26"],
         correctAnswer: "22",
         points: 10,
-        explanation: "58 - 36 = 22, vậy số còn thiếu là 22"
+        explanation: "58 - 36 = 22, vậy số còn thiếu là 22",
       },
       {
         id: 7,
         type: "essay",
-        question: "Sắp xếp các số sau theo thứ tự từ bé đến lớn: 67, 34, 89, 12, 45. Giải thích cách sắp xếp.",
+        question:
+          "Sắp xếp các số sau theo thứ tự từ bé đến lớn: 67, 34, 89, 12, 45. Giải thích cách sắp xếp.",
         points: 20,
-        sampleAnswer: "Thứ tự: 12, 34, 45, 67, 89. So sánh từng cặp số từ trái qua phải.",
-        explanation: "So sánh hàng chục trước, nếu bằng nhau thì so sánh hàng đơn vị."
-      }
-    ]
-  }
+        sampleAnswer:
+          "Thứ tự: 12, 34, 45, 67, 89. So sánh từng cặp số từ trái qua phải.",
+        explanation:
+          "So sánh hàng chục trước, nếu bằng nhau thì so sánh hàng đơn vị.",
+      },
+    ],
+  },
 };
 
 interface Answer {
@@ -114,7 +121,7 @@ interface Answer {
 export default function Quiz() {
   const { lessonId, id } = useParams();
   const navigate = useNavigate();
-  
+
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [timeRemaining, setTimeRemaining] = useState(20 * 60); // 20 minutes
@@ -140,7 +147,9 @@ export default function Quiz() {
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <div className="text-6xl mb-4">😔</div>
-            <h2 className="text-2xl font-bold mb-2">Không tìm thấy bài kiểm tra</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Không tìm thấy bài kiểm tra
+            </h2>
             <Button onClick={() => navigate(`/lesson/${lessonId}`)}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Quay lại bài học
@@ -154,18 +163,22 @@ export default function Quiz() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getAnswer = (questionId: number): Answer | undefined => {
-    return answers.find(a => a.questionId === questionId);
+    return answers.find((a) => a.questionId === questionId);
   };
 
-  const updateAnswer = (questionId: number, answer: string | string[], type: string) => {
-    setAnswers(prev => {
-      const existing = prev.findIndex(a => a.questionId === questionId);
+  const updateAnswer = (
+    questionId: number,
+    answer: string | string[],
+    type: string,
+  ) => {
+    setAnswers((prev) => {
+      const existing = prev.findIndex((a) => a.questionId === questionId);
       const newAnswer: Answer = { questionId, type, answer };
-      
+
       if (existing >= 0) {
         const updated = [...prev];
         updated[existing] = newAnswer;
@@ -178,8 +191,8 @@ export default function Quiz() {
 
   const calculateScore = () => {
     let totalScore = 0;
-    
-    quiz.questions.forEach(question => {
+
+    quiz.questions.forEach((question) => {
       const answer = getAnswer(question.id);
       if (!answer) return;
 
@@ -193,13 +206,19 @@ export default function Quiz() {
         case "multiple_select":
           const userAnswers = Array.isArray(answer.answer) ? answer.answer : [];
           const correctAnswers = question.correctAnswers || [];
-          if (JSON.stringify(userAnswers.sort()) === JSON.stringify(correctAnswers.sort())) {
+          if (
+            JSON.stringify(userAnswers.sort()) ===
+            JSON.stringify(correctAnswers.sort())
+          ) {
             totalScore += question.points;
           }
           break;
         case "essay":
           // For essays, give partial credit (this would be manual grading in real app)
-          if (typeof answer.answer === "string" && answer.answer.trim().length > 10) {
+          if (
+            typeof answer.answer === "string" &&
+            answer.answer.trim().length > 10
+          ) {
             totalScore += Math.floor(question.points * 0.8); // 80% credit for attempt
           }
           break;
@@ -234,29 +253,40 @@ export default function Quiz() {
       <DashboardLayout>
         <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
           {/* Results Header */}
-          <Card className={`border-2 ${isPassed ? 'border-green-200 bg-green-50' : 'border-yellow-200 bg-yellow-50'} shadow-lg`}>
+          <Card
+            className={`border-2 ${isPassed ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"} shadow-lg`}
+          >
             <CardContent className="p-8 text-center">
-              <div className="text-8xl mb-4">
-                {isPassed ? '🎉' : '😊'}
-              </div>
-              <h1 className={`text-3xl font-bold mb-2 ${isPassed ? 'text-green-700' : 'text-yellow-700'}`}>
-                {isPassed ? 'Chúc mừng! Bé đã qua bài kiểm tra!' : 'Bé đã cố gắng rất tốt!'}
+              <div className="text-8xl mb-4">{isPassed ? "🎉" : "😊"}</div>
+              <h1
+                className={`text-3xl font-bold mb-2 ${isPassed ? "text-green-700" : "text-yellow-700"}`}
+              >
+                {isPassed
+                  ? "Chúc mừng! Bé đã qua bài kiểm tra!"
+                  : "Bé đã cố gắng rất tốt!"}
               </h1>
               <div className="flex items-center justify-center gap-8 mt-6">
                 <div className="text-center">
-                  <div className={`text-4xl font-bold ${isPassed ? 'text-green-600' : 'text-yellow-600'}`}>
+                  <div
+                    className={`text-4xl font-bold ${isPassed ? "text-green-600" : "text-yellow-600"}`}
+                  >
                     {score}/{quiz.totalPoints}
                   </div>
                   <p className="text-sm text-muted-foreground">Điểm số</p>
                 </div>
                 <div className="text-center">
-                  <div className={`text-4xl font-bold ${isPassed ? 'text-green-600' : 'text-yellow-600'}`}>
+                  <div
+                    className={`text-4xl font-bold ${isPassed ? "text-green-600" : "text-yellow-600"}`}
+                  >
                     {Math.round((score / quiz.totalPoints) * 100)}%
                   </div>
                   <p className="text-sm text-muted-foreground">Tỷ lệ đúng</p>
                 </div>
                 <div className="text-center">
-                  <Badge variant={isPassed ? "default" : "secondary"} className="text-lg px-4 py-2">
+                  <Badge
+                    variant={isPassed ? "default" : "secondary"}
+                    className="text-lg px-4 py-2"
+                  >
                     {isPassed ? "🌟 Đạt" : "📚 Cần ôn tập"}
                   </Badge>
                 </div>
@@ -265,8 +295,9 @@ export default function Quiz() {
                 <Alert className="mt-6 border-blue-200 bg-blue-50">
                   <BookOpen className="h-4 w-4 text-blue-600" />
                   <AlertDescription className="text-blue-800">
-                    💡 <strong>Gợi ý:</strong> Bé hãy ôn lại bài học và thử làm lại bài kiểm tra nhé! 
-                    Điểm qua môn là {quiz.passingScore} điểm.
+                    💡 <strong>Gợi ý:</strong> Bé hãy ôn lại bài học và thử làm
+                    lại bài kiểm tra nhé! Điểm qua môn là {quiz.passingScore}{" "}
+                    điểm.
                   </AlertDescription>
                 </Alert>
               )}
@@ -288,31 +319,50 @@ export default function Quiz() {
               {quiz.questions.map((question, index) => {
                 const userAnswer = getAnswer(question.id);
                 let isCorrect = false;
-                
+
                 switch (question.type) {
                   case "multiple_choice":
                   case "true_false":
                     isCorrect = userAnswer?.answer === question.correctAnswer;
                     break;
                   case "multiple_select":
-                    const userAnswers = Array.isArray(userAnswer?.answer) ? userAnswer.answer : [];
+                    const userAnswers = Array.isArray(userAnswer?.answer)
+                      ? userAnswer.answer
+                      : [];
                     const correctAnswers = question.correctAnswers || [];
-                    isCorrect = JSON.stringify(userAnswers.sort()) === JSON.stringify(correctAnswers.sort());
+                    isCorrect =
+                      JSON.stringify(userAnswers.sort()) ===
+                      JSON.stringify(correctAnswers.sort());
                     break;
                   case "essay":
-                    isCorrect = userAnswer?.answer && (userAnswer.answer as string).trim().length > 10;
+                    isCorrect =
+                      userAnswer?.answer &&
+                      (userAnswer.answer as string).trim().length > 10;
                     break;
                 }
 
                 return (
-                  <div key={question.id} className={`rounded-lg border-2 p-4 ${
-                    isCorrect ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'
-                  }`}>
+                  <div
+                    key={question.id}
+                    className={`rounded-lg border-2 p-4 ${
+                      isCorrect
+                        ? "border-green-200 bg-green-50"
+                        : "border-red-200 bg-red-50"
+                    }`}
+                  >
                     <div className="flex items-start gap-3">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full ${
-                        isCorrect ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
-                      }`}>
-                        {isCorrect ? <CheckCircle className="h-5 w-5" /> : <X className="h-5 w-5" />}
+                      <div
+                        className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                          isCorrect
+                            ? "bg-green-100 text-green-600"
+                            : "bg-red-100 text-red-600"
+                        }`}
+                      >
+                        {isCorrect ? (
+                          <CheckCircle className="h-5 w-5" />
+                        ) : (
+                          <X className="h-5 w-5" />
+                        )}
                       </div>
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2">
@@ -320,22 +370,29 @@ export default function Quiz() {
                           <Badge variant="outline" className="text-xs">
                             {question.points} điểm
                           </Badge>
-                          <Badge variant={isCorrect ? "default" : "destructive"} className="text-xs">
+                          <Badge
+                            variant={isCorrect ? "default" : "destructive"}
+                            className="text-xs"
+                          >
                             {isCorrect ? "Đúng" : "Sai"}
                           </Badge>
                         </div>
                         <p className="text-sm">{question.question}</p>
-                        
+
                         {/* User's answer */}
                         <div className="text-sm">
                           <strong>Câu trả lời của bé:</strong>
                           <div className="mt-1 p-2 bg-white rounded border">
                             {userAnswer ? (
-                              Array.isArray(userAnswer.answer) 
-                                ? userAnswer.answer.join(", ") 
-                                : userAnswer.answer
+                              Array.isArray(userAnswer.answer) ? (
+                                userAnswer.answer.join(", ")
+                              ) : (
+                                userAnswer.answer
+                              )
                             ) : (
-                              <span className="text-gray-400 italic">Chưa trả lời</span>
+                              <span className="text-gray-400 italic">
+                                Chưa trả lời
+                              </span>
                             )}
                           </div>
                         </div>
@@ -344,20 +401,23 @@ export default function Quiz() {
                         <div className="text-sm">
                           <strong>Đáp án đúng:</strong>
                           <div className="mt-1 p-2 bg-green-50 rounded border border-green-200">
-                            {question.type === "multiple_select" 
+                            {question.type === "multiple_select"
                               ? (question.correctAnswers || []).join(", ")
                               : question.type === "essay"
-                              ? question.sampleAnswer
-                              : question.correctAnswer
-                            }
+                                ? question.sampleAnswer
+                                : question.correctAnswer}
                           </div>
                         </div>
 
                         {/* Explanation */}
                         {question.explanation && (
                           <div className="text-sm bg-blue-50 p-3 rounded border border-blue-200">
-                            <strong className="text-blue-800">💡 Giải thích:</strong>
-                            <p className="text-blue-700 mt-1">{question.explanation}</p>
+                            <strong className="text-blue-800">
+                              💡 Giải thích:
+                            </strong>
+                            <p className="text-blue-700 mt-1">
+                              {question.explanation}
+                            </p>
                           </div>
                         )}
                       </div>
@@ -370,7 +430,7 @@ export default function Quiz() {
 
           {/* Action Buttons */}
           <div className="flex gap-4 justify-center">
-            <Button 
+            <Button
               onClick={handleReset}
               variant="outline"
               className="border-yellow-200 text-yellow-700 hover:bg-yellow-50"
@@ -378,13 +438,13 @@ export default function Quiz() {
               <RotateCcw className="h-4 w-4 mr-2" />
               Làm lại
             </Button>
-            <Button 
+            <Button
               onClick={() => navigate(`/lesson/${lessonId}`)}
               className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80"
             >
               Quay lại bài học
             </Button>
-            <Button 
+            <Button
               onClick={() => navigate("/progress")}
               variant="outline"
               className="border-accent text-accent hover:bg-accent hover:text-white"
@@ -404,8 +464,8 @@ export default function Quiz() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               onClick={() => navigate(`/lesson/${lessonId}`)}
               className="border-primary/20 hover:bg-primary/5"
             >
@@ -421,14 +481,20 @@ export default function Quiz() {
           </div>
 
           {/* Timer */}
-          <Card className={`border-2 ${timeRemaining < 300 ? 'border-red-200 bg-red-50' : 'border-accent/20 bg-gradient-to-r from-accent/10 to-primary/10'}`}>
+          <Card
+            className={`border-2 ${timeRemaining < 300 ? "border-red-200 bg-red-50" : "border-accent/20 bg-gradient-to-r from-accent/10 to-primary/10"}`}
+          >
             <CardContent className="p-4">
-              <div className={`flex items-center gap-2 ${timeRemaining < 300 ? 'text-red-600' : 'text-accent'}`}>
+              <div
+                className={`flex items-center gap-2 ${timeRemaining < 300 ? "text-red-600" : "text-accent"}`}
+              >
                 <Clock className="h-5 w-5" />
-                <span className="font-bold text-lg">{formatTime(timeRemaining)}</span>
+                <span className="font-bold text-lg">
+                  {formatTime(timeRemaining)}
+                </span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                {timeRemaining < 300 ? '⚠️ Sắp hết giờ!' : 'Thời gian còn lại'}
+                {timeRemaining < 300 ? "⚠️ Sắp hết giờ!" : "Thời gian còn lại"}
               </p>
             </CardContent>
           </Card>
@@ -439,7 +505,9 @@ export default function Quiz() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Tiến độ làm bài</span>
-              <span className="text-sm font-bold text-primary">{Math.round(progress)}%</span>
+              <span className="text-sm font-bold text-primary">
+                {Math.round(progress)}%
+              </span>
             </div>
             <Progress value={progress} className="h-3" />
             <p className="text-xs text-muted-foreground mt-2">
@@ -462,7 +530,9 @@ export default function Quiz() {
                   key={q.id}
                   variant={currentQuestion === q.id ? "default" : "outline"}
                   className={`w-full justify-start text-left ${
-                    getAnswer(q.id) ? "border-green-500 bg-green-50 hover:bg-green-100" : ""
+                    getAnswer(q.id)
+                      ? "border-green-500 bg-green-50 hover:bg-green-100"
+                      : ""
                   }`}
                   onClick={() => setCurrentQuestion(q.id)}
                 >
@@ -472,14 +542,19 @@ export default function Quiz() {
                     </div>
                     <div className="flex-1">
                       <div className="text-xs text-muted-foreground">
-                        {q.type === "multiple_choice" ? "📋 Trắc nghiệm" :
-                         q.type === "true_false" ? "✅ Đúng/Sai" :
-                         q.type === "multiple_select" ? "☑️ Nhiều lựa chọn" :
-                         "✍️ Tự luận"}
+                        {q.type === "multiple_choice"
+                          ? "📋 Trắc nghiệm"
+                          : q.type === "true_false"
+                            ? "✅ Đúng/Sai"
+                            : q.type === "multiple_select"
+                              ? "☑️ Nhiều lựa chọn"
+                              : "✍️ Tự luận"}
                       </div>
                       <div className="text-xs">{q.points} điểm</div>
                     </div>
-                    {getAnswer(q.id) && <CheckCircle className="h-4 w-4 text-green-600" />}
+                    {getAnswer(q.id) && (
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    )}
                   </div>
                 </Button>
               ))}
@@ -489,25 +564,40 @@ export default function Quiz() {
           {/* Main Question Area */}
           <div className="lg:col-span-3 space-y-6">
             {quiz.questions
-              .filter(q => q.id === currentQuestion)
-              .map(question => {
+              .filter((q) => q.id === currentQuestion)
+              .map((question) => {
                 const currentAnswer = getAnswer(question.id);
-                
+
                 return (
-                  <Card key={question.id} className="border-primary/20 shadow-lg">
+                  <Card
+                    key={question.id}
+                    className="border-primary/20 shadow-lg"
+                  >
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="flex items-center gap-2">
-                          Câu {quiz.questions.findIndex(q => q.id === question.id) + 1}
-                          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+                          Câu{" "}
+                          {quiz.questions.findIndex(
+                            (q) => q.id === question.id,
+                          ) + 1}
+                          <Badge
+                            variant="outline"
+                            className="bg-primary/10 text-primary border-primary/20"
+                          >
                             {question.points} điểm
                           </Badge>
                         </CardTitle>
-                        <Badge variant="outline" className="bg-accent/10 text-accent border-accent/20">
-                          {question.type === "multiple_choice" ? "📋 Trắc nghiệm" :
-                           question.type === "true_false" ? "✅ Đúng/Sai" :
-                           question.type === "multiple_select" ? "☑️ Nhiều lựa chọn" :
-                           "✍️ Tự luận"}
+                        <Badge
+                          variant="outline"
+                          className="bg-accent/10 text-accent border-accent/20"
+                        >
+                          {question.type === "multiple_choice"
+                            ? "📋 Trắc nghiệm"
+                            : question.type === "true_false"
+                              ? "✅ Đúng/Sai"
+                              : question.type === "multiple_select"
+                                ? "☑️ Nhiều lựa chọn"
+                                : "✍️ Tự luận"}
                         </Badge>
                       </div>
                       <CardDescription className="text-base">
@@ -518,14 +608,25 @@ export default function Quiz() {
                       {/* Multiple Choice */}
                       {question.type === "multiple_choice" && (
                         <RadioGroup
-                          value={currentAnswer?.answer as string || ""}
-                          onValueChange={(value) => updateAnswer(question.id, value, question.type)}
+                          value={(currentAnswer?.answer as string) || ""}
+                          onValueChange={(value) =>
+                            updateAnswer(question.id, value, question.type)
+                          }
                           className="space-y-3"
                         >
                           {question.options?.map((option, index) => (
-                            <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
-                              <RadioGroupItem value={option} id={`q${question.id}_${index}`} />
-                              <Label htmlFor={`q${question.id}_${index}`} className="flex-1 cursor-pointer">
+                            <div
+                              key={index}
+                              className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50"
+                            >
+                              <RadioGroupItem
+                                value={option}
+                                id={`q${question.id}_${index}`}
+                              />
+                              <Label
+                                htmlFor={`q${question.id}_${index}`}
+                                className="flex-1 cursor-pointer"
+                              >
                                 {option}
                               </Label>
                             </div>
@@ -536,19 +637,33 @@ export default function Quiz() {
                       {/* True/False */}
                       {question.type === "true_false" && (
                         <RadioGroup
-                          value={currentAnswer?.answer as string || ""}
-                          onValueChange={(value) => updateAnswer(question.id, value, question.type)}
+                          value={(currentAnswer?.answer as string) || ""}
+                          onValueChange={(value) =>
+                            updateAnswer(question.id, value, question.type)
+                          }
                           className="space-y-3"
                         >
                           <div className="flex items-center space-x-3 p-3 rounded-lg border border-green-200 hover:bg-green-50">
-                            <RadioGroupItem value="true" id={`q${question.id}_true`} />
-                            <Label htmlFor={`q${question.id}_true`} className="flex-1 cursor-pointer">
+                            <RadioGroupItem
+                              value="true"
+                              id={`q${question.id}_true`}
+                            />
+                            <Label
+                              htmlFor={`q${question.id}_true`}
+                              className="flex-1 cursor-pointer"
+                            >
                               ✅ Đúng
                             </Label>
                           </div>
                           <div className="flex items-center space-x-3 p-3 rounded-lg border border-red-200 hover:bg-red-50">
-                            <RadioGroupItem value="false" id={`q${question.id}_false`} />
-                            <Label htmlFor={`q${question.id}_false`} className="flex-1 cursor-pointer">
+                            <RadioGroupItem
+                              value="false"
+                              id={`q${question.id}_false`}
+                            />
+                            <Label
+                              htmlFor={`q${question.id}_false`}
+                              className="flex-1 cursor-pointer"
+                            >
                               ❌ Sai
                             </Label>
                           </div>
@@ -558,25 +673,41 @@ export default function Quiz() {
                       {/* Multiple Select */}
                       {question.type === "multiple_select" && (
                         <div className="space-y-3">
-                          <p className="text-sm text-muted-foreground">Chọn tất cả đáp án đúng:</p>
+                          <p className="text-sm text-muted-foreground">
+                            Chọn tất cả đáp án đúng:
+                          </p>
                           {question.options?.map((option, index) => {
-                            const selectedAnswers = (currentAnswer?.answer as string[]) || [];
+                            const selectedAnswers =
+                              (currentAnswer?.answer as string[]) || [];
                             const isSelected = selectedAnswers.includes(option);
-                            
+
                             return (
-                              <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50">
+                              <div
+                                key={index}
+                                className="flex items-center space-x-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-50"
+                              >
                                 <Checkbox
                                   id={`q${question.id}_${index}`}
                                   checked={isSelected}
                                   onCheckedChange={(checked) => {
-                                    const currentAnswers = (currentAnswer?.answer as string[]) || [];
-                                    const newAnswers = checked 
+                                    const currentAnswers =
+                                      (currentAnswer?.answer as string[]) || [];
+                                    const newAnswers = checked
                                       ? [...currentAnswers, option]
-                                      : currentAnswers.filter(a => a !== option);
-                                    updateAnswer(question.id, newAnswers, question.type);
+                                      : currentAnswers.filter(
+                                          (a) => a !== option,
+                                        );
+                                    updateAnswer(
+                                      question.id,
+                                      newAnswers,
+                                      question.type,
+                                    );
                                   }}
                                 />
-                                <Label htmlFor={`q${question.id}_${index}`} className="flex-1 cursor-pointer">
+                                <Label
+                                  htmlFor={`q${question.id}_${index}`}
+                                  className="flex-1 cursor-pointer"
+                                >
                                   {option}
                                 </Label>
                               </div>
@@ -591,7 +722,13 @@ export default function Quiz() {
                           <Textarea
                             placeholder="Viết câu trả lời chi tiết ở đây..."
                             value={(currentAnswer?.answer as string) || ""}
-                            onChange={(e) => updateAnswer(question.id, e.target.value, question.type)}
+                            onChange={(e) =>
+                              updateAnswer(
+                                question.id,
+                                e.target.value,
+                                question.type,
+                              )
+                            }
                             className="min-h-[150px] border-primary/20 focus:border-primary resize-none"
                           />
                           <p className="text-xs text-muted-foreground">
@@ -609,12 +746,17 @@ export default function Quiz() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  const currentIndex = quiz.questions.findIndex(q => q.id === currentQuestion);
+                  const currentIndex = quiz.questions.findIndex(
+                    (q) => q.id === currentQuestion,
+                  );
                   if (currentIndex > 0) {
                     setCurrentQuestion(quiz.questions[currentIndex - 1].id);
                   }
                 }}
-                disabled={quiz.questions.findIndex(q => q.id === currentQuestion) === 0}
+                disabled={
+                  quiz.questions.findIndex((q) => q.id === currentQuestion) ===
+                  0
+                }
                 className="border-secondary/20 text-secondary hover:bg-secondary hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -630,7 +772,7 @@ export default function Quiz() {
                   <RotateCcw className="h-4 w-4 mr-2" />
                   Làm lại
                 </Button>
-                
+
                 <Button
                   onClick={handleSubmit}
                   className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold px-8"
@@ -643,12 +785,17 @@ export default function Quiz() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  const currentIndex = quiz.questions.findIndex(q => q.id === currentQuestion);
+                  const currentIndex = quiz.questions.findIndex(
+                    (q) => q.id === currentQuestion,
+                  );
                   if (currentIndex < quiz.questions.length - 1) {
                     setCurrentQuestion(quiz.questions[currentIndex + 1].id);
                   }
                 }}
-                disabled={quiz.questions.findIndex(q => q.id === currentQuestion) === quiz.questions.length - 1}
+                disabled={
+                  quiz.questions.findIndex((q) => q.id === currentQuestion) ===
+                  quiz.questions.length - 1
+                }
                 className="border-accent/20 text-accent hover:bg-accent hover:text-white"
               >
                 Câu tiếp

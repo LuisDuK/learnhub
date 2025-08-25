@@ -11,14 +11,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
+import {
   Mail,
   CheckCircle,
   AlertTriangle,
   RefreshCw,
   Shield,
   Clock,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 
 export default function EmailVerification() {
@@ -26,7 +26,9 @@ export default function EmailVerification() {
   const [searchParams] = useSearchParams();
   const [otpCode, setOtpCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState<"pending" | "success" | "error">("pending");
+  const [verificationStatus, setVerificationStatus] = useState<
+    "pending" | "success" | "error"
+  >("pending");
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
   const [canResend, setCanResend] = useState(false);
 
@@ -53,7 +55,7 @@ export default function EmailVerification() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleAutoVerification = async () => {
@@ -110,7 +112,7 @@ export default function EmailVerification() {
               Tài khoản của bạn đã được kích hoạt
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent className="p-8 text-center space-y-6">
             <Alert className="border-green-200 bg-green-50">
               <CheckCircle className="h-4 w-4 text-green-600" />
@@ -127,19 +129,25 @@ export default function EmailVerification() {
                   <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-2">
                     <Shield className="h-6 w-6 text-blue-600" />
                   </div>
-                  <span className="text-sm text-blue-700 font-medium">Bảo mật</span>
+                  <span className="text-sm text-blue-700 font-medium">
+                    Bảo mật
+                  </span>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
                     <CheckCircle className="h-6 w-6 text-green-600" />
                   </div>
-                  <span className="text-sm text-green-700 font-medium">Đã xác thực</span>
+                  <span className="text-sm text-green-700 font-medium">
+                    Đã xác thực
+                  </span>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-2">
                     <Sparkles className="h-6 w-6 text-orange-600" />
                   </div>
-                  <span className="text-sm text-orange-700 font-medium">Sẵn sàng</span>
+                  <span className="text-sm text-orange-700 font-medium">
+                    Sẵn sàng
+                  </span>
                 </div>
               </div>
 
@@ -151,7 +159,12 @@ export default function EmailVerification() {
               </Button>
 
               <p className="text-sm text-gray-600">
-                Hoặc <Button variant="link" onClick={() => navigate("/")} className="p-0 h-auto text-blue-600">
+                Hoặc{" "}
+                <Button
+                  variant="link"
+                  onClick={() => navigate("/")}
+                  className="p-0 h-auto text-blue-600"
+                >
                   quay về trang chủ
                 </Button>
               </p>
@@ -189,7 +202,7 @@ export default function EmailVerification() {
             Vui lòng kiểm tra email để hoàn tất đăng ký
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="p-6 space-y-6">
           {/* Email sent confirmation */}
           <Alert className="border-blue-200 bg-blue-50">
@@ -197,21 +210,29 @@ export default function EmailVerification() {
             <AlertDescription className="text-blue-800">
               📨 Chúng tôi đã gửi email xác thực đến <strong>{email}</strong>
               <br />
-              <span className="text-sm">Vui lòng kiểm tra hộp thư (bao gồm thư rác)</span>
+              <span className="text-sm">
+                Vui lòng kiểm tra hộp thư (bao gồm thư rác)
+              </span>
             </AlertDescription>
           </Alert>
 
           {/* Two verification methods */}
           <div className="space-y-4">
             <div className="text-center">
-              <h3 className="font-bold text-gray-700 mb-2">Hai cách xác thực:</h3>
+              <h3 className="font-bold text-gray-700 mb-2">
+                Hai cách xác thực:
+              </h3>
             </div>
 
             {/* Method 1: Click link */}
             <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">1</div>
-                <h4 className="font-bold text-green-700">Nhấp vào link trong email</h4>
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                  1
+                </div>
+                <h4 className="font-bold text-green-700">
+                  Nhấp vào link trong email
+                </h4>
               </div>
               <p className="text-sm text-green-600 ml-11">
                 Tự động xác thực và chuyển hướng về trang đăng nhập
@@ -221,10 +242,14 @@ export default function EmailVerification() {
             {/* Method 2: Enter OTP */}
             <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">2</div>
-                <h4 className="font-bold text-orange-700">Nhập mã OTP (6 chữ số)</h4>
+                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">
+                  2
+                </div>
+                <h4 className="font-bold text-orange-700">
+                  Nhập mã OTP (6 chữ số)
+                </h4>
               </div>
-              
+
               <form onSubmit={handleVerifyOTP} className="space-y-3 ml-11">
                 <div className="space-y-2">
                   <Label htmlFor="otp" className="text-orange-700 font-medium">
@@ -235,12 +260,14 @@ export default function EmailVerification() {
                     type="text"
                     placeholder="123456"
                     value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    onChange={(e) =>
+                      setOtpCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
                     className="border-orange-200 focus:border-orange-500 rounded-xl text-center text-lg font-mono tracking-widest"
                     maxLength={6}
                   />
                 </div>
-                
+
                 <Button
                   type="submit"
                   disabled={otpCode.length !== 6 || isLoading}
@@ -264,7 +291,8 @@ export default function EmailVerification() {
             <Alert className="border-red-200 bg-red-50">
               <AlertTriangle className="h-4 w-4 text-red-600" />
               <AlertDescription className="text-red-800">
-                ❌ Mã OTP không đúng. Vui lòng kiểm tra lại hoặc yêu cầu gửi mã mới.
+                ❌ Mã OTP không đúng. Vui lòng kiểm tra lại hoặc yêu cầu gửi mã
+                mới.
               </AlertDescription>
             </Alert>
           )}
@@ -274,10 +302,12 @@ export default function EmailVerification() {
             <div className="flex items-center justify-center gap-2 mb-3">
               <Clock className="h-4 w-4 text-gray-500" />
               <span className="text-sm text-gray-600">
-                {canResend ? "Mã đã hết hạn" : `Mã hết hạn sau ${formatTime(timeLeft)}`}
+                {canResend
+                  ? "Mã đã hết hạn"
+                  : `Mã hết hạn sau ${formatTime(timeLeft)}`}
               </span>
             </div>
-            
+
             <Button
               onClick={handleResendEmail}
               disabled={!canResend || isLoading}
