@@ -612,7 +612,7 @@ export default function AdminAIConfig() {
                                       <SelectItem value="text">Văn bản</SelectItem>
                                       <SelectItem value="textarea">Văn bản dài</SelectItem>
                                       <SelectItem value="number">Số</SelectItem>
-                                      <SelectItem value="select">Lựa chọn</SelectItem>
+                                      <SelectItem value="select">L��a chọn</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>
@@ -731,6 +731,7 @@ export default function AdminAIConfig() {
                       <TableHead>ID</TableHead>
                       <TableHead>Tên prompt</TableHead>
                       <TableHead>Nội dung</TableHead>
+                      <TableHead>Biến động</TableHead>
                       <TableHead>Module</TableHead>
                       <TableHead>Ngày tạo</TableHead>
                       <TableHead className="text-center">Hành động</TableHead>
@@ -747,10 +748,23 @@ export default function AdminAIConfig() {
                         </TableCell>
                         <TableCell>
                           <div
-                            className="max-w-xs truncate"
+                            className="max-w-xs truncate font-mono text-sm"
                             title={prompt.content}
                           >
                             {prompt.content}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1 max-w-xs">
+                            {prompt.variables && prompt.variables.length > 0 ? (
+                              prompt.variables.map((variable, idx) => (
+                                <Badge key={idx} variant="outline" className="text-xs">
+                                  {`{{${variable.name}}}`}
+                                </Badge>
+                              ))
+                            ) : (
+                              <span className="text-gray-400 text-xs italic">Không có biến</span>
+                            )}
                           </div>
                         </TableCell>
                         <TableCell>
@@ -767,7 +781,7 @@ export default function AdminAIConfig() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleEditPrompt(prompt)}>
                                 <Edit className="mr-2 h-4 w-4" />
                                 Chỉnh sửa
                               </DropdownMenuItem>
