@@ -54,11 +54,14 @@ const mockCourses = [
       "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán học",
-    teacher: "Cô Nguyễn Thị Mai",
+    difficulty: "Cơ bản",
+    duration: "8 tuần",
+    ageGroup: "6-8 tuổi",
     studentsCount: 120,
     completionRate: 85,
     status: "Đang mở",
     createdAt: "2024-01-15",
+    aiGenerated: true,
   },
   {
     id: 2,
@@ -67,11 +70,14 @@ const mockCourses = [
       "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
     subject: "Tiếng Việt",
-    teacher: "Cô Trần Thị Lan",
+    difficulty: "Trung bình",
+    duration: "12 tuần",
+    ageGroup: "8-9 tuổi",
     studentsCount: 95,
     completionRate: 78,
     status: "Đang mở",
     createdAt: "2024-01-20",
+    aiGenerated: false,
   },
   {
     id: 3,
@@ -80,11 +86,14 @@ const mockCourses = [
       "Khóa học tiếng Anh cơ bản với phương pháp học qua trò chơi và bài hát.",
     image: "/placeholder.svg",
     subject: "Tiếng Anh",
-    teacher: "Thầy John Smith",
+    difficulty: "Cơ bản",
+    duration: "10 tuần",
+    ageGroup: "5-7 tuổi",
     studentsCount: 80,
     completionRate: 92,
     status: "Đang mở",
     createdAt: "2024-01-10",
+    aiGenerated: true,
   },
   {
     id: 4,
@@ -93,11 +102,14 @@ const mockCourses = [
       "Khám phá thế giới xung quanh qua các thí nghiệm đơn giản và quan sát thiên nhiên.",
     image: "/placeholder.svg",
     subject: "Khoa học",
-    teacher: "Cô Lê Thị Hoa",
+    difficulty: "Trung bình",
+    duration: "6 tuần",
+    ageGroup: "7-9 tuổi",
     studentsCount: 75,
     completionRate: 70,
     status: "Tạm dừng",
     createdAt: "2024-01-05",
+    aiGenerated: false,
   },
 ];
 
@@ -111,12 +123,19 @@ const subjects = [
   "Địa lý",
 ];
 
-const teachers = [
-  "Cô Nguyễn Thị Mai",
-  "Cô Trần Thị Lan",
-  "Thầy John Smith",
-  "Cô Lê Thị Hoa",
-  "Thầy Phạm Văn Nam",
+const difficulties = [
+  "Cơ bản",
+  "Trung bình",
+  "Nâng cao",
+];
+
+const ageGroups = [
+  "3-5 tuổi",
+  "5-7 tuổi",
+  "6-8 tuổi",
+  "7-9 tuổi",
+  "8-10 tuổi",
+  "9-12 tuổi",
 ];
 
 export default function AdminCourses() {
@@ -128,7 +147,11 @@ export default function AdminCourses() {
     name: "",
     description: "",
     subject: "",
-    teacher: "",
+    difficulty: "",
+    duration: "",
+    ageGroup: "",
+    objectives: "",
+    prerequisites: "",
     image: "",
   });
 
@@ -146,7 +169,9 @@ export default function AdminCourses() {
       newCourse.name &&
       newCourse.description &&
       newCourse.subject &&
-      newCourse.teacher
+      newCourse.difficulty &&
+      newCourse.duration &&
+      newCourse.ageGroup
     ) {
       const course = {
         id: courses.length + 1,
@@ -156,13 +181,18 @@ export default function AdminCourses() {
         completionRate: 0,
         status: "Đang mở",
         createdAt: new Date().toISOString().split("T")[0],
+        aiGenerated: false,
       };
       setCourses([...courses, course]);
       setNewCourse({
         name: "",
         description: "",
         subject: "",
-        teacher: "",
+        difficulty: "",
+        duration: "",
+        ageGroup: "",
+        objectives: "",
+        prerequisites: "",
         image: "",
       });
       setIsAddDialogOpen(false);
@@ -198,11 +228,12 @@ export default function AdminCourses() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              📚 Quản lý khóa học
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+              <BookOpen className="h-8 w-8 text-blue-600" />
+              Quản lý khóa học
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý tất cả các khóa học và môn học
+              Quản lý tất cả các khóa học và môn học (Được điều hành bởi Quản trị viên)
             </p>
           </div>
 
@@ -213,17 +244,17 @@ export default function AdminCourses() {
                 Thêm khóa học
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Thêm khóa học mới</DialogTitle>
                 <DialogDescription>
-                  Tạo khóa học mới cho học sinh
+                  Tạo khóa học mới cho học sinh. Tất cả nội dung sẽ được quản lý bởi quản trị viên.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-6 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="courseName" className="text-right">
-                    Tên môn học
+                    Tên khóa học *
                   </Label>
                   <Input
                     id="courseName"
@@ -232,11 +263,13 @@ export default function AdminCourses() {
                       setNewCourse({ ...newCourse, name: e.target.value })
                     }
                     className="col-span-3"
+                    placeholder="VD: Toán học cơ bản"
                   />
                 </div>
+
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="courseDesc" className="text-right">
-                    Mô tả
+                    Mô tả *
                   </Label>
                   <Textarea
                     id="courseDesc"
@@ -249,51 +282,134 @@ export default function AdminCourses() {
                     }
                     className="col-span-3"
                     rows={3}
+                    placeholder="Mô tả chi tiết về khóa học..."
                   />
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="subject" className="text-right">
-                    Môn học
-                  </Label>
-                  <Select
-                    value={newCourse.subject}
-                    onValueChange={(value) =>
-                      setNewCourse({ ...newCourse, subject: value })
-                    }
-                  >
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Chọn môn học" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {subjects.slice(1).map((subject) => (
-                        <SelectItem key={subject} value={subject}>
-                          {subject}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                    <Label htmlFor="subject" className="text-right col-span-2">
+                      Môn học *
+                    </Label>
+                    <Select
+                      value={newCourse.subject}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, subject: value })
+                      }
+                    >
+                      <SelectTrigger className="col-span-2">
+                        <SelectValue placeholder="Chọn môn" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {subjects.slice(1).map((subject) => (
+                          <SelectItem key={subject} value={subject}>
+                            {subject}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                    <Label htmlFor="difficulty" className="text-right col-span-2">
+                      Độ khó *
+                    </Label>
+                    <Select
+                      value={newCourse.difficulty}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, difficulty: value })
+                      }
+                    >
+                      <SelectTrigger className="col-span-2">
+                        <SelectValue placeholder="Chọn độ khó" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {difficulties.map((difficulty) => (
+                          <SelectItem key={difficulty} value={difficulty}>
+                            {difficulty}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                    <Label htmlFor="duration" className="text-right col-span-2">
+                      Thời lượng *
+                    </Label>
+                    <Input
+                      id="duration"
+                      value={newCourse.duration}
+                      onChange={(e) =>
+                        setNewCourse({ ...newCourse, duration: e.target.value })
+                      }
+                      className="col-span-2"
+                      placeholder="VD: 8 tuần"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                    <Label htmlFor="ageGroup" className="text-right col-span-2">
+                      Độ tuổi *
+                    </Label>
+                    <Select
+                      value={newCourse.ageGroup}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, ageGroup: value })
+                      }
+                    >
+                      <SelectTrigger className="col-span-2">
+                        <SelectValue placeholder="Chọn độ tuổi" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ageGroups.map((age) => (
+                          <SelectItem key={age} value={age}>
+                            {age}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="teacher" className="text-right">
-                    Giáo viên
+                  <Label htmlFor="objectives" className="text-right">
+                    Mục tiêu học tập
                   </Label>
-                  <Select
-                    value={newCourse.teacher}
-                    onValueChange={(value) =>
-                      setNewCourse({ ...newCourse, teacher: value })
+                  <Textarea
+                    id="objectives"
+                    value={newCourse.objectives}
+                    onChange={(e) =>
+                      setNewCourse({
+                        ...newCourse,
+                        objectives: e.target.value,
+                      })
                     }
-                  >
-                    <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Chọn giáo viên phụ trách" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {teachers.map((teacher) => (
-                        <SelectItem key={teacher} value={teacher}>
-                          {teacher}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    className="col-span-3"
+                    rows={2}
+                    placeholder="Học sinh sẽ đạt được những mục tiêu gì sau khóa học..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="prerequisites" className="text-right">
+                    Yêu cầu trước
+                  </Label>
+                  <Textarea
+                    id="prerequisites"
+                    value={newCourse.prerequisites}
+                    onChange={(e) =>
+                      setNewCourse({
+                        ...newCourse,
+                        prerequisites: e.target.value,
+                      })
+                    }
+                    className="col-span-3"
+                    rows={2}
+                    placeholder="Kiến thức cần có trước khi học khóa này..."
+                  />
                 </div>
               </div>
               <DialogFooter>
@@ -392,10 +508,24 @@ export default function AdminCourses() {
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">Giáo viên:</span>
-                    <span className="font-medium text-blue-600">
-                      {course.teacher}
+                    <span className="text-gray-500">Độ tuổi:</span>
+                    <span className="font-medium text-purple-600">
+                      {course.ageGroup}
                     </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">Thời lượng:</span>
+                    <span className="font-medium text-orange-600">
+                      {course.duration}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">Độ khó:</span>
+                    <Badge variant={course.difficulty === 'Cơ bản' ? 'default' : course.difficulty === 'Trung bình' ? 'secondary' : 'destructive'} className="text-xs">
+                      {course.difficulty}
+                    </Badge>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
@@ -417,6 +547,18 @@ export default function AdminCourses() {
                       {course.completionRate}%
                     </span>
                   </div>
+
+                  {course.aiGenerated && (
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs">🤖</span>
+                        <span className="text-gray-500">AI Generated:</span>
+                      </div>
+                      <Badge variant="outline" className="text-xs text-blue-600">
+                        Quản trị AI
+                      </Badge>
+                    </div>
+                  )}
                 </div>
               </CardContent>
 
