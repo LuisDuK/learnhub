@@ -254,7 +254,7 @@ export default function Lesson() {
                 {lesson.content.find((c) => c.type === "example") && (
                   <div>
                     <h4 className="font-bold mb-3 text-accent">
-                      💡 Ví dụ minh họa:
+                      💡 Ví dụ minh h���a:
                     </h4>
                     <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
                       <pre className="text-sm whitespace-pre-wrap font-mono">
@@ -317,7 +317,7 @@ export default function Lesson() {
 
               {lesson.hasExercise && (
                 <Button
-                  onClick={() => navigate(`/lesson/${id}/exercise`)}
+                  onClick={() => navigate(`/lesson/${id}/exercise/1`)}
                   variant="outline"
                   className="border-accent text-accent hover:bg-accent hover:text-white transition-all duration-300 font-bold py-3 px-6 rounded-xl"
                 >
