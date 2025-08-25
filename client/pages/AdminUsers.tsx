@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -128,7 +128,7 @@ export default function AdminUsers() {
         return "bg-blue-100 text-blue-800";
       case "Giáo viên":
         return "bg-green-100 text-green-800";
-      case "Qu���n trị viên":
+      case "Quản trị viên":
         return "bg-purple-100 text-purple-800";
       default:
         return "bg-gray-100 text-gray-800";
