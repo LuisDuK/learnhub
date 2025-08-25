@@ -104,3 +104,123 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Fun animations for kids */
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+
+  .animate-rainbow {
+    animation: rainbow 3s linear infinite;
+  }
+
+  .animate-heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+
+  .hover-grow {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-grow:hover {
+    transform: scale(1.05);
+  }
+
+  .fun-shadow {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .fun-shadow-lg {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Custom scrollbar for kids */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--accent));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--secondary)));
+}
+
+/* Cursor effects for interactive elements */
+.cursor-fun {
+  cursor: pointer;
+  position: relative;
+}
+
+.cursor-fun::after {
+  content: "✨";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cursor-fun:hover::after {
+  opacity: 1;
+  animation: sparkle 1s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+}
