@@ -291,7 +291,7 @@ export default function StudyPlan() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
-              📅 Lộ trình học tập
+              Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-lg mt-1">
@@ -313,7 +313,7 @@ export default function StudyPlan() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5 text-primary" />
-                🎯 Mục tiêu học tập
+                Mục tiêu học tập
               </CardTitle>
               <CardDescription>
                 Chọn mục tiêu để xem lộ trình phù hợp
