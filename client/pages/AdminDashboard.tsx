@@ -1,7 +1,7 @@
 import React from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, GraduationCap, BookOpen, TrendingUp } from "lucide-react";
+import { Users, GraduationCap, BookOpen, TrendingUp, BarChart3, Route } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -38,8 +38,9 @@ export default function AdminDashboard() {
         {/* Page Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              📊 Tổng quan hệ thống
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+              <BarChart3 className="h-8 w-8 text-blue-600" />
+              Tổng quan hệ thống
             </h1>
             <p className="text-gray-600 mt-1">
               Thống kê tổng quan về hoạt động học tập
@@ -56,7 +57,7 @@ export default function AdminDashboard() {
                 Tổng số học sinh
               </CardTitle>
               <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="text-lg">👩‍🎓</span>
+                <Users className="h-5 w-5 text-blue-600" />
               </div>
             </CardHeader>
             <CardContent>
@@ -67,19 +68,19 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Total Teachers */}
+          {/* Active Learning Paths */}
           <Card className="border-orange-200 hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                Tổng số giáo viên
+                Lộ trình học tập
               </CardTitle>
               <div className="h-8 w-8 rounded-full bg-orange-100 flex items-center justify-center">
-                <span className="text-lg">👨‍🏫</span>
+                <Route className="h-5 w-5 text-orange-600" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">56</div>
-              <p className="text-xs text-green-600 mt-1">+3 giáo viên mới</p>
+              <div className="text-2xl font-bold text-orange-600">12</div>
+              <p className="text-xs text-green-600 mt-1">+2 lộ trình mới</p>
             </CardContent>
           </Card>
 
@@ -90,7 +91,7 @@ export default function AdminDashboard() {
                 Khóa học đang mở
               </CardTitle>
               <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                <span className="text-lg">📘</span>
+                <BookOpen className="h-5 w-5 text-green-600" />
               </div>
             </CardHeader>
             <CardContent>
@@ -122,7 +123,8 @@ export default function AdminDashboard() {
           <Card className="border-blue-200">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-blue-700">
-                📊 Số lượng học sinh theo môn học
+                <BarChart3 className="h-5 w-5" />
+                Số lượng học sinh theo môn học
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -156,7 +158,8 @@ export default function AdminDashboard() {
           <Card className="border-orange-200">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-orange-700">
-                🥧 Tỉ lệ trạng thái lộ trình học
+                <TrendingUp className="h-5 w-5" />
+                Tỉ lệ trạng thái lộ trình học
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -204,15 +207,18 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <Card className="border-gray-200">
           <CardHeader>
-            <CardTitle className="text-gray-700">⚡ Thao tác nhanh</CardTitle>
+            <CardTitle className="text-gray-700 flex items-center gap-2">
+              <GraduationCap className="h-5 w-5" />
+              Thao tác nhanh
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 border border-blue-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
                 <Users className="h-8 w-8 text-blue-600 mb-2" />
-                <h3 className="font-semibold text-blue-700">Thêm người dùng</h3>
+                <h3 className="font-semibold text-blue-700">Thêm học sinh</h3>
                 <p className="text-sm text-gray-600">
-                  Tạo tài khoản mới cho học sinh hoặc giáo viên
+                  Tạo tài khoản mới cho học sinh
                 </p>
               </div>
               <div className="p-4 border border-orange-200 rounded-lg hover:bg-orange-50 cursor-pointer transition-colors">
