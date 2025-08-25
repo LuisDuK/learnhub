@@ -8,13 +8,12 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
 } from "@/components/ui/chart";
 import {
   Table,
@@ -29,11 +28,15 @@ import {
   Calculator,
   BookOpen,
   Globe,
-  AlertTriangle,
   Trophy,
+  Star,
+  Award,
+  Brain,
   Target,
-  Clock,
-  Sparkles,
+  Lightbulb,
+  ArrowUp,
+  ArrowDown,
+  Minus,
 } from "lucide-react";
 import {
   BarChart,
@@ -42,208 +45,294 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
+  LineChart,
+  Line,
 } from "recharts";
 
-// Mock data for the three subjects
-const subjectProgress = [
-  { subject: "Toán", completed: 85, total: 100, emoji: "🔢" },
-  { subject: "Văn", completed: 72, total: 100, emoji: "📚" },
-  { subject: "Anh", completed: 65, total: 100, emoji: "🌍" },
+// Mock student data
+const studentInfo = {
+  name: "Nguyễn Minh Đức",
+  class: "Lớp 5A",
+  avatar: "/placeholder.svg",
+  totalBadges: 12,
+  level: "Học sinh giỏi",
+};
+
+// Mock subject scores data - average scores for bar chart
+const subjectScores = [
+  { subject: "Toán", score: 8.5, emoji: "🔢", color: "#3B82F6" },
+  { subject: "Văn", score: 7.2, emoji: "📚", color: "#10B981" },
+  { subject: "Anh", score: 6.8, emoji: "🌍", color: "#8B5CF6" },
+  { subject: "Khoa học", score: 8.0, emoji: "🔬", color: "#F59E0B" },
+  { subject: "Lịch sử", score: 7.5, emoji: "📜", color: "#EF4444" },
 ];
 
-const timeDistribution = [
-  { subject: "Toán", hours: 45, emoji: "🔢", color: "#3B82F6" },
-  { subject: "Văn", hours: 35, emoji: "📚", color: "#10B981" },
-  { subject: "Anh", hours: 25, emoji: "🌍", color: "#8B5CF6" },
+// Mock progress data - weekly/monthly progress for line chart
+const progressData = [
+  { period: "T1", math: 7.5, literature: 6.8, english: 6.2 },
+  { period: "T2", math: 7.8, literature: 6.9, english: 6.4 },
+  { period: "T3", math: 8.0, literature: 7.0, english: 6.5 },
+  { period: "T4", math: 8.2, literature: 7.1, english: 6.6 },
+  { period: "T5", math: 8.3, literature: 7.2, english: 6.7 },
+  { period: "T6", math: 8.5, literature: 7.2, english: 6.8 },
 ];
 
-const detailedProgress = [
+// Mock achievement badges
+const achievements = [
+  {
+    id: 1,
+    title: "Học giỏi Toán",
+    description: "Đạt điểm trung bình 8.5 môn Toán",
+    icon: "🏆",
+    color: "bg-yellow-100 border-yellow-300 text-yellow-800",
+    earned: true,
+  },
+  {
+    id: 2,
+    title: "Chăm chỉ làm bài tập",
+    description: "Hoàn thành 95% bài tập được giao",
+    icon: "📝",
+    color: "bg-green-100 border-green-300 text-green-800",
+    earned: true,
+  },
+  {
+    id: 3,
+    title: "Tiến bộ vượt bậc",
+    description: "Cải thiện điểm số 1.5 điểm trong tháng",
+    icon: "🚀",
+    color: "bg-blue-100 border-blue-300 text-blue-800",
+    earned: true,
+  },
+  {
+    id: 4,
+    title: "Học sinh xuất sắc",
+    description: "Đạt điểm trung bình trên 8.0 tất cả môn",
+    icon: "⭐",
+    color: "bg-purple-100 border-purple-300 text-purple-800",
+    earned: false,
+  },
+  {
+    id: 5,
+    title: "Đọc sách nhiều",
+    description: "Đọc hết 20 cuốn sách trong học kỳ",
+    icon: "📖",
+    color: "bg-orange-100 border-orange-300 text-orange-800",
+    earned: true,
+  },
+  {
+    id: 6,
+    title: "Giao tiếp tiếng Anh t���t",
+    description: "Đạt 7.0 điểm speaking tiếng Anh",
+    icon: "🗣️",
+    color: "bg-indigo-100 border-indigo-300 text-indigo-800",
+    earned: false,
+  },
+];
+
+// Mock detailed scores by subject
+const detailedScores = [
   {
     subject: "Toán",
     emoji: "🔢",
-    completedSessions: 34,
-    totalSessions: 40,
-    averageScore: 8.5,
-    status: "Tốt",
-    statusColor: "bg-green-100 text-green-700",
-    lastStudy: "Hôm qua",
+    scores: [8.0, 8.5, 9.0, 8.0, 8.5],
+    average: 8.5,
+    status: "Giỏi",
+    statusColor: "bg-green-100 text-green-700 border-green-300",
+    trend: "up",
+    lastTest: "9.0",
+    improvement: "+0.5",
   },
   {
     subject: "Văn",
     emoji: "📚",
-    completedSessions: 29,
-    totalSessions: 40,
-    averageScore: 7.2,
+    scores: [7.0, 7.5, 7.0, 7.5, 7.0],
+    average: 7.2,
     status: "Khá",
-    statusColor: "bg-blue-100 text-blue-700",
-    lastStudy: "2 ngày trước",
+    statusColor: "bg-blue-100 text-blue-700 border-blue-300",
+    trend: "stable",
+    lastTest: "7.0",
+    improvement: "0",
   },
   {
     subject: "Anh",
     emoji: "🌍",
-    completedSessions: 26,
-    totalSessions: 40,
-    averageScore: 6.5,
-    status: "Cần cải thiện",
-    statusColor: "bg-yellow-100 text-yellow-700",
-    lastStudy: "3 ngày trước",
+    scores: [6.5, 6.0, 7.0, 6.5, 7.5],
+    average: 6.8,
+    status: "Trung bình",
+    statusColor: "bg-yellow-100 text-yellow-700 border-yellow-300",
+    trend: "up",
+    lastTest: "7.5",
+    improvement: "+1.0",
+  },
+  {
+    subject: "Khoa học",
+    emoji: "🔬",
+    scores: [8.0, 8.5, 7.5, 8.0, 8.0],
+    average: 8.0,
+    status: "Giỏi",
+    statusColor: "bg-green-100 text-green-700 border-green-300",
+    trend: "stable",
+    lastTest: "8.0",
+    improvement: "0",
+  },
+  {
+    subject: "Lịch sử",
+    emoji: "📜",
+    scores: [7.0, 7.5, 8.0, 7.5, 7.5],
+    average: 7.5,
+    status: "Khá",
+    statusColor: "bg-blue-100 text-blue-700 border-blue-300",
+    trend: "up",
+    lastTest: "7.5",
+    improvement: "+0.5",
+  },
+];
+
+// AI suggestions based on performance
+const aiSuggestions = [
+  {
+    id: 1,
+    type: "improvement",
+    icon: "📚",
+    title: "Cải thiện môn Văn",
+    suggestion: "Bạn nên tập trung ôn thêm môn Văn trong tuần tới để nâng điểm trung bình. Đặc biệt chú ý phần đọc hiểu và viết văn.",
+    priority: "high",
+    color: "bg-red-50 border-red-200 text-red-800",
+  },
+  {
+    id: 2,
+    type: "strength",
+    icon: "🔢",
+    title: "Duy trì thế mạnh Toán",
+    suggestion: "Bạn đang học rất tốt môn Toán! Hãy tiếp tục duy trì và thử thách bản thân với những bài toán khó hơn.",
+    priority: "medium",
+    color: "bg-green-50 border-green-200 text-green-800",
+  },
+  {
+    id: 3,
+    type: "practice",
+    icon: "🌍",
+    title: "Luyện tập thêm tiếng Anh",
+    suggestion: "Điểm tiếng Anh đang có xu hướng tăng! Hãy dành 30 phút mỗi ngày để luy���n nghe và nói để cải thiện thêm.",
+    priority: "medium",
+    color: "bg-blue-50 border-blue-200 text-blue-800",
   },
 ];
 
 const chartConfig = {
-  completed: {
-    label: "Hoàn thành (%)",
-    color: "hsl(var(--primary))",
+  math: {
+    label: "Toán",
+    color: "#3B82F6",
+  },
+  literature: {
+    label: "Văn", 
+    color: "#10B981",
+  },
+  english: {
+    label: "Anh",
+    color: "#8B5CF6",
   },
 };
 
-const pieChartConfig = {
-  hours: {
-    label: "Giờ học",
-  },
+const getTrendIcon = (trend: string) => {
+  switch (trend) {
+    case "up":
+      return <ArrowUp className="h-4 w-4 text-green-600" />;
+    case "down":
+      return <ArrowDown className="h-4 w-4 text-red-600" />;
+    default:
+      return <Minus className="h-4 w-4 text-gray-600" />;
+  }
 };
 
 export default function Progress() {
-  // Calculate overall progress
-  const totalCompleted = subjectProgress.reduce(
-    (acc, subject) => acc + subject.completed,
-    0,
-  );
-  const totalPossible = subjectProgress.reduce(
-    (acc, subject) => acc + subject.total,
-    0,
-  );
-  const overallProgress = Math.round((totalCompleted / totalPossible) * 100);
-
-  // Find weak subjects (below 70%)
-  const weakSubjects = detailedProgress.filter(
-    (subject) => subject.averageScore < 7.0,
-  );
+  const earnedBadges = achievements.filter(a => a.earned);
+  const overallAverage = detailedScores.reduce((acc, score) => acc + score.average, 0) / detailedScores.length;
 
   return (
     <DashboardLayout>
       <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
-            📊 Báo cáo tiến độ học tập
-            <Sparkles className="h-8 w-8 text-primary animate-pulse" />
-          </h1>
-          <p className="text-gray-600 text-lg mt-1">
-            Theo dõi tiến độ học tập của bé qua các môn học
-          </p>
-        </div>
+        
+        {/* TOP BAR - Student Info & Badges */}
+        <Card className="border-primary/20 shadow-lg bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                {/* Avatar */}
+                <Avatar className="h-20 w-20 border-4 border-white shadow-lg">
+                  <AvatarImage src={studentInfo.avatar} alt={studentInfo.name} />
+                  <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-primary to-accent text-white">
+                    {studentInfo.name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
 
-        {/* Overall Progress & Warnings */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-primary" />
-                🎯 Tổng quan tiến độ
-              </CardTitle>
-              <CardDescription>Tiến độ học tập tổng thể của bé</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">
-                  {overallProgress}%
-                </div>
-                <p className="text-muted-foreground">Tiến độ tổng thể</p>
-              </div>
-              <Progress value={overallProgress} className="h-4" />
-              <div className="grid grid-cols-3 gap-4 text-center">
-                {subjectProgress.map((subject) => (
-                  <div key={subject.subject} className="space-y-2">
-                    <div className="text-2xl">{subject.emoji}</div>
-                    <div className="font-semibold">{subject.subject}</div>
-                    <div className="text-lg font-bold text-primary">
-                      {subject.completed}%
-                    </div>
+                {/* Student Info */}
+                <div>
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    {studentInfo.name}
+                  </h1>
+                  <p className="text-lg text-muted-foreground mt-1">{studentInfo.class}</p>
+                  <div className="flex items-center gap-3 mt-2">
+                    <Badge variant="default" className="bg-gradient-to-r from-primary to-accent text-white">
+                      {studentInfo.level}
+                    </Badge>
+                    <Badge variant="outline" className="border-yellow-300 text-yellow-700 bg-yellow-50">
+                      <Trophy className="h-4 w-4 mr-1" />
+                      {earnedBadges.length} huy hiệu
+                    </Badge>
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="space-y-4">
-            {/* Warning for weak subjects */}
-            {weakSubjects.length > 0 && (
-              <Alert className="border-yellow-200 bg-yellow-50">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
-                <AlertTitle className="text-yellow-800">
-                  ⚠️ Cần chú ý!
-                </AlertTitle>
-                <AlertDescription className="text-yellow-700">
-                  {weakSubjects.map((subject, index) => (
-                    <div key={subject.subject}>
-                      {subject.emoji} Điểm {subject.subject} thấp hơn mục tiêu
-                      (${subject.averageScore}/10)
-                      {index < weakSubjects.length - 1 && <br />}
-                    </div>
-                  ))}
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {/* Study streak */}
-            <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-accent" />
-                  🔥 Chuỗi học tập
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-accent">7</div>
-                  <p className="text-sm text-muted-foreground">
-                    ngày liên tiếp
-                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+              </div>
 
-        {/* Charts Section */}
+              {/* Overall Stats */}
+              <div className="text-right">
+                <div className="text-4xl font-bold text-primary mb-2">
+                  {overallAverage.toFixed(1)}
+                </div>
+                <p className="text-sm text-muted-foreground">Điểm trung bình</p>
+                <div className="flex items-center justify-end gap-2 mt-2">
+                  <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                  <span className="text-sm font-medium">Xếp loại: {overallAverage >= 8 ? 'Giỏi' : overallAverage >= 6.5 ? 'Khá' : 'Trung bình'}</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* MIDDLE SECTION */}
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Bar Chart - Progress by Subject */}
-          <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
+          
+          {/* Bar Chart - Average Scores by Subject */}
+          <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-secondary" />
-                📈 Tiến độ theo môn học
+                <Calculator className="h-5 w-5 text-primary" />
+                📊 Điểm trung bình từng môn
               </CardTitle>
               <CardDescription>
-                Phần trăm hoàn thành các bài học
+                Xem điểm trung bình của bé trong học kỳ này
               </CardDescription>
             </CardHeader>
             <CardContent>
               <ChartContainer config={chartConfig} className="h-[300px]">
-                <BarChart data={subjectProgress}>
+                <BarChart data={subjectScores}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="subject"
+                  <XAxis 
+                    dataKey="subject" 
                     tick={{ fontSize: 12 }}
                     tickFormatter={(value) => {
-                      const subject = subjectProgress.find(
-                        (s) => s.subject === value,
-                      );
+                      const subject = subjectScores.find(s => s.subject === value);
                       return subject ? `${subject.emoji} ${value}` : value;
                     }}
                   />
-                  <YAxis domain={[0, 100]} />
+                  <YAxis domain={[0, 10]} />
                   <ChartTooltip
                     content={<ChartTooltipContent />}
-                    formatter={(value) => [`${value}%`, "Hoàn thành"]}
+                    formatter={(value) => [`${value} điểm`, "Điểm trung bình"]}
                   />
-                  <Bar
-                    dataKey="completed"
-                    fill="var(--color-completed)"
+                  <Bar 
+                    dataKey="score" 
+                    fill="#3B82F6"
                     radius={8}
                   />
                 </BarChart>
@@ -251,158 +340,205 @@ export default function Progress() {
             </CardContent>
           </Card>
 
-          {/* Pie Chart - Time Distribution */}
-          <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
+          {/* Line Chart - Progress Over Time */}
+          <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-primary" />⏰ Phân bổ thời gian
-                học
+                <TrendingUp className="h-5 w-5 text-accent" />
+                📈 Tiến bộ theo tháng
               </CardTitle>
               <CardDescription>
-                Thời gian học theo từng môn (giờ)
+                Theo dõi sự tiến bộ của bé qua từng tháng
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={pieChartConfig} className="h-[300px]">
-                <PieChart>
-                  <Pie
-                    data={timeDistribution}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ subject, hours, percent }) =>
-                      `${subject}: ${hours}h (${(percent * 100).toFixed(0)}%)`
-                    }
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="hours"
-                  >
-                    {timeDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <ChartTooltip
-                    content={<ChartTooltipContent />}
-                    formatter={(value) => [`${value} giờ`, "Thời gian học"]}
+              <ChartContainer config={chartConfig} className="h-[300px]">
+                <LineChart data={progressData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="period" />
+                  <YAxis domain={[0, 10]} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Line 
+                    type="monotone" 
+                    dataKey="math" 
+                    stroke="var(--color-math)" 
+                    strokeWidth={3}
+                    dot={{ fill: 'var(--color-math)', strokeWidth: 2, r: 4 }}
                   />
-                </PieChart>
+                  <Line 
+                    type="monotone" 
+                    dataKey="literature" 
+                    stroke="var(--color-literature)" 
+                    strokeWidth={3}
+                    dot={{ fill: 'var(--color-literature)', strokeWidth: 2, r: 4 }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="english" 
+                    stroke="var(--color-english)" 
+                    strokeWidth={3}
+                    dot={{ fill: 'var(--color-english)', strokeWidth: 2, r: 4 }}
+                  />
+                </LineChart>
               </ChartContainer>
             </CardContent>
           </Card>
         </div>
 
-        {/* Detailed Progress Table */}
-        <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
+        {/* Achievement Badges */}
+        <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-accent" />
-              📋 Bảng chi tiết tiến độ
+              <Award className="h-5 w-5 text-secondary" />
+              🏆 Huy hiệu thành tích
             </CardTitle>
             <CardDescription>
-              Thông tin chi tiết về từng môn học
+              Những thành tích bé đã đạt được và đang phấn đấu
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Môn học</TableHead>
-                  <TableHead>Buổi học</TableHead>
-                  <TableHead>Điểm TB</TableHead>
-                  <TableHead>Trạng thái</TableHead>
-                  <TableHead>Học lần cuối</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {detailedProgress.map((subject) => (
-                  <TableRow key={subject.subject}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{subject.emoji}</span>
-                        <span>{subject.subject}</span>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {achievements.map((achievement) => (
+                <div
+                  key={achievement.id}
+                  className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${
+                    achievement.earned 
+                      ? `${achievement.color} hover:scale-105 shadow-md` 
+                      : 'bg-gray-50 border-gray-200 text-gray-500 opacity-60'
+                  }`}
+                >
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">{achievement.icon}</div>
+                    <h3 className="font-bold text-sm mb-1">{achievement.title}</h3>
+                    <p className="text-xs">{achievement.description}</p>
+                    {achievement.earned && (
+                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <Star className="h-3 w-3 text-white fill-current" />
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="space-y-1">
-                        <div className="text-sm font-medium">
-                          {subject.completedSessions}/{subject.totalSessions}
-                        </div>
-                        <Progress
-                          value={
-                            (subject.completedSessions /
-                              subject.totalSessions) *
-                            100
-                          }
-                          className="h-2 w-20"
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <span className="font-semibold">
-                          {subject.averageScore}
-                        </span>
-                        <span className="text-muted-foreground">/10</span>
-                        {subject.averageScore >= 8 && <span>🌟</span>}
-                        {subject.averageScore >= 7 &&
-                          subject.averageScore < 8 && <span>👍</span>}
-                        {subject.averageScore < 7 && <span>📚</span>}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className={subject.statusColor}>
-                        {subject.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {subject.lastStudy}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-
-        {/* Achievements Section */}
-        <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-primary" />
-              🏆 Thành tích gần đây
-            </CardTitle>
-            <CardDescription>Những cột mốc bé đã đạt được</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="text-center p-4 rounded-xl bg-yellow-50 border border-yellow-200">
-                <div className="text-3xl mb-2">🥇</div>
-                <div className="font-semibold text-yellow-800">
-                  Học sinh giỏi Toán
+                    )}
+                  </div>
                 </div>
-                <div className="text-sm text-yellow-600">
-                  Đạt điểm trung bình 8.5
-                </div>
-              </div>
-              <div className="text-center p-4 rounded-xl bg-blue-50 border border-blue-200">
-                <div className="text-3xl mb-2">📚</div>
-                <div className="font-semibold text-blue-800">
-                  Hoàn thành 50 bài học
-                </div>
-                <div className="text-sm text-blue-600">Cột mốc quan trọng!</div>
-              </div>
-              <div className="text-center p-4 rounded-xl bg-green-50 border border-green-200">
-                <div className="text-3xl mb-2">🔥</div>
-                <div className="font-semibold text-green-800">
-                  Streak 7 ngày
-                </div>
-                <div className="text-sm text-green-600">
-                  Học đều đặn mỗi ngày
-                </div>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
+
+        {/* BOTTOM SECTION */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          
+          {/* Detailed Scores Table */}
+          <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                📋 Chi tiết điểm số theo môn
+              </CardTitle>
+              <CardDescription>
+                Xem chi tiết điểm số và xu hướng từng môn học
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Môn học</TableHead>
+                    <TableHead>Điểm TB</TableHead>
+                    <TableHead>Trạng thái</TableHead>
+                    <TableHead>Xu hướng</TableHead>
+                    <TableHead>Bài kiểm tra gần nhất</TableHead>
+                    <TableHead>Tiến bộ</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {detailedScores.map((score) => (
+                    <TableRow key={score.subject}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{score.emoji}</span>
+                          <span>{score.subject}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-lg">{score.average}</span>
+                          <span className="text-muted-foreground">/10</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className={score.statusColor}>
+                          {score.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          {getTrendIcon(score.trend)}
+                          <span className="text-sm">
+                            {score.trend === 'up' ? 'Tăng' : score.trend === 'down' ? 'Giảm' : 'Ổn định'}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className="font-medium">{score.lastTest}</span>
+                      </TableCell>
+                      <TableCell>
+                        <span className={`font-medium ${
+                          score.improvement.startsWith('+') ? 'text-green-600' : 
+                          score.improvement.startsWith('-') ? 'text-red-600' : 'text-gray-600'
+                        }`}>
+                          {score.improvement}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+
+          {/* AI Suggestions */}
+          <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="h-5 w-5 text-accent" />
+                🤖 Gợi ý từ AI
+              </CardTitle>
+              <CardDescription>
+                Lời khuyên cá nhân hóa để cải thiện kết quả học tập
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {aiSuggestions.map((suggestion) => (
+                <Alert key={suggestion.id} className={`${suggestion.color} border-l-4`}>
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl">{suggestion.icon}</div>
+                    <div className="flex-1">
+                      <AlertTitle className="text-sm font-bold mb-2 flex items-center gap-2">
+                        {suggestion.title}
+                        {suggestion.priority === 'high' && (
+                          <Badge variant="destructive" className="text-xs">
+                            Ưu tiên
+                          </Badge>
+                        )}
+                      </AlertTitle>
+                      <AlertDescription className="text-sm leading-relaxed">
+                        {suggestion.suggestion}
+                      </AlertDescription>
+                    </div>
+                  </div>
+                </Alert>
+              ))}
+
+              {/* Motivational message */}
+              <div className="mt-6 p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/20 text-center">
+                <div className="text-3xl mb-2">🌟</div>
+                <p className="font-bold text-primary mb-1">Bé học rất chăm chỉ!</p>
+                <p className="text-sm text-muted-foreground">
+                  Hãy tiếp tục cố gắng để đạt được nhiều thành tích hơn nữa nhé! 💪
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </DashboardLayout>
   );
