@@ -298,9 +298,12 @@ export default function StudyPlan() {
               Kế hoạch học tập được cá nhân hóa cho bé
             </p>
           </div>
-          <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg">
+          <Button
+            onClick={handleEditRoadmap}
+            className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
+          >
             <Edit className="h-4 w-4 mr-2" />
-            ✏️ Chỉnh sửa lộ trình
+            Chỉnh sửa lộ trình
           </Button>
         </div>
 
