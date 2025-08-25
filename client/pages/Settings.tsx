@@ -188,7 +188,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <User className="h-4 w-4" />
-                      👤 Họ và tên
+                      Họ và tên
                     </Label>
                     <Input
                       id="fullName"
@@ -209,7 +209,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <Mail className="h-4 w-4" />
-                      📧 Email
+                      Email
                     </Label>
                     <Input
                       id="email"
@@ -231,7 +231,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <Calendar className="h-4 w-4" />
-                      🎂 Ngày sinh
+                      Ngày sinh
                     </Label>
                     <Input
                       id="birthday"
@@ -253,7 +253,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <School className="h-4 w-4" />
-                      🏫 Lớp/Khóa học
+                      Lớp/Khóa học
                     </Label>
                     <Select
                       value={userProfile.grade}
@@ -317,7 +317,7 @@ export default function Settings() {
                       className="text-accent font-medium flex items-center gap-1"
                     >
                       <Key className="h-4 w-4" />
-                      🔐 Mật khẩu hiện tại
+                      Mật khẩu hiện tại
                     </Label>
                     <Input
                       id="currentPassword"
@@ -333,7 +333,7 @@ export default function Settings() {
                       className="text-accent font-medium flex items-center gap-1"
                     >
                       <Lock className="h-4 w-4" />
-                      🆕 Mật khẩu mới
+                      Mật khẩu mới
                     </Label>
                     <Input
                       id="newPassword"
@@ -348,7 +348,8 @@ export default function Settings() {
                       htmlFor="confirmPassword"
                       className="text-accent font-medium flex items-center gap-1"
                     >
-                      <Lock className="h-4 w-4" />✅ Xác nhận mật khẩu mới
+                      <Lock className="h-4 w-4" />
+                      Xác nhận mật khẩu mới
                     </Label>
                     <Input
                       id="confirmPassword"
@@ -509,7 +510,7 @@ export default function Settings() {
                     <div className="space-y-0.5">
                       <Label className="text-secondary font-medium flex items-center gap-2">
                         <Bell className="h-4 w-4" />
-                        🔔 Nhắc nhở học tập hằng ngày
+                        Nhắc nhở học tập hằng ngày
                       </Label>
                       <p className="text-sm text-muted-foreground">
                         Nhận thông báo nhắc nhở học tập mỗi ngày
@@ -532,7 +533,8 @@ export default function Settings() {
                         htmlFor="reminderTime"
                         className="text-secondary font-medium flex items-center gap-1"
                       >
-                        <Clock className="h-4 w-4" />⏰ Giờ nhắc nhở
+                        <Clock className="h-4 w-4" />
+                        Giờ nhắc nhở
                       </Label>
                       <Select
                         value={studySettings.reminderTime}
@@ -571,7 +573,7 @@ export default function Settings() {
                 <div className="space-y-2">
                   <Label className="text-secondary font-medium flex items-center gap-1">
                     <Target className="h-4 w-4" />
-                    🎯 Mục tiêu mặc định
+                    Mục tiêu mặc định
                   </Label>
                   <Select
                     value={studySettings.defaultGoal}
@@ -602,7 +604,7 @@ export default function Settings() {
                 <div className="space-y-2">
                   <Label className="text-secondary font-medium flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    📅 Mục tiêu học tập hàng tuần (giờ)
+                    Mục tiêu học tập hàng tuần (giờ)
                   </Label>
                   <Select
                     value={studySettings.weeklyGoalHours.toString()}
