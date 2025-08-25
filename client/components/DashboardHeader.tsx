@@ -32,44 +32,44 @@ export function DashboardHeader() {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="relative hover:scale-110 transition-transform duration-300 hover:bg-primary/10 rounded-xl">
+              <Bell className="h-5 w-5 text-primary animate-wiggle" />
               <Badge
                 variant="destructive"
-                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs bg-gradient-to-r from-red-400 to-pink-400 animate-bounce"
               >
                 3
               </Badge>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>Thông báo</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <div className="flex w-full justify-between">
-                <span className="font-medium">Bài tập mới</span>
+          <DropdownMenuContent align="end" className="w-80 border-primary/20 shadow-xl">
+            <DropdownMenuLabel className="text-primary font-bold">🔔 Thông báo vui</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-primary/20" />
+            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-primary/5 rounded-lg m-1">
+              <div className="flex w-full justify-between items-center">
+                <span className="font-medium text-primary">🎮 Bài tập mới!</span>
                 <span className="text-xs text-gray-500">2 phút trước</span>
               </div>
               <span className="text-sm text-gray-600">
-                Bài tập "React Hooks" đã được giao
+                Bài tập "Làm game vui" đã sẵn sàng cho bé!
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <div className="flex w-full justify-between">
-                <span className="font-medium">Nhắc nhở học tập</span>
+            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-accent/5 rounded-lg m-1">
+              <div className="flex w-full justify-between items-center">
+                <span className="font-medium text-accent">⏰ Nhắc nhở học tập</span>
                 <span className="text-xs text-gray-500">10 phút trước</span>
               </div>
               <span className="text-sm text-gray-600">
-                Đã đến giờ học JavaScript nâng cao
+                Đã đến giờ học "Toán học thú vị" rồi bé ơi!
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <div className="flex w-full justify-between">
-                <span className="font-medium">Chúc mừng!</span>
+            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-secondary/5 rounded-lg m-1">
+              <div className="flex w-full justify-between items-center">
+                <span className="font-medium text-secondary">🎉 Chúc mừng!</span>
                 <span className="text-xs text-gray-500">1 giờ trước</span>
               </div>
               <span className="text-sm text-gray-600">
-                Bạn đã hoàn thành module "CSS Grid"
+                Bé đã hoàn thành "Vẽ tranh màu sắc"! Giỏi quá!
               </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
