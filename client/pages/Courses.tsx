@@ -131,7 +131,7 @@ const mockCourses: Course[] = [
     id: 5,
     title: "🌍 Tiếng Anh cơ bản",
     instructor: "Miss Sarah vui vẻ",
-    description: "Học tiếng Anh qua bài hát, trò chơi và câu chuyện thú vị",
+    description: "Học ti���ng Anh qua bài hát, trò chơi và câu chuyện thú vị",
     category: "english",
     status: "in-progress",
     progress: 45,
@@ -212,12 +212,9 @@ const statusLabels = {
 };
 
 const categoryLabels = {
-  "programming": "🎮 Lập trình",
-  "art": "🎨 Nghệ thuật", 
   "math": "🔢 Toán học",
-  "science": "🌟 Khoa học",
-  "music": "🎵 Âm nhạc",
-  "sports": "🏃‍♂️ Thể thao"
+  "literature": "📚 Ngữ văn",
+  "english": "🌍 Tiếng Anh"
 };
 
 const statusColors = {
