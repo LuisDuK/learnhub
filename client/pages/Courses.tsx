@@ -146,7 +146,7 @@ const mockCourses: Course[] = [
     id: 5,
     title: "🌍 Tiếng Anh cơ bản",
     instructor: "Miss Sarah vui vẻ",
-    description: "Học ti���ng Anh qua bài hát, trò chơi và câu chuyện thú vị",
+    description: "Học tiếng Anh qua bài hát, tr�� chơi và câu chuyện thú vị",
     category: "english",
     status: "in-progress",
     progress: 45,
@@ -356,7 +356,7 @@ export default function Courses() {
               <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="text-3xl">🎯</div>
+                    <div className="text-3xl">📚</div>
                     <div>
                       <p className="text-sm text-muted-foreground">Đang học</p>
                       <p className="text-2xl font-bold text-primary">

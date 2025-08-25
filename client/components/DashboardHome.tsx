@@ -407,7 +407,7 @@ export function DashboardHome() {
                       {course.progress === 0
                         ? "🚀 Bắt đầu học!"
                         : course.progress === 100
-                          ? "🔄 Ôn tập l���i!"
+                          ? "🔄 Ôn tập lại!"
                           : "📖 Tiếp tục học!"}
                     </Button>
                   </div>

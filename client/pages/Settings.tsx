@@ -113,21 +113,21 @@ export default function Settings() {
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <User className="h-4 w-4" />
-              👤 Thông tin cá nhân
+              Thông tin cá nhân
             </TabsTrigger>
             <TabsTrigger
               value="security"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <Shield className="h-4 w-4" />
-              🔒 Bảo mật
+              Bảo mật
             </TabsTrigger>
             <TabsTrigger
               value="study"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <SettingsIcon className="h-4 w-4" />
-              📚 Cài đặt học tập
+              Cài đặt học tập
             </TabsTrigger>
           </TabsList>
 
@@ -137,7 +137,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5 text-primary" />
-                  👤 Thông tin cá nhân
+                  Thông tin cá nhân
                 </CardTitle>
                 <CardDescription>
                   Cập nhật thông tin cá nhân của bé
@@ -173,7 +173,7 @@ export default function Settings() {
                       className="border-primary text-primary hover:bg-primary hover:text-white"
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      📷 Đổi ảnh
+                      Đổi ảnh
                     </Button>
                   </div>
                 </div>
@@ -188,7 +188,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <User className="h-4 w-4" />
-                      👤 Họ và tên
+                      Họ và tên
                     </Label>
                     <Input
                       id="fullName"
@@ -209,7 +209,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <Mail className="h-4 w-4" />
-                      📧 Email
+                      Email
                     </Label>
                     <Input
                       id="email"
@@ -231,7 +231,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <Calendar className="h-4 w-4" />
-                      🎂 Ngày sinh
+                      Ngày sinh
                     </Label>
                     <Input
                       id="birthday"
@@ -253,7 +253,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <School className="h-4 w-4" />
-                      🏫 Lớp/Khóa học
+                      Lớp/Khóa học
                     </Label>
                     <Select
                       value={userProfile.grade}
@@ -288,7 +288,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Save className="h-4 w-4 mr-2" />
-                        💾 Lưu thay đổi
+                        Lưu thay đổi
                       </>
                     )}
                   </Button>
@@ -303,7 +303,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-accent" />
-                  🔒 Bảo mật tài khoản
+                  Bảo mật tài khoản
                 </CardTitle>
                 <CardDescription>
                   Thay đổi mật khẩu để bảo vệ tài khoản của bé
@@ -317,7 +317,7 @@ export default function Settings() {
                       className="text-accent font-medium flex items-center gap-1"
                     >
                       <Key className="h-4 w-4" />
-                      🔐 Mật khẩu hiện tại
+                      Mật khẩu hiện tại
                     </Label>
                     <Input
                       id="currentPassword"
@@ -333,7 +333,7 @@ export default function Settings() {
                       className="text-accent font-medium flex items-center gap-1"
                     >
                       <Lock className="h-4 w-4" />
-                      🆕 Mật khẩu mới
+                      Mật khẩu mới
                     </Label>
                     <Input
                       id="newPassword"
@@ -348,7 +348,8 @@ export default function Settings() {
                       htmlFor="confirmPassword"
                       className="text-accent font-medium flex items-center gap-1"
                     >
-                      <Lock className="h-4 w-4" />✅ Xác nhận mật khẩu mới
+                      <Lock className="h-4 w-4" />
+                      Xác nhận mật khẩu mới
                     </Label>
                     <Input
                       id="confirmPassword"
@@ -385,7 +386,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Key className="h-4 w-4 mr-2" />
-                        🔑 Đổi mật khẩu
+                        Đổi mật khẩu
                       </>
                     )}
                   </Button>
@@ -398,7 +399,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-blue-600" />
-                  🔐 Xác thực hai bước (2FA)
+                  Xác thực hai bước (2FA)
                 </CardTitle>
                 <CardDescription>
                   Tăng cường bảo mật tài khoản với lớp bảo vệ thêm
@@ -445,7 +446,7 @@ export default function Settings() {
                     className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl"
                   >
                     <Shield className="h-4 w-4 mr-2" />
-                    🔐 Thiết lập 2FA
+                    Thiết lập 2FA
                   </Button>
                   <Button
                     variant="outline"
@@ -465,7 +466,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <SettingsIcon className="h-5 w-5 text-secondary" />
-                  📚 Cài đặt học tập
+                  Cài đặt học tập
                 </CardTitle>
                 <CardDescription>
                   Tùy chỉnh trải nghiệm học tập và nhắc nhở
@@ -509,7 +510,7 @@ export default function Settings() {
                     <div className="space-y-0.5">
                       <Label className="text-secondary font-medium flex items-center gap-2">
                         <Bell className="h-4 w-4" />
-                        🔔 Nhắc nhở học tập hằng ngày
+                        Nhắc nhở học tập hằng ngày
                       </Label>
                       <p className="text-sm text-muted-foreground">
                         Nhận thông báo nhắc nhở học tập mỗi ngày
@@ -532,7 +533,8 @@ export default function Settings() {
                         htmlFor="reminderTime"
                         className="text-secondary font-medium flex items-center gap-1"
                       >
-                        <Clock className="h-4 w-4" />⏰ Giờ nhắc nhở
+                        <Clock className="h-4 w-4" />
+                        Giờ nhắc nhở
                       </Label>
                       <Select
                         value={studySettings.reminderTime}
@@ -571,7 +573,7 @@ export default function Settings() {
                 <div className="space-y-2">
                   <Label className="text-secondary font-medium flex items-center gap-1">
                     <Target className="h-4 w-4" />
-                    🎯 Mục tiêu mặc định
+                    Mục tiêu mặc định
                   </Label>
                   <Select
                     value={studySettings.defaultGoal}
@@ -602,7 +604,7 @@ export default function Settings() {
                 <div className="space-y-2">
                   <Label className="text-secondary font-medium flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    📅 Mục tiêu học tập hàng tuần (giờ)
+                    Mục tiêu học tập hàng tuần (giờ)
                   </Label>
                   <Select
                     value={studySettings.weeklyGoalHours.toString()}
@@ -640,7 +642,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Save className="h-4 w-4 mr-2" />
-                        💾 Lưu cài đặt
+                        Lưu cài đặt
                       </>
                     )}
                   </Button>

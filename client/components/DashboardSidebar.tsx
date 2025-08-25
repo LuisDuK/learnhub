@@ -136,7 +136,7 @@ export function DashboardSidebar() {
           className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-300 rounded-xl"
         >
           <LogOut className="h-4 w-4 mr-2" />
-          👋 Tạm biệt
+          Tạm biệt
         </Button>
       </div>
     </div>
