@@ -147,16 +147,24 @@ export default function Login() {
                 <br />
                 <span className="text-sm">Vui lòng kiểm tra email để xác nhận tài khoản.</span>
               </AlertDescription>
-              <Button 
-                onClick={() => {
-                  setRegisterSuccess(false);
-                  setActiveTab("login");
-                }}
-                variant="outline"
-                className="mt-4 border-green-300 text-green-700 hover:bg-green-100"
-              >
-                Đăng nhập ngay
-              </Button>
+              <div className="flex gap-2 mt-4">
+                <Button
+                  onClick={() => navigate("/email-verification?email=banhoc@email.com")}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white"
+                >
+                  📧 Xác thực ngay
+                </Button>
+                <Button
+                  onClick={() => {
+                    setRegisterSuccess(false);
+                    setActiveTab("login");
+                  }}
+                  variant="outline"
+                  className="flex-1 border-green-300 text-green-700 hover:bg-green-100"
+                >
+                  Đăng nhập
+                </Button>
+              </div>
             </Alert>
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
