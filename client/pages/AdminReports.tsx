@@ -46,12 +46,9 @@ import {
 
 // Mock data for charts
 const subjectScoresData = [
-  { subject: "Toán học", avgScore: 85, students: 120 },
-  { subject: "Tiếng Việt", avgScore: 78, students: 95 },
-  { subject: "Tiếng Anh", avgScore: 92, students: 80 },
-  { subject: "Khoa học", avgScore: 74, students: 75 },
-  { subject: "Lịch sử", avgScore: 80, students: 60 },
-  { subject: "Địa lý", avgScore: 76, students: 55 },
+  { subject: "Toán", avgScore: 85, students: 120 },
+  { subject: "Văn", avgScore: 78, students: 95 },
+  { subject: "Anh", avgScore: 92, students: 80 },
 ];
 
 const progressTimelineData = [
@@ -65,7 +62,7 @@ const progressTimelineData = [
 
 const completionStatusData = [
   { name: "Hoàn thành", value: 45, color: "#10B981" },
-  { name: "Đang học", value: 35, color: "#3B82F6" },
+  { name: "��ang học", value: 35, color: "#3B82F6" },
   { name: "Chưa bắt đầu", value: 15, color: "#F59E0B" },
   { name: "Tạm dừng", value: 5, color: "#EF4444" },
 ];
@@ -74,7 +71,7 @@ const studentPerformanceData = [
   {
     studentId: 101,
     studentName: "Nguyễn Minh Đức",
-    subject: "Toán học",
+    subject: "Toán",
     score: 95,
     progress: 85,
     class: "3A",
@@ -83,7 +80,7 @@ const studentPerformanceData = [
   {
     studentId: 102,
     studentName: "Trần Thị Mai",
-    subject: "Tiếng Việt",
+    subject: "Văn",
     score: 87,
     progress: 78,
     class: "3B",
@@ -92,7 +89,7 @@ const studentPerformanceData = [
   {
     studentId: 103,
     studentName: "Lê Văn An",
-    subject: "Tiếng Anh",
+    subject: "Anh",
     score: 92,
     progress: 90,
     class: "3A",
@@ -101,7 +98,7 @@ const studentPerformanceData = [
   {
     studentId: 104,
     studentName: "Phạm Thị Hoa",
-    subject: "Khoa học",
+    subject: "Văn",
     score: 78,
     progress: 65,
     class: "3C",
@@ -110,7 +107,7 @@ const studentPerformanceData = [
   {
     studentId: 105,
     studentName: "Nguyễn Văn Bình",
-    subject: "Toán học",
+    subject: "Toán",
     score: 82,
     progress: 72,
     class: "3B",
@@ -220,10 +217,9 @@ export default function AdminReports() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Tất cả môn</SelectItem>
-                    <SelectItem value="Toán học">Toán học</SelectItem>
-                    <SelectItem value="Tiếng Việt">Tiếng Việt</SelectItem>
-                    <SelectItem value="Tiếng Anh">Tiếng Anh</SelectItem>
-                    <SelectItem value="Khoa học">Khoa học</SelectItem>
+                    <SelectItem value="Toán">Toán</SelectItem>
+                    <SelectItem value="Văn">Văn</SelectItem>
+                    <SelectItem value="Anh">Anh</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -487,7 +483,7 @@ export default function AdminReports() {
                     <TableHead className="font-semibold">Điểm số</TableHead>
                     <TableHead className="font-semibold">Tiến độ</TableHead>
                     <TableHead className="font-semibold">
-                      Hoạt động cuối
+                      Hoạt đ��ng cuối
                     </TableHead>
                   </TableRow>
                 </TableHeader>
