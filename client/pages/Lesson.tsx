@@ -35,7 +35,7 @@ const mockLessons = {
   1: {
     id: 1,
     title: "🔢 Phép cộng v�� phép trừ trong phạm vi 100",
-    subject: "Toán học",
+    subject: "Toán",
     grade: "Lớp 2",
     duration: "25 phút",
     difficulty: "Dễ",
