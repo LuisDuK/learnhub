@@ -216,23 +216,25 @@ export default function StudyPlan() {
     name: "",
     duration: "",
     startDate: "",
-    priority: "medium"
+    priority: "medium",
   });
-  const [lessonList, setLessonList] = useState(weeklyPlan.flatMap(week =>
-    week.lessons.map(lesson => ({ ...lesson, week: week.week }))
-  ));
+  const [lessonList, setLessonList] = useState(
+    weeklyPlan.flatMap((week) =>
+      week.lessons.map((lesson) => ({ ...lesson, week: week.week })),
+    ),
+  );
 
   // Check if first time visiting
   useEffect(() => {
-    const hasSetGoal = localStorage.getItem('studyGoalSet');
+    const hasSetGoal = localStorage.getItem("studyGoalSet");
     if (!hasSetGoal) {
       setShowGoalDialog(true);
     }
   }, []);
 
   const handleSaveGoal = () => {
-    localStorage.setItem('studyGoalSet', 'true');
-    localStorage.setItem('studyGoal', JSON.stringify(goalData));
+    localStorage.setItem("studyGoalSet", "true");
+    localStorage.setItem("studyGoal", JSON.stringify(goalData));
     setShowGoalDialog(false);
   };
 
@@ -254,19 +256,21 @@ export default function StudyPlan() {
       status: "not-started",
       day: "Thứ 2",
       time: "14:00",
-      week: "Tuần 1"
+      week: "Tuần 1",
     };
     setLessonList([...lessonList, newLesson]);
   };
 
   const deleteLesson = (id: number) => {
-    setLessonList(lessonList.filter(lesson => lesson.id !== id));
+    setLessonList(lessonList.filter((lesson) => lesson.id !== id));
   };
 
   const updateLessonStatus = (id: number, status: string) => {
-    setLessonList(lessonList.map(lesson =>
-      lesson.id === id ? { ...lesson, status } : lesson
-    ));
+    setLessonList(
+      lessonList.map((lesson) =>
+        lesson.id === id ? { ...lesson, status } : lesson,
+      ),
+    );
   };
 
   // Calculate progress
@@ -301,8 +305,8 @@ export default function StudyPlan() {
           <div className="flex gap-3">
             <Button
               onClick={() => {
-                localStorage.removeItem('studyGoalSet');
-                localStorage.removeItem('studyGoal');
+                localStorage.removeItem("studyGoalSet");
+                localStorage.removeItem("studyGoal");
                 setShowGoalDialog(true);
               }}
               variant="outline"
@@ -513,7 +517,9 @@ export default function StudyPlan() {
                 id="goalName"
                 placeholder="Ví dụ: Ôn tập thi giữa kỳ"
                 value={goalData.name}
-                onChange={(e) => setGoalData({...goalData, name: e.target.value})}
+                onChange={(e) =>
+                  setGoalData({ ...goalData, name: e.target.value })
+                }
                 className="border-primary/20 focus:border-primary rounded-xl"
               />
             </div>
@@ -522,7 +528,9 @@ export default function StudyPlan() {
               <Label htmlFor="duration">Khoảng thời gian</Label>
               <Select
                 value={goalData.duration}
-                onValueChange={(value) => setGoalData({...goalData, duration: value})}
+                onValueChange={(value) =>
+                  setGoalData({ ...goalData, duration: value })
+                }
               >
                 <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
                   <SelectValue placeholder="Chọn khoảng thời gian" />
@@ -543,7 +551,9 @@ export default function StudyPlan() {
                 id="startDate"
                 type="date"
                 value={goalData.startDate}
-                onChange={(e) => setGoalData({...goalData, startDate: e.target.value})}
+                onChange={(e) =>
+                  setGoalData({ ...goalData, startDate: e.target.value })
+                }
                 className="border-primary/20 focus:border-primary rounded-xl"
               />
             </div>
@@ -552,7 +562,9 @@ export default function StudyPlan() {
               <Label htmlFor="priority">Độ ưu tiên</Label>
               <Select
                 value={goalData.priority}
-                onValueChange={(value) => setGoalData({...goalData, priority: value})}
+                onValueChange={(value) =>
+                  setGoalData({ ...goalData, priority: value })
+                }
               >
                 <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
                   <SelectValue />
@@ -612,23 +624,41 @@ export default function StudyPlan() {
 
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {lessonList.map((lesson) => (
-                <div key={lesson.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-white">
+                <div
+                  key={lesson.id}
+                  className="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-white"
+                >
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-gray-500">{lesson.week}</span>
+                      <span className="text-sm font-medium text-gray-500">
+                        {lesson.week}
+                      </span>
                       <h4 className="font-semibold">{lesson.title}</h4>
-                      <span className="text-sm text-gray-500">({lesson.duration})</span>
+                      <span className="text-sm text-gray-500">
+                        ({lesson.duration})
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-gray-400">{lesson.day} - {lesson.time}</span>
-                      <span className="text-xs text-gray-400">• {subjectConfig[lesson.subject as keyof typeof subjectConfig]?.name}</span>
+                      <span className="text-xs text-gray-400">
+                        {lesson.day} - {lesson.time}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        •{" "}
+                        {
+                          subjectConfig[
+                            lesson.subject as keyof typeof subjectConfig
+                          ]?.name
+                        }
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <Select
                       value={lesson.status}
-                      onValueChange={(value) => updateLessonStatus(lesson.id, value)}
+                      onValueChange={(value) =>
+                        updateLessonStatus(lesson.id, value)
+                      }
                     >
                       <SelectTrigger className="w-40 text-sm">
                         <SelectValue />
