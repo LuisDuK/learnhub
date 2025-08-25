@@ -104,7 +104,15 @@ const mockExercises = [
   },
 ];
 
-const subjects = ["Tất cả", "Toán học", "Tiếng Việt", "Tiếng Anh", "Khoa học", "Lịch sử", "Địa lý"];
+const subjects = [
+  "Tất cả",
+  "Toán học",
+  "Tiếng Việt",
+  "Tiếng Anh",
+  "Khoa học",
+  "Lịch sử",
+  "Địa lý",
+];
 const types = ["Tất cả", "Trắc nghiệm", "Tự luận"];
 const difficulties = ["Dễ", "Trung bình", "Khó"];
 
@@ -119,28 +127,43 @@ export default function AdminExercises() {
     subject: "",
     type: "",
     difficulty: "",
-    questions: [{ question: "", options: ["", "", "", ""], correctAnswer: "", explanation: "" }],
+    questions: [
+      {
+        question: "",
+        options: ["", "", "", ""],
+        correctAnswer: "",
+        explanation: "",
+      },
+    ],
     essayPrompt: "",
   });
 
   const filteredExercises = exercises.filter((exercise) => {
-    const matchesSearch = exercise.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         exercise.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSubject = subjectFilter === "Tất cả" || exercise.subject === subjectFilter;
+    const matchesSearch =
+      exercise.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      exercise.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSubject =
+      subjectFilter === "Tất cả" || exercise.subject === subjectFilter;
     const matchesType = typeFilter === "Tất cả" || exercise.type === typeFilter;
     return matchesSearch && matchesSubject && matchesType;
   });
 
   const handleAddExercise = () => {
-    if (newExercise.title && newExercise.subject && newExercise.type && newExercise.difficulty) {
+    if (
+      newExercise.title &&
+      newExercise.subject &&
+      newExercise.type &&
+      newExercise.difficulty
+    ) {
       const exercise = {
         id: exercises.length + 1,
         title: newExercise.title,
         type: newExercise.type,
         subject: newExercise.subject,
         creator: "Admin Nguyễn Đức",
-        createdAt: new Date().toISOString().split('T')[0],
-        totalQuestions: newExercise.type === "Trắc nghiệm" ? newExercise.questions.length : 1,
+        createdAt: new Date().toISOString().split("T")[0],
+        totalQuestions:
+          newExercise.type === "Trắc nghiệm" ? newExercise.questions.length : 1,
         difficulty: newExercise.difficulty,
         submissions: 0,
         avgScore: 0,
@@ -151,7 +174,14 @@ export default function AdminExercises() {
         subject: "",
         type: "",
         difficulty: "",
-        questions: [{ question: "", options: ["", "", "", ""], correctAnswer: "", explanation: "" }],
+        questions: [
+          {
+            question: "",
+            options: ["", "", "", ""],
+            correctAnswer: "",
+            explanation: "",
+          },
+        ],
         essayPrompt: "",
       });
       setIsAddDialogOpen(false);
@@ -159,25 +189,41 @@ export default function AdminExercises() {
   };
 
   const handleDeleteExercise = (id: number) => {
-    setExercises(exercises.filter(exercise => exercise.id !== id));
+    setExercises(exercises.filter((exercise) => exercise.id !== id));
   };
 
   const addQuestion = () => {
     setNewExercise({
       ...newExercise,
-      questions: [...newExercise.questions, { question: "", options: ["", "", "", ""], correctAnswer: "", explanation: "" }]
+      questions: [
+        ...newExercise.questions,
+        {
+          question: "",
+          options: ["", "", "", ""],
+          correctAnswer: "",
+          explanation: "",
+        },
+      ],
     });
   };
 
   const updateQuestion = (index: number, field: string, value: string) => {
     const updatedQuestions = [...newExercise.questions];
-    if (field === "question" || field === "correctAnswer" || field === "explanation") {
+    if (
+      field === "question" ||
+      field === "correctAnswer" ||
+      field === "explanation"
+    ) {
       updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
     }
     setNewExercise({ ...newExercise, questions: updatedQuestions });
   };
 
-  const updateOption = (questionIndex: number, optionIndex: number, value: string) => {
+  const updateOption = (
+    questionIndex: number,
+    optionIndex: number,
+    value: string,
+  ) => {
     const updatedQuestions = [...newExercise.questions];
     updatedQuestions[questionIndex].options[optionIndex] = value;
     setNewExercise({ ...newExercise, questions: updatedQuestions });
@@ -220,7 +266,7 @@ export default function AdminExercises() {
               Tạo và quản lý bài tập cho học sinh
             </p>
           </div>
-          
+
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white">
@@ -235,7 +281,7 @@ export default function AdminExercises() {
                   Tạo bài tập trắc nghiệm hoặc tự luận cho học sinh
                 </DialogDescription>
               </DialogHeader>
-              
+
               <div className="space-y-4">
                 {/* Basic Info */}
                 <div className="grid grid-cols-2 gap-4">
@@ -244,19 +290,31 @@ export default function AdminExercises() {
                     <Input
                       id="title"
                       value={newExercise.title}
-                      onChange={(e) => setNewExercise({...newExercise, title: e.target.value})}
+                      onChange={(e) =>
+                        setNewExercise({
+                          ...newExercise,
+                          title: e.target.value,
+                        })
+                      }
                       placeholder="Nhập tên bài tập"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="subject">Môn học</Label>
-                    <Select value={newExercise.subject} onValueChange={(value) => setNewExercise({...newExercise, subject: value})}>
+                    <Select
+                      value={newExercise.subject}
+                      onValueChange={(value) =>
+                        setNewExercise({ ...newExercise, subject: value })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn môn học" />
                       </SelectTrigger>
                       <SelectContent>
-                        {subjects.slice(1).map(subject => (
-                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                        {subjects.slice(1).map((subject) => (
+                          <SelectItem key={subject} value={subject}>
+                            {subject}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -266,7 +324,12 @@ export default function AdminExercises() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="type">Loại bài tập</Label>
-                    <Select value={newExercise.type} onValueChange={(value) => setNewExercise({...newExercise, type: value})}>
+                    <Select
+                      value={newExercise.type}
+                      onValueChange={(value) =>
+                        setNewExercise({ ...newExercise, type: value })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn loại" />
                       </SelectTrigger>
@@ -278,13 +341,20 @@ export default function AdminExercises() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="difficulty">Độ khó</Label>
-                    <Select value={newExercise.difficulty} onValueChange={(value) => setNewExercise({...newExercise, difficulty: value})}>
+                    <Select
+                      value={newExercise.difficulty}
+                      onValueChange={(value) =>
+                        setNewExercise({ ...newExercise, difficulty: value })
+                      }
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn độ khó" />
                       </SelectTrigger>
                       <SelectContent>
-                        {difficulties.map(difficulty => (
-                          <SelectItem key={difficulty} value={difficulty}>{difficulty}</SelectItem>
+                        {difficulties.map((difficulty) => (
+                          <SelectItem key={difficulty} value={difficulty}>
+                            {difficulty}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
@@ -295,50 +365,82 @@ export default function AdminExercises() {
                 {newExercise.type === "Trắc nghiệm" && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Label className="text-lg font-semibold">Câu hỏi trắc nghiệm</Label>
-                      <Button type="button" onClick={addQuestion} variant="outline" size="sm">
+                      <Label className="text-lg font-semibold">
+                        Câu hỏi trắc nghiệm
+                      </Label>
+                      <Button
+                        type="button"
+                        onClick={addQuestion}
+                        variant="outline"
+                        size="sm"
+                      >
                         <Plus className="h-4 w-4 mr-2" />
                         Thêm câu hỏi
                       </Button>
                     </div>
-                    
+
                     {newExercise.questions.map((q, qIndex) => (
-                      <div key={qIndex} className="p-4 border border-gray-200 rounded-lg space-y-3">
+                      <div
+                        key={qIndex}
+                        className="p-4 border border-gray-200 rounded-lg space-y-3"
+                      >
                         <div>
-                          <Label htmlFor={`question-${qIndex}`}>Câu hỏi {qIndex + 1}</Label>
+                          <Label htmlFor={`question-${qIndex}`}>
+                            Câu hỏi {qIndex + 1}
+                          </Label>
                           <Textarea
                             id={`question-${qIndex}`}
                             value={q.question}
-                            onChange={(e) => updateQuestion(qIndex, "question", e.target.value)}
+                            onChange={(e) =>
+                              updateQuestion(qIndex, "question", e.target.value)
+                            }
                             placeholder="Nhập câu hỏi..."
                             rows={2}
                           />
                         </div>
-                        
+
                         <div className="space-y-2">
                           <Label>Các lựa chọn</Label>
                           {q.options.map((option, oIndex) => (
-                            <div key={oIndex} className="flex items-center gap-2">
-                              <span className="text-sm font-medium w-6">{String.fromCharCode(65 + oIndex)}.</span>
+                            <div
+                              key={oIndex}
+                              className="flex items-center gap-2"
+                            >
+                              <span className="text-sm font-medium w-6">
+                                {String.fromCharCode(65 + oIndex)}.
+                              </span>
                               <Input
                                 value={option}
-                                onChange={(e) => updateOption(qIndex, oIndex, e.target.value)}
+                                onChange={(e) =>
+                                  updateOption(qIndex, oIndex, e.target.value)
+                                }
                                 placeholder={`Lựa chọn ${String.fromCharCode(65 + oIndex)}`}
                               />
                             </div>
                           ))}
                         </div>
-                        
+
                         <div>
-                          <Label htmlFor={`correct-${qIndex}`}>Đáp án đúng</Label>
-                          <Select value={q.correctAnswer} onValueChange={(value) => updateQuestion(qIndex, "correctAnswer", value)}>
+                          <Label htmlFor={`correct-${qIndex}`}>
+                            Đáp án đúng
+                          </Label>
+                          <Select
+                            value={q.correctAnswer}
+                            onValueChange={(value) =>
+                              updateQuestion(qIndex, "correctAnswer", value)
+                            }
+                          >
                             <SelectTrigger>
                               <SelectValue placeholder="Chọn đáp án đúng" />
                             </SelectTrigger>
                             <SelectContent>
                               {q.options.map((_, oIndex) => (
-                                <SelectItem key={oIndex} value={String.fromCharCode(65 + oIndex)}>
-                                  {String.fromCharCode(65 + oIndex)}. {q.options[oIndex]}
+                                <SelectItem
+                                  key={oIndex}
+                                  value={String.fromCharCode(65 + oIndex)}
+                                >
+                                  {String.fromCharCode(65 + oIndex)}.{" "}
+                                  {q.options[oIndex]}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -355,7 +457,12 @@ export default function AdminExercises() {
                     <Textarea
                       id="essayPrompt"
                       value={newExercise.essayPrompt}
-                      onChange={(e) => setNewExercise({...newExercise, essayPrompt: e.target.value})}
+                      onChange={(e) =>
+                        setNewExercise({
+                          ...newExercise,
+                          essayPrompt: e.target.value,
+                        })
+                      }
                       placeholder="Nhập đề bài tự luận..."
                       rows={4}
                     />
@@ -367,8 +474,12 @@ export default function AdminExercises() {
                   <Label>Upload tệp tin (Excel / PDF)</Label>
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                     <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">Kéo thả file hoặc click để chọn</p>
-                    <p className="text-xs text-gray-500 mt-1">Hỗ trợ: Excel (.xlsx), PDF (.pdf)</p>
+                    <p className="text-sm text-gray-600">
+                      Kéo thả file hoặc click để chọn
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Hỗ trợ: Excel (.xlsx), PDF (.pdf)
+                    </p>
                   </div>
                 </div>
               </div>
@@ -400,8 +511,10 @@ export default function AdminExercises() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {subjects.map(subject => (
-                <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+              {subjects.map((subject) => (
+                <SelectItem key={subject} value={subject}>
+                  {subject}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -410,8 +523,10 @@ export default function AdminExercises() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {types.map(type => (
-                <SelectItem key={type} value={type}>{type}</SelectItem>
+              {types.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -430,7 +545,9 @@ export default function AdminExercises() {
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold">Ngày tạo</TableHead>
                 <TableHead className="font-semibold">Thống kê</TableHead>
-                <TableHead className="font-semibold text-center">Hành động</TableHead>
+                <TableHead className="font-semibold text-center">
+                  Hành động
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -439,8 +556,12 @@ export default function AdminExercises() {
                   <TableCell className="font-medium">{exercise.id}</TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-medium text-gray-900">{exercise.title}</p>
-                      <p className="text-xs text-gray-500">{exercise.totalQuestions} câu hỏi</p>
+                      <p className="font-medium text-gray-900">
+                        {exercise.title}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {exercise.totalQuestions} câu hỏi
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -456,12 +577,20 @@ export default function AdminExercises() {
                       {exercise.difficulty}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-gray-600">{exercise.creator}</TableCell>
-                  <TableCell className="text-sm text-gray-600">{exercise.createdAt}</TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {exercise.creator}
+                  </TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {exercise.createdAt}
+                  </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      <div className="text-gray-900 font-medium">{exercise.submissions} bài nộp</div>
-                      <div className="text-gray-500">Đi��m TB: {exercise.avgScore}</div>
+                      <div className="text-gray-900 font-medium">
+                        {exercise.submissions} bài nộp
+                      </div>
+                      <div className="text-gray-500">
+                        Đi��m TB: {exercise.avgScore}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -480,7 +609,7 @@ export default function AdminExercises() {
                           <Edit className="mr-2 h-4 w-4" />
                           Chỉnh sửa
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           className="text-red-600"
                           onClick={() => handleDeleteExercise(exercise.id)}
                         >
@@ -499,18 +628,20 @@ export default function AdminExercises() {
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">{exercises.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {exercises.length}
+            </div>
             <div className="text-sm text-blue-600">Tổng bài tập</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">
-              {exercises.filter(e => e.type === "Trắc nghiệm").length}
+              {exercises.filter((e) => e.type === "Trắc nghiệm").length}
             </div>
             <div className="text-sm text-green-600">Trắc nghiệm</div>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">
-              {exercises.filter(e => e.type === "Tự luận").length}
+              {exercises.filter((e) => e.type === "Tự luận").length}
             </div>
             <div className="text-sm text-purple-600">Tự luận</div>
           </div>

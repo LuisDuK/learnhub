@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +50,8 @@ const mockCourses = [
   {
     id: 1,
     name: "Toán học cơ bản",
-    description: "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
+    description:
+      "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán học",
     teacher: "Cô Nguyễn Thị Mai",
@@ -57,7 +63,8 @@ const mockCourses = [
   {
     id: 2,
     name: "Tiếng Việt lớp 3",
-    description: "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
+    description:
+      "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
     subject: "Tiếng Việt",
     teacher: "Cô Trần Thị Lan",
@@ -69,7 +76,8 @@ const mockCourses = [
   {
     id: 3,
     name: "Tiếng Anh cho trẻ em",
-    description: "Khóa học tiếng Anh cơ bản với phương pháp học qua trò chơi và bài hát.",
+    description:
+      "Khóa học tiếng Anh cơ bản với phương pháp học qua trò chơi và bài hát.",
     image: "/placeholder.svg",
     subject: "Tiếng Anh",
     teacher: "Thầy John Smith",
@@ -81,7 +89,8 @@ const mockCourses = [
   {
     id: 4,
     name: "Khoa học tự nhiên",
-    description: "Khám phá thế giới xung quanh qua các thí nghiệm đơn giản và quan sát thiên nhiên.",
+    description:
+      "Khám phá thế giới xung quanh qua các thí nghiệm đơn giản và quan sát thiên nhiên.",
     image: "/placeholder.svg",
     subject: "Khoa học",
     teacher: "Cô Lê Thị Hoa",
@@ -92,14 +101,22 @@ const mockCourses = [
   },
 ];
 
-const subjects = ["Tất cả", "Toán học", "Tiếng Việt", "Tiếng Anh", "Khoa học", "Lịch sử", "Địa lý"];
+const subjects = [
+  "Tất cả",
+  "Toán học",
+  "Tiếng Việt",
+  "Tiếng Anh",
+  "Khoa học",
+  "Lịch sử",
+  "Địa lý",
+];
 
 const teachers = [
   "Cô Nguyễn Thị Mai",
-  "Cô Trần Thị Lan", 
+  "Cô Trần Thị Lan",
   "Thầy John Smith",
   "Cô Lê Thị Hoa",
-  "Thầy Phạm Văn Nam"
+  "Thầy Phạm Văn Nam",
 ];
 
 export default function AdminCourses() {
@@ -116,14 +133,21 @@ export default function AdminCourses() {
   });
 
   const filteredCourses = courses.filter((course) => {
-    const matchesSearch = course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSubject = subjectFilter === "Tất cả" || course.subject === subjectFilter;
+    const matchesSearch =
+      course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSubject =
+      subjectFilter === "Tất cả" || course.subject === subjectFilter;
     return matchesSearch && matchesSubject;
   });
 
   const handleAddCourse = () => {
-    if (newCourse.name && newCourse.description && newCourse.subject && newCourse.teacher) {
+    if (
+      newCourse.name &&
+      newCourse.description &&
+      newCourse.subject &&
+      newCourse.teacher
+    ) {
       const course = {
         id: courses.length + 1,
         ...newCourse,
@@ -131,16 +155,22 @@ export default function AdminCourses() {
         studentsCount: 0,
         completionRate: 0,
         status: "Đang mở",
-        createdAt: new Date().toISOString().split('T')[0],
+        createdAt: new Date().toISOString().split("T")[0],
       };
       setCourses([...courses, course]);
-      setNewCourse({ name: "", description: "", subject: "", teacher: "", image: "" });
+      setNewCourse({
+        name: "",
+        description: "",
+        subject: "",
+        teacher: "",
+        image: "",
+      });
       setIsAddDialogOpen(false);
     }
   };
 
   const handleDeleteCourse = (id: number) => {
-    setCourses(courses.filter(course => course.id !== id));
+    setCourses(courses.filter((course) => course.id !== id));
   };
 
   const getStatusColor = (status: string) => {
@@ -175,7 +205,7 @@ export default function AdminCourses() {
               Quản lý tất cả các khóa học và môn học
             </p>
           </div>
-          
+
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white">
@@ -198,7 +228,9 @@ export default function AdminCourses() {
                   <Input
                     id="courseName"
                     value={newCourse.name}
-                    onChange={(e) => setNewCourse({...newCourse, name: e.target.value})}
+                    onChange={(e) =>
+                      setNewCourse({ ...newCourse, name: e.target.value })
+                    }
                     className="col-span-3"
                   />
                 </div>
@@ -209,7 +241,12 @@ export default function AdminCourses() {
                   <Textarea
                     id="courseDesc"
                     value={newCourse.description}
-                    onChange={(e) => setNewCourse({...newCourse, description: e.target.value})}
+                    onChange={(e) =>
+                      setNewCourse({
+                        ...newCourse,
+                        description: e.target.value,
+                      })
+                    }
                     className="col-span-3"
                     rows={3}
                   />
@@ -218,13 +255,20 @@ export default function AdminCourses() {
                   <Label htmlFor="subject" className="text-right">
                     Môn học
                   </Label>
-                  <Select value={newCourse.subject} onValueChange={(value) => setNewCourse({...newCourse, subject: value})}>
+                  <Select
+                    value={newCourse.subject}
+                    onValueChange={(value) =>
+                      setNewCourse({ ...newCourse, subject: value })
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Chọn môn học" />
                     </SelectTrigger>
                     <SelectContent>
-                      {subjects.slice(1).map(subject => (
-                        <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+                      {subjects.slice(1).map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                          {subject}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -233,13 +277,20 @@ export default function AdminCourses() {
                   <Label htmlFor="teacher" className="text-right">
                     Giáo viên
                   </Label>
-                  <Select value={newCourse.teacher} onValueChange={(value) => setNewCourse({...newCourse, teacher: value})}>
+                  <Select
+                    value={newCourse.teacher}
+                    onValueChange={(value) =>
+                      setNewCourse({ ...newCourse, teacher: value })
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Chọn giáo viên phụ trách" />
                     </SelectTrigger>
                     <SelectContent>
-                      {teachers.map(teacher => (
-                        <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
+                      {teachers.map((teacher) => (
+                        <SelectItem key={teacher} value={teacher}>
+                          {teacher}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -269,8 +320,10 @@ export default function AdminCourses() {
               <SelectValue placeholder="Lọc theo môn" />
             </SelectTrigger>
             <SelectContent>
-              {subjects.map(subject => (
-                <SelectItem key={subject} value={subject}>{subject}</SelectItem>
+              {subjects.map((subject) => (
+                <SelectItem key={subject} value={subject}>
+                  {subject}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -279,7 +332,10 @@ export default function AdminCourses() {
         {/* Course Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course) => (
-            <Card key={course.id} className="hover:shadow-lg transition-shadow border-gray-200 overflow-hidden">
+            <Card
+              key={course.id}
+              className="hover:shadow-lg transition-shadow border-gray-200 overflow-hidden"
+            >
               <CardHeader className="pb-3">
                 <div className="relative">
                   <img
@@ -287,7 +343,9 @@ export default function AdminCourses() {
                     alt={course.name}
                     className="w-full h-32 object-cover rounded-lg bg-gradient-to-br from-blue-100 to-orange-100"
                   />
-                  <Badge className={`absolute top-2 right-2 ${getStatusColor(course.status)}`}>
+                  <Badge
+                    className={`absolute top-2 right-2 ${getStatusColor(course.status)}`}
+                  >
                     {course.status}
                   </Badge>
                 </div>
@@ -315,7 +373,7 @@ export default function AdminCourses() {
                         <Edit className="mr-2 h-4 w-4" />
                         Chỉnh sửa
                       </DropdownMenuItem>
-                      <DropdownMenuItem 
+                      <DropdownMenuItem
                         className="text-red-600"
                         onClick={() => handleDeleteCourse(course.id)}
                       >
@@ -326,18 +384,20 @@ export default function AdminCourses() {
                   </DropdownMenu>
                 </div>
               </CardHeader>
-              
+
               <CardContent className="pt-0">
                 <p className="text-sm text-gray-600 mb-4 line-clamp-2">
                   {course.description}
                 </p>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Giáo viên:</span>
-                    <span className="font-medium text-blue-600">{course.teacher}</span>
+                    <span className="font-medium text-blue-600">
+                      {course.teacher}
+                    </span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1">
                       <Users className="h-4 w-4 text-blue-500" />
@@ -345,19 +405,21 @@ export default function AdminCourses() {
                     </div>
                     <span className="font-medium">{course.studentsCount}</span>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1">
                       <TrendingUp className="h-4 w-4 text-green-500" />
                       <span className="text-gray-500">Hoàn thành:</span>
                     </div>
-                    <span className={`font-medium ${getCompletionColor(course.completionRate)}`}>
+                    <span
+                      className={`font-medium ${getCompletionColor(course.completionRate)}`}
+                    >
                       {course.completionRate}%
                     </span>
                   </div>
                 </div>
               </CardContent>
-              
+
               <CardFooter className="pt-0">
                 <div className="w-full">
                   <div className="flex justify-between text-xs text-gray-500 mb-1">
@@ -386,7 +448,12 @@ export default function AdminCourses() {
             <p className="text-gray-500 mb-4">
               Thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác
             </p>
-            <Button onClick={() => {setSearchTerm(""); setSubjectFilter("Tất cả");}}>
+            <Button
+              onClick={() => {
+                setSearchTerm("");
+                setSubjectFilter("Tất cả");
+              }}
+            >
               Xóa bộ lọc
             </Button>
           </div>
@@ -395,12 +462,14 @@ export default function AdminCourses() {
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">{courses.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {courses.length}
+            </div>
             <div className="text-sm text-blue-600">Tổng khóa học</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">
-              {courses.filter(c => c.status === "Đang mở").length}
+              {courses.filter((c) => c.status === "Đang mở").length}
             </div>
             <div className="text-sm text-green-600">Đang mở</div>
           </div>
@@ -412,7 +481,11 @@ export default function AdminCourses() {
           </div>
           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">
-              {Math.round(courses.reduce((sum, c) => sum + c.completionRate, 0) / courses.length)}%
+              {Math.round(
+                courses.reduce((sum, c) => sum + c.completionRate, 0) /
+                  courses.length,
+              )}
+              %
             </div>
             <div className="text-sm text-purple-600">Hoàn thành TB</div>
           </div>

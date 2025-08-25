@@ -88,9 +88,7 @@ export function AdminSidebar() {
             <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
               🛡️ KidsLearn Admin
             </span>
-            <span className="text-xs text-blue-600">
-              Hệ thống quản trị
-            </span>
+            <span className="text-xs text-blue-600">Hệ thống quản trị</span>
           </div>
         </div>
       </div>

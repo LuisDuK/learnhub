@@ -127,7 +127,8 @@ export default function AdminReports() {
     if (filterBy === "all") return true;
     if (filterBy === "student") return true;
     if (filterBy === "class") return true;
-    if (filterBy === "subject") return selectedSubject === "all" || student.subject === selectedSubject;
+    if (filterBy === "subject")
+      return selectedSubject === "all" || student.subject === selectedSubject;
     return true;
   });
 
@@ -210,7 +211,10 @@ export default function AdminReports() {
                 <label className="text-sm font-medium text-gray-600 mb-2 block">
                   Môn học
                 </label>
-                <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+                <Select
+                  value={selectedSubject}
+                  onValueChange={setSelectedSubject}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -238,9 +242,13 @@ export default function AdminReports() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Tổng học sinh</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Tổng học sinh
+                  </p>
                   <p className="text-2xl font-bold text-blue-600">1,234</p>
-                  <p className="text-xs text-green-600 mt-1">+12% tháng trước</p>
+                  <p className="text-xs text-green-600 mt-1">
+                    +12% tháng trước
+                  </p>
                 </div>
                 <Users className="h-8 w-8 text-blue-500" />
               </div>
@@ -250,7 +258,9 @@ export default function AdminReports() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Điểm TB chung</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Điểm TB chung
+                  </p>
                   <p className="text-2xl font-bold text-green-600">82.5</p>
                   <p className="text-xs text-green-600 mt-1">+5.2 điểm</p>
                 </div>
@@ -262,7 +272,9 @@ export default function AdminReports() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Khóa học hoàn thành</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Khóa học hoàn thành
+                  </p>
                   <p className="text-2xl font-bold text-orange-600">156</p>
                   <p className="text-xs text-blue-600 mt-1">18 khóa mới</p>
                 </div>
@@ -274,7 +286,9 @@ export default function AdminReports() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Thời gian học TB</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Thời gian học TB
+                  </p>
                   <p className="text-2xl font-bold text-purple-600">4.2h</p>
                   <p className="text-xs text-purple-600 mt-1">mỗi ngày</p>
                 </div>
@@ -458,7 +472,9 @@ export default function AdminReports() {
         {/* Detailed Performance Table */}
         <Card className="border-gray-200">
           <CardHeader>
-            <CardTitle className="text-gray-700">📋 Bảng dữ liệu chi tiết</CardTitle>
+            <CardTitle className="text-gray-700">
+              📋 Bảng dữ liệu chi tiết
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
@@ -470,18 +486,25 @@ export default function AdminReports() {
                     <TableHead className="font-semibold">Môn học</TableHead>
                     <TableHead className="font-semibold">Điểm số</TableHead>
                     <TableHead className="font-semibold">Tiến độ</TableHead>
-                    <TableHead className="font-semibold">Hoạt động cuối</TableHead>
+                    <TableHead className="font-semibold">
+                      Hoạt động cuối
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredStudentData.map((student) => (
-                    <TableRow key={student.studentId} className="hover:bg-gray-50">
+                    <TableRow
+                      key={student.studentId}
+                      className="hover:bg-gray-50"
+                    >
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center text-white text-sm font-bold">
                             {student.studentName.charAt(0)}
                           </div>
-                          <span className="font-medium">{student.studentName}</span>
+                          <span className="font-medium">
+                            {student.studentName}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -491,7 +514,9 @@ export default function AdminReports() {
                         <Badge variant="secondary">{student.subject}</Badge>
                       </TableCell>
                       <TableCell>
-                        <span className={`font-bold ${getScoreColor(student.score)}`}>
+                        <span
+                          className={`font-bold ${getScoreColor(student.score)}`}
+                        >
                           {student.score}
                         </span>
                       </TableCell>
@@ -503,7 +528,9 @@ export default function AdminReports() {
                               style={{ width: `${student.progress}%` }}
                             />
                           </div>
-                          <span className="text-sm text-gray-600">{student.progress}%</span>
+                          <span className="text-sm text-gray-600">
+                            {student.progress}%
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="text-sm text-gray-600">

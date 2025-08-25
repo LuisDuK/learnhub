@@ -136,20 +136,35 @@ export default function AdminLearningPaths() {
   });
 
   const filteredPaths = learningPaths.filter((path) => {
-    return path.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           path.goal.toLowerCase().includes(searchTerm.toLowerCase());
+    return (
+      path.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      path.goal.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   const handleAddPath = () => {
-    if (newPath.studentId && newPath.goal && newPath.duration && newPath.startDate && newPath.priority) {
-      const student = students.find(s => s.id.toString() === newPath.studentId);
+    if (
+      newPath.studentId &&
+      newPath.goal &&
+      newPath.duration &&
+      newPath.startDate &&
+      newPath.priority
+    ) {
+      const student = students.find(
+        (s) => s.id.toString() === newPath.studentId,
+      );
       if (student) {
         const startDate = new Date(newPath.startDate);
-        const durationWeeks = newPath.duration === "2 tuần" ? 2 : 
-                             newPath.duration === "1 tháng" ? 4 :
-                             newPath.duration === "2 tháng" ? 8 : 12;
+        const durationWeeks =
+          newPath.duration === "2 tuần"
+            ? 2
+            : newPath.duration === "1 tháng"
+              ? 4
+              : newPath.duration === "2 tháng"
+                ? 8
+                : 12;
         const endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + (durationWeeks * 7));
+        endDate.setDate(startDate.getDate() + durationWeeks * 7);
 
         const path = {
           id: learningPaths.length + 1,
@@ -158,7 +173,7 @@ export default function AdminLearningPaths() {
           goal: newPath.goal,
           progress: 0,
           startDate: newPath.startDate,
-          endDate: endDate.toISOString().split('T')[0],
+          endDate: endDate.toISOString().split("T")[0],
           priority: newPath.priority,
           status: "Đang học",
           totalLessons: Math.floor(Math.random() * 15) + 10,
@@ -166,14 +181,20 @@ export default function AdminLearningPaths() {
           estimatedTime: newPath.duration,
         };
         setLearningPaths([...learningPaths, path]);
-        setNewPath({ studentId: "", goal: "", duration: "", startDate: "", priority: "" });
+        setNewPath({
+          studentId: "",
+          goal: "",
+          duration: "",
+          startDate: "",
+          priority: "",
+        });
         setIsAddDialogOpen(false);
       }
     }
   };
 
   const handleDeletePath = (id: number) => {
-    setLearningPaths(learningPaths.filter(path => path.id !== id));
+    setLearningPaths(learningPaths.filter((path) => path.id !== id));
   };
 
   const getPriorityColor = (priority: string) => {
@@ -208,7 +229,9 @@ export default function AdminLearningPaths() {
     return "bg-red-500";
   };
 
-  const selectedPath = viewDetailId ? learningPaths.find(p => p.id === viewDetailId) : null;
+  const selectedPath = viewDetailId
+    ? learningPaths.find((p) => p.id === viewDetailId)
+    : null;
 
   return (
     <AdminLayout>
@@ -223,7 +246,7 @@ export default function AdminLearningPaths() {
               Theo dõi và quản lý lộ trình học tập của học sinh
             </p>
           </div>
-          
+
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white">
@@ -235,7 +258,8 @@ export default function AdminLearningPaths() {
               <DialogHeader>
                 <DialogTitle>Tạo lộ trình học mới</DialogTitle>
                 <DialogDescription>
-                  AI sẽ tự động tạo timeline học tập dựa trên thông tin bạn cung cấp
+                  AI sẽ tự động tạo timeline học tập dựa trên thông tin bạn cung
+                  cấp
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -243,13 +267,21 @@ export default function AdminLearningPaths() {
                   <Label htmlFor="student" className="text-right">
                     Chọn học sinh
                   </Label>
-                  <Select value={newPath.studentId} onValueChange={(value) => setNewPath({...newPath, studentId: value})}>
+                  <Select
+                    value={newPath.studentId}
+                    onValueChange={(value) =>
+                      setNewPath({ ...newPath, studentId: value })
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Chọn học sinh" />
                     </SelectTrigger>
                     <SelectContent>
-                      {students.map(student => (
-                        <SelectItem key={student.id} value={student.id.toString()}>
+                      {students.map((student) => (
+                        <SelectItem
+                          key={student.id}
+                          value={student.id.toString()}
+                        >
                           {student.name}
                         </SelectItem>
                       ))}
@@ -263,7 +295,9 @@ export default function AdminLearningPaths() {
                   <Textarea
                     id="goal"
                     value={newPath.goal}
-                    onChange={(e) => setNewPath({...newPath, goal: e.target.value})}
+                    onChange={(e) =>
+                      setNewPath({ ...newPath, goal: e.target.value })
+                    }
                     className="col-span-3"
                     placeholder="Nhập mục tiêu học tập..."
                     rows={2}
@@ -273,13 +307,20 @@ export default function AdminLearningPaths() {
                   <Label htmlFor="duration" className="text-right">
                     Khoảng thời gian
                   </Label>
-                  <Select value={newPath.duration} onValueChange={(value) => setNewPath({...newPath, duration: value})}>
+                  <Select
+                    value={newPath.duration}
+                    onValueChange={(value) =>
+                      setNewPath({ ...newPath, duration: value })
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Chọn thời gian" />
                     </SelectTrigger>
                     <SelectContent>
-                      {durations.map(duration => (
-                        <SelectItem key={duration} value={duration}>{duration}</SelectItem>
+                      {durations.map((duration) => (
+                        <SelectItem key={duration} value={duration}>
+                          {duration}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -292,7 +333,9 @@ export default function AdminLearningPaths() {
                     id="startDate"
                     type="date"
                     value={newPath.startDate}
-                    onChange={(e) => setNewPath({...newPath, startDate: e.target.value})}
+                    onChange={(e) =>
+                      setNewPath({ ...newPath, startDate: e.target.value })
+                    }
                     className="col-span-3"
                   />
                 </div>
@@ -300,13 +343,20 @@ export default function AdminLearningPaths() {
                   <Label htmlFor="priority" className="text-right">
                     Độ ưu tiên
                   </Label>
-                  <Select value={newPath.priority} onValueChange={(value) => setNewPath({...newPath, priority: value})}>
+                  <Select
+                    value={newPath.priority}
+                    onValueChange={(value) =>
+                      setNewPath({ ...newPath, priority: value })
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Chọn độ ưu tiên" />
                     </SelectTrigger>
                     <SelectContent>
-                      {priorities.map(priority => (
-                        <SelectItem key={priority} value={priority}>{priority}</SelectItem>
+                      {priorities.map((priority) => (
+                        <SelectItem key={priority} value={priority}>
+                          {priority}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -347,7 +397,9 @@ export default function AdminLearningPaths() {
                 <TableHead className="font-semibold">Thời gian</TableHead>
                 <TableHead className="font-semibold">Ưu tiên</TableHead>
                 <TableHead className="font-semibold">Trạng thái</TableHead>
-                <TableHead className="font-semibold text-center">Hành động</TableHead>
+                <TableHead className="font-semibold text-center">
+                  Hành động
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -364,8 +416,12 @@ export default function AdminLearningPaths() {
                   </TableCell>
                   <TableCell>
                     <div className="max-w-xs">
-                      <p className="text-sm font-medium text-gray-900 truncate">{path.goal}</p>
-                      <p className="text-xs text-gray-500">{path.completedLessons}/{path.totalLessons} bài học</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {path.goal}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {path.completedLessons}/{path.totalLessons} bài học
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -373,7 +429,10 @@ export default function AdminLearningPaths() {
                       <div className="flex justify-between text-xs text-gray-600 mb-1">
                         <span>{path.progress}%</span>
                       </div>
-                      <Progress value={path.progress} className={`h-2 ${getProgressColor(path.progress)}`} />
+                      <Progress
+                        value={path.progress}
+                        className={`h-2 ${getProgressColor(path.progress)}`}
+                      />
                     </div>
                   </TableCell>
                   <TableCell>
@@ -406,7 +465,9 @@ export default function AdminLearningPaths() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => setViewDetailId(path.id)}>
+                        <DropdownMenuItem
+                          onClick={() => setViewDetailId(path.id)}
+                        >
                           <Eye className="mr-2 h-4 w-4" />
                           Xem chi tiết
                         </DropdownMenuItem>
@@ -414,7 +475,7 @@ export default function AdminLearningPaths() {
                           <Edit className="mr-2 h-4 w-4" />
                           Chỉnh sửa
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           className="text-red-600"
                           onClick={() => handleDeletePath(path.id)}
                         >
@@ -431,7 +492,10 @@ export default function AdminLearningPaths() {
         </div>
 
         {/* Detail View Dialog */}
-        <Dialog open={!!viewDetailId} onOpenChange={() => setViewDetailId(null)}>
+        <Dialog
+          open={!!viewDetailId}
+          onOpenChange={() => setViewDetailId(null)}
+        >
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
               <DialogTitle>Chi tiết lộ trình học</DialogTitle>
@@ -443,38 +507,63 @@ export default function AdminLearningPaths() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">Học sinh</Label>
-                    <p className="text-lg font-semibold">{selectedPath.studentName}</p>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Học sinh
+                    </Label>
+                    <p className="text-lg font-semibold">
+                      {selectedPath.studentName}
+                    </p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">Mục tiêu</Label>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Mục tiêu
+                    </Label>
                     <p className="text-lg">{selectedPath.goal}</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <Label className="text-sm font-medium text-gray-500">Tiến độ tổng thể</Label>
-                    <span className="text-sm font-medium">{selectedPath.progress}%</span>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Tiến độ tổng thể
+                    </Label>
+                    <span className="text-sm font-medium">
+                      {selectedPath.progress}%
+                    </span>
                   </div>
                   <Progress value={selectedPath.progress} className="h-3" />
                   <div className="flex justify-between text-xs text-gray-500">
-                    <span>{selectedPath.completedLessons}/{selectedPath.totalLessons} bài học hoàn thành</span>
+                    <span>
+                      {selectedPath.completedLessons}/
+                      {selectedPath.totalLessons} bài học hoàn thành
+                    </span>
                     <span>{selectedPath.estimatedTime}</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4 pt-4">
                   <div className="text-center p-3 bg-blue-50 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">{selectedPath.completedLessons}</div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      {selectedPath.completedLessons}
+                    </div>
                     <div className="text-xs text-blue-600">Đã hoàn thành</div>
                   </div>
                   <div className="text-center p-3 bg-yellow-50 rounded-lg">
-                    <div className="text-2xl font-bold text-yellow-600">{selectedPath.totalLessons - selectedPath.completedLessons}</div>
+                    <div className="text-2xl font-bold text-yellow-600">
+                      {selectedPath.totalLessons -
+                        selectedPath.completedLessons}
+                    </div>
                     <div className="text-xs text-yellow-600">Còn lại</div>
                   </div>
                   <div className="text-center p-3 bg-green-50 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">{Math.round((selectedPath.completedLessons / selectedPath.totalLessons) * 100)}%</div>
+                    <div className="text-2xl font-bold text-green-600">
+                      {Math.round(
+                        (selectedPath.completedLessons /
+                          selectedPath.totalLessons) *
+                          100,
+                      )}
+                      %
+                    </div>
                     <div className="text-xs text-green-600">Hiệu suất</div>
                   </div>
                 </div>
@@ -486,24 +575,30 @@ export default function AdminLearningPaths() {
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">{learningPaths.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {learningPaths.length}
+            </div>
             <div className="text-sm text-blue-600">Tổng lộ trình</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">
-              {learningPaths.filter(p => p.status === "Đang học").length}
+              {learningPaths.filter((p) => p.status === "Đang học").length}
             </div>
             <div className="text-sm text-green-600">Đang thực hiện</div>
           </div>
           <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
             <div className="text-2xl font-bold text-orange-600">
-              {learningPaths.filter(p => p.status === "Hoàn thành").length}
+              {learningPaths.filter((p) => p.status === "Hoàn thành").length}
             </div>
             <div className="text-sm text-orange-600">Đã hoàn thành</div>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">
-              {Math.round(learningPaths.reduce((sum, p) => sum + p.progress, 0) / learningPaths.length)}%
+              {Math.round(
+                learningPaths.reduce((sum, p) => sum + p.progress, 0) /
+                  learningPaths.length,
+              )}
+              %
             </div>
             <div className="text-sm text-purple-600">Tiến độ TB</div>
           </div>

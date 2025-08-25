@@ -79,9 +79,7 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-orange-600">56</div>
-              <p className="text-xs text-green-600 mt-1">
-                +3 giáo viên mới
-              </p>
+              <p className="text-xs text-green-600 mt-1">+3 giáo viên mới</p>
             </CardContent>
           </Card>
 
@@ -97,9 +95,7 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">24</div>
-              <p className="text-xs text-blue-600 mt-1">
-                6 môn học chính
-              </p>
+              <p className="text-xs text-blue-600 mt-1">6 môn học chính</p>
             </CardContent>
           </Card>
 
@@ -215,17 +211,23 @@ export default function AdminDashboard() {
               <div className="p-4 border border-blue-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
                 <Users className="h-8 w-8 text-blue-600 mb-2" />
                 <h3 className="font-semibold text-blue-700">Thêm người dùng</h3>
-                <p className="text-sm text-gray-600">Tạo tài khoản mới cho học sinh hoặc giáo viên</p>
+                <p className="text-sm text-gray-600">
+                  Tạo tài khoản mới cho học sinh hoặc giáo viên
+                </p>
               </div>
               <div className="p-4 border border-orange-200 rounded-lg hover:bg-orange-50 cursor-pointer transition-colors">
                 <BookOpen className="h-8 w-8 text-orange-600 mb-2" />
                 <h3 className="font-semibold text-orange-700">Tạo khóa học</h3>
-                <p className="text-sm text-gray-600">Thiết lập khóa học mới cho học sinh</p>
+                <p className="text-sm text-gray-600">
+                  Thiết lập khóa học mới cho học sinh
+                </p>
               </div>
               <div className="p-4 border border-green-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
                 <GraduationCap className="h-8 w-8 text-green-600 mb-2" />
                 <h3 className="font-semibold text-green-700">Xem báo cáo</h3>
-                <p className="text-sm text-gray-600">Theo dõi tiến độ học tập chi tiết</p>
+                <p className="text-sm text-gray-600">
+                  Theo dõi tiến độ học tập chi tiết
+                </p>
               </div>
             </div>
           </CardContent>

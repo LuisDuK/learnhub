@@ -93,8 +93,9 @@ export default function AdminUsers() {
   });
 
   const filteredUsers = users.filter((user) => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = roleFilter === "all" || user.role === roleFilter;
     return matchesSearch && matchesRole;
   });
@@ -105,7 +106,7 @@ export default function AdminUsers() {
         id: users.length + 1,
         ...newUser,
         status: "Hoạt động",
-        createdAt: new Date().toISOString().split('T')[0],
+        createdAt: new Date().toISOString().split("T")[0],
       };
       setUsers([...users, user]);
       setNewUser({ name: "", email: "", role: "", password: "" });
@@ -114,7 +115,7 @@ export default function AdminUsers() {
   };
 
   const handleDeleteUser = (id: number) => {
-    setUsers(users.filter(user => user.id !== id));
+    setUsers(users.filter((user) => user.id !== id));
   };
 
   const handleResetPassword = (id: number) => {
@@ -159,7 +160,7 @@ export default function AdminUsers() {
               Quản lý học sinh, giáo viên và quản trị viên
             </p>
           </div>
-          
+
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white">
@@ -182,7 +183,9 @@ export default function AdminUsers() {
                   <Input
                     id="name"
                     value={newUser.name}
-                    onChange={(e) => setNewUser({...newUser, name: e.target.value})}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, name: e.target.value })
+                    }
                     className="col-span-3"
                   />
                 </div>
@@ -194,7 +197,9 @@ export default function AdminUsers() {
                     id="email"
                     type="email"
                     value={newUser.email}
-                    onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, email: e.target.value })
+                    }
                     className="col-span-3"
                   />
                 </div>
@@ -202,14 +207,21 @@ export default function AdminUsers() {
                   <Label htmlFor="role" className="text-right">
                     Vai trò
                   </Label>
-                  <Select value={newUser.role} onValueChange={(value) => setNewUser({...newUser, role: value})}>
+                  <Select
+                    value={newUser.role}
+                    onValueChange={(value) =>
+                      setNewUser({ ...newUser, role: value })
+                    }
+                  >
                     <SelectTrigger className="col-span-3">
                       <SelectValue placeholder="Chọn vai trò" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Học sinh">Học sinh</SelectItem>
                       <SelectItem value="Giáo viên">Giáo viên</SelectItem>
-                      <SelectItem value="Quản trị viên">Quản trị viên</SelectItem>
+                      <SelectItem value="Quản trị viên">
+                        Quản trị viên
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -221,7 +233,9 @@ export default function AdminUsers() {
                     id="password"
                     type="password"
                     value={newUser.password}
-                    onChange={(e) => setNewUser({...newUser, password: e.target.value})}
+                    onChange={(e) =>
+                      setNewUser({ ...newUser, password: e.target.value })
+                    }
                     className="col-span-3"
                   />
                 </div>
@@ -269,7 +283,9 @@ export default function AdminUsers() {
                 <TableHead className="font-semibold">Vai trò</TableHead>
                 <TableHead className="font-semibold">Trạng thái</TableHead>
                 <TableHead className="font-semibold">Ngày tạo</TableHead>
-                <TableHead className="font-semibold text-center">Hành động</TableHead>
+                <TableHead className="font-semibold text-center">
+                  Hành động
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -295,7 +311,9 @@ export default function AdminUsers() {
                       {user.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-gray-600">{user.createdAt}</TableCell>
+                  <TableCell className="text-gray-600">
+                    {user.createdAt}
+                  </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -308,11 +326,13 @@ export default function AdminUsers() {
                           <Edit className="mr-2 h-4 w-4" />
                           Chỉnh sửa
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleResetPassword(user.id)}>
+                        <DropdownMenuItem
+                          onClick={() => handleResetPassword(user.id)}
+                        >
                           <RotateCcw className="mr-2 h-4 w-4" />
                           Reset mật khẩu
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           className="text-red-600"
                           onClick={() => handleDeleteUser(user.id)}
                         >
@@ -332,19 +352,19 @@ export default function AdminUsers() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
             <div className="text-2xl font-bold text-blue-600">
-              {users.filter(u => u.role === "Học sinh").length}
+              {users.filter((u) => u.role === "Học sinh").length}
             </div>
             <div className="text-sm text-blue-600">Học sinh</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">
-              {users.filter(u => u.role === "Giáo viên").length}
+              {users.filter((u) => u.role === "Giáo viên").length}
             </div>
             <div className="text-sm text-green-600">Giáo viên</div>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">
-              {users.filter(u => u.role === "Quản trị viên").length}
+              {users.filter((u) => u.role === "Quản trị viên").length}
             </div>
             <div className="text-sm text-purple-600">Quản trị viên</div>
           </div>

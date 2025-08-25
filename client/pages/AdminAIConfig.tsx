@@ -61,21 +61,24 @@ const mockPrompts = [
   {
     id: 1,
     name: "Prompt tạo bài tập toán",
-    content: "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {grade} về chủ đề {topic}. Bài tập cần có {difficulty} độ khó và bao gồm {questions} câu hỏi.",
+    content:
+      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {grade} về chủ đề {topic}. Bài tập cần có {difficulty} độ khó và bao gồm {questions} câu hỏi.",
     module: "Bài tập",
     createdAt: "2024-01-15",
   },
   {
     id: 2,
     name: "Prompt sinh lộ trình học",
-    content: "Dựa trên mục tiêu học tập '{goal}' trong thời gian {duration}, hãy tạo một lộ trình học chi tiết cho học sinh có trình độ {level}.",
+    content:
+      "Dựa trên mục tiêu học tập '{goal}' trong thời gian {duration}, hãy tạo một lộ trình học chi tiết cho học sinh có trình độ {level}.",
     module: "Lộ trình",
     createdAt: "2024-01-20",
   },
   {
     id: 3,
     name: "Prompt chatbot hỗ trợ",
-    content: "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học. Hãy trả lời câu hỏi '{question}' một cách đơn giản, dễ hiểu và khuyến khích.",
+    content:
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học. Hãy trả lời câu hỏi '{question}' một cách đơn giản, dễ hiểu và khuyến khích.",
     module: "Chatbot",
     createdAt: "2024-01-10",
   },
@@ -145,7 +148,7 @@ export default function AdminAIConfig() {
       const prompt = {
         id: prompts.length + 1,
         ...newPrompt,
-        createdAt: new Date().toISOString().split('T')[0],
+        createdAt: new Date().toISOString().split("T")[0],
       };
       setPrompts([...prompts, prompt]);
       setNewPrompt({ name: "", module: "", content: "" });
@@ -154,11 +157,11 @@ export default function AdminAIConfig() {
   };
 
   const handleDeletePrompt = (id: number) => {
-    setPrompts(prompts.filter(prompt => prompt.id !== id));
+    setPrompts(prompts.filter((prompt) => prompt.id !== id));
   };
 
   const handleFeatureToggle = (feature: string, enabled: boolean) => {
-    setAiFeatures(prev => ({ ...prev, [feature]: enabled }));
+    setAiFeatures((prev) => ({ ...prev, [feature]: enabled }));
   };
 
   const exportLogs = () => {
@@ -250,7 +253,12 @@ export default function AdminAIConfig() {
                           id="apiKey"
                           type={showApiKey ? "text" : "password"}
                           value={apiConfig.apiKey}
-                          onChange={(e) => setApiConfig({...apiConfig, apiKey: e.target.value})}
+                          onChange={(e) =>
+                            setApiConfig({
+                              ...apiConfig,
+                              apiKey: e.target.value,
+                            })
+                          }
                           className="flex-1"
                         />
                         <Button
@@ -258,21 +266,34 @@ export default function AdminAIConfig() {
                           size="sm"
                           onClick={() => setShowApiKey(!showApiKey)}
                         >
-                          {showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          {showApiKey ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
                         </Button>
                       </div>
                     </div>
 
                     <div>
                       <Label htmlFor="model">Model AI</Label>
-                      <Select value={apiConfig.model} onValueChange={(value) => setApiConfig({...apiConfig, model: value})}>
+                      <Select
+                        value={apiConfig.model}
+                        onValueChange={(value) =>
+                          setApiConfig({ ...apiConfig, model: value })
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="gpt-4">GPT-4</SelectItem>
-                          <SelectItem value="gpt-4-turbo">GPT-4 Turbo</SelectItem>
-                          <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
+                          <SelectItem value="gpt-4-turbo">
+                            GPT-4 Turbo
+                          </SelectItem>
+                          <SelectItem value="gpt-3.5-turbo">
+                            GPT-3.5 Turbo
+                          </SelectItem>
                           <SelectItem value="claude-3">Claude 3</SelectItem>
                         </SelectContent>
                       </Select>
@@ -290,7 +311,9 @@ export default function AdminAIConfig() {
                         max={1}
                         step={0.1}
                         value={apiConfig.temperature}
-                        onValueChange={(value) => setApiConfig({...apiConfig, temperature: value})}
+                        onValueChange={(value) =>
+                          setApiConfig({ ...apiConfig, temperature: value })
+                        }
                         className="mt-2"
                       />
                       <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -305,7 +328,12 @@ export default function AdminAIConfig() {
                         id="maxTokens"
                         type="number"
                         value={apiConfig.maxTokens}
-                        onChange={(e) => setApiConfig({...apiConfig, maxTokens: parseInt(e.target.value)})}
+                        onChange={(e) =>
+                          setApiConfig({
+                            ...apiConfig,
+                            maxTokens: parseInt(e.target.value),
+                          })
+                        }
                         min={1}
                         max={4000}
                       />
@@ -314,7 +342,10 @@ export default function AdminAIConfig() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={handleSaveApiConfig} className="bg-blue-600 hover:bg-blue-700">
+                  <Button
+                    onClick={handleSaveApiConfig}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
                     <Save className="h-4 w-4 mr-2" />
                     Lưu cấu hình
                   </Button>
@@ -332,7 +363,10 @@ export default function AdminAIConfig() {
                     <MessageSquare className="h-5 w-5" />
                     Quản lý Prompt mẫu
                   </CardTitle>
-                  <Dialog open={isAddPromptDialogOpen} onOpenChange={setIsAddPromptDialogOpen}>
+                  <Dialog
+                    open={isAddPromptDialogOpen}
+                    onOpenChange={setIsAddPromptDialogOpen}
+                  >
                     <DialogTrigger asChild>
                       <Button className="bg-green-600 hover:bg-green-700">
                         <Plus className="h-4 w-4 mr-2" />
@@ -352,13 +386,23 @@ export default function AdminAIConfig() {
                           <Input
                             id="promptName"
                             value={newPrompt.name}
-                            onChange={(e) => setNewPrompt({...newPrompt, name: e.target.value})}
+                            onChange={(e) =>
+                              setNewPrompt({
+                                ...newPrompt,
+                                name: e.target.value,
+                              })
+                            }
                             placeholder="Nhập tên prompt"
                           />
                         </div>
                         <div>
                           <Label htmlFor="promptModule">Module áp dụng</Label>
-                          <Select value={newPrompt.module} onValueChange={(value) => setNewPrompt({...newPrompt, module: value})}>
+                          <Select
+                            value={newPrompt.module}
+                            onValueChange={(value) =>
+                              setNewPrompt({ ...newPrompt, module: value })
+                            }
+                          >
                             <SelectTrigger>
                               <SelectValue placeholder="Chọn module" />
                             </SelectTrigger>
@@ -375,7 +419,12 @@ export default function AdminAIConfig() {
                           <Textarea
                             id="promptContent"
                             value={newPrompt.content}
-                            onChange={(e) => setNewPrompt({...newPrompt, content: e.target.value})}
+                            onChange={(e) =>
+                              setNewPrompt({
+                                ...newPrompt,
+                                content: e.target.value,
+                              })
+                            }
                             placeholder="Nhập nội dung prompt chi tiết..."
                             rows={6}
                           />
@@ -403,10 +452,17 @@ export default function AdminAIConfig() {
                   <TableBody>
                     {prompts.map((prompt) => (
                       <TableRow key={prompt.id}>
-                        <TableCell className="font-medium">{prompt.id}</TableCell>
-                        <TableCell className="font-medium">{prompt.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {prompt.id}
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {prompt.name}
+                        </TableCell>
                         <TableCell>
-                          <div className="max-w-xs truncate" title={prompt.content}>
+                          <div
+                            className="max-w-xs truncate"
+                            title={prompt.content}
+                          >
                             {prompt.content}
                           </div>
                         </TableCell>
@@ -428,7 +484,7 @@ export default function AdminAIConfig() {
                                 <Edit className="mr-2 h-4 w-4" />
                                 Chỉnh sửa
                               </DropdownMenuItem>
-                              <DropdownMenuItem 
+                              <DropdownMenuItem
                                 className="text-red-600"
                                 onClick={() => handleDeletePrompt(prompt.id)}
                               >
@@ -465,12 +521,16 @@ export default function AdminAIConfig() {
                         </div>
                         <div>
                           <h3 className="font-medium">AI chấm bài</h3>
-                          <p className="text-sm text-gray-600">Tự động chấm điểm bài tập của học sinh</p>
+                          <p className="text-sm text-gray-600">
+                            Tự động chấm điểm bài tập của học sinh
+                          </p>
                         </div>
                       </div>
                       <Switch
                         checked={aiFeatures.autoGrading}
-                        onCheckedChange={(checked) => handleFeatureToggle('autoGrading', checked)}
+                        onCheckedChange={(checked) =>
+                          handleFeatureToggle("autoGrading", checked)
+                        }
                       />
                     </div>
 
@@ -481,12 +541,16 @@ export default function AdminAIConfig() {
                         </div>
                         <div>
                           <h3 className="font-medium">AI sinh lộ trình</h3>
-                          <p className="text-sm text-gray-600">Tạo lộ trình học tập cá nhân hóa</p>
+                          <p className="text-sm text-gray-600">
+                            Tạo lộ trình học tập cá nhân hóa
+                          </p>
                         </div>
                       </div>
                       <Switch
                         checked={aiFeatures.pathGeneration}
-                        onCheckedChange={(checked) => handleFeatureToggle('pathGeneration', checked)}
+                        onCheckedChange={(checked) =>
+                          handleFeatureToggle("pathGeneration", checked)
+                        }
                       />
                     </div>
 
@@ -497,12 +561,16 @@ export default function AdminAIConfig() {
                         </div>
                         <div>
                           <h3 className="font-medium">AI tạo bài tập</h3>
-                          <p className="text-sm text-gray-600">Sinh tự động các bài tập phù hợp</p>
+                          <p className="text-sm text-gray-600">
+                            Sinh tự động các bài tập phù hợp
+                          </p>
                         </div>
                       </div>
                       <Switch
                         checked={aiFeatures.exerciseCreation}
-                        onCheckedChange={(checked) => handleFeatureToggle('exerciseCreation', checked)}
+                        onCheckedChange={(checked) =>
+                          handleFeatureToggle("exerciseCreation", checked)
+                        }
                       />
                     </div>
 
@@ -513,33 +581,47 @@ export default function AdminAIConfig() {
                         </div>
                         <div>
                           <h3 className="font-medium">AI báo cáo tiến độ</h3>
-                          <p className="text-sm text-gray-600">Phân tích và báo cáo tiến độ học tập</p>
+                          <p className="text-sm text-gray-600">
+                            Phân tích và báo cáo tiến độ học tập
+                          </p>
                         </div>
                       </div>
                       <Switch
                         checked={aiFeatures.progressReporting}
-                        onCheckedChange={(checked) => handleFeatureToggle('progressReporting', checked)}
+                        onCheckedChange={(checked) =>
+                          handleFeatureToggle("progressReporting", checked)
+                        }
                       />
                     </div>
                   </div>
 
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-medium text-blue-900 mb-2">📊 Thống kê sử dụng tính năng</h4>
+                    <h4 className="font-medium text-blue-900 mb-2">
+                      📊 Thống kê sử dụng tính năng
+                    </h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
-                        <div className="text-2xl font-bold text-blue-600">245</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          245
+                        </div>
                         <div className="text-blue-600">Bài chấm tự động</div>
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-green-600">18</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          18
+                        </div>
                         <div className="text-green-600">Lộ trình đã tạo</div>
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-orange-600">67</div>
+                        <div className="text-2xl font-bold text-orange-600">
+                          67
+                        </div>
                         <div className="text-orange-600">Bài tập AI sinh</div>
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-purple-600">152</div>
+                        <div className="text-2xl font-bold text-purple-600">
+                          152
+                        </div>
                         <div className="text-purple-600">Báo cáo đã tạo</div>
                       </div>
                     </div>
@@ -579,15 +661,21 @@ export default function AdminAIConfig() {
                   <TableBody>
                     {mockAILogs.map((log) => (
                       <TableRow key={log.id}>
-                        <TableCell className="font-mono text-sm">{log.timestamp}</TableCell>
+                        <TableCell className="font-mono text-sm">
+                          {log.timestamp}
+                        </TableCell>
                         <TableCell>{log.user}</TableCell>
                         <TableCell>
                           <Badge className={getModuleColor(log.module)}>
                             {log.module}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-mono">{log.tokensUsed}</TableCell>
-                        <TableCell className="font-mono text-green-600">{log.cost}</TableCell>
+                        <TableCell className="font-mono">
+                          {log.tokensUsed}
+                        </TableCell>
+                        <TableCell className="font-mono text-green-600">
+                          {log.cost}
+                        </TableCell>
                         <TableCell>
                           <Badge className={getStatusColor(log.status)}>
                             {log.status}
@@ -600,20 +688,34 @@ export default function AdminAIConfig() {
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-600">1,245</div>
-                    <div className="text-sm text-blue-600">Tổng request hôm nay</div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      1,245
+                    </div>
+                    <div className="text-sm text-blue-600">
+                      Tổng request hôm nay
+                    </div>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <div className="text-2xl font-bold text-green-600">98.5%</div>
-                    <div className="text-sm text-green-600">Tỉ lệ thành công</div>
+                    <div className="text-2xl font-bold text-green-600">
+                      98.5%
+                    </div>
+                    <div className="text-sm text-green-600">
+                      Tỉ lệ thành công
+                    </div>
                   </div>
                   <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                    <div className="text-2xl font-bold text-orange-600">45,678</div>
+                    <div className="text-2xl font-bold text-orange-600">
+                      45,678
+                    </div>
                     <div className="text-sm text-orange-600">Token sử dụng</div>
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <div className="text-2xl font-bold text-purple-600">$12.45</div>
-                    <div className="text-sm text-purple-600">Chi phí hôm nay</div>
+                    <div className="text-2xl font-bold text-purple-600">
+                      $12.45
+                    </div>
+                    <div className="text-sm text-purple-600">
+                      Chi phí hôm nay
+                    </div>
                   </div>
                 </div>
               </CardContent>
