@@ -20,6 +20,9 @@ import {
   TrendingUp,
   Play,
   Calendar,
+  Star,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import {
   BarChart,
@@ -42,7 +45,7 @@ const progressData = [
 
 const chartConfig = {
   completed: {
-    label: "Đã hoàn thành",
+    label: "Bài đã hoàn thành",
     color: "hsl(var(--primary))",
   },
   total: {
@@ -51,175 +54,197 @@ const chartConfig = {
   },
 };
 
-// Mock upcoming schedule data
+// Mock upcoming schedule data - kid-friendly
 const upcomingLessons = [
   {
     id: 1,
-    title: "JavaScript ES6 Features",
-    course: "JavaScript Nâng cao",
+    title: "🎮 Làm game với Scratch",
+    course: "Lập trình vui",
     time: "09:00",
     date: "Hôm nay",
-    duration: "90 phút",
+    duration: "45 phút",
     type: "live",
+    emoji: "🎮"
   },
   {
     id: 2,
-    title: "React State Management",
-    course: "React.js Complete",
+    title: "🌈 Vẽ tranh với máy tính",
+    course: "Thiết kế sáng tạo",
     time: "14:30",
     date: "Hôm nay",
-    duration: "120 phút",
+    duration: "60 phút",
     type: "recorded",
+    emoji: "🌈"
   },
   {
     id: 3,
-    title: "Database Design Principles",
-    course: "Backend Development",
+    title: "🔢 Toán học thú vị",
+    course: "Toán vui vẻ",
     time: "10:00",
     date: "Mai",
-    duration: "75 phút",
+    duration: "30 phút",
     type: "live",
+    emoji: "🔢"
   },
   {
     id: 4,
-    title: "API Testing with Postman",
-    course: "Backend Development",
+    title: "🌟 Khoa học thí nghiệm",
+    course: "Khám phá khoa học",
     time: "16:00",
     date: "Thứ 4",
-    duration: "60 phút",
+    duration: "50 phút",
     type: "recorded",
+    emoji: "🌟"
   },
 ];
 
-// Mock courses data
+// Mock courses data - kid-friendly
 const currentCourses = [
   {
     id: 1,
-    title: "JavaScript Nâng cao",
-    instructor: "Trần Văn A",
+    title: "🎮 Lập trình game cơ bản",
+    instructor: "Thầy Minh vui vẻ",
     progress: 75,
-    totalLessons: 24,
-    completedLessons: 18,
+    totalLessons: 20,
+    completedLessons: 15,
     thumbnail: "/placeholder.svg",
-    category: "Frontend",
-    level: "Trung cấp",
+    category: "Lập trình",
+    level: "Dễ",
+    emoji: "🎮"
   },
   {
     id: 2,
-    title: "React.js Complete",
-    instructor: "Nguyễn Thị B",
+    title: "🌈 Thiết kế và vẽ tranh",
+    instructor: "Cô Lan xinh đẹp",
     progress: 60,
-    totalLessons: 32,
-    completedLessons: 19,
+    totalLessons: 16,
+    completedLessons: 10,
     thumbnail: "/placeholder.svg",
-    category: "Frontend",
-    level: "Nâng cao",
+    category: "Nghệ thuật",
+    level: "Dễ",
+    emoji: "🌈"
   },
   {
     id: 3,
-    title: "Backend Development",
-    instructor: "Lê Minh C",
-    progress: 40,
-    totalLessons: 28,
-    completedLessons: 11,
+    title: "🔢 Toán học siêu thú vị",
+    instructor: "Thầy Hùng thông minh",
+    progress: 80,
+    totalLessons: 25,
+    completedLessons: 20,
     thumbnail: "/placeholder.svg",
-    category: "Backend",
-    level: "Trung cấp",
+    category: "Toán học",
+    level: "Trung bình",
+    emoji: "🔢"
   },
   {
     id: 4,
-    title: "Database Management",
-    instructor: "Phạm Văn D",
-    progress: 85,
-    totalLessons: 20,
-    completedLessons: 17,
+    title: "🌟 Khoa học khám phá",
+    instructor: "Cô Hoa hiền lành",
+    progress: 45,
+    totalLessons: 18,
+    completedLessons: 8,
     thumbnail: "/placeholder.svg",
-    category: "Database",
-    level: "Cơ bản",
+    category: "Khoa học",
+    level: "Dễ",
+    emoji: "🌟"
   },
   {
     id: 5,
-    title: "UI/UX Design Basics",
-    instructor: "Hoàng Thị E",
+    title: "🎵 Âm nhạc và ca hát",
+    instructor: "Thầy Nam vui tính",
     progress: 30,
-    totalLessons: 16,
-    completedLessons: 5,
+    totalLessons: 12,
+    completedLessons: 4,
     thumbnail: "/placeholder.svg",
-    category: "Design",
-    level: "Cơ bản",
+    category: "Âm nhạc",
+    level: "Dễ",
+    emoji: "🎵"
   },
   {
     id: 6,
-    title: "Mobile App Development",
-    instructor: "Đỗ Văn F",
-    progress: 20,
-    totalLessons: 35,
-    completedLessons: 7,
+    title: "🏃‍♂️ Thể dục vui nhộn",
+    instructor: "Cô Mai năng động",
+    progress: 90,
+    totalLessons: 10,
+    completedLessons: 9,
     thumbnail: "/placeholder.svg",
-    category: "Mobile",
-    level: "Nâng cao",
+    category: "Thể thao",
+    level: "Dễ",
+    emoji: "🏃‍♂️"
   },
 ];
 
 export function DashboardHome() {
   return (
-    <div className="flex-1 space-y-6 p-6">
+    <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
+      {/* Greeting Section */}
+      <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 rounded-2xl p-6 border border-primary/20 shadow-lg">
+        <div className="flex items-center gap-4">
+          <div className="text-6xl animate-bounce">👋</div>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Chào bé Minh Đức! ✨
+            </h1>
+            <p className="text-lg text-muted-foreground mt-1">
+              Hôm nay bé học gì vui nhỉ? 🎉
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Header Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Khóa học đang theo
-            </CardTitle>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">📚 Khóa học đang học</CardTitle>
+            <div className="text-2xl">🎓</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">6</div>
-            <p className="text-xs text-muted-foreground">+2 từ tháng trước</p>
+            <div className="text-3xl font-bold text-primary">6</div>
+            <p className="text-xs text-muted-foreground">🆕 +2 khóa học mới!</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Bài học hoàn thành
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">⭐ Bài học hoàn thành</CardTitle>
+            <div className="text-2xl">🏆</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">77</div>
-            <p className="text-xs text-muted-foreground">+12 tuần này</p>
+            <div className="text-3xl font-bold text-primary">77</div>
+            <p className="text-xs text-muted-foreground">🎉 +12 bài tuần này!</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Thời gian học</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">⏰ Thời gian học</CardTitle>
+            <div className="text-2xl">📖</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">45h</div>
-            <p className="text-xs text-muted-foreground">Tháng này</p>
+            <div className="text-3xl font-bold text-primary">45h</div>
+            <p className="text-xs text-muted-foreground">📅 Tháng này</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/5 to-accent/10 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Lịch học hôm nay
-            </CardTitle>
-            <CalendarDays className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">🗓️ Lịch học hôm nay</CardTitle>
+            <div className="text-2xl">📝</div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2</div>
-            <p className="text-xs text-muted-foreground">Buổi học</p>
+            <div className="text-3xl font-bold text-primary">2</div>
+            <p className="text-xs text-muted-foreground">🚀 Buổi học thú vị!</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Progress Chart */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
           <CardHeader>
-            <CardTitle>Tiến độ học tập</CardTitle>
-            <CardDescription>Số bài học hoàn thành theo tháng</CardDescription>
+            <CardTitle className="flex items-center gap-2">
+              📊 Tiến độ học tập của bé
+              <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+            </CardTitle>
+            <CardDescription>Xem bé đã học được bao nhiêu bài rồi nhé! 🌟</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig} className="h-[300px]">
@@ -228,54 +253,38 @@ export function DashboardHome() {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar
-                  dataKey="completed"
-                  fill="var(--color-completed)"
-                  radius={4}
-                />
-                <Bar dataKey="total" fill="var(--color-total)" radius={4} />
+                <Bar dataKey="completed" fill="var(--color-completed)" radius={8} />
+                <Bar dataKey="total" fill="var(--color-total)" radius={8} />
               </BarChart>
             </ChartContainer>
           </CardContent>
         </Card>
 
         {/* Upcoming Schedule */}
-        <Card>
+        <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Lịch học sắp tới
+              🗓️ Lịch học sắp tới
+              <Calendar className="h-5 w-5 text-accent animate-bounce" />
             </CardTitle>
+            <CardDescription>Những buổi học thú vị đang chờ bé! 🎉</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {upcomingLessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="flex items-start gap-3 p-3 rounded-lg border"
-              >
+              <div key={lesson.id} className="flex items-start gap-3 p-3 rounded-xl border border-primary/10 bg-gradient-to-r from-primary/5 to-accent/5 hover:scale-105 transition-transform duration-200">
                 <div className="flex flex-col items-center min-w-0">
-                  <div className="text-xs font-medium text-muted-foreground">
-                    {lesson.date}
-                  </div>
-                  <div className="text-sm font-semibold">{lesson.time}</div>
+                  <div className="text-2xl">{lesson.emoji}</div>
+                  <div className="text-xs font-medium text-muted-foreground">{lesson.date}</div>
+                  <div className="text-sm font-semibold text-primary">{lesson.time}</div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-medium truncate">
-                    {lesson.title}
-                  </h4>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {lesson.course}
-                  </p>
+                  <h4 className="text-sm font-medium truncate">{lesson.title}</h4>
+                  <p className="text-xs text-muted-foreground truncate">{lesson.course}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <Badge
-                      variant={lesson.type === "live" ? "default" : "secondary"}
-                      className="text-xs"
-                    >
-                      {lesson.type === "live" ? "Live" : "Recorded"}
+                    <Badge variant={lesson.type === "live" ? "default" : "secondary"} className="text-xs">
+                      {lesson.type === "live" ? "🔴 Trực tiếp" : "📹 Video"}
                     </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {lesson.duration}
-                    </span>
+                    <span className="text-xs text-muted-foreground">⏱️ {lesson.duration}</span>
                   </div>
                 </div>
               </div>
@@ -285,49 +294,59 @@ export function DashboardHome() {
       </div>
 
       {/* Current Courses Grid */}
-      <Card>
+      <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
         <CardHeader>
-          <CardTitle>Khóa học đang theo</CardTitle>
-          <CardDescription>
-            Tiếp tục học tập từ nơi bạn đã dừng lại
-          </CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            🎯 Các khóa học đang theo
+            <Zap className="h-5 w-5 text-secondary animate-pulse" />
+          </CardTitle>
+          <CardDescription>Tiếp tục hành trình học tập thú vị của bé! 🚀</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {currentCourses.map((course) => (
-              <Card
-                key={course.id}
-                className="group hover:shadow-md transition-shadow"
-              >
+              <Card key={course.id} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-primary/10 bg-gradient-to-br from-white to-primary/5">
                 <CardContent className="p-4">
-                  <div className="aspect-video bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-                    <BookOpen className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold text-sm leading-tight">
-                        {course.title}
-                      </h3>
-                      <Badge variant="outline" className="text-xs">
+                  <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl mb-3 flex items-center justify-center relative overflow-hidden border border-primary/20">
+                    <div className="text-4xl">{course.emoji}</div>
+                    <div className="absolute top-2 right-2">
+                      <Badge variant="outline" className="text-xs bg-white/80">
                         {course.level}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Giảng viên: {course.instructor}
-                    </p>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs">
-                        <span>
-                          {course.completedLessons}/{course.totalLessons} bài
-                          học
-                        </span>
-                        <span>{course.progress}%</span>
-                      </div>
-                      <Progress value={course.progress} className="h-2" />
+                    
+                    {/* Hover sparkles */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute top-2 left-2 text-yellow-400 animate-ping">✨</div>
+                      <div className="absolute bottom-2 right-2 text-yellow-400 animate-ping" style={{animationDelay: '0.2s'}}>⭐</div>
+                      <div className="absolute top-1/2 left-1/2 text-yellow-400 animate-ping" style={{animationDelay: '0.4s'}}>💫</div>
                     </div>
-                    <Button size="sm" className="w-full mt-3">
-                      <Play className="h-3 w-3 mr-1" />
-                      Tiếp tục học
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                        {course.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">👨‍🏫 {course.instructor}</p>
+                    </div>
+
+                    {/* Progress */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>📚 {course.completedLessons}/{course.totalLessons} bài học</span>
+                        <span className="font-medium text-primary">{course.progress}%</span>
+                      </div>
+                      <Progress value={course.progress} className="h-3 bg-primary/10" />
+                    </div>
+
+                    {/* Action Button */}
+                    <Button 
+                      className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105" 
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      {course.progress === 0 ? "🚀 Bắt đầu học!" : 
+                       course.progress === 100 ? "🔄 Ôn tập l���i!" : "📖 Tiếp tục học!"}
                     </Button>
                   </div>
                 </CardContent>
