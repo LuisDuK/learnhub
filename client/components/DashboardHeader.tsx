@@ -1,4 +1,5 @@
 import { Search, Bell, Settings, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +14,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 export function DashboardHeader() {
+  const navigate = useNavigate();
+
+  const handleSettings = () => {
+    navigate("/settings");
+  };
+
+  const handleLogout = () => {
+    // Clear any stored user data
+    localStorage.removeItem("user");
+    sessionStorage.clear();
+    // Navigate to login page
+    navigate("/login");
+  };
+
   return (
     <header className="flex h-16 items-center justify-between border-b border-primary/20 bg-gradient-to-r from-white via-accent/5 to-primary/5 px-6 shadow-sm">
       {/* Search bar */}
@@ -112,23 +127,29 @@ export function DashboardHeader() {
           >
             <DropdownMenuLabel className="font-normal bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg m-1">
               <div className="flex flex-col space-y-1 p-2">
-                <p className="text-sm font-bold text-primary leading-none flex items-center gap-1">
-                  🌟 Bé Minh Đức
+                <p className="text-sm font-bold text-primary leading-none">
+                  Bé Minh Đức
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  ✨ Học sinh thông minh
+                  Học sinh thông minh
                 </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-primary/20" />
-            <DropdownMenuItem className="hover:bg-primary/5 rounded-lg m-1">
+            <DropdownMenuItem
+              className="hover:bg-primary/5 rounded-lg m-1 cursor-pointer"
+              onClick={handleSettings}
+            >
               <Settings className="mr-2 h-4 w-4 text-primary" />
-              <span>⚙️ Cài đặt</span>
+              <span>Cài đặt</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-primary/20" />
-            <DropdownMenuItem className="text-red-500 hover:bg-red-50 rounded-lg m-1">
+            <DropdownMenuItem
+              className="text-red-500 hover:bg-red-50 rounded-lg m-1 cursor-pointer"
+              onClick={handleLogout}
+            >
               <LogOut className="mr-2 h-4 w-4" />
-              <span>👋 Tạm biệt</span>
+              <span>Tạm biệt</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
