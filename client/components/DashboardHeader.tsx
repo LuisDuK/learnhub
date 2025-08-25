@@ -78,35 +78,35 @@ export function DashboardHeader() {
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              <Avatar className="h-8 w-8">
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:scale-110 transition-transform duration-300">
+              <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors">
                 <AvatarImage src="/placeholder.svg" alt="Avatar" />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  NMĐ
+                <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-bold animate-heartbeat">
+                  🧒
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  Nguyễn Minh Đức
+          <DropdownMenuContent className="w-56 border-primary/20 shadow-xl" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg m-1">
+              <div className="flex flex-col space-y-1 p-2">
+                <p className="text-sm font-bold text-primary leading-none flex items-center gap-1">
+                  🌟 Bé Minh Đức
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  duc.nguyen@email.com
+                  ✨ Học sinh thông minh
                 </p>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Cài đặt</span>
+            <DropdownMenuSeparator className="bg-primary/20" />
+            <DropdownMenuItem className="hover:bg-primary/5 rounded-lg m-1">
+              <Settings className="mr-2 h-4 w-4 text-primary" />
+              <span>⚙️ Cài đặt</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuSeparator className="bg-primary/20" />
+            <DropdownMenuItem className="text-red-500 hover:bg-red-50 rounded-lg m-1">
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Đăng xuất</span>
+              <span>👋 Tạm biệt</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
