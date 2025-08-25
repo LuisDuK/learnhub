@@ -210,6 +210,64 @@ const statusConfig = {
 
 export default function StudyPlan() {
   const [selectedGoal, setSelectedGoal] = useState("midterm");
+  const [showGoalDialog, setShowGoalDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [goalData, setGoalData] = useState({
+    name: "",
+    duration: "",
+    startDate: "",
+    priority: "medium"
+  });
+  const [lessonList, setLessonList] = useState(weeklyPlan.flatMap(week =>
+    week.lessons.map(lesson => ({ ...lesson, week: week.week }))
+  ));
+
+  // Check if first time visiting
+  useEffect(() => {
+    const hasSetGoal = localStorage.getItem('studyGoalSet');
+    if (!hasSetGoal) {
+      setShowGoalDialog(true);
+    }
+  }, []);
+
+  const handleSaveGoal = () => {
+    localStorage.setItem('studyGoalSet', 'true');
+    localStorage.setItem('studyGoal', JSON.stringify(goalData));
+    setShowGoalDialog(false);
+  };
+
+  const handleEditRoadmap = () => {
+    setShowEditDialog(true);
+  };
+
+  const handleSaveRoadmap = () => {
+    setShowEditDialog(false);
+    // Save lesson changes
+  };
+
+  const addNewLesson = () => {
+    const newLesson = {
+      id: Date.now(),
+      subject: "math",
+      title: "Bài học mới",
+      duration: "45 phút",
+      status: "not-started",
+      day: "Thứ 2",
+      time: "14:00",
+      week: "Tuần 1"
+    };
+    setLessonList([...lessonList, newLesson]);
+  };
+
+  const deleteLesson = (id: number) => {
+    setLessonList(lessonList.filter(lesson => lesson.id !== id));
+  };
+
+  const updateLessonStatus = (id: number, status: string) => {
+    setLessonList(lessonList.map(lesson =>
+      lesson.id === id ? { ...lesson, status } : lesson
+    ));
+  };
 
   // Calculate progress
   const totalLessons = weeklyPlan.reduce(
