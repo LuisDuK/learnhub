@@ -87,7 +87,7 @@ const weeklyPlan = [
       {
         id: 4,
         subject: "math",
-        title: "➕ Ph��p tính với phân số",
+        title: "➕ Phép tính với phân số",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
