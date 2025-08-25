@@ -53,7 +53,7 @@ const mockCourses = [
     description:
       "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
-    subject: "Toán học",
+    subject: "Toán",
     difficulty: "Cơ bản",
     duration: "8 tuần",
     ageGroup: "6-8 tuổi",
@@ -69,7 +69,7 @@ const mockCourses = [
     description:
       "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
-    subject: "Tiếng Việt",
+    subject: "Văn",
     difficulty: "Trung bình",
     duration: "12 tuần",
     ageGroup: "8-9 tuổi",
@@ -85,7 +85,7 @@ const mockCourses = [
     description:
       "Khóa học tiếng Anh cơ bản với phương pháp học qua trò chơi và bài hát.",
     image: "/placeholder.svg",
-    subject: "Tiếng Anh",
+    subject: "Anh",
     difficulty: "Cơ bản",
     duration: "10 tuần",
     ageGroup: "5-7 tuổi",
@@ -101,7 +101,7 @@ const mockCourses = [
     description:
       "Khám phá thế giới xung quanh qua các thí nghiệm đơn giản và quan sát thiên nhiên.",
     image: "/placeholder.svg",
-    subject: "Khoa học",
+    subject: "Toán",
     difficulty: "Trung bình",
     duration: "6 tuần",
     ageGroup: "7-9 tuổi",
@@ -115,12 +115,9 @@ const mockCourses = [
 
 const subjects = [
   "Tất cả",
-  "Toán học",
-  "Tiếng Việt",
-  "Tiếng Anh",
-  "Khoa học",
-  "Lịch sử",
-  "Địa lý",
+  "Toán",
+  "Văn",
+  "Anh",
 ];
 
 const difficulties = [
