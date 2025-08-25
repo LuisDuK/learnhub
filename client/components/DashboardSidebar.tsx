@@ -9,8 +9,10 @@ import {
   Home,
   ChevronRight,
   Zap,
+  LogOut,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const menuItems = [
   {
@@ -47,6 +49,16 @@ const menuItems = [
 
 export function DashboardSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear any stored user data (localStorage, sessionStorage, etc.)
+    localStorage.removeItem("user");
+    sessionStorage.clear();
+
+    // Navigate to login page
+    navigate("/login");
+  };
 
   return (
     <div className="flex h-full w-64 flex-col bg-gradient-to-b from-sidebar-background to-accent/20 border-r border-primary/20 shadow-lg">
@@ -102,7 +114,7 @@ export function DashboardSidebar() {
       </nav>
 
       {/* User section */}
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-gray-200 p-4 space-y-3">
         <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 p-3 border border-primary/20">
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-bounce">
             <span className="text-lg">🧒</span>
@@ -116,6 +128,16 @@ export function DashboardSidebar() {
             </p>
           </div>
         </div>
+
+        {/* Logout Button */}
+        <Button
+          onClick={handleLogout}
+          variant="outline"
+          className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-300 rounded-xl"
+        >
+          <LogOut className="h-4 w-4 mr-2" />
+          👋 Tạm biệt
+        </Button>
       </div>
     </div>
   );

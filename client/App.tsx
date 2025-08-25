@@ -6,13 +6,19 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { FloatingChatbot } from "@/components/FloatingChatbot";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import EmailVerification from "./pages/EmailVerification";
+import TwoFactorAuth from "./pages/TwoFactorAuth";
 import Courses from "./pages/Courses";
 import StudyPlan from "./pages/StudyPlan";
 import Chatbot from "./pages/Chatbot";
 import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
+import Lesson from "./pages/Lesson";
+import Exercise from "./pages/Exercise";
+import Quiz from "./pages/Quiz";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,11 +37,16 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/email-verification" element={<EmailVerification />} />
+        <Route path="/two-factor-auth" element={<TwoFactorAuth />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/study-plan" element={<StudyPlan />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/lesson/:id" element={<Lesson />} />
+        <Route path="/lesson/:lessonId/exercise/:id" element={<Exercise />} />
+        <Route path="/lesson/:lessonId/quiz/:id" element={<Quiz />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -48,6 +59,7 @@ function App() {
     <StrictMode>
       <AppProviders>
         <AppRoutes />
+        <FloatingChatbot />
         <Toaster />
         <Sonner />
       </AppProviders>

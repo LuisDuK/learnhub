@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import {
   Card,
@@ -41,6 +42,7 @@ import {
 } from "lucide-react";
 
 export default function Settings() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
 
@@ -390,6 +392,71 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Two-Factor Authentication Card */}
+            <Card className="border-blue-200 shadow-lg bg-gradient-to-br from-white to-blue-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-blue-600" />
+                  🔐 Xác thực hai bước (2FA)
+                </CardTitle>
+                <CardDescription>
+                  Tăng cường bảo mật tài khoản với lớp bảo vệ thêm
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                      <Shield className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-blue-700">
+                        Xác thực 2 bước
+                      </h4>
+                      <p className="text-sm text-blue-600">
+                        Bảo vệ tài khoản với mã OTP qua email
+                      </p>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className="bg-orange-100 text-orange-700 border-orange-300"
+                  >
+                    Chưa kích hoạt
+                  </Badge>
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-xl border border-green-200">
+                  <h4 className="font-bold text-green-700 mb-2">
+                    ✨ Lợi ích của xác thực 2 bước:
+                  </h4>
+                  <ul className="text-sm text-green-600 space-y-1">
+                    <li>• Bảo vệ tài khoản khỏi truy cập trái phép</li>
+                    <li>• Được thông báo ngay khi có đăng nhập đáng ngờ</li>
+                    <li>• An toàn hơn khi sử dụng WiFi công cộng</li>
+                    <li>• Tuân thủ các tiêu chuẩn bảo mật hiện đại</li>
+                  </ul>
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => navigate("/two-factor-auth")}
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl"
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    🔐 Thiết lập 2FA
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/two-factor-auth")}
+                    className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                  >
+                    📖 Tìm hiểu thêm
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Study Settings Tab */}
@@ -490,7 +557,7 @@ export default function Settings() {
                             🕗 20:00 (8:00 PM)
                           </SelectItem>
                           <SelectItem value="21:00">
-                            🕘 21:00 (9:00 PM)
+                            �� 21:00 (9:00 PM)
                           </SelectItem>
                         </SelectContent>
                       </Select>
