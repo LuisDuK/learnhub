@@ -1,45 +1,46 @@
 import { cn } from "@/lib/utils";
 import {
-  BarChart3,
-  BookOpen,
+  Sparkles,
+  Gamepad2,
   Calendar,
-  MessageCircle,
-  TrendingUp,
-  Settings,
+  Bot,
+  Trophy,
+  Heart,
   Home,
   ChevronRight,
+  Zap,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
   {
-    title: "Tổng quan",
+    title: "🏠 Trang chủ",
     icon: Home,
     href: "/",
   },
   {
-    title: "Khóa học của tôi",
-    icon: BookOpen,
+    title: "📚 Các khóa học",
+    icon: Gamepad2,
     href: "/courses",
   },
   {
-    title: "Study Plan",
+    title: "📅 Kế hoạch học",
     icon: Calendar,
     href: "/study-plan",
   },
   {
-    title: "Chatbot",
-    icon: MessageCircle,
+    title: "🤖 Trợ lý thông minh",
+    icon: Bot,
     href: "/chatbot",
   },
   {
-    title: "Báo cáo tiến độ",
-    icon: TrendingUp,
+    title: "🏆 Thành tích của bé",
+    icon: Trophy,
     href: "/progress",
   },
   {
-    title: "Cài đặt cá nhân",
-    icon: Settings,
+    title: "⚙️ Cài đặt",
+    icon: Heart,
     href: "/settings",
   },
 ];
@@ -48,14 +49,17 @@ export function DashboardSidebar() {
   const location = useLocation();
 
   return (
-    <div className="flex h-full w-64 flex-col bg-white border-r border-gray-200">
+    <div className="flex h-full w-64 flex-col bg-gradient-to-b from-sidebar-background to-accent/20 border-r border-primary/20 shadow-lg">
       {/* Logo */}
       <div className="flex h-16 items-center px-6 border-b border-gray-200">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded bg-primary">
-            <BarChart3 className="h-5 w-5 text-primary-foreground" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent animate-pulse">
+            <Sparkles className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-lg font-semibold text-gray-900">LearnHub</span>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">🌟 KidsLearn</span>
+            <span className="text-xs text-muted-foreground">Học vui, học giỏi!</span>
+          </div>
         </div>
       </div>
 
@@ -68,10 +72,10 @@ export function DashboardSidebar() {
               key={item.href}
               to={item.href}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                "group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-all duration-300 hover:scale-105",
                 isActive
-                  ? "bg-primary/10 text-primary"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                  ? "bg-gradient-to-r from-primary/20 to-accent/20 text-primary shadow-md border border-primary/20"
+                  : "text-gray-600 hover:bg-gradient-to-r hover:from-accent/10 hover:to-primary/10 hover:text-primary",
               )}
             >
               <item.icon
@@ -91,17 +95,17 @@ export function DashboardSidebar() {
 
       {/* User section */}
       <div className="border-t border-gray-200 p-4">
-        <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-sm font-medium text-primary-foreground">
-              NMĐ
+        <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 p-3 border border-primary/20">
+          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-bounce">
+            <span className="text-lg">
+              🧒
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
-              Nguyễn Minh Đức
+            <p className="text-sm font-bold text-primary truncate">
+              Bé Minh Đức
             </p>
-            <p className="text-xs text-gray-500 truncate">Học viên</p>
+            <p className="text-xs text-muted-foreground truncate">✨ Học sinh thông minh</p>
           </div>
         </div>
       </div>
