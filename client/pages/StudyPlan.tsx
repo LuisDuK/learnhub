@@ -481,6 +481,184 @@ export default function StudyPlan() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Popup nhập mục tiêu học tập */}
+      <Dialog open={showGoalDialog} onOpenChange={setShowGoalDialog}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">
+              🎯 Thêm mục tiêu học tập
+            </DialogTitle>
+            <DialogDescription>
+              Nhập thông tin mục tiêu học tập để tạo lộ trình phù hợp
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="goalName">Tên mục tiêu</Label>
+              <Input
+                id="goalName"
+                placeholder="Ví dụ: Ôn tập thi giữa kỳ"
+                value={goalData.name}
+                onChange={(e) => setGoalData({...goalData, name: e.target.value})}
+                className="border-primary/20 focus:border-primary rounded-xl"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="duration">Khoảng thời gian</Label>
+              <Select
+                value={goalData.duration}
+                onValueChange={(value) => setGoalData({...goalData, duration: value})}
+              >
+                <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
+                  <SelectValue placeholder="Chọn khoảng thời gian" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1-week">1 tuần</SelectItem>
+                  <SelectItem value="2-weeks">2 tuần</SelectItem>
+                  <SelectItem value="3-weeks">3 tuần</SelectItem>
+                  <SelectItem value="1-month">1 tháng</SelectItem>
+                  <SelectItem value="2-months">2 tháng</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="startDate">Ngày bắt đầu</Label>
+              <Input
+                id="startDate"
+                type="date"
+                value={goalData.startDate}
+                onChange={(e) => setGoalData({...goalData, startDate: e.target.value})}
+                className="border-primary/20 focus:border-primary rounded-xl"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="priority">Độ ưu tiên</Label>
+              <Select
+                value={goalData.priority}
+                onValueChange={(value) => setGoalData({...goalData, priority: value})}
+              >
+                <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="high">🔴 Cao</SelectItem>
+                  <SelectItem value="medium">🟡 Trung bình</SelectItem>
+                  <SelectItem value="low">🟢 Thấp</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button
+              onClick={() => setShowGoalDialog(false)}
+              variant="outline"
+              className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl"
+            >
+              Hủy
+            </Button>
+            <Button
+              onClick={handleSaveGoal}
+              className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Lưu mục tiêu
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Popup chỉnh sửa lộ trình */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">
+              ✏️ Chỉnh sửa lộ trình
+            </DialogTitle>
+            <DialogDescription>
+              Quản lý danh sách bài học trong lộ trình của bạn
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Danh sách bài học</h3>
+              <Button
+                onClick={addNewLesson}
+                size="sm"
+                className="bg-green-600 hover:bg-green-700 text-white rounded-lg"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Thêm bài học
+              </Button>
+            </div>
+
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {lessonList.map((lesson) => (
+                <div key={lesson.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-white">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-gray-500">{lesson.week}</span>
+                      <h4 className="font-semibold">{lesson.title}</h4>
+                      <span className="text-sm text-gray-500">({lesson.duration})</span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-gray-400">{lesson.day} - {lesson.time}</span>
+                      <span className="text-xs text-gray-400">• {subjectConfig[lesson.subject as keyof typeof subjectConfig]?.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Select
+                      value={lesson.status}
+                      onValueChange={(value) => updateLessonStatus(lesson.id, value)}
+                    >
+                      <SelectTrigger className="w-40 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="not-started">Chưa học</SelectItem>
+                        <SelectItem value="in-progress">Đang học</SelectItem>
+                        <SelectItem value="completed">Hoàn thành</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      onClick={() => deleteLesson(lesson.id)}
+                      size="sm"
+                      variant="outline"
+                      className="text-red-600 border-red-200 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button
+              onClick={() => setShowEditDialog(false)}
+              variant="outline"
+              className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl"
+            >
+              Đóng
+            </Button>
+            <Button
+              onClick={handleSaveRoadmap}
+              className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Lưu thay đổi
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }
