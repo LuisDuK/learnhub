@@ -619,7 +619,7 @@ export default function Settings() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="5">⏰ 5 gi��/tuần</SelectItem>
+                      <SelectItem value="5">⏰ 5 giờ/tuần</SelectItem>
                       <SelectItem value="8">⏰ 8 giờ/tuần</SelectItem>
                       <SelectItem value="10">⏰ 10 giờ/tuần</SelectItem>
                       <SelectItem value="12">⏰ 12 giờ/tuần</SelectItem>
