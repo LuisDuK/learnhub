@@ -36,7 +36,7 @@ export function DashboardHeader() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary animate-pulse" />
           <Input
             type="search"
-            placeholder="🔍 Tìm kiếm bài học vui nhộn..."
+            placeholder="Tìm kiếm bài học vui nhộn..."
             className="pl-10 pr-4 w-full border-primary/20 focus:border-primary focus:ring-primary rounded-xl bg-white/80 backdrop-blur"
           />
         </div>
