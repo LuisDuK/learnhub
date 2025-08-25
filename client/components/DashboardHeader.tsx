@@ -14,15 +14,15 @@ import { Badge } from "@/components/ui/badge";
 
 export function DashboardHeader() {
   return (
-    <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6">
+    <header className="flex h-16 items-center justify-between border-b border-primary/20 bg-gradient-to-r from-white via-accent/5 to-primary/5 px-6 shadow-sm">
       {/* Search bar */}
       <div className="flex flex-1 items-center max-w-md">
         <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary animate-pulse" />
           <Input
             type="search"
-            placeholder="Tìm kiếm khóa học, bài giảng..."
-            className="pl-10 pr-4 w-full border-gray-200 focus:border-primary focus:ring-primary"
+            placeholder="🔍 Tìm kiếm bài học vui nhộn..."
+            className="pl-10 pr-4 w-full border-primary/20 focus:border-primary focus:ring-primary rounded-xl bg-white/80 backdrop-blur"
           />
         </div>
       </div>
