@@ -153,7 +153,7 @@ export function FloatingChatbot() {
     <div className="fixed bottom-20 right-6 z-50">
       <Card
         className={`w-96 shadow-2xl border-primary/20 transition-all duration-300 ${
-          isMinimized ? "h-16" : "h-[400px]"
+          isMinimized ? "h-16" : "h-[480px]"
         }`}
       >
         {/* Header */}
