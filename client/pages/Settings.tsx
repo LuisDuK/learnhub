@@ -173,7 +173,7 @@ export default function Settings() {
                       className="border-primary text-primary hover:bg-primary hover:text-white"
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      📷 Đổi ảnh
+                      Đổi ảnh
                     </Button>
                   </div>
                 </div>
@@ -288,7 +288,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Save className="h-4 w-4 mr-2" />
-                        💾 Lưu thay đổi
+                        Lưu thay đổi
                       </>
                     )}
                   </Button>
@@ -386,7 +386,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Key className="h-4 w-4 mr-2" />
-                        🔑 Đổi mật khẩu
+                        Đổi mật khẩu
                       </>
                     )}
                   </Button>
@@ -446,7 +446,7 @@ export default function Settings() {
                     className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl"
                   >
                     <Shield className="h-4 w-4 mr-2" />
-                    🔐 Thiết lập 2FA
+                    Thiết lập 2FA
                   </Button>
                   <Button
                     variant="outline"
@@ -642,7 +642,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Save className="h-4 w-4 mr-2" />
-                        💾 Lưu cài đặt
+                        Lưu cài đặt
                       </>
                     )}
                   </Button>
