@@ -1,3 +1,4 @@
+import React from "react";
 import { Search, Bell, Settings, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -72,7 +73,7 @@ export function DashboardHeader() {
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-primary/5 rounded-lg m-1">
               <div className="flex w-full justify-between items-center">
                 <span className="font-medium text-primary">
-                  🎮 Bài tập mới!
+                  🎮 B��i tập mới!
                 </span>
                 <span className="text-xs text-gray-500">2 phút trước</span>
               </div>
@@ -96,7 +97,7 @@ export function DashboardHeader() {
                 <span className="font-medium text-secondary">
                   🎉 Chúc mừng!
                 </span>
-                <span className="text-xs text-gray-500">1 giờ trước</span>
+                <span className="text-xs text-gray-500">1 gi��� trước</span>
               </div>
               <span className="text-sm text-gray-600">
                 Bé đã hoàn thành "Vẽ tranh màu sắc"! Giỏi quá!
