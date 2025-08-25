@@ -308,7 +308,7 @@ export default function StudyPlan() {
               variant="outline"
               className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl"
             >
-              🔄 Reset Demo
+              🔄 Reset lộ trình học
             </Button>
             <Button
               onClick={handleEditRoadmap}
@@ -329,7 +329,7 @@ export default function StudyPlan() {
                 Mục tiêu học tập
               </CardTitle>
               <CardDescription>
-                Chọn mục tiêu để xem lộ trình phù hợp
+                Ch���n mục tiêu để xem lộ trình phù hợp
               </CardDescription>
             </CardHeader>
             <CardContent>
