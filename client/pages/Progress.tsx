@@ -95,7 +95,7 @@ const achievements = [
   },
   {
     id: 3,
-    title: "Tiến bộ v��ợt bậc",
+    title: "Tiến bộ vượt bậc",
     description: "Cải thiện điểm số 1.5 điểm trong tháng",
     icon: "🚀",
     color: "bg-blue-100 border-blue-300 text-blue-800",
@@ -119,7 +119,7 @@ const achievements = [
   },
   {
     id: 6,
-    title: "Giao tiếp tiếng Anh t���t",
+    title: "Giao tiếp tiếng Anh tốt",
     description: "Đạt 7.0 điểm speaking tiếng Anh",
     icon: "🗣️",
     color: "bg-indigo-100 border-indigo-300 text-indigo-800",
