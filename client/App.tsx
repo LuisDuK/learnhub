@@ -55,5 +55,13 @@ function App() {
   );
 }
 
-const root = createRoot(document.getElementById("root")!);
+// Get or create root instance to handle HMR properly
+const container = document.getElementById("root")!;
+let root = (globalThis as any).__react_root__;
+
+if (!root) {
+  root = createRoot(container);
+  (globalThis as any).__react_root__ = root;
+}
+
 root.render(<App />);
