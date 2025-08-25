@@ -124,7 +124,7 @@ export function FloatingChatbot() {
       return "🥰 Không có gì! Tôi rất vui khi được giúp đỡ bé. Nếu có câu hỏi gì khác, bé cứ hỏi tôi nhé! Chúc bé học tập vui vẻ! 🌟";
     }
 
-    return "🤔 Đó là câu hỏi thú vị! Tôi có thể giúp bé về Toán, Văn, Anh và nhiều chủ đề học tập khác. Bé có thể hỏi cụ thể hơn để tôi hỗ trợ tốt nhất nhé! 💡";
+    return "🤔 Đó là câu hỏi thú vị! Tôi có thể giúp bé về Toán, Văn, Anh và nhiều ch��� đề học tập khác. Bé có thể hỏi cụ thể hơn để tôi hỗ trợ tốt nhất nhé! 💡";
   };
 
   const handleQuickSuggestion = (text: string) => {
@@ -150,7 +150,7 @@ export function FloatingChatbot() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-20 right-6 z-50">
       <Card
         className={`w-96 shadow-2xl border-primary/20 transition-all duration-300 ${
           isMinimized ? "h-16" : "h-[500px]"
