@@ -494,14 +494,6 @@ export default function Login() {
         <p className="text-sm font-medium">
           🎓 Nền tảng học tập trực tuyến cho học sinh tiểu học & trung học
         </p>
-        <div className="flex items-center justify-center gap-2 mt-2">
-          <span className="text-xs">Tập trung vào 3 môn học chính:</span>
-          <span className="text-blue-600 font-bold text-xs">Toán</span>
-          <span className="text-gray-400">•</span>
-          <span className="text-green-600 font-bold text-xs">Văn</span>
-          <span className="text-gray-400">•</span>
-          <span className="text-purple-600 font-bold text-xs">Anh</span>
-        </div>
         <div className="flex items-center justify-center gap-1 mt-2">
           <span className="text-xs">Được thiết kế với</span>
           <span className="text-red-500 animate-pulse">❤️</span>
