@@ -30,6 +30,7 @@ function AppRoutes() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/study-plan" element={<StudyPlan />} />
         <Route path="/chatbot" element={<Chatbot />} />
