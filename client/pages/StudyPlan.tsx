@@ -298,13 +298,26 @@ export default function StudyPlan() {
               Kế hoạch học tập được cá nhân hóa cho bé
             </p>
           </div>
-          <Button
-            onClick={handleEditRoadmap}
-            className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Chỉnh sửa lộ trình
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              onClick={() => {
+                localStorage.removeItem('studyGoalSet');
+                localStorage.removeItem('studyGoal');
+                setShowGoalDialog(true);
+              }}
+              variant="outline"
+              className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl"
+            >
+              🔄 Reset Demo
+            </Button>
+            <Button
+              onClick={handleEditRoadmap}
+              className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Chỉnh sửa lộ trình
+            </Button>
+          </div>
         </div>
 
         {/* Goal Selection & Progress */}
