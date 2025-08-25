@@ -150,7 +150,7 @@ export function FloatingChatbot() {
   }
 
   return (
-    <div className={`fixed right-6 z-50 transition-all duration-300 ${isMinimized ? 'bottom-4' : 'bottom-20'}`}>
+    <div className={`fixed right-6 z-50 transition-all duration-300 ${isMinimized ? 'bottom-2' : 'bottom-20'}`}>
       <Card
         className={`w-96 shadow-2xl border-primary/20 transition-all duration-300 ${
           isMinimized ? "h-16" : "h-[480px]"
