@@ -63,8 +63,6 @@ const subjectScores = [
   { subject: "Toán", score: 8.5, emoji: "🔢", color: "#3B82F6" },
   { subject: "Văn", score: 7.2, emoji: "📚", color: "#10B981" },
   { subject: "Anh", score: 6.8, emoji: "🌍", color: "#8B5CF6" },
-  { subject: "Khoa học", score: 8.0, emoji: "🔬", color: "#F59E0B" },
-  { subject: "Lịch sử", score: 7.5, emoji: "📜", color: "#EF4444" },
 ];
 
 // Mock progress data - weekly/monthly progress for line chart
@@ -163,28 +161,6 @@ const detailedScores = [
     trend: "up",
     lastTest: "7.5",
     improvement: "+1.0",
-  },
-  {
-    subject: "Khoa học",
-    emoji: "🔬",
-    scores: [8.0, 8.5, 7.5, 8.0, 8.0],
-    average: 8.0,
-    status: "Giỏi",
-    statusColor: "bg-green-100 text-green-700 border-green-300",
-    trend: "stable",
-    lastTest: "8.0",
-    improvement: "0",
-  },
-  {
-    subject: "Lịch sử",
-    emoji: "📜",
-    scores: [7.0, 7.5, 8.0, 7.5, 7.5],
-    average: 7.5,
-    status: "Khá",
-    statusColor: "bg-blue-100 text-blue-700 border-blue-300",
-    trend: "up",
-    lastTest: "7.5",
-    improvement: "+0.5",
   },
 ];
 
