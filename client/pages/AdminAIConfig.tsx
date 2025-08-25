@@ -95,7 +95,7 @@ const mockPrompts = [
     id: 3,
     name: "Prompt chatbot hỗ trợ",
     content:
-      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} m���t cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
     module: "Chatbot",
     variables: [
       { name: "age", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi học sinh" },
@@ -195,7 +195,7 @@ export default function AdminAIConfig() {
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
-    alert("Cấu hình API đã được lưu thành công!");
+    alert("Cấu hình API đã ��ược lưu thành công!");
   };
 
   const handleAddPrompt = () => {
@@ -612,7 +612,7 @@ export default function AdminAIConfig() {
                                       <SelectItem value="text">Văn bản</SelectItem>
                                       <SelectItem value="textarea">Văn bản dài</SelectItem>
                                       <SelectItem value="number">Số</SelectItem>
-                                      <SelectItem value="select">L��a chọn</SelectItem>
+                                      <SelectItem value="select">Lựa chọn</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>
@@ -823,7 +823,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI chấm bài (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Tự động chấm điểm bài tập thông qua prompt do admin thiết lập
+                            Tự động chấm điểm - Cấu hình prompt với biến {`{{student_answer}}`}, {`{{correct_answer}}`}, {`{{criteria}}`}
                           </p>
                         </div>
                       </div>
@@ -843,7 +843,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI sinh lộ trình (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Tạo lộ trình học tập theo mẫu prompt admin thiết lập
+                            Tạo lộ trình cá nhân - Sử dụng biến {`{{goal}}`}, {`{{duration}}`}, {`{{level}}`}, {`{{subject}}`}
                           </p>
                         </div>
                       </div>
@@ -863,7 +863,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI tạo bài tập (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Sinh bài tập theo template và prompt do admin quản lý
+                            Sinh bài tập động - Điều chỉnh biến {`{{grade}}`}, {`{{topic}}`}, {`{{difficulty}}`}, {`{{questions}}`}
                           </p>
                         </div>
                       </div>
@@ -883,7 +883,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI báo cáo tiến độ (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Phân tích dữ liệu theo cấu hình admin thiết lập
+                            Phân tích thông minh - Tùy chỉnh biến {`{{time_period}}`}, {`{{metrics}}`}, {`{{student_group}}`}
                           </p>
                         </div>
                       </div>
@@ -899,7 +899,7 @@ export default function AdminAIConfig() {
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <h4 className="font-medium text-blue-900 mb-2 flex items-center gap-2">
                       <Activity className="h-4 w-4" />
-                      Thống kê sử dụng tính năng AI (Do quản trị viên kiểm soát)
+                      Thống kê sử dụng AI - Tất cả prompt và biến do quản trị viên kiểm soát
                     </h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
