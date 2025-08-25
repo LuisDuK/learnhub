@@ -95,7 +95,7 @@ const achievements = [
   },
   {
     id: 3,
-    title: "Tiến bộ vượt bậc",
+    title: "Tiến bộ v��ợt bậc",
     description: "Cải thiện điểm số 1.5 điểm trong tháng",
     icon: "🚀",
     color: "bg-blue-100 border-blue-300 text-blue-800",
@@ -192,7 +192,7 @@ const aiSuggestions = [
     icon: "🌍",
     title: "Luyện tập thêm tiếng Anh",
     suggestion:
-      "Điểm tiếng Anh đang có xu hướng tăng! Hãy dành 30 phút mỗi ngày để luy���n nghe và nói để cải thiện thêm.",
+      "Điểm tiếng Anh đang có xu hướng tăng! Hãy dành 30 phút mỗi ngày để luyện nghe và nói để cải thiện thêm.",
     priority: "medium",
     color: "bg-blue-50 border-blue-200 text-blue-800",
   },
