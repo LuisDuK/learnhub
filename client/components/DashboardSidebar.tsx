@@ -114,7 +114,7 @@ export function DashboardSidebar() {
       </nav>
 
       {/* User section */}
-      <div className="border-t border-gray-200 p-4 space-y-3">
+      <div className="border-t border-gray-200 px-4 pt-4 pb-2 space-y-3">
         <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 p-3 border border-primary/20">
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-bounce">
             <span className="text-lg">🧒</span>
