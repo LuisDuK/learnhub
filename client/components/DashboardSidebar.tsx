@@ -78,16 +78,20 @@ export function DashboardSidebar() {
                   : "text-gray-600 hover:bg-gradient-to-r hover:from-accent/10 hover:to-primary/10 hover:text-primary",
               )}
             >
-              <item.icon
-                className={cn(
-                  "h-5 w-5 transition-colors",
-                  isActive
-                    ? "text-primary"
-                    : "text-gray-400 group-hover:text-gray-600",
-                )}
-              />
-              <span className="flex-1">{item.title}</span>
-              {isActive && <ChevronRight className="h-4 w-4 text-primary" />}
+              {isActive ? (
+                <>
+                  <item.icon
+                    className={cn(
+                      "h-5 w-5 transition-colors",
+                      "text-primary"
+                    )}
+                  />
+                  <span className="flex-1">{item.title}</span>
+                  <ChevronRight className="h-4 w-4 text-primary" />
+                </>
+              ) : (
+                <span className="flex-1 font-medium">{item.title}</span>
+              )}
             </Link>
           );
         })}
