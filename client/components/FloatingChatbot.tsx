@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { 
-  MessageCircle, 
-  Send, 
-  X, 
+import {
+  MessageCircle,
+  Send,
+  X,
   Minimize2,
   Bot,
   User,
@@ -15,7 +15,7 @@ import {
   HelpCircle,
   BookOpen,
   Calculator,
-  Globe
+  Globe,
 } from "lucide-react";
 
 interface Message {
@@ -29,16 +29,20 @@ const quickSuggestions = [
   { text: "🔢 Giải bài toán", icon: Calculator },
   { text: "📚 Hỏi về văn học", icon: BookOpen },
   { text: "🌍 Học tiếng Anh", icon: Globe },
-  { text: "❓ Câu hỏi khác", icon: HelpCircle }
+  { text: "❓ Câu hỏi khác", icon: HelpCircle },
 ];
 
 const initialMessages: Message[] = [
   {
     id: 1,
     type: "bot",
-    content: "Xin chào bé! 👋 Tôi là trợ lý học tập của bé. Tôi có thể giúp bé học Toán, Văn, Anh và trả lời nhiều câu hỏi khác nữa! Bé muốn hỏi gì nào? 😊",
-    timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-  }
+    content:
+      "Xin chào bé! 👋 Tôi là trợ lý học tập của bé. Tôi có thể giúp bé học Toán, Văn, Anh và trả lời nhiều câu hỏi khác nữa! Bé muốn hỏi gì nào? 😊",
+    timestamp: new Date().toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+  },
 ];
 
 export function FloatingChatbot() {
@@ -55,10 +59,13 @@ export function FloatingChatbot() {
       id: messages.length + 1,
       type: "user",
       content: newMessage,
-      timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setNewMessage("");
     setIsTyping(true);
 
@@ -68,36 +75,55 @@ export function FloatingChatbot() {
         id: messages.length + 2,
         type: "bot",
         content: getBotResponse(newMessage),
-        timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date().toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
     }, 1500);
   };
 
   const getBotResponse = (userInput: string): string => {
     const input = userInput.toLowerCase();
-    
-    if (input.includes("toán") || input.includes("tính") || input.includes("số")) {
+
+    if (
+      input.includes("toán") ||
+      input.includes("tính") ||
+      input.includes("số")
+    ) {
       return "🔢 Tôi có thể giúp bé học toán! Bé có thể hỏi về phép tính, phân số, hình học, hoặc bài toán nào cần giải. Hãy cho tôi biết bài toán cụ thể nhé! 📊";
     }
-    
-    if (input.includes("văn") || input.includes("thơ") || input.includes("viết")) {
+
+    if (
+      input.includes("văn") ||
+      input.includes("thơ") ||
+      input.includes("viết")
+    ) {
       return "📚 Tuyệt vời! Tôi sẽ giúp bé học văn. Bé muốn học về thơ, truyện, cách viết văn hay đọc hiểu? Tôi có thể giải thích ý nghĩa bài thơ hoặc hướng dẫn viết văn cho bé! ✍️";
     }
-    
-    if (input.includes("anh") || input.includes("english") || input.includes("từ vựng")) {
+
+    if (
+      input.includes("anh") ||
+      input.includes("english") ||
+      input.includes("từ vựng")
+    ) {
       return "🌍 Great! Tôi có thể dạy bé tiếng Anh. Bé muốn học từ vựng mới, ngữ pháp, hay luyện hội thoại? I can help you with vocabulary, grammar, or conversation practice! 🗣️";
     }
-    
-    if (input.includes("chào") || input.includes("hello") || input.includes("hi")) {
+
+    if (
+      input.includes("chào") ||
+      input.includes("hello") ||
+      input.includes("hi")
+    ) {
       return "👋 Chào bé! Rất vui được gặp bé! Tôi luôn sẵn sàng giúp bé học tập. Bé có câu hỏi gì không? 😊";
     }
-    
+
     if (input.includes("cảm ơn") || input.includes("thanks")) {
       return "🥰 Không có gì! Tôi rất vui khi được giúp đỡ bé. Nếu có câu hỏi gì khác, bé cứ hỏi tôi nhé! Chúc bé học tập vui vẻ! 🌟";
     }
-    
+
     return "🤔 Đó là câu hỏi thú vị! Tôi có thể giúp bé về Toán, Văn, Anh và nhiều chủ đề học tập khác. Bé có thể hỏi cụ thể hơn để tôi hỗ trợ tốt nhất nhé! 💡";
   };
 
@@ -125,9 +151,11 @@ export function FloatingChatbot() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Card className={`w-96 shadow-2xl border-primary/20 transition-all duration-300 ${
-        isMinimized ? 'h-16' : 'h-[500px]'
-      }`}>
+      <Card
+        className={`w-96 shadow-2xl border-primary/20 transition-all duration-300 ${
+          isMinimized ? "h-16" : "h-[500px]"
+        }`}
+      >
         {/* Header */}
         <CardHeader className="p-4 bg-gradient-to-r from-primary to-accent text-white rounded-t-lg">
           <div className="flex items-center justify-between">
@@ -176,12 +204,16 @@ export function FloatingChatbot() {
                       key={message.id}
                       className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      <div className={`flex gap-2 max-w-[85%] ${message.type === "user" ? "flex-row-reverse" : ""}`}>
-                        <div className={`flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0 ${
-                          message.type === "user" 
-                            ? "bg-gradient-to-br from-accent to-secondary" 
-                            : "bg-gradient-to-br from-primary to-accent"
-                        }`}>
+                      <div
+                        className={`flex gap-2 max-w-[85%] ${message.type === "user" ? "flex-row-reverse" : ""}`}
+                      >
+                        <div
+                          className={`flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0 ${
+                            message.type === "user"
+                              ? "bg-gradient-to-br from-accent to-secondary"
+                              : "bg-gradient-to-br from-primary to-accent"
+                          }`}
+                        >
                           {message.type === "user" ? (
                             <User className="h-4 w-4 text-white" />
                           ) : (
@@ -189,11 +221,13 @@ export function FloatingChatbot() {
                           )}
                         </div>
 
-                        <div className={`rounded-2xl p-3 text-sm shadow-sm ${
-                          message.type === "user"
-                            ? "bg-gradient-to-r from-accent to-secondary text-white"
-                            : "bg-white border border-gray-200"
-                        }`}>
+                        <div
+                          className={`rounded-2xl p-3 text-sm shadow-sm ${
+                            message.type === "user"
+                              ? "bg-gradient-to-r from-accent to-secondary text-white"
+                              : "bg-white border border-gray-200"
+                          }`}
+                        >
                           <p className="leading-relaxed whitespace-pre-line">
                             {message.content}
                           </p>
@@ -204,7 +238,7 @@ export function FloatingChatbot() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {isTyping && (
                     <div className="flex gap-3 justify-start">
                       <div className="flex gap-2 max-w-[85%]">
@@ -214,11 +248,22 @@ export function FloatingChatbot() {
                         <div className="bg-white border border-gray-200 rounded-2xl p-3 shadow-sm">
                           <div className="flex items-center gap-2">
                             <div className="flex gap-1">
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "0ms" }}
+                              />
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "150ms" }}
+                              />
+                              <div
+                                className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                                style={{ animationDelay: "300ms" }}
+                              />
                             </div>
-                            <span className="text-xs text-gray-500">Đang suy nghĩ...</span>
+                            <span className="text-xs text-gray-500">
+                              Đang suy nghĩ...
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -262,7 +307,7 @@ export function FloatingChatbot() {
                     }
                   }}
                 />
-                <Button 
+                <Button
                   onClick={handleSendMessage}
                   disabled={!newMessage.trim() || isTyping}
                   size="sm"

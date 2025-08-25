@@ -1,21 +1,33 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  User, 
-  Shield, 
-  Settings as SettingsIcon, 
-  Camera, 
-  Save, 
+import {
+  User,
+  Shield,
+  Settings as SettingsIcon,
+  Camera,
+  Save,
   Key,
   Bell,
   Target,
@@ -25,20 +37,20 @@ import {
   Calendar,
   School,
   Mail,
-  Lock
+  Lock,
 } from "lucide-react";
 
 export default function Settings() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
-  
+
   // Mock user data
   const [userProfile, setUserProfile] = useState({
     fullName: "Bé Minh Đức",
     email: "duc.nguyen@email.com",
     birthday: "2010-05-15",
     grade: "Lớp 5A",
-    avatar: "/placeholder.svg"
+    avatar: "/placeholder.svg",
   });
 
   const [studySettings, setStudySettings] = useState({
@@ -46,7 +58,7 @@ export default function Settings() {
     reminderTime: "19:00",
     defaultGoal: "midterm",
     studyStreak: 7,
-    weeklyGoalHours: 10
+    weeklyGoalHours: 10,
   });
 
   const handleSaveProfile = async () => {
@@ -88,24 +100,28 @@ export default function Settings() {
         </div>
 
         {/* Settings Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-3 bg-primary/10">
-            <TabsTrigger 
-              value="profile" 
+            <TabsTrigger
+              value="profile"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <User className="h-4 w-4" />
               👤 Thông tin cá nhân
             </TabsTrigger>
-            <TabsTrigger 
-              value="security" 
+            <TabsTrigger
+              value="security"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <Shield className="h-4 w-4" />
               🔒 Bảo mật
             </TabsTrigger>
-            <TabsTrigger 
-              value="study" 
+            <TabsTrigger
+              value="study"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <SettingsIcon className="h-4 w-4" />
@@ -135,19 +151,25 @@ export default function Settings() {
                         🧒
                       </AvatarFallback>
                     </Avatar>
-                    <Button 
-                      size="sm" 
+                    <Button
+                      size="sm"
                       className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0 bg-gradient-to-r from-primary to-accent"
                     >
                       <Camera className="h-4 w-4" />
                     </Button>
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-lg font-semibold text-primary">Ảnh đại diện</h3>
+                    <h3 className="text-lg font-semibold text-primary">
+                      Ảnh đại diện
+                    </h3>
                     <p className="text-sm text-muted-foreground">
                       Nhấn vào biểu tượng máy ảnh để thay đổi ảnh đại diện
                     </p>
-                    <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-primary text-primary hover:bg-primary hover:text-white"
+                    >
                       <Upload className="h-4 w-4 mr-2" />
                       📷 Đổi ảnh
                     </Button>
@@ -159,20 +181,31 @@ export default function Settings() {
                 {/* Profile Form */}
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="fullName" className="text-primary font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="fullName"
+                      className="text-primary font-medium flex items-center gap-1"
+                    >
                       <User className="h-4 w-4" />
                       👤 Họ và tên
                     </Label>
                     <Input
                       id="fullName"
                       value={userProfile.fullName}
-                      onChange={(e) => setUserProfile({...userProfile, fullName: e.target.value})}
+                      onChange={(e) =>
+                        setUserProfile({
+                          ...userProfile,
+                          fullName: e.target.value,
+                        })
+                      }
                       className="border-primary/20 focus:border-primary rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-primary font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="email"
+                      className="text-primary font-medium flex items-center gap-1"
+                    >
                       <Mail className="h-4 w-4" />
                       📧 Email
                     </Label>
@@ -180,13 +213,21 @@ export default function Settings() {
                       id="email"
                       type="email"
                       value={userProfile.email}
-                      onChange={(e) => setUserProfile({...userProfile, email: e.target.value})}
+                      onChange={(e) =>
+                        setUserProfile({
+                          ...userProfile,
+                          email: e.target.value,
+                        })
+                      }
                       className="border-primary/20 focus:border-primary rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="birthday" className="text-primary font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="birthday"
+                      className="text-primary font-medium flex items-center gap-1"
+                    >
                       <Calendar className="h-4 w-4" />
                       🎂 Ngày sinh
                     </Label>
@@ -194,19 +235,29 @@ export default function Settings() {
                       id="birthday"
                       type="date"
                       value={userProfile.birthday}
-                      onChange={(e) => setUserProfile({...userProfile, birthday: e.target.value})}
+                      onChange={(e) =>
+                        setUserProfile({
+                          ...userProfile,
+                          birthday: e.target.value,
+                        })
+                      }
                       className="border-primary/20 focus:border-primary rounded-xl"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="grade" className="text-primary font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="grade"
+                      className="text-primary font-medium flex items-center gap-1"
+                    >
                       <School className="h-4 w-4" />
                       🏫 Lớp/Khóa học
                     </Label>
-                    <Select 
+                    <Select
                       value={userProfile.grade}
-                      onValueChange={(value) => setUserProfile({...userProfile, grade: value})}
+                      onValueChange={(value) =>
+                        setUserProfile({ ...userProfile, grade: value })
+                      }
                     >
                       <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
                         <SelectValue placeholder="Chọn lớp" />
@@ -222,7 +273,7 @@ export default function Settings() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button 
+                  <Button
                     onClick={handleSaveProfile}
                     disabled={isLoading}
                     className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl"
@@ -259,7 +310,10 @@ export default function Settings() {
               <CardContent className="space-y-6">
                 <div className="grid gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="currentPassword" className="text-accent font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="currentPassword"
+                      className="text-accent font-medium flex items-center gap-1"
+                    >
                       <Key className="h-4 w-4" />
                       🔐 Mật khẩu hiện tại
                     </Label>
@@ -272,7 +326,10 @@ export default function Settings() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="newPassword" className="text-accent font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="newPassword"
+                      className="text-accent font-medium flex items-center gap-1"
+                    >
                       <Lock className="h-4 w-4" />
                       🆕 Mật khẩu mới
                     </Label>
@@ -285,9 +342,11 @@ export default function Settings() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="text-accent font-medium flex items-center gap-1">
-                      <Lock className="h-4 w-4" />
-                      ✅ Xác nhận mật khẩu mới
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-accent font-medium flex items-center gap-1"
+                    >
+                      <Lock className="h-4 w-4" />✅ Xác nhận mật khẩu mới
                     </Label>
                     <Input
                       id="confirmPassword"
@@ -299,7 +358,9 @@ export default function Settings() {
                 </div>
 
                 <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                  <h4 className="text-sm font-medium text-yellow-800 mb-2">💡 Gợi ý tạo mật khẩu mạnh:</h4>
+                  <h4 className="text-sm font-medium text-yellow-800 mb-2">
+                    💡 Gợi ý tạo mật khẩu mạnh:
+                  </h4>
                   <ul className="text-sm text-yellow-700 space-y-1">
                     <li>• Ít nhất 8 ký tự</li>
                     <li>• Bao gồm chữ hoa, chữ thường</li>
@@ -309,7 +370,7 @@ export default function Settings() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button 
+                  <Button
                     onClick={handleChangePassword}
                     disabled={isLoading}
                     className="bg-gradient-to-r from-accent to-secondary hover:from-accent/80 hover:to-secondary/80 text-white font-bold rounded-xl"
@@ -348,18 +409,28 @@ export default function Settings() {
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="text-center p-4 rounded-xl bg-primary/10 border border-primary/20">
                     <div className="text-2xl mb-2">🔥</div>
-                    <div className="text-lg font-bold text-primary">{studySettings.studyStreak}</div>
-                    <div className="text-sm text-muted-foreground">Ngày liên tiếp</div>
+                    <div className="text-lg font-bold text-primary">
+                      {studySettings.studyStreak}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Ngày liên tiếp
+                    </div>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-accent/10 border border-accent/20">
                     <div className="text-2xl mb-2">⏰</div>
-                    <div className="text-lg font-bold text-accent">{studySettings.weeklyGoalHours}h</div>
-                    <div className="text-sm text-muted-foreground">Mục tiêu tuần</div>
+                    <div className="text-lg font-bold text-accent">
+                      {studySettings.weeklyGoalHours}h
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Mục tiêu tuần
+                    </div>
                   </div>
                   <div className="text-center p-4 rounded-xl bg-secondary/10 border border-secondary/20">
                     <div className="text-2xl mb-2">🎯</div>
                     <div className="text-lg font-bold text-secondary">85%</div>
-                    <div className="text-sm text-muted-foreground">Hoàn thành</div>
+                    <div className="text-sm text-muted-foreground">
+                      Hoàn thành
+                    </div>
                   </div>
                 </div>
 
@@ -379,30 +450,48 @@ export default function Settings() {
                     </div>
                     <Switch
                       checked={studySettings.dailyReminder}
-                      onCheckedChange={(checked) => 
-                        setStudySettings({...studySettings, dailyReminder: checked})
+                      onCheckedChange={(checked) =>
+                        setStudySettings({
+                          ...studySettings,
+                          dailyReminder: checked,
+                        })
                       }
                     />
                   </div>
 
                   {studySettings.dailyReminder && (
                     <div className="space-y-2 ml-6">
-                      <Label htmlFor="reminderTime" className="text-secondary font-medium flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        ⏰ Giờ nhắc nhở
+                      <Label
+                        htmlFor="reminderTime"
+                        className="text-secondary font-medium flex items-center gap-1"
+                      >
+                        <Clock className="h-4 w-4" />⏰ Giờ nhắc nhở
                       </Label>
-                      <Select 
+                      <Select
                         value={studySettings.reminderTime}
-                        onValueChange={(value) => setStudySettings({...studySettings, reminderTime: value})}
+                        onValueChange={(value) =>
+                          setStudySettings({
+                            ...studySettings,
+                            reminderTime: value,
+                          })
+                        }
                       >
                         <SelectTrigger className="w-48 border-secondary/20 focus:border-secondary rounded-xl">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="18:00">🕕 18:00 (6:00 PM)</SelectItem>
-                          <SelectItem value="19:00">🕖 19:00 (7:00 PM)</SelectItem>
-                          <SelectItem value="20:00">🕗 20:00 (8:00 PM)</SelectItem>
-                          <SelectItem value="21:00">🕘 21:00 (9:00 PM)</SelectItem>
+                          <SelectItem value="18:00">
+                            🕕 18:00 (6:00 PM)
+                          </SelectItem>
+                          <SelectItem value="19:00">
+                            🕖 19:00 (7:00 PM)
+                          </SelectItem>
+                          <SelectItem value="20:00">
+                            🕗 20:00 (8:00 PM)
+                          </SelectItem>
+                          <SelectItem value="21:00">
+                            🕘 21:00 (9:00 PM)
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -417,9 +506,11 @@ export default function Settings() {
                     <Target className="h-4 w-4" />
                     🎯 Mục tiêu mặc định
                   </Label>
-                  <Select 
+                  <Select
                     value={studySettings.defaultGoal}
-                    onValueChange={(value) => setStudySettings({...studySettings, defaultGoal: value})}
+                    onValueChange={(value) =>
+                      setStudySettings({ ...studySettings, defaultGoal: value })
+                    }
                   >
                     <SelectTrigger className="border-secondary/20 focus:border-secondary rounded-xl">
                       <SelectValue placeholder="Chọn mục tiêu" />
@@ -427,8 +518,12 @@ export default function Settings() {
                     <SelectContent>
                       <SelectItem value="midterm">🎯 Thi giữa kỳ</SelectItem>
                       <SelectItem value="final">📝 Thi cuối kỳ</SelectItem>
-                      <SelectItem value="vocabulary">📖 Ôn tập từ vựng</SelectItem>
-                      <SelectItem value="grammar">📚 Ôn tập ngữ pháp</SelectItem>
+                      <SelectItem value="vocabulary">
+                        📖 Ôn tập từ vựng
+                      </SelectItem>
+                      <SelectItem value="grammar">
+                        📚 Ôn tập ngữ pháp
+                      </SelectItem>
                       <SelectItem value="practice">🏋️ Luyện thi</SelectItem>
                     </SelectContent>
                   </Select>
@@ -442,9 +537,14 @@ export default function Settings() {
                     <Clock className="h-4 w-4" />
                     📅 Mục tiêu học tập hàng tuần (giờ)
                   </Label>
-                  <Select 
+                  <Select
                     value={studySettings.weeklyGoalHours.toString()}
-                    onValueChange={(value) => setStudySettings({...studySettings, weeklyGoalHours: parseInt(value)})}
+                    onValueChange={(value) =>
+                      setStudySettings({
+                        ...studySettings,
+                        weeklyGoalHours: parseInt(value),
+                      })
+                    }
                   >
                     <SelectTrigger className="border-secondary/20 focus:border-secondary rounded-xl">
                       <SelectValue />
@@ -460,7 +560,7 @@ export default function Settings() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button 
+                  <Button
                     onClick={handleSaveStudySettings}
                     disabled={isLoading}
                     className="bg-gradient-to-r from-secondary to-primary hover:from-secondary/80 hover:to-primary/80 text-white font-bold rounded-xl"
