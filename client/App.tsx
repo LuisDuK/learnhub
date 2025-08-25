@@ -18,6 +18,7 @@ import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Lesson from "./pages/Lesson";
 import Exercise from "./pages/Exercise";
+import ExerciseResults from "./pages/ExerciseResults";
 import Quiz from "./pages/Quiz";
 import NotFound from "./pages/NotFound";
 
