@@ -34,7 +34,8 @@ const mockExercise = {
   id: 1,
   lessonId: 1,
   title: "🔢 Bài tập phép cộng và trừ",
-  description: "Hoàn thành các bài tập sau để củng cố kiến thức về phép cộng và phép trừ trong phạm vi 100.",
+  description:
+    "Hoàn thành các bài tập sau để củng cố kiến thức về phép cộng và phép trừ trong phạm vi 100.",
   timeLimit: 30, // minutes
   totalPoints: 100,
   questions: [
@@ -74,7 +75,8 @@ const mockExercise = {
     {
       id: 5,
       type: "multiple_choice" as const,
-      question: "Lan có 56 viên kẹo, cho bạn 18 viên. Hỏi Lan còn lại bao nhiêu viên?",
+      question:
+        "Lan có 56 viên kẹo, cho bạn 18 viên. Hỏi Lan còn lại bao nhiêu viên?",
       options: ["38 viên", "36 viên", "40 viên", "42 viên"],
       correctAnswer: 0,
       points: 15,
@@ -90,7 +92,8 @@ const mockExercise = {
     {
       id: 7,
       type: "essay" as const,
-      question: "Tính 67 - 39 và giải thích tại sao phải mượn khi thực hiện phép trừ này",
+      question:
+        "Tính 67 - 39 và giải thích tại sao phải mượn khi thực hiện phép trừ này",
       points: 15,
       hint: "Chú ý đến việc mượn từ hàng chục",
     },
@@ -146,11 +149,17 @@ export default function Exercise() {
     content: string,
     type: "multiple_choice" | "essay",
     selectedOption?: number,
-    imageFile?: File
+    imageFile?: File,
   ) => {
     setAnswers((prev) => {
       const existing = prev.findIndex((a) => a.questionId === questionId);
-      const newAnswer: Answer = { questionId, type, content, selectedOption, imageFile };
+      const newAnswer: Answer = {
+        questionId,
+        type,
+        content,
+        selectedOption,
+        imageFile,
+      };
 
       if (existing >= 0) {
         const updated = [...prev];
@@ -162,10 +171,18 @@ export default function Exercise() {
     });
   };
 
-  const handleMultipleChoiceAnswer = (questionId: number, optionIndex: number) => {
-    const question = mockExercise.questions.find(q => q.id === questionId);
+  const handleMultipleChoiceAnswer = (
+    questionId: number,
+    optionIndex: number,
+  ) => {
+    const question = mockExercise.questions.find((q) => q.id === questionId);
     if (question && question.type === "multiple_choice") {
-      updateAnswer(questionId, question.options[optionIndex], "multiple_choice", optionIndex);
+      updateAnswer(
+        questionId,
+        question.options[optionIndex],
+        "multiple_choice",
+        optionIndex,
+      );
     }
   };
 
@@ -189,7 +206,13 @@ export default function Exercise() {
     setTimeout(() => {
       const imageUrl = URL.createObjectURL(file);
       const currentAnswer = getAnswer(questionId);
-      updateAnswer(questionId, currentAnswer?.content || "", "essay", undefined, file);
+      updateAnswer(
+        questionId,
+        currentAnswer?.content || "",
+        "essay",
+        undefined,
+        file,
+      );
       setUploadingImage(false);
     }, 1000);
   };
@@ -227,8 +250,8 @@ export default function Exercise() {
     }
 
     // Navigate to results page
-    navigate(`/lesson/${lessonId}/exercise/${id || "1"}/results`, { 
-      state: { answers, exercise: mockExercise } 
+    navigate(`/lesson/${lessonId}/exercise/${id || "1"}/results`, {
+      state: { answers, exercise: mockExercise },
     });
   };
 
@@ -284,15 +307,15 @@ export default function Exercise() {
               <CardTitle className="text-lg flex items-center gap-2">
                 📝 Danh sách câu hỏi
               </CardTitle>
-              <CardDescription>
-                Nhấp vào số câu để chuyển nhanh
-              </CardDescription>
+              <CardDescription>Nhấp vào số câu để chuyển nhanh</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {mockExercise.questions.map((q, index) => (
                 <Button
                   key={q.id}
-                  variant={currentQuestionIndex === index ? "default" : "outline"}
+                  variant={
+                    currentQuestionIndex === index ? "default" : "outline"
+                  }
                   className={`w-full justify-between text-left ${
                     getQuestionStatus(q.id) === "completed"
                       ? "border-green-500 bg-green-50 hover:bg-green-100"
@@ -306,7 +329,9 @@ export default function Exercise() {
                     </div>
                     <div className="text-left">
                       <div className="text-xs text-muted-foreground">
-                        {q.type === "multiple_choice" ? "Trắc nghiệm" : "Tự luận"}
+                        {q.type === "multiple_choice"
+                          ? "Trắc nghiệm"
+                          : "Tự luận"}
                       </div>
                       <div className="text-xs">{q.points} điểm</div>
                     </div>
@@ -316,9 +341,11 @@ export default function Exercise() {
                   )}
                 </Button>
               ))}
-              
+
               <div className="mt-4 pt-4 border-t border-border">
-                <div className="text-xs text-muted-foreground mb-1">Tiến độ</div>
+                <div className="text-xs text-muted-foreground mb-1">
+                  Tiến độ
+                </div>
                 <div className="text-sm font-medium">
                   {answers.length}/{mockExercise.questions.length} câu đã làm
                 </div>
@@ -344,7 +371,9 @@ export default function Exercise() {
                     variant="outline"
                     className="bg-accent/10 text-accent border-accent/20"
                   >
-                    {currentQuestion.type === "multiple_choice" ? "🔘 Trắc nghiệm" : "✏️ Tự luận"}
+                    {currentQuestion.type === "multiple_choice"
+                      ? "🔘 Trắc nghiệm"
+                      : "✏️ Tự luận"}
                   </Badge>
                 </div>
                 <CardDescription className="text-base font-medium">
@@ -355,25 +384,46 @@ export default function Exercise() {
                 {currentQuestion.type === "multiple_choice" ? (
                   <div className="space-y-4">
                     <RadioGroup
-                      value={getAnswer(currentQuestion.id)?.selectedOption?.toString() || ""}
-                      onValueChange={(value) => handleMultipleChoiceAnswer(currentQuestion.id, parseInt(value))}
+                      value={
+                        getAnswer(
+                          currentQuestion.id,
+                        )?.selectedOption?.toString() || ""
+                      }
+                      onValueChange={(value) =>
+                        handleMultipleChoiceAnswer(
+                          currentQuestion.id,
+                          parseInt(value),
+                        )
+                      }
                       className="space-y-3"
                     >
                       {currentQuestion.options.map((option, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-accent/5 transition-colors">
-                          <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                          <Label htmlFor={`option-${index}`} className="text-base cursor-pointer flex-1">
+                        <div
+                          key={index}
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-border hover:bg-accent/5 transition-colors"
+                        >
+                          <RadioGroupItem
+                            value={index.toString()}
+                            id={`option-${index}`}
+                          />
+                          <Label
+                            htmlFor={`option-${index}`}
+                            className="text-base cursor-pointer flex-1"
+                          >
                             {String.fromCharCode(65 + index)}. {option}
                           </Label>
                         </div>
                       ))}
                     </RadioGroup>
-                    
+
                     {getAnswer(currentQuestion.id) && (
                       <Alert className="border-green-200 bg-green-50">
                         <CheckCircle className="h-4 w-4 text-green-600" />
                         <AlertDescription className="text-green-800">
-                          ✅ Đã chọn đáp án: <strong>{getAnswer(currentQuestion.id)?.content}</strong>
+                          ✅ Đã chọn đáp án:{" "}
+                          <strong>
+                            {getAnswer(currentQuestion.id)?.content}
+                          </strong>
                         </AlertDescription>
                       </Alert>
                     )}
@@ -388,14 +438,20 @@ export default function Exercise() {
                         </AlertDescription>
                       </Alert>
                     )}
-                    
+
                     <Tabs defaultValue="text" className="w-full">
                       <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="text" className="flex items-center gap-2">
+                        <TabsTrigger
+                          value="text"
+                          className="flex items-center gap-2"
+                        >
                           <Edit3 className="h-4 w-4" />
                           Nhập văn bản
                         </TabsTrigger>
-                        <TabsTrigger value="image" className="flex items-center gap-2">
+                        <TabsTrigger
+                          value="image"
+                          className="flex items-center gap-2"
+                        >
                           <FileImage className="h-4 w-4" />
                           Gửi ảnh viết tay
                         </TabsTrigger>
@@ -405,7 +461,12 @@ export default function Exercise() {
                         <Textarea
                           placeholder="Nhập lời giải chi tiết của bạn..."
                           value={getAnswer(currentQuestion.id)?.content || ""}
-                          onChange={(e) => handleEssayAnswer(currentQuestion.id, e.target.value)}
+                          onChange={(e) =>
+                            handleEssayAnswer(
+                              currentQuestion.id,
+                              e.target.value,
+                            )
+                          }
                           className="min-h-[150px] border-primary/20 focus:border-primary resize-none"
                         />
                         <p className="text-xs text-muted-foreground">
@@ -425,7 +486,9 @@ export default function Exercise() {
                           ) : getAnswer(currentQuestion.id)?.imageFile ? (
                             <div className="space-y-3">
                               <img
-                                src={URL.createObjectURL(getAnswer(currentQuestion.id)!.imageFile!)}
+                                src={URL.createObjectURL(
+                                  getAnswer(currentQuestion.id)!.imageFile!,
+                                )}
                                 alt="Uploaded answer"
                                 className="max-w-full max-h-64 mx-auto rounded-lg shadow-md"
                               />
@@ -434,12 +497,19 @@ export default function Exercise() {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => {
-                                    const input = document.createElement("input");
+                                    const input =
+                                      document.createElement("input");
                                     input.type = "file";
                                     input.accept = "image/*";
                                     input.onchange = (e) => {
-                                      const file = (e.target as HTMLInputElement).files?.[0];
-                                      if (file) handleFileUpload(currentQuestion.id, file);
+                                      const file = (
+                                        e.target as HTMLInputElement
+                                      ).files?.[0];
+                                      if (file)
+                                        handleFileUpload(
+                                          currentQuestion.id,
+                                          file,
+                                        );
                                     };
                                     input.click();
                                   }}
@@ -451,7 +521,9 @@ export default function Exercise() {
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => removeImage(currentQuestion.id)}
+                                  onClick={() =>
+                                    removeImage(currentQuestion.id)
+                                  }
                                   className="border-red-200 text-red-600 hover:bg-red-50"
                                 >
                                   <Trash2 className="h-4 w-4 mr-2" />
@@ -467,8 +539,10 @@ export default function Exercise() {
                                 input.type = "file";
                                 input.accept = "image/*";
                                 input.onchange = (e) => {
-                                  const file = (e.target as HTMLInputElement).files?.[0];
-                                  if (file) handleFileUpload(currentQuestion.id, file);
+                                  const file = (e.target as HTMLInputElement)
+                                    .files?.[0];
+                                  if (file)
+                                    handleFileUpload(currentQuestion.id, file);
                                 };
                                 input.click();
                               }}
@@ -503,27 +577,37 @@ export default function Exercise() {
               </Button>
 
               <div className="flex gap-4">
-                {currentQuestion.type === "multiple_choice" && getAnswer(currentQuestion.id) && (
-                  <Button
-                    onClick={nextQuestion}
-                    disabled={currentQuestionIndex === mockExercise.questions.length - 1}
-                    className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white"
-                  >
-                    Câu tiếp theo
-                    <ChevronRight className="h-4 w-4 ml-2" />
-                  </Button>
-                )}
-                
+                {currentQuestion.type === "multiple_choice" &&
+                  getAnswer(currentQuestion.id) && (
+                    <Button
+                      onClick={nextQuestion}
+                      disabled={
+                        currentQuestionIndex ===
+                        mockExercise.questions.length - 1
+                      }
+                      className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white"
+                    >
+                      Câu tiếp theo
+                      <ChevronRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  )}
+
                 {currentQuestion.type === "essay" && (
                   <Button
                     onClick={() => {
-                      if (currentQuestion.type === "essay" && !getAnswer(currentQuestion.id)?.content && !getAnswer(currentQuestion.id)?.imageFile) {
+                      if (
+                        currentQuestion.type === "essay" &&
+                        !getAnswer(currentQuestion.id)?.content &&
+                        !getAnswer(currentQuestion.id)?.imageFile
+                      ) {
                         alert("Vui lòng nhập câu trả lời hoặc tải ảnh lên!");
                         return;
                       }
                       nextQuestion();
                     }}
-                    disabled={currentQuestionIndex === mockExercise.questions.length - 1}
+                    disabled={
+                      currentQuestionIndex === mockExercise.questions.length - 1
+                    }
                     className="bg-gradient-to-r from-accent to-primary hover:from-accent/80 hover:to-primary/80 text-white"
                   >
                     Nộp tự luận
@@ -534,7 +618,9 @@ export default function Exercise() {
 
               <Button
                 onClick={nextQuestion}
-                disabled={currentQuestionIndex === mockExercise.questions.length - 1}
+                disabled={
+                  currentQuestionIndex === mockExercise.questions.length - 1
+                }
                 variant="outline"
                 className="border-accent/20 text-accent hover:bg-accent hover:text-white"
               >
