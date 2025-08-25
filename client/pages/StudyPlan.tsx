@@ -39,6 +39,9 @@ import {
   BookOpen,
   Globe,
   Sparkles,
+  Plus,
+  Trash2,
+  Save,
 } from "lucide-react";
 
 // Mock study plan data focusing on Math, Literature, English
@@ -78,7 +81,7 @@ const weeklyPlan = [
         title: "🌍 Present Simple Tense",
         duration: "45 phút",
         status: "in-progress",
-        day: "Th��� 4",
+        day: "Thứ 4",
         time: "16:00",
       },
       {
