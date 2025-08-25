@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -66,7 +72,9 @@ export default function Login() {
       {/* Login/Register Card */}
       <Card className="w-full max-w-md border-primary/20 shadow-2xl bg-white/95 backdrop-blur">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-primary">Chào mừng bé! 👋</CardTitle>
+          <CardTitle className="text-2xl font-bold text-primary">
+            Chào mừng bé! 👋
+          </CardTitle>
           <CardDescription className="text-muted-foreground">
             Đăng nhập để bắt đầu hành trình học tập thú vị
           </CardDescription>
@@ -74,19 +82,27 @@ export default function Login() {
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 bg-primary/10">
-              <TabsTrigger value="login" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+              <TabsTrigger
+                value="login"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              >
                 📖 Đăng nhập
               </TabsTrigger>
-              <TabsTrigger value="register" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+              <TabsTrigger
+                value="register"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              >
                 ✨ Đăng ký
               </TabsTrigger>
             </TabsList>
-            
+
             {/* Login Tab */}
             <TabsContent value="login" className="space-y-4 mt-6">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-primary font-medium">📧 Email</Label>
+                  <Label htmlFor="email" className="text-primary font-medium">
+                    📧 Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -96,7 +112,12 @@ export default function Login() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-primary font-medium">🔒 Mật khẩu</Label>
+                  <Label
+                    htmlFor="password"
+                    className="text-primary font-medium"
+                  >
+                    🔒 Mật khẩu
+                  </Label>
                   <Input
                     id="password"
                     type="password"
@@ -105,8 +126,8 @@ export default function Login() {
                     className="border-primary/20 focus:border-primary rounded-xl"
                   />
                 </div>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl h-12"
                   disabled={isLoading}
                 >
@@ -120,7 +141,10 @@ export default function Login() {
                   )}
                 </Button>
                 <div className="text-center">
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm text-primary hover:underline"
+                  >
                     🤔 Quên mật khẩu?
                   </Link>
                 </div>
@@ -131,7 +155,12 @@ export default function Login() {
             <TabsContent value="register" className="space-y-4 mt-6">
               <form onSubmit={handleRegister} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="fullName" className="text-primary font-medium">👤 Họ và tên</Label>
+                  <Label
+                    htmlFor="fullName"
+                    className="text-primary font-medium"
+                  >
+                    👤 Họ và tên
+                  </Label>
                   <Input
                     id="fullName"
                     type="text"
@@ -141,7 +170,12 @@ export default function Login() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="registerEmail" className="text-primary font-medium">📧 Email</Label>
+                  <Label
+                    htmlFor="registerEmail"
+                    className="text-primary font-medium"
+                  >
+                    📧 Email
+                  </Label>
                   <Input
                     id="registerEmail"
                     type="email"
@@ -151,7 +185,12 @@ export default function Login() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="registerPassword" className="text-primary font-medium">🔒 Mật khẩu</Label>
+                  <Label
+                    htmlFor="registerPassword"
+                    className="text-primary font-medium"
+                  >
+                    🔒 Mật khẩu
+                  </Label>
                   <Input
                     id="registerPassword"
                     type="password"
@@ -161,7 +200,12 @@ export default function Login() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-primary font-medium">🔐 Xác nhận mật khẩu</Label>
+                  <Label
+                    htmlFor="confirmPassword"
+                    className="text-primary font-medium"
+                  >
+                    🔐 Xác nhận mật khẩu
+                  </Label>
                   <Input
                     id="confirmPassword"
                     type="password"
@@ -170,8 +214,8 @@ export default function Login() {
                     className="border-primary/20 focus:border-primary rounded-xl"
                   />
                 </div>
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full bg-gradient-to-r from-accent to-secondary hover:from-accent/80 hover:to-secondary/80 text-white font-bold rounded-xl h-12"
                   disabled={isLoading}
                 >

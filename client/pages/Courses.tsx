@@ -1,26 +1,38 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Play, 
-  Clock, 
-  BookOpen, 
-  Users, 
-  Star, 
+import {
+  Play,
+  Clock,
+  BookOpen,
+  Users,
+  Star,
   Search,
   Filter,
   Calendar,
   Award,
   Sparkles,
-  Zap
+  Zap,
 } from "lucide-react";
 
 // Course status types
@@ -54,7 +66,8 @@ const mockCourses: Course[] = [
     id: 1,
     title: "🔢 Toán học cơ bản",
     instructor: "Thầy Minh vui vẻ",
-    description: "Học toán qua trò chơi và câu đố thú vị. Phân số, số thập phân, phép tính cơ bản",
+    description:
+      "Học toán qua trò chơi và câu đố thú vị. Phân số, số thập phân, phép tính cơ bản",
     category: "math",
     status: "in-progress",
     progress: 75,
@@ -68,13 +81,14 @@ const mockCourses: Course[] = [
     tags: ["Phân số", "Phép tính", "Số học"],
     lastAccessed: "2 giờ trước",
     estimatedCompletion: "2 tuần",
-    emoji: "🔢"
+    emoji: "🔢",
   },
   {
     id: 2,
     title: "📐 Hình học thú vị",
     instructor: "Cô Lan xinh đẹp",
-    description: "Khám phá thế giới hình học qua những hình dạng và bài toán vui nhộn",
+    description:
+      "Khám phá thế giới hình học qua những hình dạng và bài toán vui nhộn",
     category: "math",
     status: "not-started",
     progress: 0,
@@ -86,7 +100,7 @@ const mockCourses: Course[] = [
     level: "Trung bình",
     thumbnail: "/placeholder.svg",
     tags: ["Hình học", "Chu vi", "Diện tích"],
-    emoji: "📐"
+    emoji: "📐",
   },
   {
     id: 3,
@@ -106,7 +120,7 @@ const mockCourses: Course[] = [
     tags: ["Đọc hiểu", "Viết văn", "Thơ"],
     lastAccessed: "1 ngày trước",
     estimatedCompletion: "4 tuần",
-    emoji: "📚"
+    emoji: "📚",
   },
   {
     id: 4,
@@ -125,7 +139,7 @@ const mockCourses: Course[] = [
     thumbnail: "/placeholder.svg",
     tags: ["Viết văn", "Miêu tả", "Tả người"],
     lastAccessed: "1 tuần trước",
-    emoji: "✍️"
+    emoji: "✍️",
   },
   {
     id: 5,
@@ -145,7 +159,7 @@ const mockCourses: Course[] = [
     tags: ["Từ vựng", "Ngữ pháp", "Giao tiếp"],
     lastAccessed: "3 ngày trước",
     estimatedCompletion: "6 tuần",
-    emoji: "🌍"
+    emoji: "🌍",
   },
   {
     id: 6,
@@ -163,13 +177,14 @@ const mockCourses: Course[] = [
     level: "Trung bình",
     thumbnail: "/placeholder.svg",
     tags: ["Speaking", "Conversation", "Phát âm"],
-    emoji: "🗣️"
+    emoji: "🗣️",
   },
   {
     id: 7,
     title: "📖 Ngữ pháp tiếng Anh",
     instructor: "Cô Mai chuyên nghiệp",
-    description: "Nắm vững ngữ pháp tiếng Anh qua các bài tập và ví dụ đơn giản",
+    description:
+      "Nắm vững ngữ pháp tiếng Anh qua các bài tập và ví dụ đơn giản",
     category: "english",
     status: "in-progress",
     progress: 30,
@@ -183,13 +198,14 @@ const mockCourses: Course[] = [
     tags: ["Grammar", "Tenses", "Cấu trúc"],
     lastAccessed: "5 ngày trước",
     estimatedCompletion: "7 tuần",
-    emoji: "📖"
+    emoji: "📖",
   },
   {
     id: 8,
     title: "🧮 Toán nâng cao",
     instructor: "Thầy Hùng thông minh",
-    description: "Giải các bài toán nâng cao, rèn luyện tư duy logic và sáng tạo",
+    description:
+      "Giải các bài toán nâng cao, rèn luyện tư duy logic và sáng tạo",
     category: "math",
     status: "not-started",
     progress: 0,
@@ -201,41 +217,47 @@ const mockCourses: Course[] = [
     level: "Khó",
     thumbnail: "/placeholder.svg",
     tags: ["Nâng cao", "Logic", "Tư duy"],
-    emoji: "🧮"
-  }
+    emoji: "🧮",
+  },
 ];
 
 const statusLabels = {
   "not-started": "Chưa học",
   "in-progress": "Đang học",
-  "completed": "Hoàn thành"
+  completed: "Hoàn thành",
 };
 
 const categoryLabels = {
-  "math": "🔢 Toán học",
-  "literature": "📚 Ngữ văn",
-  "english": "🌍 Tiếng Anh"
+  math: "🔢 Toán học",
+  literature: "📚 Ngữ văn",
+  english: "🌍 Tiếng Anh",
 };
 
 const statusColors = {
   "not-started": "secondary",
   "in-progress": "default",
-  "completed": "secondary"
+  completed: "secondary",
 } as const;
 
 export default function Courses() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<CourseCategory[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<
+    CourseCategory[]
+  >([]);
   const [selectedStatuses, setSelectedStatuses] = useState<CourseStatus[]>([]);
   const [sortBy, setSortBy] = useState<string>("recent");
 
   // Filter courses based on search and filters
-  const filteredCourses = mockCourses.filter(course => {
-    const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(course.category);
-    const matchesStatus = selectedStatuses.length === 0 || selectedStatuses.includes(course.status);
-    
+  const filteredCourses = mockCourses.filter((course) => {
+    const matchesSearch =
+      course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      course.instructor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(course.category);
+    const matchesStatus =
+      selectedStatuses.length === 0 || selectedStatuses.includes(course.status);
+
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
@@ -256,18 +278,18 @@ export default function Courses() {
   });
 
   const toggleCategory = (category: CourseCategory) => {
-    setSelectedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category],
     );
   };
 
   const toggleStatus = (status: CourseStatus) => {
-    setSelectedStatuses(prev =>
+    setSelectedStatuses((prev) =>
       prev.includes(status)
-        ? prev.filter(s => s !== status)
-        : [...prev, status]
+        ? prev.filter((s) => s !== status)
+        : [...prev, status],
     );
   };
 
@@ -284,7 +306,9 @@ export default function Courses() {
                   📚 Các khóa học của bé
                   <Sparkles className="h-8 w-8 text-primary animate-pulse" />
                 </h1>
-                <p className="text-gray-600 text-lg">Chọn khóa học mà bé thích để bắt đầu hành trình học tập! 🚀</p>
+                <p className="text-gray-600 text-lg">
+                  Chọn khóa học mà bé thích để bắt đầu hành trình học tập! 🚀
+                </p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="relative">
@@ -317,8 +341,12 @@ export default function Courses() {
                   <div className="flex items-center gap-3">
                     <div className="text-3xl">📚</div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Tổng khóa học</p>
-                      <p className="text-2xl font-bold text-primary">{mockCourses.length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Tổng khóa học
+                      </p>
+                      <p className="text-2xl font-bold text-primary">
+                        {mockCourses.length}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -329,7 +357,12 @@ export default function Courses() {
                     <div className="text-3xl">🎯</div>
                     <div>
                       <p className="text-sm text-muted-foreground">Đang học</p>
-                      <p className="text-2xl font-bold text-primary">{mockCourses.filter(c => c.status === "in-progress").length}</p>
+                      <p className="text-2xl font-bold text-primary">
+                        {
+                          mockCourses.filter((c) => c.status === "in-progress")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -339,8 +372,15 @@ export default function Courses() {
                   <div className="flex items-center gap-3">
                     <div className="text-3xl">🏆</div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Hoàn thành</p>
-                      <p className="text-2xl font-bold text-primary">{mockCourses.filter(c => c.status === "completed").length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Hoàn thành
+                      </p>
+                      <p className="text-2xl font-bold text-primary">
+                        {
+                          mockCourses.filter((c) => c.status === "completed")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -350,8 +390,15 @@ export default function Courses() {
                   <div className="flex items-center gap-3">
                     <div className="text-3xl">🎁</div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Chưa bắt đầu</p>
-                      <p className="text-2xl font-bold text-primary">{mockCourses.filter(c => c.status === "not-started").length}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Chưa bắt đầu
+                      </p>
+                      <p className="text-2xl font-bold text-primary">
+                        {
+                          mockCourses.filter((c) => c.status === "not-started")
+                            .length
+                        }
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -362,24 +409,36 @@ export default function Courses() {
           {/* Course Grid */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {sortedCourses.map((course) => (
-              <Card key={course.id} className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-primary/20 bg-gradient-to-br from-white to-primary/5 overflow-hidden">
+              <Card
+                key={course.id}
+                className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-primary/20 bg-gradient-to-br from-white to-primary/5 overflow-hidden"
+              >
                 <CardContent className="p-0">
                   {/* Course Image */}
                   <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 rounded-t-lg flex items-center justify-center relative overflow-hidden">
-                    <div className="text-6xl group-hover:scale-110 transition-transform duration-300">{course.emoji}</div>
+                    <div className="text-6xl group-hover:scale-110 transition-transform duration-300">
+                      {course.emoji}
+                    </div>
                     <div className="absolute top-3 left-3">
-                      <Badge variant={statusColors[course.status]} className="text-xs">
+                      <Badge
+                        variant={statusColors[course.status]}
+                        className="text-xs"
+                      >
                         {statusLabels[course.status]}
                       </Badge>
                     </div>
                     <div className="absolute top-3 right-3">
-                      <Badge variant="outline" className="text-xs bg-white/80">{course.level}</Badge>
+                      <Badge variant="outline" className="text-xs bg-white/80">
+                        {course.level}
+                      </Badge>
                     </div>
-                    
+
                     {/* Hover overlay with sparkles */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/80 to-accent/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <div className="text-white text-center p-4">
-                        <p className="text-sm mb-3 font-medium">{course.description}</p>
+                        <p className="text-sm mb-3 font-medium">
+                          {course.description}
+                        </p>
                         <div className="flex items-center justify-center gap-4 text-xs">
                           <span className="flex items-center gap-1">
                             <Users className="h-3 w-3" />
@@ -396,9 +455,21 @@ export default function Courses() {
                         </div>
                       </div>
                       {/* Animated sparkles */}
-                      <div className="absolute top-2 left-2 text-yellow-300 animate-ping">✨</div>
-                      <div className="absolute bottom-2 right-2 text-yellow-300 animate-ping" style={{animationDelay: '0.2s'}}>⭐</div>
-                      <div className="absolute top-1/2 right-4 text-yellow-300 animate-ping" style={{animationDelay: '0.4s'}}>💫</div>
+                      <div className="absolute top-2 left-2 text-yellow-300 animate-ping">
+                        ✨
+                      </div>
+                      <div
+                        className="absolute bottom-2 right-2 text-yellow-300 animate-ping"
+                        style={{ animationDelay: "0.2s" }}
+                      >
+                        ⭐
+                      </div>
+                      <div
+                        className="absolute top-1/2 right-4 text-yellow-300 animate-ping"
+                        style={{ animationDelay: "0.4s" }}
+                      >
+                        💫
+                      </div>
                     </div>
                   </div>
 
@@ -408,24 +479,38 @@ export default function Courses() {
                       <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
                         {course.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground">👨‍🏫 {course.instructor}</p>
+                      <p className="text-sm text-muted-foreground">
+                        👨‍🏫 {course.instructor}
+                      </p>
                     </div>
 
                     {/* Progress */}
                     {course.progress > 0 && (
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span>📖 {course.completedLessons}/{course.totalLessons} bài học</span>
-                          <span className="font-bold text-primary">{course.progress}%</span>
+                          <span>
+                            📖 {course.completedLessons}/{course.totalLessons}{" "}
+                            bài học
+                          </span>
+                          <span className="font-bold text-primary">
+                            {course.progress}%
+                          </span>
                         </div>
-                        <Progress value={course.progress} className="h-3 bg-primary/10" />
+                        <Progress
+                          value={course.progress}
+                          className="h-3 bg-primary/10"
+                        />
                       </div>
                     )}
 
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1">
                       {course.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs bg-accent/20 text-accent-foreground">
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-xs bg-accent/20 text-accent-foreground"
+                        >
                           {tag}
                         </Badge>
                       ))}
@@ -439,12 +524,13 @@ export default function Courses() {
                     )}
 
                     {/* Action Button */}
-                    <Button 
-                      className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
-                    >
+                    <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg">
                       <Play className="h-4 w-4 mr-2" />
-                      {course.status === "not-started" ? "🚀 Bắt đầu học!" : 
-                       course.status === "completed" ? "🔄 Ôn tập lại!" : "📖 Tiếp tục học!"}
+                      {course.status === "not-started"
+                        ? "🚀 Bắt đầu học!"
+                        : course.status === "completed"
+                          ? "🔄 Ôn tập lại!"
+                          : "📖 Tiếp tục học!"}
                     </Button>
                   </div>
                 </CardContent>
@@ -456,8 +542,12 @@ export default function Courses() {
           {sortedCourses.length === 0 && (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">😔</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Không tìm thấy khóa học</h3>
-              <p className="text-gray-600">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm nhé! 🔍</p>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Không tìm thấy khóa học
+              </h3>
+              <p className="text-gray-600">
+                Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm nhé! 🔍
+              </p>
             </div>
           )}
         </div>
@@ -472,18 +562,31 @@ export default function Courses() {
           <div className="space-y-6">
             {/* Category Filter */}
             <div>
-              <Label className="text-sm font-bold mb-3 block text-primary">🎯 Chọn môn học</Label>
+              <Label className="text-sm font-bold mb-3 block text-primary">
+                🎯 Chọn môn học
+              </Label>
               <div className="space-y-3">
                 {Object.entries(categoryLabels).map(([key, label]) => (
-                  <div key={key} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
+                  <div
+                    key={key}
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-primary/5 transition-colors"
+                  >
                     <Checkbox
                       id={key}
-                      checked={selectedCategories.includes(key as CourseCategory)}
-                      onCheckedChange={() => toggleCategory(key as CourseCategory)}
+                      checked={selectedCategories.includes(
+                        key as CourseCategory,
+                      )}
+                      onCheckedChange={() =>
+                        toggleCategory(key as CourseCategory)
+                      }
                       className="border-primary/40"
                     />
-                    <Label htmlFor={key} className="text-sm cursor-pointer font-medium">
-                      {label} ({mockCourses.filter(c => c.category === key).length})
+                    <Label
+                      htmlFor={key}
+                      className="text-sm cursor-pointer font-medium"
+                    >
+                      {label} (
+                      {mockCourses.filter((c) => c.category === key).length})
                     </Label>
                   </div>
                 ))}
@@ -494,18 +597,27 @@ export default function Courses() {
 
             {/* Status Filter */}
             <div>
-              <Label className="text-sm font-bold mb-3 block text-primary">📊 Trạng thái học</Label>
+              <Label className="text-sm font-bold mb-3 block text-primary">
+                📊 Trạng thái học
+              </Label>
               <div className="space-y-3">
                 {Object.entries(statusLabels).map(([key, label]) => (
-                  <div key={key} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-accent/5 transition-colors">
+                  <div
+                    key={key}
+                    className="flex items-center space-x-3 p-2 rounded-lg hover:bg-accent/5 transition-colors"
+                  >
                     <Checkbox
                       id={key}
                       checked={selectedStatuses.includes(key as CourseStatus)}
                       onCheckedChange={() => toggleStatus(key as CourseStatus)}
                       className="border-accent/40"
                     />
-                    <Label htmlFor={key} className="text-sm cursor-pointer font-medium">
-                      {label} ({mockCourses.filter(c => c.status === key).length})
+                    <Label
+                      htmlFor={key}
+                      className="text-sm cursor-pointer font-medium"
+                    >
+                      {label} (
+                      {mockCourses.filter((c) => c.status === key).length})
                     </Label>
                   </div>
                 ))}
@@ -515,8 +627,8 @@ export default function Courses() {
             <Separator className="bg-primary/20" />
 
             {/* Clear Filters */}
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full border-primary/40 text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-xl font-bold"
               onClick={() => {
                 setSelectedCategories([]);
@@ -530,8 +642,14 @@ export default function Courses() {
             {/* Fun motivational section */}
             <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-4 border border-primary/20 text-center">
               <div className="text-4xl mb-2">🌟</div>
-              <p className="text-sm font-bold text-primary mb-1">Học nhiều sẽ thông minh!</p>
-              <p className="text-xs text-muted-foreground">Bé đã học {mockCourses.filter(c => c.status === "completed").length} khóa học rồi đấy! 🎉</p>
+              <p className="text-sm font-bold text-primary mb-1">
+                Học nhiều sẽ thông minh!
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Bé đã học{" "}
+                {mockCourses.filter((c) => c.status === "completed").length}{" "}
+                khóa học rồi đấy! 🎉
+              </p>
             </div>
           </div>
         </div>

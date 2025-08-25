@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
-  Send, 
-  Plus, 
-  MessageCircle, 
-  Bot, 
+import {
+  Send,
+  Plus,
+  MessageCircle,
+  Bot,
   User,
   Sparkles,
   BookOpen,
@@ -17,7 +17,7 @@ import {
   Globe,
   Lightbulb,
   FileText,
-  HelpCircle
+  HelpCircle,
 } from "lucide-react";
 
 // Mock conversation data
@@ -27,29 +27,29 @@ const conversations = [
     title: "🔢 Bài tập Toán",
     lastMessage: "Giải phương trình bậc nhất",
     timestamp: "10 phút trước",
-    isActive: true
+    isActive: true,
   },
   {
     id: 2,
     title: "📚 Ngữ pháp tiếng Anh",
     lastMessage: "Cách sử dụng Present Perfect",
     timestamp: "2 giờ trước",
-    isActive: false
+    isActive: false,
   },
   {
     id: 3,
     title: "📝 Viết văn miêu tả",
     lastMessage: "Hướng dẫn viết đoạn văn",
     timestamp: "1 ngày trước",
-    isActive: false
+    isActive: false,
   },
   {
     id: 4,
     title: "🌍 Từ vựng tiếng Anh",
     lastMessage: "Học từ vựng về động vật",
     timestamp: "2 ngày trước",
-    isActive: false
-  }
+    isActive: false,
+  },
 ];
 
 // Mock messages for active conversation
@@ -57,34 +57,37 @@ const messages = [
   {
     id: 1,
     type: "ai",
-    content: "Chào bé! 👋 Tôi là trợ lý học tập thông minh. Hôm nay bé muốn học gì nào?",
-    timestamp: "14:30"
+    content:
+      "Chào bé! 👋 Tôi là trợ lý học tập thông minh. Hôm nay bé muốn học gì nào?",
+    timestamp: "14:30",
   },
   {
     id: 2,
     type: "user",
     content: "Em muốn học giải phương trình bậc nhất ạ",
-    timestamp: "14:32"
+    timestamp: "14:32",
   },
   {
     id: 3,
     type: "ai",
-    content: "Tuyệt vời! 🎉 Phương trình bậc nhất có dạng ax + b = 0 (với a ≠ 0). Em có muốn tôi giải thích từng bước không?",
-    timestamp: "14:32"
+    content:
+      "Tuyệt vời! 🎉 Phương trình bậc nhất có dạng ax + b = 0 (với a ≠ 0). Em có muốn tôi giải thích từng bước không?",
+    timestamp: "14:32",
   },
   {
     id: 4,
     type: "user",
     content: "Có ạ, em muốn xem ví dụ cụ thể",
-    timestamp: "14:33"
+    timestamp: "14:33",
   },
   {
     id: 5,
     type: "ai",
-    content: "Tốt lắm! 📚 Hãy cùng giải phương trình: 2x + 6 = 0\n\nBước 1: Chuyển số hạng tự do sang vế phải\n2x = -6\n\nBước 2: Chia cả hai vế cho hệ số của x\nx = -6 ÷ 2 = -3\n\nVậy nghiệm của phương trình là x = -3 ✨",
+    content:
+      "Tốt lắm! 📚 Hãy cùng giải phương trình: 2x + 6 = 0\n\nBước 1: Chuyển số hạng tự do sang vế phải\n2x = -6\n\nBước 2: Chia cả hai vế cho hệ số của x\nx = -6 ÷ 2 = -3\n\nVậy nghiệm của phương trình là x = -3 ✨",
     timestamp: "14:34",
-    hasChart: true
-  }
+    hasChart: true,
+  },
 ];
 
 // Quick prompt suggestions
@@ -92,23 +95,23 @@ const quickPrompts = [
   {
     icon: FileText,
     text: "📝 Tạo bài ôn tập",
-    prompt: "Tạo bài ôn tập cho em về"
+    prompt: "Tạo bài ôn tập cho em về",
   },
   {
     icon: HelpCircle,
     text: "❓ Giải thích khái niệm",
-    prompt: "Giải thích khái niệm"
+    prompt: "Giải thích khái niệm",
   },
   {
     icon: Lightbulb,
     text: "💡 Sinh flashcard",
-    prompt: "Tạo flashcard học tập về"
+    prompt: "Tạo flashcard học tập về",
   },
   {
     icon: BookOpen,
     text: "📖 Hướng dẫn bài tập",
-    prompt: "Hướng dẫn em làm bài tập"
-  }
+    prompt: "Hướng dẫn em làm bài tập",
+  },
 ];
 
 export default function Chatbot() {
@@ -118,7 +121,7 @@ export default function Chatbot() {
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
-    
+
     setIsLoading(true);
     // Simulate AI response
     setTimeout(() => {
@@ -141,7 +144,10 @@ export default function Chatbot() {
               <h2 className="text-lg font-bold text-primary flex items-center gap-2">
                 💬 Cuộc trò chuyện
               </h2>
-              <Button size="sm" className="bg-gradient-to-r from-primary to-accent text-white rounded-lg">
+              <Button
+                size="sm"
+                className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
+              >
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -150,7 +156,7 @@ export default function Chatbot() {
               🆕 Trò chuyện mới
             </Button>
           </div>
-          
+
           <ScrollArea className="h-[calc(100vh-180px)]">
             <div className="p-2 space-y-2">
               {conversations.map((conversation) => (
@@ -158,8 +164,8 @@ export default function Chatbot() {
                   key={conversation.id}
                   onClick={() => setSelectedConversation(conversation.id)}
                   className={`p-3 rounded-xl cursor-pointer transition-all duration-200 hover:bg-primary/5 ${
-                    conversation.isActive 
-                      ? "bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20" 
+                    conversation.isActive
+                      ? "bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20"
                       : "hover:bg-gray-50"
                   }`}
                 >
@@ -168,7 +174,9 @@ export default function Chatbot() {
                       <Bot className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-sm truncate">{conversation.title}</h3>
+                      <h3 className="font-medium text-sm truncate">
+                        {conversation.title}
+                      </h3>
                       <p className="text-xs text-muted-foreground truncate mt-1">
                         {conversation.lastMessage}
                       </p>
@@ -192,11 +200,18 @@ export default function Chatbot() {
                 <Bot className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-primary">🤖 Trợ lý học tập thông minh</h3>
-                <p className="text-sm text-muted-foreground">Luôn sẵn sàng giúp bé học tập! ✨</p>
+                <h3 className="font-bold text-primary">
+                  🤖 Trợ lý học tập thông minh
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Luôn sẵn sàng giúp bé học tập! ✨
+                </p>
               </div>
               <div className="ml-auto">
-                <Badge variant="secondary" className="bg-green-100 text-green-700">
+                <Badge
+                  variant="secondary"
+                  className="bg-green-100 text-green-700"
+                >
                   🟢 Đang hoạt động
                 </Badge>
               </div>
@@ -211,13 +226,17 @@ export default function Chatbot() {
                   key={message.id}
                   className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div className={`flex gap-3 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : ""}`}>
+                  <div
+                    className={`flex gap-3 max-w-[80%] ${message.type === "user" ? "flex-row-reverse" : ""}`}
+                  >
                     {/* Avatar */}
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0 ${
-                      message.type === "user" 
-                        ? "bg-gradient-to-br from-accent to-secondary" 
-                        : "bg-gradient-to-br from-primary to-accent"
-                    }`}>
+                    <div
+                      className={`flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0 ${
+                        message.type === "user"
+                          ? "bg-gradient-to-br from-accent to-secondary"
+                          : "bg-gradient-to-br from-primary to-accent"
+                      }`}
+                    >
                       {message.type === "user" ? (
                         <User className="h-4 w-4 text-white" />
                       ) : (
@@ -226,21 +245,25 @@ export default function Chatbot() {
                     </div>
 
                     {/* Message Bubble */}
-                    <div className={`rounded-2xl p-4 shadow-sm ${
-                      message.type === "user"
-                        ? "bg-gradient-to-r from-accent to-secondary text-white"
-                        : "bg-white border border-gray-200"
-                    }`}>
+                    <div
+                      className={`rounded-2xl p-4 shadow-sm ${
+                        message.type === "user"
+                          ? "bg-gradient-to-r from-accent to-secondary text-white"
+                          : "bg-white border border-gray-200"
+                      }`}
+                    >
                       <p className="text-sm leading-relaxed whitespace-pre-line">
                         {message.content}
                       </p>
-                      
+
                       {/* Chart placeholder for AI messages */}
                       {message.hasChart && message.type === "ai" && (
                         <div className="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/20">
                           <div className="flex items-center gap-2 mb-2">
                             <Calculator className="h-4 w-4 text-primary" />
-                            <span className="text-xs font-medium text-primary">Biểu đồ minh họa</span>
+                            <span className="text-xs font-medium text-primary">
+                              Biểu đồ minh họa
+                            </span>
                           </div>
                           <div className="bg-white rounded-lg p-4 border">
                             <div className="text-center text-sm text-muted-foreground">
@@ -249,7 +272,7 @@ export default function Chatbot() {
                           </div>
                         </div>
                       )}
-                      
+
                       <p className="text-xs opacity-70 mt-2">
                         {message.timestamp}
                       </p>
@@ -257,7 +280,7 @@ export default function Chatbot() {
                   </div>
                 </div>
               ))}
-              
+
               {/* Loading indicator */}
               {isLoading && (
                 <div className="flex justify-start">
@@ -268,11 +291,22 @@ export default function Chatbot() {
                     <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
                       <div className="flex items-center gap-2">
                         <div className="flex gap-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0ms'}} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '150ms'}} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '300ms'}} />
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "0ms" }}
+                          />
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "150ms" }}
+                          />
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: "300ms" }}
+                          />
                         </div>
-                        <span className="text-xs text-muted-foreground">Đang suy nghĩ...</span>
+                        <span className="text-xs text-muted-foreground">
+                          Đang suy nghĩ...
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -315,7 +349,7 @@ export default function Chatbot() {
                   }}
                 />
               </div>
-              <Button 
+              <Button
                 onClick={handleSendMessage}
                 disabled={!newMessage.trim() || isLoading}
                 className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl px-6"
@@ -323,7 +357,7 @@ export default function Chatbot() {
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            
+
             <p className="text-xs text-muted-foreground mt-2 text-center">
               💡 Mẹo: Bé có thể hỏi về Toán, Văn, Anh và nhiều chủ đề khác!
             </p>

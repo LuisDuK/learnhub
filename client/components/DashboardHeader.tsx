@@ -32,7 +32,11 @@ export function DashboardHeader() {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative hover:scale-110 transition-transform duration-300 hover:bg-primary/10 rounded-xl">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative hover:scale-110 transition-transform duration-300 hover:bg-primary/10 rounded-xl"
+            >
               <Bell className="h-5 w-5 text-primary animate-wiggle" />
               <Badge
                 variant="destructive"
@@ -42,12 +46,19 @@ export function DashboardHeader() {
               </Badge>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80 border-primary/20 shadow-xl">
-            <DropdownMenuLabel className="text-primary font-bold">🔔 Thông báo vui</DropdownMenuLabel>
+          <DropdownMenuContent
+            align="end"
+            className="w-80 border-primary/20 shadow-xl"
+          >
+            <DropdownMenuLabel className="text-primary font-bold">
+              🔔 Thông báo vui
+            </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-primary/20" />
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-primary/5 rounded-lg m-1">
               <div className="flex w-full justify-between items-center">
-                <span className="font-medium text-primary">🎮 Bài tập mới!</span>
+                <span className="font-medium text-primary">
+                  🎮 Bài tập mới!
+                </span>
                 <span className="text-xs text-gray-500">2 phút trước</span>
               </div>
               <span className="text-sm text-gray-600">
@@ -56,7 +67,9 @@ export function DashboardHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-accent/5 rounded-lg m-1">
               <div className="flex w-full justify-between items-center">
-                <span className="font-medium text-accent">⏰ Nhắc nhở học tập</span>
+                <span className="font-medium text-accent">
+                  ⏰ Nhắc nhở học tập
+                </span>
                 <span className="text-xs text-gray-500">10 phút trước</span>
               </div>
               <span className="text-sm text-gray-600">
@@ -65,7 +78,9 @@ export function DashboardHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 hover:bg-secondary/5 rounded-lg m-1">
               <div className="flex w-full justify-between items-center">
-                <span className="font-medium text-secondary">🎉 Chúc mừng!</span>
+                <span className="font-medium text-secondary">
+                  🎉 Chúc mừng!
+                </span>
                 <span className="text-xs text-gray-500">1 giờ trước</span>
               </div>
               <span className="text-sm text-gray-600">
@@ -78,7 +93,10 @@ export function DashboardHeader() {
         {/* User menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:scale-110 transition-transform duration-300">
+            <Button
+              variant="ghost"
+              className="relative h-10 w-10 rounded-full hover:scale-110 transition-transform duration-300"
+            >
               <Avatar className="h-10 w-10 border-2 border-primary/20 hover:border-primary transition-colors">
                 <AvatarImage src="/placeholder.svg" alt="Avatar" />
                 <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground font-bold animate-heartbeat">
@@ -87,7 +105,11 @@ export function DashboardHeader() {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 border-primary/20 shadow-xl" align="end" forceMount>
+          <DropdownMenuContent
+            className="w-56 border-primary/20 shadow-xl"
+            align="end"
+            forceMount
+          >
             <DropdownMenuLabel className="font-normal bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg m-1">
               <div className="flex flex-col space-y-1 p-2">
                 <p className="text-sm font-bold text-primary leading-none flex items-center gap-1">

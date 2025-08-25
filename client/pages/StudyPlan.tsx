@@ -1,22 +1,34 @@
 import { useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Calendar, 
-  Clock, 
-  Target, 
-  Edit, 
-  CheckCircle, 
-  Circle, 
+import {
+  Calendar,
+  Clock,
+  Target,
+  Edit,
+  CheckCircle,
+  Circle,
   PlayCircle,
   Calculator,
   BookOpen,
   Globe,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 
 // Mock study plan data focusing on Math, Literature, English
@@ -39,7 +51,7 @@ const weeklyPlan = [
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
-        time: "14:00"
+        time: "14:00",
       },
       {
         id: 2,
@@ -48,7 +60,7 @@ const weeklyPlan = [
         duration: "60 phút",
         status: "completed",
         day: "Thứ 3",
-        time: "15:00"
+        time: "15:00",
       },
       {
         id: 3,
@@ -57,7 +69,7 @@ const weeklyPlan = [
         duration: "45 phút",
         status: "in-progress",
         day: "Thứ 4",
-        time: "16:00"
+        time: "16:00",
       },
       {
         id: 4,
@@ -66,9 +78,9 @@ const weeklyPlan = [
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
-        time: "14:00"
+        time: "14:00",
       },
-    ]
+    ],
   },
   {
     week: "Tuần 2",
@@ -81,7 +93,7 @@ const weeklyPlan = [
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
-        time: "15:00"
+        time: "15:00",
       },
       {
         id: 6,
@@ -90,7 +102,7 @@ const weeklyPlan = [
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
-        time: "16:00"
+        time: "16:00",
       },
       {
         id: 7,
@@ -99,9 +111,9 @@ const weeklyPlan = [
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
-        time: "14:00"
+        time: "14:00",
       },
-    ]
+    ],
   },
   {
     week: "Tuần 3",
@@ -114,7 +126,7 @@ const weeklyPlan = [
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 2",
-        time: "16:00"
+        time: "16:00",
       },
       {
         id: 9,
@@ -123,7 +135,7 @@ const weeklyPlan = [
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
-        time: "14:00"
+        time: "14:00",
       },
       {
         id: 10,
@@ -132,10 +144,10 @@ const weeklyPlan = [
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 6",
-        time: "15:00"
+        time: "15:00",
       },
-    ]
-  }
+    ],
+  },
 ];
 
 const subjectConfig = {
@@ -144,53 +156,62 @@ const subjectConfig = {
     icon: Calculator,
     color: "bg-blue-500",
     bgColor: "bg-blue-50",
-    textColor: "text-blue-700"
+    textColor: "text-blue-700",
   },
   literature: {
     name: "Văn",
     icon: BookOpen,
     color: "bg-green-500",
     bgColor: "bg-green-50",
-    textColor: "text-green-700"
+    textColor: "text-green-700",
   },
   english: {
     name: "Anh",
     icon: Globe,
     color: "bg-purple-500",
     bgColor: "bg-purple-50",
-    textColor: "text-purple-700"
-  }
+    textColor: "text-purple-700",
+  },
 };
 
 const statusConfig = {
-  "completed": {
+  completed: {
     icon: CheckCircle,
     color: "text-green-500",
     bgColor: "bg-green-100",
-    label: "Hoàn thành"
+    label: "Hoàn thành",
   },
   "in-progress": {
     icon: PlayCircle,
     color: "text-blue-500",
     bgColor: "bg-blue-100",
-    label: "Đang học"
+    label: "Đang học",
   },
   "not-started": {
     icon: Circle,
     color: "text-gray-400",
     bgColor: "bg-gray-100",
-    label: "Chưa bắt đầu"
-  }
+    label: "Chưa bắt đầu",
+  },
 };
 
 export default function StudyPlan() {
   const [selectedGoal, setSelectedGoal] = useState("midterm");
-  
+
   // Calculate progress
-  const totalLessons = weeklyPlan.reduce((acc, week) => acc + week.lessons.length, 0);
-  const completedLessons = weeklyPlan.reduce((acc, week) => 
-    acc + week.lessons.filter(lesson => lesson.status === "completed").length, 0);
-  const progressPercentage = Math.round((completedLessons / totalLessons) * 100);
+  const totalLessons = weeklyPlan.reduce(
+    (acc, week) => acc + week.lessons.length,
+    0,
+  );
+  const completedLessons = weeklyPlan.reduce(
+    (acc, week) =>
+      acc +
+      week.lessons.filter((lesson) => lesson.status === "completed").length,
+    0,
+  );
+  const progressPercentage = Math.round(
+    (completedLessons / totalLessons) * 100,
+  );
 
   return (
     <DashboardLayout>
@@ -220,7 +241,9 @@ export default function StudyPlan() {
                 <Target className="h-5 w-5 text-primary" />
                 🎯 Mục tiêu học tập
               </CardTitle>
-              <CardDescription>Chọn mục tiêu để xem lộ trình phù hợp</CardDescription>
+              <CardDescription>
+                Chọn mục tiêu để xem lộ trình phù hợp
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <Select value={selectedGoal} onValueChange={setSelectedGoal}>
@@ -232,7 +255,9 @@ export default function StudyPlan() {
                     <SelectItem key={goal.id} value={goal.id}>
                       <div className="flex items-center justify-between w-full">
                         <span>{goal.label}</span>
-                        <Badge variant="outline" className="ml-2">{goal.duration}</Badge>
+                        <Badge variant="outline" className="ml-2">
+                          {goal.duration}
+                        </Badge>
                       </div>
                     </SelectItem>
                   ))}
@@ -250,7 +275,9 @@ export default function StudyPlan() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{progressPercentage}%</div>
+                <div className="text-3xl font-bold text-primary">
+                  {progressPercentage}%
+                </div>
                 <p className="text-sm text-muted-foreground">Hoàn thành</p>
               </div>
               <Progress value={progressPercentage} className="h-3" />
@@ -281,16 +308,24 @@ export default function StudyPlan() {
                     {weekIndex + 1}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-primary">{week.week}</h3>
-                    <p className="text-sm text-muted-foreground">{week.startDate}</p>
+                    <h3 className="text-xl font-bold text-primary">
+                      {week.week}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {week.startDate}
+                    </p>
                   </div>
                 </div>
 
                 {/* Lessons */}
                 <div className="ml-6 border-l-2 border-primary/20 pl-6 space-y-4">
                   {week.lessons.map((lesson, lessonIndex) => {
-                    const subject = subjectConfig[lesson.subject as keyof typeof subjectConfig];
-                    const status = statusConfig[lesson.status as keyof typeof statusConfig];
+                    const subject =
+                      subjectConfig[
+                        lesson.subject as keyof typeof subjectConfig
+                      ];
+                    const status =
+                      statusConfig[lesson.status as keyof typeof statusConfig];
                     const SubjectIcon = subject.icon;
                     const StatusIcon = status.icon;
 
@@ -301,18 +336,26 @@ export default function StudyPlan() {
                       >
                         {/* Timeline dot */}
                         <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
-                          <div className={`h-3 w-3 rounded-full ${subject.color}`} />
+                          <div
+                            className={`h-3 w-3 rounded-full ${subject.color}`}
+                          />
                         </div>
 
                         {/* Content */}
                         <div className="flex-1">
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-3">
-                              <div className={`p-2 rounded-lg ${subject.bgColor}`}>
-                                <SubjectIcon className={`h-5 w-5 ${subject.textColor}`} />
+                              <div
+                                className={`p-2 rounded-lg ${subject.bgColor}`}
+                              >
+                                <SubjectIcon
+                                  className={`h-5 w-5 ${subject.textColor}`}
+                                />
                               </div>
                               <div>
-                                <h4 className="font-semibold text-lg">{lesson.title}</h4>
+                                <h4 className="font-semibold text-lg">
+                                  {lesson.title}
+                                </h4>
                                 <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                                   <span>📚 {subject.name}</span>
                                   <span>📅 {lesson.day}</span>
@@ -322,25 +365,34 @@ export default function StudyPlan() {
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Badge 
-                                variant="outline" 
+                              <Badge
+                                variant="outline"
                                 className={`${status.bgColor} border-0`}
                               >
-                                <StatusIcon className={`h-3 w-3 mr-1 ${status.color}`} />
+                                <StatusIcon
+                                  className={`h-3 w-3 mr-1 ${status.color}`}
+                                />
                                 {status.label}
                               </Badge>
                             </div>
                           </div>
-                          
+
                           {lesson.status === "in-progress" && (
-                            <Button size="sm" className="bg-gradient-to-r from-primary to-accent text-white rounded-lg">
+                            <Button
+                              size="sm"
+                              className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
+                            >
                               <PlayCircle className="h-4 w-4 mr-1" />
                               Tiếp tục học
                             </Button>
                           )}
-                          
+
                           {lesson.status === "not-started" && (
-                            <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg"
+                            >
                               <Circle className="h-4 w-4 mr-1" />
                               Bắt đầu học
                             </Button>

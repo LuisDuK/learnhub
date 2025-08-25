@@ -51,14 +51,21 @@ export function DashboardSidebar() {
   return (
     <div className="flex h-full w-64 flex-col bg-gradient-to-b from-sidebar-background to-accent/20 border-r border-primary/20 shadow-lg">
       {/* Logo */}
-      <div className="flex h-16 items-center border-b border-gray-200" style={{ padding: "0 30px 0 24px" }}>
+      <div
+        className="flex h-16 items-center border-b border-gray-200"
+        style={{ padding: "0 30px 0 24px" }}
+      >
         <div className="flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent animate-pulse">
             <Sparkles className="h-6 w-6 text-primary-foreground" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">🌟 KidsLearn</span>
-            <span className="text-xs text-muted-foreground">Học vui, học giỏi!</span>
+            <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              🌟 KidsLearn
+            </span>
+            <span className="text-xs text-muted-foreground">
+              Học vui, học giỏi!
+            </span>
           </div>
         </div>
       </div>
@@ -81,10 +88,7 @@ export function DashboardSidebar() {
               {isActive ? (
                 <>
                   <item.icon
-                    className={cn(
-                      "h-5 w-5 transition-colors",
-                      "text-primary"
-                    )}
+                    className={cn("h-5 w-5 transition-colors", "text-primary")}
                   />
                   <span className="flex-1">{item.title}</span>
                   <ChevronRight className="h-4 w-4 text-primary" />
@@ -101,15 +105,15 @@ export function DashboardSidebar() {
       <div className="border-t border-gray-200 p-4">
         <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 p-3 border border-primary/20">
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center animate-bounce">
-            <span className="text-lg">
-              🧒
-            </span>
+            <span className="text-lg">🧒</span>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-primary truncate">
               Bé Minh Đức
             </p>
-            <p className="text-xs text-muted-foreground truncate">✨ Học sinh thông minh</p>
+            <p className="text-xs text-muted-foreground truncate">
+              ✨ Học sinh thông minh
+            </p>
           </div>
         </div>
       </div>
