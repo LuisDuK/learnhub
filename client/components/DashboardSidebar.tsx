@@ -51,7 +51,7 @@ export function DashboardSidebar() {
   return (
     <div className="flex h-full w-64 flex-col bg-gradient-to-b from-sidebar-background to-accent/20 border-r border-primary/20 shadow-lg">
       {/* Logo */}
-      <div className="flex h-16 items-center px-6 border-b border-gray-200">
+      <div className="flex h-16 items-center border-b border-gray-200" style={{ padding: "0 30px 0 24px" }}>
         <div className="flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent animate-pulse">
             <Sparkles className="h-6 w-6 text-primary-foreground" />
