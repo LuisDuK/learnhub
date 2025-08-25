@@ -28,7 +28,7 @@ import AdminCourses from "./pages/AdminCourses";
 import AdminLearningPaths from "./pages/AdminLearningPaths";
 import AdminExercises from "./pages/AdminExercises";
 import AdminReports from "./pages/AdminReports";
-import PlaceholderPage from "./components/PlaceholderPage";
+import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
 
