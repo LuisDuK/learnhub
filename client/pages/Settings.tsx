@@ -113,21 +113,21 @@ export default function Settings() {
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <User className="h-4 w-4" />
-              👤 Thông tin cá nhân
+              Thông tin cá nhân
             </TabsTrigger>
             <TabsTrigger
               value="security"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <Shield className="h-4 w-4" />
-              🔒 Bảo mật
+              Bảo mật
             </TabsTrigger>
             <TabsTrigger
               value="study"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
               <SettingsIcon className="h-4 w-4" />
-              📚 Cài đặt học tập
+              Cài đặt học tập
             </TabsTrigger>
           </TabsList>
 
@@ -137,7 +137,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5 text-primary" />
-                  👤 Thông tin cá nhân
+                  Thông tin cá nhân
                 </CardTitle>
                 <CardDescription>
                   Cập nhật thông tin cá nhân của bé
@@ -303,7 +303,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-accent" />
-                  🔒 Bảo mật tài khoản
+                  Bảo mật tài khoản
                 </CardTitle>
                 <CardDescription>
                   Thay đổi mật khẩu để bảo vệ tài khoản của bé
@@ -399,7 +399,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-blue-600" />
-                  🔐 Xác thực hai bước (2FA)
+                  Xác thực hai bước (2FA)
                 </CardTitle>
                 <CardDescription>
                   Tăng cường bảo mật tài khoản với lớp bảo vệ thêm
@@ -466,7 +466,7 @@ export default function Settings() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <SettingsIcon className="h-5 w-5 text-secondary" />
-                  📚 Cài đặt học tập
+                  Cài đặt học tập
                 </CardTitle>
                 <CardDescription>
                   Tùy chỉnh trải nghiệm học tập và nhắc nhở
