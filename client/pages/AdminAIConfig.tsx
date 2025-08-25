@@ -491,47 +491,200 @@ export default function AdminAIConfig() {
                         Thêm prompt
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px]">
+                    <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
                       <DialogHeader>
-                        <DialogTitle>Thêm Prompt mới (Quản trị viên)</DialogTitle>
+                        <DialogTitle>{isEditingPrompt ? "Chỉnh sửa" : "Thêm"} Prompt (Quản trị viên)</DialogTitle>
                         <DialogDescription>
-                          Tạo prompt mẫu cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
+                          Tạo prompt mẫu với biến động cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
                         </DialogDescription>
                       </DialogHeader>
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="promptName">Tên prompt</Label>
-                          <Input
-                            id="promptName"
-                            value={newPrompt.name}
-                            onChange={(e) =>
-                              setNewPrompt({
-                                ...newPrompt,
-                                name: e.target.value,
-                              })
-                            }
-                            placeholder="Nhập tên prompt"
-                          />
+                      <div className="space-y-6">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="promptName">Tên prompt</Label>
+                            <Input
+                              id="promptName"
+                              value={newPrompt.name}
+                              onChange={(e) =>
+                                setNewPrompt({
+                                  ...newPrompt,
+                                  name: e.target.value,
+                                })
+                              }
+                              placeholder="Nhập tên prompt"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="promptModule">Module áp dụng</Label>
+                            <Select
+                              value={newPrompt.module}
+                              onValueChange={(value) =>
+                                setNewPrompt({ ...newPrompt, module: value })
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Chọn module" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Bài tập">Bài tập</SelectItem>
+                                <SelectItem value="Lộ trình">Lộ trình</SelectItem>
+                                <SelectItem value="Chatbot">Chatbot</SelectItem>
+                                <SelectItem value="Chấm bài">Chấm bài</SelectItem>
+                                <SelectItem value="Báo cáo">Báo cáo</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
-                        <div>
-                          <Label htmlFor="promptModule">Module áp dụng</Label>
-                          <Select
-                            value={newPrompt.module}
-                            onValueChange={(value) =>
-                              setNewPrompt({ ...newPrompt, module: value })
-                            }
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Chọn module" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Bài tập">Bài tập</SelectItem>
-                              <SelectItem value="Lộ trình">Lộ trình</SelectItem>
-                              <SelectItem value="Chatbot">Chatbot</SelectItem>
-                              <SelectItem value="Báo cáo">Báo cáo</SelectItem>
-                            </SelectContent>
-                          </Select>
+
+                        {/* Variables Section */}
+                        <div className="border border-blue-200 rounded-lg p-4">
+                          <div className="flex items-center justify-between mb-4">
+                            <Label className="text-lg font-semibold text-blue-700">Biến động (Variables)</Label>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setShowVariableEditor(!showVariableEditor)}
+                              className="border-blue-300 text-blue-600"
+                            >
+                              <Plus className="h-4 w-4 mr-1" />
+                              Thêm biến
+                            </Button>
+                          </div>
+
+                          {/* Variable List */}
+                          {newPrompt.variables.length > 0 && (
+                            <div className="space-y-2 mb-4">
+                              {newPrompt.variables.map((variable, index) => (
+                                <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded border border-blue-200">
+                                  <div className="flex-1">
+                                    <div className="font-medium text-blue-900">{`{{${variable.name}}}`}</div>
+                                    <div className="text-sm text-blue-600">{variable.description}</div>
+                                    <div className="text-xs text-blue-500">Loại: {variable.type}</div>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => insertVariableIntoPrompt(variable.name)}
+                                      className="text-blue-600 hover:bg-blue-100"
+                                    >
+                                      Chèn
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleRemoveVariable(index)}
+                                      className="text-red-600 hover:bg-red-100"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Variable Editor */}
+                          {showVariableEditor && (
+                            <div className="border-t border-blue-200 pt-4 space-y-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <Label>Tên biến</Label>
+                                  <Input
+                                    value={currentVariable.name}
+                                    onChange={(e) => setCurrentVariable({...currentVariable, name: e.target.value})}
+                                    placeholder="VD: grade, topic, difficulty"
+                                  />
+                                </div>
+                                <div>
+                                  <Label>Loại dữ liệu</Label>
+                                  <Select
+                                    value={currentVariable.type}
+                                    onValueChange={(value) => setCurrentVariable({...currentVariable, type: value})}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="text">Văn bản</SelectItem>
+                                      <SelectItem value="textarea">Văn bản dài</SelectItem>
+                                      <SelectItem value="number">Số</SelectItem>
+                                      <SelectItem value="select">Lựa chọn</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </div>
+
+                              <div>
+                                <Label>Mô tả</Label>
+                                <Input
+                                  value={currentVariable.description}
+                                  onChange={(e) => setCurrentVariable({...currentVariable, description: e.target.value})}
+                                  placeholder="Mô tả mục đích của biến"
+                                />
+                              </div>
+
+                              {currentVariable.type === "select" && (
+                                <div>
+                                  <Label>Các lựa chọn (cách nhau bằng dấu phẩy)</Label>
+                                  <Input
+                                    value={Array.isArray(currentVariable.options) ? currentVariable.options.join(", ") : currentVariable.options}
+                                    onChange={(e) => setCurrentVariable({...currentVariable, options: e.target.value})}
+                                    placeholder="VD: dễ, trung bình, khó"
+                                  />
+                                </div>
+                              )}
+
+                              {currentVariable.type === "number" && (
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label>Giá trị tối thiểu</Label>
+                                    <Input
+                                      type="number"
+                                      value={currentVariable.min}
+                                      onChange={(e) => setCurrentVariable({...currentVariable, min: parseInt(e.target.value)})}
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label>Giá trị tối đa</Label>
+                                    <Input
+                                      type="number"
+                                      value={currentVariable.max}
+                                      onChange={(e) => setCurrentVariable({...currentVariable, max: parseInt(e.target.value)})}
+                                    />
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  onClick={handleAddVariable}
+                                  size="sm"
+                                  className="bg-blue-600 hover:bg-blue-700"
+                                >
+                                  Lưu biến
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  onClick={() => setShowVariableEditor(false)}
+                                  size="sm"
+                                >
+                                  Hủy
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="text-sm text-blue-600 bg-blue-50 p-3 rounded">
+                            <strong>💡 Hướng dẫn:</strong> Sử dụng cú pháp {`{{tên_biến}}`} trong nội dung prompt. VD: {`{{grade}}`}, {`{{topic}}`}
+                          </div>
                         </div>
+
                         <div>
                           <Label htmlFor="promptContent">Nội dung prompt</Label>
                           <Textarea
@@ -543,13 +696,29 @@ export default function AdminAIConfig() {
                                 content: e.target.value,
                               })
                             }
-                            placeholder="Nhập nội dung prompt chi tiết..."
-                            rows={6}
+                            placeholder={`Nhập nội dung prompt. Sử dụng {{tên_biến}} để chèn biến động...`}
+                            rows={8}
+                            className="font-mono text-sm"
                           />
                         </div>
                       </div>
                       <DialogFooter>
-                        <Button onClick={handleAddPrompt}>Lưu</Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setIsAddPromptDialogOpen(false);
+                              setIsEditingPrompt(false);
+                              setEditingPromptId(null);
+                              setNewPrompt({ name: "", module: "", content: "", variables: [] });
+                            }}
+                          >
+                            Hủy
+                          </Button>
+                          <Button onClick={handleAddPrompt} className="bg-green-600 hover:bg-green-700">
+                            {isEditingPrompt ? "Cập nhật" : "Lưu"} Prompt
+                          </Button>
+                        </div>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
