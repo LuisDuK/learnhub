@@ -25,7 +25,7 @@ import {
 
 // Course status types
 type CourseStatus = "not-started" | "in-progress" | "completed";
-type CourseCategory = "programming" | "art" | "math" | "science" | "music" | "sports";
+type CourseCategory = "math" | "literature" | "english";
 
 interface Course {
   id: number;
@@ -87,7 +87,7 @@ const mockCourses: Course[] = [
     thumbnail: "/placeholder.svg",
     tags: ["Vẽ", "Màu sắc", "Sáng tạo"],
     lastAccessed: "1 ngày trước",
-    estimatedCompletion: "2 tuần",
+    estimatedCompletion: "2 tu���n",
     emoji: "🌈"
   },
   {
@@ -151,7 +151,7 @@ const mockCourses: Course[] = [
     id: 6,
     title: "🏃‍♂️ Thể dục vui nhộn",
     instructor: "Cô Mai năng động",
-    description: "Tập th��� dục tại nhà, học các động tác vui nhộn và khỏe mạnh",
+    description: "Tập thể dục tại nhà, học các động tác vui nhộn và khỏe mạnh",
     category: "sports",
     status: "completed",
     progress: 100,
