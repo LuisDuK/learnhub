@@ -60,6 +60,16 @@ function AppRoutes() {
           element={<ExerciseResults />}
         />
         <Route path="/lesson/:lessonId/quiz/:id" element={<Quiz />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/courses" element={<AdminCourses />} />
+        <Route path="/admin/learning-paths" element={<AdminLearningPaths />} />
+        <Route path="/admin/exercises" element={<AdminExercises />} />
+        <Route path="/admin/reports" element={<AdminReports />} />
+        <Route path="/admin/settings" element={<PlaceholderPage />} />
+
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
