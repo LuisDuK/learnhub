@@ -1,5 +1,5 @@
 import "./global.css";
-import { StrictMode } from "react";
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -21,6 +21,15 @@ import Exercise from "./pages/Exercise";
 import ExerciseResults from "./pages/ExerciseResults";
 import Quiz from "./pages/Quiz";
 import NotFound from "./pages/NotFound";
+// Admin pages
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsers from "./pages/AdminUsers";
+import AdminCourses from "./pages/AdminCourses";
+import AdminLearningPaths from "./pages/AdminLearningPaths";
+import AdminExercises from "./pages/AdminExercises";
+import AdminReports from "./pages/AdminReports";
+import AdminAIConfig from "./pages/AdminAIConfig";
+import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +61,25 @@ function AppRoutes() {
           element={<ExerciseResults />}
         />
         <Route path="/lesson/:lessonId/quiz/:id" element={<Quiz />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/admin/courses" element={<AdminCourses />} />
+        <Route path="/admin/learning-paths" element={<AdminLearningPaths />} />
+        <Route path="/admin/exercises" element={<AdminExercises />} />
+        <Route path="/admin/reports" element={<AdminReports />} />
+        <Route path="/admin/ai-config" element={<AdminAIConfig />} />
+        <Route
+          path="/admin/settings"
+          element={
+            <PlaceholderPage
+              title="Cài đặt hệ thống"
+              description="Quản lý cấu hình và thiết lập hệ thống"
+            />
+          }
+        />
+
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
