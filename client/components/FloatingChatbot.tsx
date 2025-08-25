@@ -133,7 +133,7 @@ export function FloatingChatbot() {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-20 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
           className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-accent hover:from-primary/80 hover:to-accent/80 shadow-2xl border-4 border-white animate-bounce"
