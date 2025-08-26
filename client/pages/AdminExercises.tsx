@@ -581,10 +581,10 @@ export default function AdminExercises() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               <PenTool className="inline-block h-8 w-8 mr-2" />
-              Quản lý bài tập
+              Kho bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Tạo và quản lý bài tập cho học sinh với AI và import hàng loạt
+              Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho nhiều khóa học
             </p>
           </div>
 
@@ -696,7 +696,7 @@ export default function AdminExercises() {
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
                     <TabsTrigger value="questions">
-                      Câu hỏi ({newExercise.questions.length})
+                      Câu h��i ({newExercise.questions.length})
                     </TabsTrigger>
                     <TabsTrigger value="import">Import hàng loạt</TabsTrigger>
                   </TabsList>
@@ -843,7 +843,7 @@ export default function AdminExercises() {
                         onChange={(e) => setBulkQuestions(e.target.value)}
                         placeholder={`Q: 2 + 3 = ?
 Q: Thủ đô của Việt Nam là gì?
-Q: Viết đoạn văn tả v��� mùa xuân`}
+Q: Viết đoạn văn tả về mùa xuân`}
                         rows={10}
                         className="font-mono"
                       />
