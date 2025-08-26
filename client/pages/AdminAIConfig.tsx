@@ -195,7 +195,7 @@ export default function AdminAIConfig() {
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
-    alert("Cấu hình API đã ��ược lưu thành công!");
+    alert("Cấu hình API đã ��ư���c lưu thành công!");
   };
 
   const handleAddPrompt = () => {
@@ -898,6 +898,22 @@ export default function AdminAIConfig() {
 
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <h4 className="font-medium text-blue-900 mb-2 flex items-center gap-2">
+                      <MessageSquare className="h-5 w-5" />
+                      🔗 Kết nối với Prompt mẫu
+                    </h4>
+                    <p className="text-sm text-blue-800 mb-3">
+                      <strong>Cách sử dụng:</strong> Sau khi bật tính năng AI ở trên, bạn cần:
+                    </p>
+                    <ol className="text-sm text-blue-800 space-y-1 ml-4 list-decimal">
+                      <li>Chuyển sang tab <strong>"Prompt mẫu"</strong> để tạo/chỉnh sửa prompt tương ứng</li>
+                      <li>Mỗi tính năng AI sẽ sử dụng prompt có Module phù hợp (VD: "Chấm bài", "Lộ trình", "Bài tập")</li>
+                      <li>Tùy chỉnh biến trong prompt để điều khiển hành vi AI</li>
+                      <li>Lưu prompt để tính năng AI hoạt động theo cấu hình của bạn</li>
+                    </ol>
+                  </div>
+
+                  <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                    <h4 className="font-medium text-yellow-900 mb-2 flex items-center gap-2">
                       <Activity className="h-4 w-4" />
                       Thống kê sử dụng AI - Tất cả prompt và biến do quản trị viên kiểm soát
                     </h4>

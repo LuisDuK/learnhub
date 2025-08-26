@@ -38,7 +38,7 @@ const menuItems = [
     href: "/admin/learning-paths",
   },
   {
-    title: "Quản lý b��i tập",
+    title: "Quản lý bài tập",
     icon: PenTool,
     href: "/admin/exercises",
   },
