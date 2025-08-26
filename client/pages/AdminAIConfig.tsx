@@ -1098,7 +1098,7 @@ export default function AdminAIConfig() {
                               onClick={() => showLogDetail(log)}
                               className="text-blue-600 hover:text-blue-800"
                             >
-                              {log.conversation ? "�� Xem hội thoại" : "🔍 Xem chi tiết"}
+                              {log.conversation ? "💬 Xem hội thoại" : "🔍 Xem chi tiết"}
                             </Button>
                           </div>
                         </TableCell>
