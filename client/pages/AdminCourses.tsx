@@ -1656,11 +1656,14 @@ export default function AdminCourses() {
 
         {/* Edit Exercise Dialog */}
         <Dialog open={isEditExerciseDialogOpen} onOpenChange={setIsEditExerciseDialogOpen}>
-          <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Chỉnh sửa bài tập</DialogTitle>
-              <DialogDescription>
-                Cập nhật thông tin bài tập
+          <DialogContent className="sm:max-w-[850px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b border-gray-200">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Award className="h-5 w-5 text-green-600" />
+                Chỉnh sửa bài tập
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Cập nhật thông tin và nội dung bài tập
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
