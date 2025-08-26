@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,6 +59,14 @@ import {
   Link,
   Image,
   Video,
+  Bot,
+  Sparkles,
+  Wand2,
+  Loader2,
+  Save,
+  Import,
+  Copy,
+  X,
 } from "lucide-react";
 
 // Mock course data with lessons
@@ -65,7 +75,7 @@ const mockCourses = [
     id: 1,
     name: "Toán học cơ bản",
     description:
-      "Khóa học toán học dành cho học sinh tiểu h��c, bao gồm các phép tính cơ bản và hình học đơn giản.",
+      "Khóa học toán học dành cho học sinh ti���u h��c, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -79,7 +89,7 @@ const mockCourses = [
     lessons: [
       {
         id: 1,
-        title: "Số từ 1 đến 10",
+        title: "Số t�� 1 đến 10",
         description: "Học cách đếm và nhận biết các số từ 1 đến 10",
         type: "video",
         duration: "15 phút",
@@ -98,7 +108,7 @@ const mockCourses = [
         order: 2,
         completed: false,
         content:
-          "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
+          "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép c��ng...",
         materials: ["worksheet.pdf", "counting_objects.png"],
       },
       {
@@ -137,7 +147,7 @@ const mockCourses = [
       {
         id: 2,
         title: "Bài tập cộng trừ",
-        description: "Thực hiện các phép tính cơ bản",
+        description: "Thực hi���n các phép tính cơ bản",
         type: "practice",
         difficulty: "Trung bình",
         points: 15,
@@ -233,7 +243,7 @@ const mockCourses = [
       {
         id: 1,
         title: "Color Matching Game",
-        description: "Ghép màu sắc với tên tiếng Anh",
+        description: "Ghép màu sắc v���i tên tiếng Anh",
         type: "game",
         difficulty: "Dễ",
         points: 10,
@@ -270,7 +280,7 @@ const mockCourses = [
       {
         id: 1,
         title: "Thí nghiệm nảy mầm",
-        description: "Quan sát quá trình nảy mầm của hạt đậu",
+        description: "Quan sát quá trình nảy m��m của hạt đậu",
         type: "experiment",
         difficulty: "Trung bình",
         points: 25,
@@ -291,6 +301,19 @@ const ageGroups = [
   "8-10 tuổi",
   "9-12 tuổi",
 ];
+
+// Question interface for exercise creation
+interface Question {
+  id?: string;
+  question: string;
+  type: "multiple_choice" | "essay" | "short_answer";
+  options?: string[];
+  correctAnswer?: string;
+  explanation?: string;
+  maxWords?: number;
+  keywords?: string[];
+  rubric?: string;
+}
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState(mockCourses);
@@ -317,6 +340,56 @@ export default function AdminCourses() {
   const [editExercise, setEditExercise] = useState<any>({});
   const [newLesson, setNewLesson] = useState<any>({});
   const [newExercise, setNewExercise] = useState<any>({});
+
+  // AI and bulk import states
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStep, setProcessingStep] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [bulkQuestions, setBulkQuestions] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Assign from exercise bank states
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [selectedExercisesFromBank, setSelectedExercisesFromBank] = useState<
+    number[]
+  >([]);
+  const [exerciseBank] = useState([
+    // Mock exercise bank - this would come from the actual exercise bank/kho bài tập
+    {
+      id: 101,
+      title: "Phép cộng cơ bản",
+      type: "Trắc nghiệm",
+      subject: "Toán",
+      difficulty: "Dễ",
+      totalQuestions: 10,
+      creator: "Cô Nguyễn Thị Mai",
+      createdAt: "2024-01-15",
+    },
+    {
+      id: 102,
+      title: "Viết đoạn văn tả người",
+      type: "Tự luận",
+      subject: "Văn",
+      difficulty: "Trung bình",
+      totalQuestions: 1,
+      creator: "Cô Trần Thị Lan",
+      createdAt: "2024-01-20",
+    },
+    {
+      id: 103,
+      title: "Colors and Shapes",
+      type: "Trắc nghiệm",
+      subject: "Anh",
+      difficulty: "Dễ",
+      totalQuestions: 8,
+      creator: "Thầy John Smith",
+      createdAt: "2024-01-10",
+    },
+  ]);
+
   const [newCourse, setNewCourse] = useState({
     name: "",
     description: "",
@@ -627,6 +700,178 @@ export default function AdminCourses() {
     }
   };
 
+  // AI Exercise Generation
+  const handleAIGeneration = async () => {
+    setIsProcessing(true);
+    setProcessingStep("Đang xử lý yêu cầu AI...");
+
+    try {
+      // Simulate AI processing
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setProcessingStep("Tạo câu hỏi từ AI...");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Mock AI generated questions
+      const aiQuestions: Question[] = [
+        {
+          id: "ai1",
+          question: "Tổng của 25 + 37 bằng bao nhiêu?",
+          type: "multiple_choice",
+          options: ["52", "62", "72", "82"],
+          correctAnswer: "B",
+          explanation: "25 + 37 = 62",
+        },
+        {
+          id: "ai2",
+          question: "Hãy giải thích tại sao 5 x 6 = 30",
+          type: "essay",
+          maxWords: 100,
+          keywords: ["phép nhân", "tính chất", "ví dụ"],
+          rubric:
+            "Học sinh cần giải thích khái niệm phép nhân và đưa ra ví dụ cụ thể",
+        },
+      ];
+
+      setNewExercise({
+        ...newExercise,
+        questions: [...(newExercise.questions || []), ...aiQuestions],
+      });
+
+      setProcessingStep("Hoàn thành!");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      setIsAIDialogOpen(false);
+    } catch (error) {
+      console.error("AI generation error:", error);
+    } finally {
+      setIsProcessing(false);
+      setProcessingStep("");
+      setAiPrompt("");
+    }
+  };
+
+  // File Upload Processing
+  const handleFileUpload = async (file: File) => {
+    setIsProcessing(true);
+    setUploadProgress(0);
+    setProcessingStep("Đang tải file...");
+
+    try {
+      // Simulate file processing
+      for (let i = 0; i <= 100; i += 10) {
+        setUploadProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 200));
+      }
+
+      setProcessingStep("Phân tích nội dung file...");
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      setProcessingStep("Tạo câu hỏi từ file...");
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Mock questions from file
+      const fileQuestions: Question[] = [
+        {
+          id: "file1",
+          question: "Theo tài liệu, đâu là đặc điểm chính của phép cộng?",
+          type: "multiple_choice",
+          options: [
+            "Tính giao hoán",
+            "Tính kết hợp",
+            "Có phần tử đơn vị",
+            "Tất cả đều đúng",
+          ],
+          correctAnswer: "D",
+          explanation: "Phép cộng có đầy đủ các tính chất được liệt kê",
+        },
+      ];
+
+      setNewExercise({
+        ...newExercise,
+        questions: [...(newExercise.questions || []), ...fileQuestions],
+      });
+
+      setProcessingStep("Hoàn thành!");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    } finally {
+      setIsProcessing(false);
+      setUploadProgress(0);
+      setProcessingStep("");
+      setUploadedFile(null);
+    }
+  };
+
+  // Bulk Import Questions
+  const handleBulkImport = () => {
+    const lines = bulkQuestions.split("\n").filter((line) => line.trim());
+    const questions: Question[] = [];
+
+    lines.forEach((line, index) => {
+      if (line.startsWith("Q:")) {
+        const questionText = line.substring(2).trim();
+        questions.push({
+          id: `bulk_${index}`,
+          question: questionText,
+          type: "short_answer",
+          correctAnswer: "",
+          keywords: [],
+        });
+      }
+    });
+
+    setNewExercise({
+      ...newExercise,
+      questions: [...(newExercise.questions || []), ...questions],
+    });
+
+    setBulkQuestions("");
+  };
+
+  // Assign exercises from bank
+  const handleAssignExercises = () => {
+    if (selectedCourse && selectedExercisesFromBank.length > 0) {
+      const exercisesToAssign = exerciseBank
+        .filter((ex) => selectedExercisesFromBank.includes(ex.id))
+        .map((ex) => ({
+          id:
+            Math.max(...(selectedCourse.exercises?.map((e) => e.id) || [0])) +
+            ex.id,
+          title: ex.title,
+          description: `Bài tập được gán từ kho bài tập`,
+          type: ex.type.toLowerCase().replace(/\s+/g, "_"),
+          difficulty: ex.difficulty,
+          points: 10,
+          timeLimit: 600,
+          questions: ex.totalQuestions || 1,
+          assignedFrom: "bank",
+          originalId: ex.id,
+        }));
+
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              exercises: [...(course.exercises || []), ...exercisesToAssign],
+            }
+          : course,
+      );
+
+      setCourses(updatedCourses);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
+      setSelectedExercisesFromBank([]);
+      setIsAssignDialogOpen(false);
+    }
+  };
+
+  const toggleExerciseSelection = (exerciseId: number) => {
+    setSelectedExercisesFromBank((prev) =>
+      prev.includes(exerciseId)
+        ? prev.filter((id) => id !== exerciseId)
+        : [...prev, exerciseId],
+    );
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Đang mở":
@@ -876,7 +1121,7 @@ export default function AdminCourses() {
                     }
                     className="col-span-3"
                     rows={2}
-                    placeholder="Kiến thức cần có trước khi học khóa này..."
+                    placeholder="Kiến thức cần có tr��ớc khi học khóa này..."
                   />
                 </div>
               </div>
@@ -1286,7 +1531,7 @@ export default function AdminCourses() {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right font-semibold">
-                        Ngày tạo:
+                        Ng��y tạo:
                       </Label>
                       <div className="col-span-3 text-sm">
                         {selectedCourse.createdAt}
@@ -1299,7 +1544,7 @@ export default function AdminCourses() {
                         </Label>
                         <div className="col-span-3">
                           <Badge variant="outline" className="text-blue-600">
-                            🤖 Quản trị AI
+                            �� Quản trị AI
                           </Badge>
                         </div>
                       </div>
@@ -1416,14 +1661,34 @@ export default function AdminCourses() {
                       <h3 className="text-lg font-semibold">
                         Danh sách bài tập
                       </h3>
-                      <Button
-                        size="sm"
-                        className="gap-2"
-                        onClick={() => setIsAddExerciseDialogOpen(true)}
-                      >
-                        <PlusCircle className="h-4 w-4" />
-                        Thêm bài tập
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white border-0"
+                          onClick={() => setIsAssignDialogOpen(true)}
+                        >
+                          <Link className="h-4 w-4" />
+                          Gán từ kho
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+                          onClick={() => setIsAIDialogOpen(true)}
+                        >
+                          <Bot className="h-4 w-4" />
+                          AI Tạo bài tập
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="gap-2"
+                          onClick={() => setIsAddExerciseDialogOpen(true)}
+                        >
+                          <PlusCircle className="h-4 w-4" />
+                          Thêm bài tập
+                        </Button>
+                      </div>
                     </div>
 
                     {selectedCourse.exercises &&
@@ -2101,7 +2366,7 @@ export default function AdminCourses() {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right">Tùy chọn C:</Label>
-                      <Input placeholder="Tùy chọn C" className="col-span-3" />
+                      <Input placeholder="T��y chọn C" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right">Đáp án đúng:</Label>
@@ -2365,7 +2630,7 @@ export default function AdminCourses() {
             <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
               <div className="flex items-center justify-between w-full">
                 <div className="text-xs text-gray-500">
-                  * Các trường bắt buộc
+                  * Các trường b��t buộc
                 </div>
                 <div className="flex gap-3">
                   <Button
@@ -2384,6 +2649,87 @@ export default function AdminCourses() {
                   </Button>
                 </div>
               </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* AI Exercise Dialog */}
+        <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-purple-500" />
+                AI Tạo bài tập cho khóa học
+              </DialogTitle>
+              <DialogDescription>
+                Mô tả yêu cầu và AI sẽ t��o bài tập phù hợp cho khóa học này
+              </DialogDescription>
+            </DialogHeader>
+
+            {isProcessing ? (
+              <div className="space-y-4 py-4">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>{processingStep}</span>
+                </div>
+                <Progress value={uploadProgress} className="w-full" />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <Label>Mô tả bài tập cần tạo</Label>
+                  <Textarea
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghiệm về phép cộng trong phạm vi 100, phù hợp với khóa học này..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Hoặc upload file tài liệu</Label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setUploadedFile(file);
+                          handleFileUpload(file);
+                        }
+                      }}
+                      accept=".pdf,.docx,.xlsx,.txt"
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Chọn file (PDF, Word, Excel, TXT)
+                    </Button>
+                    {uploadedFile && (
+                      <p className="text-sm text-gray-600 mt-2">
+                        Đã chọn: {uploadedFile.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button
+                onClick={handleAIGeneration}
+                disabled={!aiPrompt.trim() || isProcessing}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              >
+                <Wand2 className="h-4 w-4 mr-2" />
+                Tạo bài tập
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -2604,7 +2950,7 @@ export default function AdminCourses() {
                     className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Tạo bài tập
+                    T���o bài tập
                   </Button>
                 </div>
               </div>
