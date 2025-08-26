@@ -87,7 +87,7 @@ const mockPrompts = [
       { name: "level", type: "select", options: ["mới bắt đầu", "cơ bản", "trung bình", "nâng cao"], description: "Trình độ hiện tại" },
       { name: "subject", type: "select", options: ["Toán", "Văn", "Anh"], description: "Môn học" },
       { name: "sessions", type: "number", min: 3, max: 20, description: "Số buổi học" },
-      { name: "session_duration", type: "number", min: 15, max: 60, description: "Th��i lượng mỗi buổi (phút)" }
+      { name: "session_duration", type: "number", min: 15, max: 60, description: "Thời lượng mỗi buổi (phút)" }
     ],
     createdAt: "2024-01-20",
   },
@@ -129,7 +129,7 @@ const mockAILogs = [
   {
     id: 1,
     timestamp: "2024-01-28 14:30:25",
-    user: "Nguyễn Minh Đức",
+    user: "Nguy���n Minh Đức",
     module: "Bài tập",
     tokensUsed: 150,
     status: "Thành công",
@@ -231,7 +231,6 @@ export default function AdminAIConfig() {
   const [showVariableEditor, setShowVariableEditor] = useState(false);
   const [moduleFilter, setModuleFilter] = useState("Tất cả");
   const [statusFilter, setStatusFilter] = useState("Tất cả");
-  const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
   const [isLogDetailDialogOpen, setIsLogDetailDialogOpen] = useState(false);
 
@@ -365,7 +364,7 @@ export default function AdminAIConfig() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Brain className="h-8 w-8 text-blue-600" />
-              Cấu hình AI (Chỉ Qu���n trị viên)
+              Cấu hình AI (Chỉ Quản trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
               Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh
@@ -378,21 +377,9 @@ export default function AdminAIConfig() {
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            onClick={() => setIsLogDialogOpen(true)}
-            variant="outline"
-            className="bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100"
-          >
-            <Activity className="h-4 w-4 mr-2" />
-            📊 Xem Log AI
-          </Button>
-        </div>
-
         {/* Main Content Tabs */}
         <Tabs defaultValue="api-config" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-blue-50">
+          <TabsList className="grid w-full grid-cols-4 bg-blue-50">
             <TabsTrigger value="api-config" className="flex items-center gap-2">
               <Cpu className="h-4 w-4" />
               Cấu hình API
@@ -404,6 +391,10 @@ export default function AdminAIConfig() {
             <TabsTrigger value="features" className="flex items-center gap-2">
               <Brain className="h-4 w-4" />
               Tính năng AI
+            </TabsTrigger>
+            <TabsTrigger value="logs" className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Log AI
             </TabsTrigger>
           </TabsList>
 
@@ -1008,6 +999,135 @@ export default function AdminAIConfig() {
             </Card>
           </TabsContent>
 
+          {/* AI Logs Tab */}
+          <TabsContent value="logs">
+            <Card className="border-orange-200">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 text-orange-700">
+                    <Activity className="h-5 w-5" />
+                    Theo dõi Log AI - Tất cả hoạt động AI
+                  </CardTitle>
+                  <Button onClick={exportLogs} variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
+                    Xuất CSV
+                  </Button>
+                </div>
+                <div className="flex items-center gap-4 mt-4">
+                  <div className="flex items-center gap-2">
+                    <Label>Lọc theo Module:</Label>
+                    <Select value={moduleFilter} onValueChange={setModuleFilter}>
+                      <SelectTrigger className="w-40">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Tất cả">Tất cả</SelectItem>
+                        <SelectItem value="Bài tập">Bài tập</SelectItem>
+                        <SelectItem value="Lộ trình">Lộ trình</SelectItem>
+                        <SelectItem value="Chatbot">Chatbot</SelectItem>
+                        <SelectItem value="Chấm bài">Chấm bài</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label>Lọc theo Trạng thái:</Label>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-40">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Tất cả">Tất cả</SelectItem>
+                        <SelectItem value="Thành công">Thành công</SelectItem>
+                        <SelectItem value="Lỗi">Lỗi</SelectItem>
+                        <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Thời gian</TableHead>
+                      <TableHead>Người dùng</TableHead>
+                      <TableHead>Module</TableHead>
+                      <TableHead>Nội dung</TableHead>
+                      <TableHead>Token</TableHead>
+                      <TableHead>Trạng thái & Hành động</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {mockAILogs
+                      .filter(log => moduleFilter === "Tất cả" || log.module === moduleFilter)
+                      .filter(log => statusFilter === "Tất cả" || log.status === statusFilter)
+                      .map((log) => (
+                      <TableRow key={log.id}>
+                        <TableCell className="font-mono text-sm">
+                          {log.timestamp}
+                        </TableCell>
+                        <TableCell>{log.user}</TableCell>
+                        <TableCell>
+                          <Badge className={getModuleColor(log.module)}>
+                            {log.module}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="max-w-xs">
+                            <p className="text-sm text-gray-700 truncate" title={log.details}>
+                              {log.details || "Không có mô tả"}
+                            </p>
+                            {log.conversation && (
+                              <Badge variant="outline" className="mt-1 text-xs">
+                                💬 {log.conversation.length} tin nhắn
+                              </Badge>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-mono text-blue-600">
+                          {log.tokensUsed}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Badge className={getStatusColor(log.status)}>
+                              {log.status}
+                            </Badge>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => showLogDetail(log)}
+                              className="text-blue-600 hover:text-blue-800"
+                            >
+                              {log.conversation ? "�� Xem hội thoại" : "🔍 Xem chi tiết"}
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div className="text-2xl font-bold text-blue-600">1,245</div>
+                    <div className="text-sm text-blue-600">Tổng request hôm nay</div>
+                  </div>
+                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <div className="text-2xl font-bold text-green-600">98.5%</div>
+                    <div className="text-sm text-green-600">Tỉ lệ thành công</div>
+                  </div>
+                  <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <div className="text-2xl font-bold text-orange-600">45,678</div>
+                    <div className="text-sm text-orange-600">Token sử dụng</div>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <div className="text-2xl font-bold text-purple-600">45,678</div>
+                    <div className="text-sm text-purple-600">Token hôm nay</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
 
         {/* AI Logs Dialog */}
