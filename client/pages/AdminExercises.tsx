@@ -307,7 +307,7 @@ export default function AdminExercises() {
   const [exercises, setExercises] = useState(mockExercises);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
-  const [typeFilter, setTypeFilter] = useState("T��t cả");
+  const [typeFilter, setTypeFilter] = useState("Tất cả");
   const [departmentFilter, setDepartmentFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
@@ -1686,7 +1686,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                           onClick={() => handleDeleteExercise(exercise.id)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Gỡ bỏ
+                          G��� bỏ
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
