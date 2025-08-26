@@ -242,7 +242,7 @@ const mockCourses = [
     id: 4,
     name: "Khoa học tự nhiên",
     description:
-      "Khám phá thế giới xung quanh qua các thí nghiệm đơn giản và quan sát thiên nhiên.",
+      "Khám phá thế giới xung quanh qua các th�� nghiệm đơn giản và quan sát thiên nhiên.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Trung bình",
@@ -1056,7 +1056,7 @@ export default function AdminCourses() {
           <div className="text-center py-12">
             <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Không tìm th���y khóa học nào
+              Không tìm thấy khóa học nào
             </h3>
             <p className="text-gray-500 mb-4">
               Thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác
@@ -1306,7 +1306,7 @@ export default function AdminCourses() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">Danh sách bài tập</h3>
-                      <Button size="sm" className="gap-2">
+                      <Button size="sm" className="gap-2" onClick={() => setIsAddExerciseDialogOpen(true)}>
                         <PlusCircle className="h-4 w-4" />
                         Thêm bài tập
                       </Button>
