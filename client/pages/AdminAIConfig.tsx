@@ -62,7 +62,7 @@ const mockPrompts = [
     id: 1,
     name: "Prompt tạo bài tập toán",
     content:
-      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao gồm {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
+      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao g��m {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
     module: "Bài tập",
     variables: [
       { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "Lớp học" },
@@ -320,7 +320,7 @@ export default function AdminAIConfig() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Brain className="h-8 w-8 text-blue-600" />
-              Cấu hình AI (Chỉ Quản trị viên)
+              Cấu hình AI (Ch��� Quản trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
               Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh
@@ -698,7 +698,7 @@ export default function AdminAIConfig() {
                                 content: e.target.value,
                               })
                             }
-                            placeholder={`Nhập nội dung prompt. Sử dụng {{tên_biến}} để chèn biến động...`}
+                            placeholder={`Nhập nội dung prompt. Sử d��ng {{tên_biến}} để chèn biến động...`}
                             rows={8}
                             className="font-mono text-sm"
                           />
@@ -883,7 +883,7 @@ export default function AdminAIConfig() {
                           <Activity className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI báo cáo tiến độ (Qu��n trị viên)</h3>
+                          <h3 className="font-medium">AI báo cáo tiến độ (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
                             Phân tích thông minh - Tùy chỉnh biến {`{{time_period}}`}, {`{{metrics}}`}, {`{{student_group}}`}
                           </p>
@@ -920,7 +920,7 @@ export default function AdminAIConfig() {
                       ⚠️ Quan trọng: Cách thay đổi hành vi AI
                     </h4>
                     <p className="text-sm text-yellow-800">
-                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu lại.
+                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu l���i.
                       AI sẽ hoạt động theo prompt mới ngay lập tức!
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -928,7 +928,7 @@ export default function AdminAIConfig() {
                         <div className="text-2xl font-bold text-blue-600">
                           245
                         </div>
-                        <div className="text-blue-600">Bài chấm tự đ��ng</div>
+                        <div className="text-blue-600">Bài chấm tự động</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold text-green-600">
@@ -1035,9 +1035,19 @@ export default function AdminAIConfig() {
                           {log.cost}
                         </TableCell>
                         <TableCell>
-                          <Badge className={getStatusColor(log.status)}>
-                            {log.status}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge className={getStatusColor(log.status)}>
+                              {log.status}
+                            </Badge>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => alert(`📊 Chi tiết hoạt động AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n💰 Chi phí: ${log.cost}\n✅ Trạng thái: ${log.status}`)}
+                              className="text-blue-600 hover:text-blue-800"
+                            >
+                              🔍 Xem chi tiết
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
