@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AdminLayout } from "@/components/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -96,7 +96,7 @@ const mockCourses = [
         order: 1,
         completed: false,
         videoUrl: "https://www.youtube.com/watch?v=example123",
-        content: "Nội dung bài gi��ng về số học...",
+        content: "Nội dung bài giảng về số học...",
         materials: [],
       },
       {
@@ -280,7 +280,7 @@ const mockCourses = [
       {
         id: 1,
         title: "Thí nghiệm nảy mầm",
-        description: "Quan sát quá trình nảy mầm của hạt đậu",
+        description: "Quan sát quá trình nảy m��m của hạt đậu",
         type: "experiment",
         difficulty: "Trung bình",
         points: 25,
@@ -301,6 +301,19 @@ const ageGroups = [
   "8-10 tuổi",
   "9-12 tuổi",
 ];
+
+// Question interface for exercise creation
+interface Question {
+  id?: string;
+  question: string;
+  type: "multiple_choice" | "essay" | "short_answer";
+  options?: string[];
+  correctAnswer?: string;
+  explanation?: string;
+  maxWords?: number;
+  keywords?: string[];
+  rubric?: string;
+}
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState(mockCourses);
@@ -897,7 +910,7 @@ export default function AdminCourses() {
                     }
                     className="col-span-3"
                     rows={2}
-                    placeholder="Kiến thức cần có trước khi học khóa này..."
+                    placeholder="Kiến thức cần có tr��ớc khi học khóa này..."
                   />
                 </div>
               </div>
@@ -2001,7 +2014,7 @@ export default function AdminCourses() {
                   }
                   className="col-span-3"
                   rows={3}
-                  placeholder="Mô t�� nội dung bài t��p..."
+                  placeholder="Mô tả nội dung bài t��p..."
                 />
               </div>
 
