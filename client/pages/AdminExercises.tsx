@@ -95,7 +95,7 @@ const mockExercises = [
     title: "Viết đoạn văn tả cảnh thiên nhiên",
     type: "Tự luận",
     subject: "Văn",
-    creator: "Cô Trần Thị Lan",
+    creator: "Cô Tr��n Thị Lan",
     createdAt: "2024-01-20",
     totalQuestions: 1,
     difficulty: "Trung bình",
@@ -380,6 +380,7 @@ export default function AdminExercises() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [bulkQuestions, setBulkQuestions] = useState("");
+  const [hasAIContent, setHasAIContent] = useState(false);
 
   const filteredExercises = exercises.filter((exercise) => {
     const matchesSearch =
@@ -426,7 +427,7 @@ export default function AdminExercises() {
         avgScore: 0,
         department: "Tùy chỉnh",
         isFromBank: false,
-        isAIGenerated: false,
+        isAIGenerated: hasAIContent,
         tags: [],
         description: newExercise.description || "",
       };
@@ -478,6 +479,7 @@ export default function AdminExercises() {
       description: "",
       questions: [],
     });
+    setHasAIContent(false);
   };
 
   const handleDeleteExercise = (id: number) => {
@@ -581,6 +583,7 @@ export default function AdminExercises() {
         ...newExercise,
         questions: [...newExercise.questions, ...aiQuestions],
       });
+      setHasAIContent(true);
 
       setProcessingStep("Hoàn thành!");
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -800,7 +803,7 @@ export default function AdminExercises() {
             </div>
 
             <div>
-              <Label>Giải thích (tùy chọn)</Label>
+              <Label>Giải thích (tùy ch��n)</Label>
               <Textarea
                 value={question.explanation || ""}
                 onChange={(e) =>
@@ -1240,7 +1243,7 @@ export default function AdminExercises() {
                       <Textarea
                         value={aiPrompt}
                         onChange={(e) => setAiPrompt(e.target.value)}
-                        placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghiệm về phép cộng trong phạm vi 100, độ khó vừa phải cho học sinh lớp 2..."
+                        placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghi��m về phép cộng trong phạm vi 100, độ khó vừa phải cho học sinh lớp 2..."
                         rows={4}
                       />
                     </div>
@@ -1330,7 +1333,7 @@ export default function AdminExercises() {
                               title: e.target.value,
                             })
                           }
-                          placeholder="Nhập tên bài tập"
+                          placeholder="Nhập tên b��i tập"
                         />
                       </div>
                       <div className="space-y-2">
