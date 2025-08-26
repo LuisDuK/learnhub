@@ -155,7 +155,7 @@ export default function AdminUsers() {
               👥 Quản lý người dùng
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý giáo viên và quản trị viên hệ thống
+              Quản lý học sinh và quản trị viên hệ thống
             </p>
           </div>
 
@@ -170,7 +170,7 @@ export default function AdminUsers() {
               <DialogHeader>
                 <DialogTitle>Thêm người dùng mới</DialogTitle>
                 <DialogDescription>
-                  Tạo tài khoản mới cho giáo viên hoặc quản trị viên
+                  Tạo tài khoản mới cho học sinh hoặc quản trị viên
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -215,7 +215,7 @@ export default function AdminUsers() {
                       <SelectValue placeholder="Chọn vai trò" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Giáo viên">Giáo viên</SelectItem>
+                      <SelectItem value="Học sinh">Học sinh</SelectItem>
                       <SelectItem value="Quản trị viên">
                         Quản trị viên
                       </SelectItem>
@@ -262,7 +262,7 @@ export default function AdminUsers() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả vai trò</SelectItem>
-              <SelectItem value="Giáo viên">Giáo viên</SelectItem>
+              <SelectItem value="Học sinh">Học sinh</SelectItem>
               <SelectItem value="Quản trị viên">Quản trị viên</SelectItem>
             </SelectContent>
           </Select>
@@ -348,9 +348,9 @@ export default function AdminUsers() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">
-              {users.filter((u) => u.role === "Giáo viên").length}
+              {users.filter((u) => u.role === "Học sinh").length}
             </div>
-            <div className="text-sm text-green-600">Giáo viên</div>
+            <div className="text-sm text-green-600">Học sinh</div>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">

@@ -192,6 +192,8 @@ export default function AdminAIConfig() {
   const [isEditingPrompt, setIsEditingPrompt] = useState(false);
   const [editingPromptId, setEditingPromptId] = useState(null);
   const [showVariableEditor, setShowVariableEditor] = useState(false);
+  const [moduleFilter, setModuleFilter] = useState("Tất cả");
+  const [statusFilter, setStatusFilter] = useState("Tất cả");
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
@@ -495,7 +497,7 @@ export default function AdminAIConfig() {
                       <DialogHeader>
                         <DialogTitle>{isEditingPrompt ? "Chỉnh sửa" : "Thêm"} Prompt (Quản trị viên)</DialogTitle>
                         <DialogDescription>
-                          Tạo prompt mẫu với biến động cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
+                          Tạo prompt mẫu với biến đ���ng cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-6">
