@@ -75,7 +75,7 @@ const mockCourses = [
     id: 1,
     name: "Toán học cơ bản",
     description:
-      "Khóa học toán học dành cho học sinh tiểu h��c, bao gồm các phép tính cơ bản và hình học đơn giản.",
+      "Khóa học toán học dành cho học sinh ti���u h��c, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -350,6 +350,43 @@ export default function AdminCourses() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [bulkQuestions, setBulkQuestions] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Assign from exercise bank states
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [selectedExercisesFromBank, setSelectedExercisesFromBank] = useState<number[]>([]);
+  const [exerciseBank] = useState([
+    // Mock exercise bank - this would come from the actual exercise bank/kho bài tập
+    {
+      id: 101,
+      title: "Phép cộng cơ bản",
+      type: "Trắc nghiệm",
+      subject: "Toán",
+      difficulty: "Dễ",
+      totalQuestions: 10,
+      creator: "Cô Nguyễn Thị Mai",
+      createdAt: "2024-01-15"
+    },
+    {
+      id: 102,
+      title: "Viết đoạn văn tả người",
+      type: "Tự luận",
+      subject: "Văn",
+      difficulty: "Trung bình",
+      totalQuestions: 1,
+      creator: "Cô Trần Thị Lan",
+      createdAt: "2024-01-20"
+    },
+    {
+      id: 103,
+      title: "Colors and Shapes",
+      type: "Trắc nghiệm",
+      subject: "Anh",
+      difficulty: "Dễ",
+      totalQuestions: 8,
+      creator: "Thầy John Smith",
+      createdAt: "2024-01-10"
+    }
+  ]);
 
   const [newCourse, setNewCourse] = useState({
     name: "",
