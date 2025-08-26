@@ -148,7 +148,7 @@ const mockCourses = [
   },
   {
     id: 2,
-    name: "Tiếng Việt lớp 3",
+    name: "Tiếng Việt l��p 3",
     description:
       "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
@@ -313,8 +313,12 @@ export default function AdminCourses() {
   const [selectedExercise, setSelectedExercise] = useState<any>(null);
   const [isEditLessonDialogOpen, setIsEditLessonDialogOpen] = useState(false);
   const [isEditExerciseDialogOpen, setIsEditExerciseDialogOpen] = useState(false);
+  const [isAddLessonDialogOpen, setIsAddLessonDialogOpen] = useState(false);
+  const [isAddExerciseDialogOpen, setIsAddExerciseDialogOpen] = useState(false);
   const [editLesson, setEditLesson] = useState<any>({});
   const [editExercise, setEditExercise] = useState<any>({});
+  const [newLesson, setNewLesson] = useState<any>({});
+  const [newExercise, setNewExercise] = useState<any>({});
   const [newCourse, setNewCourse] = useState({
     name: "",
     description: "",
