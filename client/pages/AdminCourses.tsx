@@ -65,7 +65,7 @@ const mockCourses = [
     id: 1,
     name: "Toán học cơ bản",
     description:
-      "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
+      "Khóa học toán học dành cho học sinh tiểu h��c, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -756,7 +756,7 @@ export default function AdminCourses() {
                       }
                     >
                       <SelectTrigger className="col-span-2">
-                        <SelectValue placeholder="Chọn đ�� khó" />
+                        <SelectValue placeholder="Chọn độ khó" />
                       </SelectTrigger>
                       <SelectContent>
                         {difficulties.map((difficulty) => (
@@ -1146,7 +1146,7 @@ export default function AdminCourses() {
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    ✏️ Bài t��p ({selectedCourse.exercises?.length || 0})
+                    ✏️ Bài tập ({selectedCourse.exercises?.length || 0})
                   </button>
                 </div>
 
@@ -1369,7 +1369,7 @@ export default function AdminCourses() {
                       <div className="text-center py-8 text-gray-500">
                         <Edit className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>Chưa có bài tập nào</p>
-                        <Button className="mt-4 gap-2">
+                        <Button className="mt-4 gap-2" onClick={() => setIsAddExerciseDialogOpen(true)}>
                           <PlusCircle className="h-4 w-4" />
                           Thêm bài tập đầu tiên
                         </Button>
@@ -1838,7 +1838,7 @@ export default function AdminCourses() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn độ khó" />
+                      <SelectValue placeholder="Ch���n độ khó" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Dễ">Dễ</SelectItem>
