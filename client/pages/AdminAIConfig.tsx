@@ -95,7 +95,7 @@ const mockPrompts = [
     id: 3,
     name: "Prompt chatbot hỗ trợ",
     content:
-      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} m���t cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
     module: "Chatbot",
     variables: [
       { name: "age", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi học sinh" },
@@ -325,7 +325,7 @@ export default function AdminAIConfig() {
             </p>
             <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài, tạo lộ trình, sinh bài tập) được điều khiển hoàn toàn bởi quản trị viên thông qua các prompt và cấu hình này.
+                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài, tạo lộ trình, sinh bài tập) được ��iều khiển hoàn toàn bởi quản trị viên thông qua các prompt và cấu hình này.
               </p>
             </div>
           </div>
