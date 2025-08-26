@@ -120,8 +120,42 @@ const mockExercises = [
     department: "Khối mầm non",
     isFromBank: false,
     tags: ["màu sắc", "số đếm", "từ vựng"],
-    description: "Học từ vựng về màu sắc và số",
+    description: "Học từ vựng v��� màu sắc và số",
     courseName: "Tiếng Anh cho trẻ em",
+  },
+  {
+    id: 4,
+    title: "Quan sát và mô tả hiện tượng",
+    type: "Tự luận",
+    subject: "Toán",
+    creator: "Cô Lê Thị Hoa",
+    createdAt: "2024-01-25",
+    totalQuestions: 3,
+    difficulty: "Khó",
+    submissions: 28,
+    avgScore: 65,
+    department: "Khối lớp 3-5",
+    isFromBank: true,
+    tags: ["quan sát", "mô tả"],
+    description: "Bài tập quan sát và mô tả các hiện tượng",
+    courseName: null, // Chưa gán vào khóa học nào
+  },
+  {
+    id: 5,
+    title: "Bảng cửu chương 2-3-4",
+    type: "Trắc nghiệm",
+    subject: "Toán",
+    creator: "Bộ GD&ĐT",
+    createdAt: "2024-01-01",
+    totalQuestions: 20,
+    difficulty: "Dễ",
+    submissions: 0,
+    avgScore: 0,
+    department: "Khối lớp 1-2",
+    isFromBank: true,
+    tags: ["bảng cửu chương", "nhân"],
+    description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
+    courseName: null, // Chưa gán vào khóa học nào
   },
 ];
 
@@ -785,7 +819,7 @@ export default function AdminExercises() {
               />
             </div>
             <div>
-              <Label>Từ khóa chấp nhận (cách nhau bởi dấu phẩy)</Label>
+              <Label>Từ khóa chấp nh��n (cách nhau bởi dấu phẩy)</Label>
               <Input
                 value={question.keywords?.join(", ") || ""}
                 onChange={(e) =>
@@ -1114,7 +1148,7 @@ export default function AdminExercises() {
                     AI Tạo bài tập
                   </DialogTitle>
                   <DialogDescription>
-                    Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho bạn
+                    Mô tả yêu cầu và AI sẽ t��o bài tập phù hợp cho bạn
                   </DialogDescription>
                 </DialogHeader>
 
