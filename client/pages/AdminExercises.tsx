@@ -1002,7 +1002,11 @@ export default function AdminExercises() {
 
           <div className="flex gap-2">
             {/* Exercise Bank Dialog - Hidden */}
-            <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen} className="hidden">
+            <Dialog
+              open={isBankDialogOpen}
+              onOpenChange={setIsBankDialogOpen}
+              className="hidden"
+            >
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
