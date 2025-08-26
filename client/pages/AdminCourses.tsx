@@ -2348,6 +2348,112 @@ export default function AdminCourses() {
                           </DialogContent>
                         </Dialog>
 
+                        {/* AI Generate Exercise Dialog */}
+                        <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+                            >
+                              <Bot className="h-4 w-4 mr-2" />
+                              AI tạo bài tập
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[500px]">
+                            <DialogHeader>
+                              <DialogTitle className="flex items-center gap-2">
+                                <Sparkles className="h-5 w-5 text-purple-500" />
+                                AI tạo bài tập cho khóa học
+                              </DialogTitle>
+                              <DialogDescription>
+                                Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho khóa học này
+                              </DialogDescription>
+                            </DialogHeader>
+
+                            {isProcessing ? (
+                              <div className="space-y-4 py-4">
+                                <div className="flex items-center gap-2">
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                  <span>{processingStep}</span>
+                                </div>
+                                <Progress value={uploadProgress} className="w-full" />
+                              </div>
+                            ) : (
+                              <div className="space-y-4">
+                                <div>
+                                  <Label>Mô tả bài tập cần tạo cho khóa học "{selectedCourse?.name}"</Label>
+                                  <Textarea
+                                    value={aiPrompt}
+                                    onChange={(e) => setAiPrompt(e.target.value)}
+                                    placeholder={`Ví dụ: Tạo 5 câu hỏi trắc nghiệm về ${selectedCourse?.subject || 'môn học'} phù hợp với độ tuổi ${selectedCourse?.ageGroup || '6-8 tuổi'}, độ khó ${selectedCourse?.difficulty || 'cơ bản'}...`}
+                                    rows={4}
+                                  />
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label>Hoặc upload file tài liệu</Label>
+                                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                                    <input
+                                      type="file"
+                                      ref={fileInputRef}
+                                      onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                          setUploadedFile(file);
+                                          handleFileUpload(file);
+                                        }
+                                      }}
+                                      accept=".pdf,.docx,.xlsx,.txt"
+                                      className="hidden"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      onClick={() => fileInputRef.current?.click()}
+                                      className="w-full"
+                                    >
+                                      <Upload className="h-4 w-4 mr-2" />
+                                      Chọn file (PDF, Word, Excel, TXT)
+                                    </Button>
+                                    {uploadedFile && (
+                                      <p className="text-sm text-gray-600 mt-2">
+                                        Đã chọn: {uploadedFile.name}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            <DialogFooter>
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  setAiPrompt("");
+                                  setIsAIDialogOpen(false);
+                                }}
+                              >
+                                Hủy
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  // Call AI generation and then create exercise
+                                  handleAIGeneration();
+                                  // After AI generation, open the add exercise dialog
+                                  setTimeout(() => {
+                                    setIsAddExerciseDialogOpen(true);
+                                  }, 100);
+                                }}
+                                disabled={!aiPrompt.trim() || isProcessing}
+                                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                              >
+                                <Wand2 className="h-4 w-4 mr-2" />
+                                Tạo bài tập với AI
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+
                         <Dialog open={isAddExerciseDialogOpen} onOpenChange={setIsAddExerciseDialogOpen}>
                           <DialogTrigger asChild>
                             <Button>
