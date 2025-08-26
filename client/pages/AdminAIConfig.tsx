@@ -497,7 +497,7 @@ export default function AdminAIConfig() {
                       <DialogHeader>
                         <DialogTitle>{isEditingPrompt ? "Chỉnh sửa" : "Thêm"} Prompt (Quản trị viên)</DialogTitle>
                         <DialogDescription>
-                          Tạo prompt mẫu với biến đ���ng cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
+                          Tạo prompt mẫu với biến động cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-6">
@@ -883,7 +883,7 @@ export default function AdminAIConfig() {
                           <Activity className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI báo cáo tiến độ (Quản trị viên)</h3>
+                          <h3 className="font-medium">AI báo cáo tiến độ (Qu��n trị viên)</h3>
                           <p className="text-sm text-gray-600">
                             Phân tích thông minh - Tùy chỉnh biến {`{{time_period}}`}, {`{{metrics}}`}, {`{{student_group}}`}
                           </p>
@@ -928,7 +928,7 @@ export default function AdminAIConfig() {
                         <div className="text-2xl font-bold text-blue-600">
                           245
                         </div>
-                        <div className="text-blue-600">Bài chấm tự động</div>
+                        <div className="text-blue-600">Bài chấm tự đ��ng</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold text-green-600">
@@ -962,12 +962,43 @@ export default function AdminAIConfig() {
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2 text-orange-700">
                     <Activity className="h-5 w-5" />
-                    Theo dõi Log AI
+                    Theo dõi Log AI - Tất cả hoạt động AI
                   </CardTitle>
                   <Button onClick={exportLogs} variant="outline">
                     <Download className="h-4 w-4 mr-2" />
                     Xuất CSV
                   </Button>
+                </div>
+                <div className="flex items-center gap-4 mt-4">
+                  <div className="flex items-center gap-2">
+                    <Label>Lọc theo Module:</Label>
+                    <Select value={moduleFilter} onValueChange={setModuleFilter}>
+                      <SelectTrigger className="w-40">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Tất cả">Tất cả</SelectItem>
+                        <SelectItem value="Bài tập">Bài tập</SelectItem>
+                        <SelectItem value="Lộ trình">Lộ trình</SelectItem>
+                        <SelectItem value="Chatbot">Chatbot</SelectItem>
+                        <SelectItem value="Chấm bài">Chấm bài</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label>Lọc theo Trạng thái:</Label>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-40">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Tất cả">Tất cả</SelectItem>
+                        <SelectItem value="Thành công">Thành công</SelectItem>
+                        <SelectItem value="Lỗi">Lỗi</SelectItem>
+                        <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -983,7 +1014,10 @@ export default function AdminAIConfig() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {mockAILogs.map((log) => (
+                    {mockAILogs
+                      .filter(log => moduleFilter === "Tất cả" || log.module === moduleFilter)
+                      .filter(log => statusFilter === "Tất cả" || log.status === statusFilter)
+                      .map((log) => (
                       <TableRow key={log.id}>
                         <TableCell className="font-mono text-sm">
                           {log.timestamp}
