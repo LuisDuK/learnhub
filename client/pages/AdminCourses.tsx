@@ -89,7 +89,7 @@ const mockCourses = [
     lessons: [
       {
         id: 1,
-        title: "Số từ 1 đến 10",
+        title: "Số t�� 1 đến 10",
         description: "Học cách đếm và nhận biết các số từ 1 đến 10",
         type: "video",
         duration: "15 phút",
@@ -1440,7 +1440,7 @@ export default function AdminCourses() {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right font-semibold">
-                        Ngày tạo:
+                        Ng��y tạo:
                       </Label>
                       <div className="col-span-3 text-sm">
                         {selectedCourse.createdAt}
@@ -2266,7 +2266,7 @@ export default function AdminCourses() {
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right">Tùy chọn C:</Label>
-                      <Input placeholder="Tùy chọn C" className="col-span-3" />
+                      <Input placeholder="T��y chọn C" className="col-span-3" />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right">Đáp án đúng:</Label>
@@ -2530,7 +2530,7 @@ export default function AdminCourses() {
             <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
               <div className="flex items-center justify-between w-full">
                 <div className="text-xs text-gray-500">
-                  * Các trường bắt buộc
+                  * Các trường b��t buộc
                 </div>
                 <div className="flex gap-3">
                   <Button
@@ -2549,6 +2549,87 @@ export default function AdminCourses() {
                   </Button>
                 </div>
               </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* AI Exercise Dialog */}
+        <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-purple-500" />
+                AI Tạo bài tập cho khóa học
+              </DialogTitle>
+              <DialogDescription>
+                Mô tả yêu cầu và AI sẽ t��o bài tập phù hợp cho khóa học này
+              </DialogDescription>
+            </DialogHeader>
+
+            {isProcessing ? (
+              <div className="space-y-4 py-4">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>{processingStep}</span>
+                </div>
+                <Progress value={uploadProgress} className="w-full" />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <Label>Mô tả bài tập cần tạo</Label>
+                  <Textarea
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghiệm về phép cộng trong phạm vi 100, phù hợp với khóa học này..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Hoặc upload file tài liệu</Label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setUploadedFile(file);
+                          handleFileUpload(file);
+                        }
+                      }}
+                      accept=".pdf,.docx,.xlsx,.txt"
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Chọn file (PDF, Word, Excel, TXT)
+                    </Button>
+                    {uploadedFile && (
+                      <p className="text-sm text-gray-600 mt-2">
+                        Đã chọn: {uploadedFile.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button
+                onClick={handleAIGeneration}
+                disabled={!aiPrompt.trim() || isProcessing}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              >
+                <Wand2 className="h-4 w-4 mr-2" />
+                Tạo bài tập
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
