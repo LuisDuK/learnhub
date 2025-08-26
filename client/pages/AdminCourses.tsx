@@ -610,10 +610,13 @@ export default function AdminCourses() {
                 Thêm khóa học
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Thêm khóa học mới</DialogTitle>
-                <DialogDescription>
+            <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto">
+              <DialogHeader className="pb-4 border-b border-gray-200">
+                <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <Plus className="h-5 w-5 text-blue-600" />
+                  Thêm khóa học mới
+                </DialogTitle>
+                <DialogDescription className="text-gray-600">
                   Tạo khóa học mới cho học sinh. Tất cả nội dung sẽ được quản lý bởi quản trị viên.
                 </DialogDescription>
               </DialogHeader>
@@ -1520,7 +1523,7 @@ export default function AdminCourses() {
                 </div>
 
                 <div className="grid grid-cols-2 items-center gap-2">
-                  <Label htmlFor="lessonDuration">Thời lư��ng *</Label>
+                  <Label htmlFor="lessonDuration">Thời lượng *</Label>
                   <Input
                     id="lessonDuration"
                     value={editLesson.duration || ""}
