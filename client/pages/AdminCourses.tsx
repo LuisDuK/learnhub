@@ -405,7 +405,8 @@ export default function AdminCourses() {
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
   const [selectedExercise, setSelectedExercise] = useState<any>(null);
   const [isEditLessonDialogOpen, setIsEditLessonDialogOpen] = useState(false);
-  const [isEditExerciseDialogOpen, setIsEditExerciseDialogOpen] = useState(false);
+  const [isEditExerciseDialogOpen, setIsEditExerciseDialogOpen] =
+    useState(false);
   const [isAddLessonDialogOpen, setIsAddLessonDialogOpen] = useState(false);
   const [isAddExerciseDialogOpen, setIsAddExerciseDialogOpen] = useState(false);
   const [editLesson, setEditLesson] = useState<any>({});
@@ -425,14 +426,18 @@ export default function AdminCourses() {
 
   // Exercise bank assignment states
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-  const [selectedExercisesFromBank, setSelectedExercisesFromBank] = useState<Set<number>>(new Set());
-  const [bankViewMode, setBankViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedExercisesFromBank, setSelectedExercisesFromBank] = useState<
+    Set<number>
+  >(new Set());
+  const [bankViewMode, setBankViewMode] = useState<"grid" | "list">("grid");
   const [bankSearchTerm, setBankSearchTerm] = useState("");
   const [bankSubjectFilter, setBankSubjectFilter] = useState("Tất cả");
   const [bankDepartmentFilter, setBankDepartmentFilter] = useState("Tất cả");
 
   // Question editing states
-  const [editingQuestionIndex, setEditingQuestionIndex] = useState<number | null>(null);
+  const [editingQuestionIndex, setEditingQuestionIndex] = useState<
+    number | null
+  >(null);
 
   const [newCourse, setNewCourse] = useState({
     name: "",
@@ -458,11 +463,12 @@ export default function AdminCourses() {
   const filteredBankExercises = mockExerciseBank.filter((exercise) => {
     const matchesSearch =
       exercise.title.toLowerCase().includes(bankSearchTerm.toLowerCase()) ||
-      exercise.tags.some(tag => tag.includes(bankSearchTerm.toLowerCase()));
+      exercise.tags.some((tag) => tag.includes(bankSearchTerm.toLowerCase()));
     const matchesSubject =
       bankSubjectFilter === "Tất cả" || exercise.subject === bankSubjectFilter;
     const matchesDepartment =
-      bankDepartmentFilter === "Tất cả" || exercise.department === bankDepartmentFilter;
+      bankDepartmentFilter === "Tất cả" ||
+      exercise.department === bankDepartmentFilter;
     return matchesSearch && matchesSubject && matchesDepartment;
   });
 
@@ -896,26 +902,33 @@ export default function AdminCourses() {
 
   const handleAssignExercises = () => {
     if (selectedCourse && selectedExercisesFromBank.size > 0) {
-      const exercisesToAssign = Array.from(selectedExercisesFromBank).map(exerciseId => {
-        const bankExercise = mockExerciseBank.find(ex => ex.id === exerciseId);
-        if (bankExercise) {
-          return {
-            id: Math.max(...(selectedCourse.exercises?.map((e) => e.id) || [0])) + bankExercise.id,
-            title: bankExercise.title,
-            description: `${bankExercise.description} (Gán từ kho bài tập)`,
-            type: bankExercise.type.toLowerCase().replace(/\s+/g, "_"),
-            difficulty: bankExercise.difficulty,
-            points: 10,
-            timeLimit: 600,
-            questions: bankExercise.questions || [],
-            assignedFrom: "bank",
-            originalId: bankExercise.id,
-            instructions: "Bài tập được gán từ kho bài tập",
-            submissionType: "text",
-          };
-        }
-        return null;
-      }).filter(Boolean);
+      const exercisesToAssign = Array.from(selectedExercisesFromBank)
+        .map((exerciseId) => {
+          const bankExercise = mockExerciseBank.find(
+            (ex) => ex.id === exerciseId,
+          );
+          if (bankExercise) {
+            return {
+              id:
+                Math.max(
+                  ...(selectedCourse.exercises?.map((e) => e.id) || [0]),
+                ) + bankExercise.id,
+              title: bankExercise.title,
+              description: `${bankExercise.description} (Gán từ kho bài tập)`,
+              type: bankExercise.type.toLowerCase().replace(/\s+/g, "_"),
+              difficulty: bankExercise.difficulty,
+              points: 10,
+              timeLimit: 600,
+              questions: bankExercise.questions || [],
+              assignedFrom: "bank",
+              originalId: bankExercise.id,
+              instructions: "Bài tập được gán từ kho bài tập",
+              submissionType: "text",
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
 
       const updatedCourses = courses.map((course) =>
         course.id === selectedCourse.id
@@ -936,7 +949,9 @@ export default function AdminCourses() {
   };
 
   // Question editing functions
-  const addQuestion = (type: "multiple_choice" | "essay" | "short_answer" = "multiple_choice") => {
+  const addQuestion = (
+    type: "multiple_choice" | "essay" | "short_answer" = "multiple_choice",
+  ) => {
     const newQuestion: Question = {
       id: Date.now().toString(),
       question: "",
@@ -971,12 +986,16 @@ export default function AdminCourses() {
   };
 
   const updateQuestion = (index: number, field: string, value: any) => {
-    const targetExercise = isEditExerciseDialogOpen ? editExercise : newExercise;
-    const setTargetExercise = isEditExerciseDialogOpen ? setEditExercise : setNewExercise;
-    
+    const targetExercise = isEditExerciseDialogOpen
+      ? editExercise
+      : newExercise;
+    const setTargetExercise = isEditExerciseDialogOpen
+      ? setEditExercise
+      : setNewExercise;
+
     const updatedQuestions = [...(targetExercise.questions || [])];
     updatedQuestions[index] = { ...updatedQuestions[index], [field]: value };
-    
+
     setTargetExercise({
       ...targetExercise,
       questions: updatedQuestions,
@@ -984,21 +1003,35 @@ export default function AdminCourses() {
   };
 
   const removeQuestion = (index: number) => {
-    const targetExercise = isEditExerciseDialogOpen ? editExercise : newExercise;
-    const setTargetExercise = isEditExerciseDialogOpen ? setEditExercise : setNewExercise;
-    
-    const updatedQuestions = (targetExercise.questions || []).filter((_, i) => i !== index);
-    
+    const targetExercise = isEditExerciseDialogOpen
+      ? editExercise
+      : newExercise;
+    const setTargetExercise = isEditExerciseDialogOpen
+      ? setEditExercise
+      : setNewExercise;
+
+    const updatedQuestions = (targetExercise.questions || []).filter(
+      (_, i) => i !== index,
+    );
+
     setTargetExercise({
       ...targetExercise,
       questions: updatedQuestions,
     });
   };
 
-  const updateOption = (questionIndex: number, optionIndex: number, value: string) => {
-    const targetExercise = isEditExerciseDialogOpen ? editExercise : newExercise;
-    const setTargetExercise = isEditExerciseDialogOpen ? setEditExercise : setNewExercise;
-    
+  const updateOption = (
+    questionIndex: number,
+    optionIndex: number,
+    value: string,
+  ) => {
+    const targetExercise = isEditExerciseDialogOpen
+      ? editExercise
+      : newExercise;
+    const setTargetExercise = isEditExerciseDialogOpen
+      ? setEditExercise
+      : setNewExercise;
+
     const updatedQuestions = [...(targetExercise.questions || [])];
     if (updatedQuestions[questionIndex].options) {
       updatedQuestions[questionIndex].options![optionIndex] = value;
@@ -1010,14 +1043,18 @@ export default function AdminCourses() {
   };
 
   const duplicateQuestion = (index: number) => {
-    const targetExercise = isEditExerciseDialogOpen ? editExercise : newExercise;
-    const setTargetExercise = isEditExerciseDialogOpen ? setEditExercise : setNewExercise;
-    
+    const targetExercise = isEditExerciseDialogOpen
+      ? editExercise
+      : newExercise;
+    const setTargetExercise = isEditExerciseDialogOpen
+      ? setEditExercise
+      : setNewExercise;
+
     const questionToCopy = { ...(targetExercise.questions || [])[index] };
     questionToCopy.id = Date.now().toString();
     const updatedQuestions = [...(targetExercise.questions || [])];
     updatedQuestions.splice(index + 1, 0, questionToCopy);
-    
+
     setTargetExercise({
       ...targetExercise,
       questions: updatedQuestions,
@@ -1107,12 +1144,12 @@ export default function AdminCourses() {
 
   const renderBankExerciseCard = (exercise: any) => {
     const isSelected = selectedExercisesFromBank.has(exercise.id);
-    
+
     return (
-      <Card 
-        key={exercise.id} 
+      <Card
+        key={exercise.id}
         className={`cursor-pointer transition-all hover:shadow-lg ${
-          isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+          isSelected ? "ring-2 ring-blue-500 bg-blue-50" : ""
         }`}
         onClick={() => toggleExerciseSelection(exercise.id)}
       >
@@ -1145,7 +1182,7 @@ export default function AdminCourses() {
           <p className="text-xs text-gray-600 line-clamp-2 mb-3">
             {exercise.description}
           </p>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-500">Khối:</span>
@@ -1153,7 +1190,9 @@ export default function AdminCourses() {
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-500">Độ khó:</span>
-              <Badge className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
+              <Badge
+                className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
+              >
                 {exercise.difficulty}
               </Badge>
             </div>
@@ -1222,9 +1261,9 @@ export default function AdminCourses() {
           <Label>Loại câu hỏi</Label>
           <Select
             value={question.type}
-            onValueChange={(value: "multiple_choice" | "essay" | "short_answer") => 
-              updateQuestion(index, "type", value)
-            }
+            onValueChange={(
+              value: "multiple_choice" | "essay" | "short_answer",
+            ) => updateQuestion(index, "type", value)}
           >
             <SelectTrigger>
               <SelectValue />
@@ -1258,7 +1297,9 @@ export default function AdminCourses() {
                   </span>
                   <Input
                     value={option}
-                    onChange={(e) => updateOption(index, oIndex, e.target.value)}
+                    onChange={(e) =>
+                      updateOption(index, oIndex, e.target.value)
+                    }
                     placeholder={`Lựa chọn ${String.fromCharCode(65 + oIndex)}`}
                   />
                 </div>
@@ -1269,7 +1310,9 @@ export default function AdminCourses() {
               <Label>Đáp án đúng</Label>
               <Select
                 value={question.correctAnswer}
-                onValueChange={(value) => updateQuestion(index, "correctAnswer", value)}
+                onValueChange={(value) =>
+                  updateQuestion(index, "correctAnswer", value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Chọn đáp án đúng" />
@@ -1280,7 +1323,8 @@ export default function AdminCourses() {
                       key={oIndex}
                       value={String.fromCharCode(65 + oIndex)}
                     >
-                      {String.fromCharCode(65 + oIndex)}. {question.options![oIndex]}
+                      {String.fromCharCode(65 + oIndex)}.{" "}
+                      {question.options![oIndex]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -1291,7 +1335,9 @@ export default function AdminCourses() {
               <Label>Giải thích (tùy chọn)</Label>
               <Textarea
                 value={question.explanation || ""}
-                onChange={(e) => updateQuestion(index, "explanation", e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, "explanation", e.target.value)
+                }
                 placeholder="Giải thích tại sao đáp án này đúng..."
                 rows={2}
               />
@@ -1306,7 +1352,9 @@ export default function AdminCourses() {
               <Input
                 type="number"
                 value={question.maxWords || 300}
-                onChange={(e) => updateQuestion(index, "maxWords", parseInt(e.target.value))}
+                onChange={(e) =>
+                  updateQuestion(index, "maxWords", parseInt(e.target.value))
+                }
                 placeholder="300"
               />
             </div>
@@ -1328,7 +1376,9 @@ export default function AdminCourses() {
               <Label>Rubric đánh giá</Label>
               <Textarea
                 value={question.rubric || ""}
-                onChange={(e) => updateQuestion(index, "rubric", e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, "rubric", e.target.value)
+                }
                 placeholder="Tiêu chí đánh giá bài làm của học sinh..."
                 rows={3}
               />
@@ -1342,7 +1392,9 @@ export default function AdminCourses() {
               <Label>Đáp án mẫu</Label>
               <Input
                 value={question.correctAnswer || ""}
-                onChange={(e) => updateQuestion(index, "correctAnswer", e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, "correctAnswer", e.target.value)
+                }
                 placeholder="Đáp án đúng..."
               />
             </div>
@@ -1377,7 +1429,8 @@ export default function AdminCourses() {
               Quản lý khóa học
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý tất cả các khóa học và môn học - Có thể chỉnh sửa chi tiết từng bài tập
+              Quản lý tất cả các khóa học và môn học - Có thể chỉnh sửa chi tiết
+              từng bài tập
             </p>
           </div>
 
@@ -1849,7 +1902,8 @@ export default function AdminCourses() {
                 Chi tiết khóa học: {selectedCourse?.name}
               </DialogTitle>
               <DialogDescription>
-                Quản lý nội dung và bài tập của khóa học - Có thể chỉnh sửa chi tiết từng câu hỏi
+                Quản lý nội dung và bài tập của khóa học - Có thể chỉnh sửa chi
+                tiết từng câu hỏi
               </DialogDescription>
             </DialogHeader>
 
@@ -1941,21 +1995,29 @@ export default function AdminCourses() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Thời lượng:</Label>
-                        <span className="text-sm">{selectedCourse.duration}</span>
+                        <span className="text-sm">
+                          {selectedCourse.duration}
+                        </span>
                       </div>
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Độ tuổi:</Label>
-                        <span className="text-sm">{selectedCourse.ageGroup}</span>
+                        <span className="text-sm">
+                          {selectedCourse.ageGroup}
+                        </span>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Học sinh:</Label>
-                        <span className="text-sm">{selectedCourse.studentsCount}</span>
+                        <span className="text-sm">
+                          {selectedCourse.studentsCount}
+                        </span>
                       </div>
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Ho��n thành:</Label>
-                        <span className="text-sm">{selectedCourse.completionRate}%</span>
+                        <span className="text-sm">
+                          {selectedCourse.completionRate}%
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -1964,8 +2026,13 @@ export default function AdminCourses() {
                 {activeTab === "lessons" && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Danh sách bài giảng</h3>
-                      <Dialog open={isAddLessonDialogOpen} onOpenChange={setIsAddLessonDialogOpen}>
+                      <h3 className="text-lg font-semibold">
+                        Danh sách bài giảng
+                      </h3>
+                      <Dialog
+                        open={isAddLessonDialogOpen}
+                        onOpenChange={setIsAddLessonDialogOpen}
+                      >
                         <DialogTrigger asChild>
                           <Button>
                             <Plus className="h-4 w-4 mr-2" />
@@ -1981,28 +2048,40 @@ export default function AdminCourses() {
                           </DialogHeader>
                           <div className="grid gap-4 py-4">
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="lessonTitle" className="text-right">
+                              <Label
+                                htmlFor="lessonTitle"
+                                className="text-right"
+                              >
                                 Tiêu đề *
                               </Label>
                               <Input
                                 id="lessonTitle"
                                 value={newLesson.title || ""}
                                 onChange={(e) =>
-                                  setNewLesson({ ...newLesson, title: e.target.value })
+                                  setNewLesson({
+                                    ...newLesson,
+                                    title: e.target.value,
+                                  })
                                 }
                                 className="col-span-3"
                                 placeholder="Tiêu đề bài giảng"
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="lessonDescription" className="text-right">
+                              <Label
+                                htmlFor="lessonDescription"
+                                className="text-right"
+                              >
                                 Mô tả
                               </Label>
                               <Textarea
                                 id="lessonDescription"
                                 value={newLesson.description || ""}
                                 onChange={(e) =>
-                                  setNewLesson({ ...newLesson, description: e.target.value })
+                                  setNewLesson({
+                                    ...newLesson,
+                                    description: e.target.value,
+                                  })
                                 }
                                 className="col-span-3"
                                 placeholder="Mô tả bài giảng"
@@ -2010,7 +2089,10 @@ export default function AdminCourses() {
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="lessonType" className="text-right">
+                              <Label
+                                htmlFor="lessonType"
+                                className="text-right"
+                              >
                                 Loại bài giảng *
                               </Label>
                               <Select
@@ -2024,38 +2106,58 @@ export default function AdminCourses() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="video">Video</SelectItem>
-                                  <SelectItem value="reading">Đọc hiểu</SelectItem>
-                                  <SelectItem value="interactive">Tương tác</SelectItem>
+                                  <SelectItem value="reading">
+                                    Đọc hiểu
+                                  </SelectItem>
+                                  <SelectItem value="interactive">
+                                    Tương tác
+                                  </SelectItem>
                                   <SelectItem value="game">Trò chơi</SelectItem>
                                   <SelectItem value="song">Bài hát</SelectItem>
-                                  <SelectItem value="exercise">Bài tập</SelectItem>
-                                  <SelectItem value="observation">Quan sát</SelectItem>
+                                  <SelectItem value="exercise">
+                                    Bài tập
+                                  </SelectItem>
+                                  <SelectItem value="observation">
+                                    Quan sát
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="lessonDuration" className="text-right">
+                              <Label
+                                htmlFor="lessonDuration"
+                                className="text-right"
+                              >
                                 Thời lượng *
                               </Label>
                               <Input
                                 id="lessonDuration"
                                 value={newLesson.duration || ""}
                                 onChange={(e) =>
-                                  setNewLesson({ ...newLesson, duration: e.target.value })
+                                  setNewLesson({
+                                    ...newLesson,
+                                    duration: e.target.value,
+                                  })
                                 }
                                 className="col-span-3"
                                 placeholder="VD: 15 phút"
                               />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="lessonContent" className="text-right">
+                              <Label
+                                htmlFor="lessonContent"
+                                className="text-right"
+                              >
                                 Nội dung
                               </Label>
                               <Textarea
                                 id="lessonContent"
                                 value={newLesson.content || ""}
                                 onChange={(e) =>
-                                  setNewLesson({ ...newLesson, content: e.target.value })
+                                  setNewLesson({
+                                    ...newLesson,
+                                    content: e.target.value,
+                                  })
                                 }
                                 className="col-span-3"
                                 placeholder="Nội dung chi tiết của bài giảng"
@@ -2064,14 +2166,20 @@ export default function AdminCourses() {
                             </div>
                             {newLesson.type === "video" && (
                               <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="videoUrl" className="text-right">
+                                <Label
+                                  htmlFor="videoUrl"
+                                  className="text-right"
+                                >
                                   URL Video
                                 </Label>
                                 <Input
                                   id="videoUrl"
                                   value={newLesson.videoUrl || ""}
                                   onChange={(e) =>
-                                    setNewLesson({ ...newLesson, videoUrl: e.target.value })
+                                    setNewLesson({
+                                      ...newLesson,
+                                      videoUrl: e.target.value,
+                                    })
                                   }
                                   className="col-span-3"
                                   placeholder="https://youtube.com/watch?v=..."
@@ -2087,7 +2195,10 @@ export default function AdminCourses() {
                                   id="gameUrl"
                                   value={newLesson.gameUrl || ""}
                                   onChange={(e) =>
-                                    setNewLesson({ ...newLesson, gameUrl: e.target.value })
+                                    setNewLesson({
+                                      ...newLesson,
+                                      gameUrl: e.target.value,
+                                    })
                                   }
                                   className="col-span-3"
                                   placeholder="https://game.example.com"
@@ -2107,7 +2218,11 @@ export default function AdminCourses() {
                             </Button>
                             <Button
                               onClick={handleAddLesson}
-                              disabled={!newLesson.title || !newLesson.type || !newLesson.duration}
+                              disabled={
+                                !newLesson.title ||
+                                !newLesson.type ||
+                                !newLesson.duration
+                              }
                             >
                               <Save className="h-4 w-4 mr-2" />
                               Thêm bài giảng
@@ -2117,7 +2232,8 @@ export default function AdminCourses() {
                       </Dialog>
                     </div>
 
-                    {selectedCourse.lessons && selectedCourse.lessons.length > 0 ? (
+                    {selectedCourse.lessons &&
+                    selectedCourse.lessons.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.lessons.map((lesson) => (
                           <Card key={lesson.id} className="p-4">
@@ -2125,14 +2241,21 @@ export default function AdminCourses() {
                               <div className="flex items-center gap-3">
                                 {getLessonTypeIcon(lesson.type)}
                                 <div>
-                                  <h4 className="font-semibold">{lesson.title}</h4>
-                                  <p className="text-sm text-gray-600">{lesson.description}</p>
+                                  <h4 className="font-semibold">
+                                    {lesson.title}
+                                  </h4>
+                                  <p className="text-sm text-gray-600">
+                                    {lesson.description}
+                                  </p>
                                   <div className="flex items-center gap-4 mt-1">
                                     <span className="text-xs text-gray-500">
                                       <Clock className="h-3 w-3 inline mr-1" />
                                       {lesson.duration}
                                     </span>
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       {lesson.type}
                                     </Badge>
                                   </div>
@@ -2171,10 +2294,15 @@ export default function AdminCourses() {
                 {activeTab === "exercises" && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Danh sách bài tập</h3>
+                      <h3 className="text-lg font-semibold">
+                        Danh sách bài tập
+                      </h3>
                       <div className="flex gap-2">
                         {/* Exercise Bank Assignment Dialog */}
-                        <Dialog open={isAssignDialogOpen} onOpenChange={setIsAssignDialogOpen}>
+                        <Dialog
+                          open={isAssignDialogOpen}
+                          onOpenChange={setIsAssignDialogOpen}
+                        >
                           <DialogTrigger asChild>
                             <Button
                               variant="outline"
@@ -2191,7 +2319,8 @@ export default function AdminCourses() {
                                 Kho bài tập - Chọn bài tập để gán vào khóa học
                               </DialogTitle>
                               <DialogDescription>
-                                Duyệt và chọn bài tập từ kho để gán vào khóa học. Có thể chọn nhiều bài tập cùng lúc.
+                                Duyệt và chọn bài tập từ kho để gán vào khóa
+                                học. Có thể chọn nhiều bài tập cùng lúc.
                               </DialogDescription>
                             </DialogHeader>
 
@@ -2203,11 +2332,16 @@ export default function AdminCourses() {
                                   <Input
                                     placeholder="Tìm kiếm trong kho bài tập..."
                                     value={bankSearchTerm}
-                                    onChange={(e) => setBankSearchTerm(e.target.value)}
+                                    onChange={(e) =>
+                                      setBankSearchTerm(e.target.value)
+                                    }
                                     className="pl-10"
                                   />
                                 </div>
-                                <Select value={bankSubjectFilter} onValueChange={setBankSubjectFilter}>
+                                <Select
+                                  value={bankSubjectFilter}
+                                  onValueChange={setBankSubjectFilter}
+                                >
                                   <SelectTrigger className="w-40">
                                     <SelectValue />
                                   </SelectTrigger>
@@ -2219,7 +2353,10 @@ export default function AdminCourses() {
                                     ))}
                                   </SelectContent>
                                 </Select>
-                                <Select value={bankDepartmentFilter} onValueChange={setBankDepartmentFilter}>
+                                <Select
+                                  value={bankDepartmentFilter}
+                                  onValueChange={setBankDepartmentFilter}
+                                >
                                   <SelectTrigger className="w-40">
                                     <Building2 className="h-4 w-4 mr-2" />
                                     <SelectValue />
@@ -2236,16 +2373,24 @@ export default function AdminCourses() {
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setBankViewMode('grid')}
-                                    className={bankViewMode === 'grid' ? 'bg-blue-100' : ''}
+                                    onClick={() => setBankViewMode("grid")}
+                                    className={
+                                      bankViewMode === "grid"
+                                        ? "bg-blue-100"
+                                        : ""
+                                    }
                                   >
                                     <Grid3X3 className="h-4 w-4" />
                                   </Button>
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setBankViewMode('list')}
-                                    className={bankViewMode === 'list' ? 'bg-blue-100' : ''}
+                                    onClick={() => setBankViewMode("list")}
+                                    className={
+                                      bankViewMode === "list"
+                                        ? "bg-blue-100"
+                                        : ""
+                                    }
                                   >
                                     <List className="h-4 w-4" />
                                   </Button>
@@ -2256,12 +2401,15 @@ export default function AdminCourses() {
                               {selectedExercisesFromBank.size > 0 && (
                                 <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
                                   <span className="text-blue-800 font-medium">
-                                    Đã chọn {selectedExercisesFromBank.size} bài tập
+                                    Đã chọn {selectedExercisesFromBank.size} bài
+                                    tập
                                   </span>
                                   <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() => setSelectedExercisesFromBank(new Set())}
+                                    onClick={() =>
+                                      setSelectedExercisesFromBank(new Set())
+                                    }
                                   >
                                     Bỏ chọn tất cả
                                   </Button>
@@ -2270,9 +2418,11 @@ export default function AdminCourses() {
 
                               {/* Exercise Bank Grid/List */}
                               <div className="overflow-y-auto max-h-[500px]">
-                                {bankViewMode === 'grid' ? (
+                                {bankViewMode === "grid" ? (
                                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {filteredBankExercises.map((exercise) => renderBankExerciseCard(exercise))}
+                                    {filteredBankExercises.map((exercise) =>
+                                      renderBankExerciseCard(exercise),
+                                    )}
                                   </div>
                                 ) : (
                                   <div className="space-y-2">
@@ -2280,30 +2430,49 @@ export default function AdminCourses() {
                                       <Card
                                         key={exercise.id}
                                         className={`cursor-pointer transition-all hover:shadow-md ${
-                                          selectedExercisesFromBank.has(exercise.id) ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                                          selectedExercisesFromBank.has(
+                                            exercise.id,
+                                          )
+                                            ? "ring-2 ring-blue-500 bg-blue-50"
+                                            : ""
                                         }`}
-                                        onClick={() => toggleExerciseSelection(exercise.id)}
+                                        onClick={() =>
+                                          toggleExerciseSelection(exercise.id)
+                                        }
                                       >
                                         <CardContent className="p-4">
                                           <div className="flex items-center gap-4">
                                             <Checkbox
-                                              checked={selectedExercisesFromBank.has(exercise.id)}
+                                              checked={selectedExercisesFromBank.has(
+                                                exercise.id,
+                                              )}
                                               onChange={() => {}}
                                             />
-                                            <div className="text-2xl">{exercise.thumbnail}</div>
+                                            <div className="text-2xl">
+                                              {exercise.thumbnail}
+                                            </div>
                                             <div className="flex-1">
-                                              <h3 className="font-semibold">{exercise.title}</h3>
+                                              <h3 className="font-semibold">
+                                                {exercise.title}
+                                              </h3>
                                               <p className="text-sm text-gray-600 line-clamp-1">
                                                 {exercise.description}
                                               </p>
                                               <div className="flex items-center gap-2 mt-2">
-                                                <Badge variant="outline" className="text-xs">
+                                                <Badge
+                                                  variant="outline"
+                                                  className="text-xs"
+                                                >
                                                   {exercise.subject}
                                                 </Badge>
-                                                <Badge className={`text-xs ${getTypeColor(exercise.type)}`}>
+                                                <Badge
+                                                  className={`text-xs ${getTypeColor(exercise.type)}`}
+                                                >
                                                   {exercise.type}
                                                 </Badge>
-                                                <Badge className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
+                                                <Badge
+                                                  className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
+                                                >
                                                   {exercise.difficulty}
                                                 </Badge>
                                               </div>
@@ -2342,14 +2511,18 @@ export default function AdminCourses() {
                                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
                               >
                                 <Plus className="h-4 w-4 mr-2" />
-                                Gán {selectedExercisesFromBank.size} bài tập được chọn
+                                Gán {selectedExercisesFromBank.size} bài tập
+                                được chọn
                               </Button>
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
 
                         {/* AI Generate Exercise Dialog */}
-                        <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
+                        <Dialog
+                          open={isAIDialogOpen}
+                          onOpenChange={setIsAIDialogOpen}
+                        >
                           <DialogTrigger asChild>
                             <Button
                               variant="outline"
@@ -2366,7 +2539,8 @@ export default function AdminCourses() {
                                 AI tạo bài tập cho khóa học
                               </DialogTitle>
                               <DialogDescription>
-                                Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho khóa học này
+                                Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho
+                                khóa học này
                               </DialogDescription>
                             </DialogHeader>
 
@@ -2376,16 +2550,24 @@ export default function AdminCourses() {
                                   <Loader2 className="h-4 w-4 animate-spin" />
                                   <span>{processingStep}</span>
                                 </div>
-                                <Progress value={uploadProgress} className="w-full" />
+                                <Progress
+                                  value={uploadProgress}
+                                  className="w-full"
+                                />
                               </div>
                             ) : (
                               <div className="space-y-4">
                                 <div>
-                                  <Label>Mô tả bài tập cần tạo cho khóa học "{selectedCourse?.name}"</Label>
+                                  <Label>
+                                    Mô tả bài tập cần tạo cho khóa học "
+                                    {selectedCourse?.name}"
+                                  </Label>
                                   <Textarea
                                     value={aiPrompt}
-                                    onChange={(e) => setAiPrompt(e.target.value)}
-                                    placeholder={`Ví dụ: Tạo 5 câu hỏi trắc nghiệm về ${selectedCourse?.subject || 'môn học'} phù hợp với độ tuổi ${selectedCourse?.ageGroup || '6-8 tuổi'}, độ khó ${selectedCourse?.difficulty || 'cơ bản'}...`}
+                                    onChange={(e) =>
+                                      setAiPrompt(e.target.value)
+                                    }
+                                    placeholder={`Ví dụ: Tạo 5 câu hỏi trắc nghiệm về ${selectedCourse?.subject || "môn học"} phù hợp với độ tuổi ${selectedCourse?.ageGroup || "6-8 tuổi"}, độ khó ${selectedCourse?.difficulty || "cơ bản"}...`}
                                     rows={4}
                                   />
                                 </div>
@@ -2409,7 +2591,9 @@ export default function AdminCourses() {
                                     <Button
                                       type="button"
                                       variant="outline"
-                                      onClick={() => fileInputRef.current?.click()}
+                                      onClick={() =>
+                                        fileInputRef.current?.click()
+                                      }
                                       className="w-full"
                                     >
                                       <Upload className="h-4 w-4 mr-2" />
@@ -2454,7 +2638,10 @@ export default function AdminCourses() {
                           </DialogContent>
                         </Dialog>
 
-                        <Dialog open={isAddExerciseDialogOpen} onOpenChange={setIsAddExerciseDialogOpen}>
+                        <Dialog
+                          open={isAddExerciseDialogOpen}
+                          onOpenChange={setIsAddExerciseDialogOpen}
+                        >
                           <DialogTrigger asChild>
                             <Button>
                               <Plus className="h-4 w-4 mr-2" />
@@ -2465,17 +2652,23 @@ export default function AdminCourses() {
                             <DialogHeader>
                               <DialogTitle>Tạo bài tập mới</DialogTitle>
                               <DialogDescription>
-                                Tạo bài tập với nhiều dạng câu hỏi khác nhau - Có thể chỉnh sửa chi tiết từng câu hỏi
+                                Tạo bài tập với nhiều dạng câu hỏi khác nhau -
+                                Có thể chỉnh sửa chi tiết từng câu hỏi
                               </DialogDescription>
                             </DialogHeader>
 
                             <Tabs defaultValue="basic" className="w-full">
                               <TabsList className="grid w-full grid-cols-3">
-                                <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
-                                <TabsTrigger value="questions">
-                                  Câu hỏi ({(newExercise.questions || []).length})
+                                <TabsTrigger value="basic">
+                                  Thông tin cơ bản
                                 </TabsTrigger>
-                                <TabsTrigger value="import">Import hàng loạt</TabsTrigger>
+                                <TabsTrigger value="questions">
+                                  Câu hỏi (
+                                  {(newExercise.questions || []).length})
+                                </TabsTrigger>
+                                <TabsTrigger value="import">
+                                  Import hàng loạt
+                                </TabsTrigger>
                               </TabsList>
 
                               <TabsContent value="basic" className="space-y-4">
@@ -2498,17 +2691,28 @@ export default function AdminCourses() {
                                     <Select
                                       value={newExercise.type || ""}
                                       onValueChange={(value) =>
-                                        setNewExercise({ ...newExercise, type: value })
+                                        setNewExercise({
+                                          ...newExercise,
+                                          type: value,
+                                        })
                                       }
                                     >
                                       <SelectTrigger>
                                         <SelectValue placeholder="Chọn loại" />
                                       </SelectTrigger>
                                       <SelectContent>
-                                        <SelectItem value="quiz">Trắc nghiệm</SelectItem>
-                                        <SelectItem value="practice">Luyện tập</SelectItem>
-                                        <SelectItem value="game">Trò chơi</SelectItem>
-                                        <SelectItem value="experiment">Thí nghiệm</SelectItem>
+                                        <SelectItem value="quiz">
+                                          Trắc nghiệm
+                                        </SelectItem>
+                                        <SelectItem value="practice">
+                                          Luyện tập
+                                        </SelectItem>
+                                        <SelectItem value="game">
+                                          Trò chơi
+                                        </SelectItem>
+                                        <SelectItem value="experiment">
+                                          Thí nghiệm
+                                        </SelectItem>
                                       </SelectContent>
                                     </Select>
                                   </div>
@@ -2531,8 +2735,12 @@ export default function AdminCourses() {
                                       </SelectTrigger>
                                       <SelectContent>
                                         <SelectItem value="Dễ">Dễ</SelectItem>
-                                        <SelectItem value="Trung bình">Trung bình</SelectItem>
-                                        <SelectItem value="Khó">Kh��</SelectItem>
+                                        <SelectItem value="Trung bình">
+                                          Trung bình
+                                        </SelectItem>
+                                        <SelectItem value="Khó">
+                                          Kh��
+                                        </SelectItem>
                                       </SelectContent>
                                     </Select>
                                   </div>
@@ -2597,10 +2805,14 @@ export default function AdminCourses() {
                                 </div>
                               </TabsContent>
 
-                              <TabsContent value="questions" className="space-y-4">
+                              <TabsContent
+                                value="questions"
+                                className="space-y-4"
+                              >
                                 <div className="flex items-center justify-between">
                                   <Label className="text-lg font-semibold">
-                                    Danh sách câu hỏi ({(newExercise.questions || []).length} câu)
+                                    Danh sách câu hỏi (
+                                    {(newExercise.questions || []).length} câu)
                                   </Label>
                                   <div className="flex gap-2">
                                     <DropdownMenu>
@@ -2612,7 +2824,9 @@ export default function AdminCourses() {
                                       </DropdownMenuTrigger>
                                       <DropdownMenuContent>
                                         <DropdownMenuItem
-                                          onClick={() => addQuestion("multiple_choice")}
+                                          onClick={() =>
+                                            addQuestion("multiple_choice")
+                                          }
                                         >
                                           <CheckCircle className="mr-2 h-4 w-4" />
                                           Trắc nghiệm
@@ -2624,7 +2838,9 @@ export default function AdminCourses() {
                                           Tự luận dài
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
-                                          onClick={() => addQuestion("short_answer")}
+                                          onClick={() =>
+                                            addQuestion("short_answer")
+                                          }
                                         >
                                           <Edit className="mr-2 h-4 w-4" />
                                           Trả lời ngắn
@@ -2634,16 +2850,21 @@ export default function AdminCourses() {
                                   </div>
                                 </div>
 
-                                {(!newExercise.questions || newExercise.questions.length === 0) && (
+                                {(!newExercise.questions ||
+                                  newExercise.questions.length === 0) && (
                                   <div className="text-center py-8 text-gray-500">
                                     <Edit className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                                    <p>Chưa có câu hỏi nào. Thêm câu hỏi đầu tiên!</p>
+                                    <p>
+                                      Chưa có câu hỏi nào. Thêm câu hỏi đầu
+                                      tiên!
+                                    </p>
                                   </div>
                                 )}
 
                                 <div className="space-y-4">
-                                  {(newExercise.questions || []).map((question, index) =>
-                                    renderQuestionForm(question, index),
+                                  {(newExercise.questions || []).map(
+                                    (question, index) =>
+                                      renderQuestionForm(question, index),
                                   )}
                                 </div>
                               </TabsContent>
@@ -2655,13 +2876,16 @@ export default function AdminCourses() {
                                       Import câu hỏi hàng loạt
                                     </Label>
                                     <p className="text-sm text-gray-600">
-                                      Nhập nhiều câu hỏi cùng lúc, mỗi câu hỏi bắt đầu bằng "Q:"
+                                      Nhập nhiều câu hỏi cùng lúc, mỗi câu hỏi
+                                      bắt đầu bằng "Q:"
                                     </p>
                                   </div>
 
                                   <Textarea
                                     value={bulkQuestions}
-                                    onChange={(e) => setBulkQuestions(e.target.value)}
+                                    onChange={(e) =>
+                                      setBulkQuestions(e.target.value)
+                                    }
                                     placeholder={`Q: 2 + 3 = ?
 Q: Thủ đô của Việt Nam là gì?
 Q: Viết đoạn văn tả về mùa xuân`}
@@ -2692,10 +2916,12 @@ Q: Viết đoạn văn tả về mùa xuân`}
                                     <ul className="text-sm text-blue-800 space-y-1">
                                       <li>• Mỗi câu hỏi bắt đầu bằng "Q:"</li>
                                       <li>
-                                        • Câu hỏi sẽ được tạo dạng trả lời ngắn mặc định
+                                        • Câu hỏi sẽ được tạo dạng trả lời ngắn
+                                        mặc định
                                       </li>
                                       <li>
-                                        • Có thể chỉnh sửa loại câu hỏi sau khi import
+                                        • Có thể chỉnh sửa loại câu hỏi sau khi
+                                        import
                                       </li>
                                     </ul>
                                   </div>
@@ -2719,7 +2945,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
                                   !newExercise.title ||
                                   !newExercise.type ||
                                   !newExercise.difficulty ||
-                                  !(newExercise.questions && newExercise.questions.length > 0)
+                                  !(
+                                    newExercise.questions &&
+                                    newExercise.questions.length > 0
+                                  )
                                 }
                               >
                                 <Save className="h-4 w-4 mr-2" />
@@ -2731,7 +2960,8 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       </div>
                     </div>
 
-                    {selectedCourse.exercises && selectedCourse.exercises.length > 0 ? (
+                    {selectedCourse.exercises &&
+                    selectedCourse.exercises.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.exercises.map((exercise) => (
                           <Card key={exercise.id} className="p-4">
@@ -2740,31 +2970,43 @@ Q: Viết đoạn văn tả về mùa xuân`}
                                 {getExerciseTypeIcon(exercise.type)}
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2 mb-1">
-                                    <h4 className="font-semibold">{exercise.title}</h4>
+                                    <h4 className="font-semibold">
+                                      {exercise.title}
+                                    </h4>
                                     {exercise.assignedFrom === "bank" && (
-                                      <Badge variant="secondary" className="text-xs">
+                                      <Badge
+                                        variant="secondary"
+                                        className="text-xs"
+                                      >
                                         Từ kho bài tập
                                       </Badge>
                                     )}
                                   </div>
-                                  <p className="text-sm text-gray-600 mb-2">{exercise.description}</p>
+                                  <p className="text-sm text-gray-600 mb-2">
+                                    {exercise.description}
+                                  </p>
                                   <div className="flex items-center gap-4">
                                     <span className="text-xs text-gray-500">
                                       <Award className="h-3 w-3 inline mr-1" />
                                       {exercise.points} điểm
                                     </span>
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       {exercise.difficulty}
                                     </Badge>
                                     <span className="text-xs text-gray-500">
-                                      {Array.isArray(exercise.questions) 
-                                        ? exercise.questions.length 
-                                        : exercise.questions || 0} câu hỏi
+                                      {Array.isArray(exercise.questions)
+                                        ? exercise.questions.length
+                                        : exercise.questions || 0}{" "}
+                                      câu hỏi
                                     </span>
                                     {exercise.timeLimit && (
                                       <span className="text-xs text-gray-500">
                                         <Clock className="h-3 w-3 inline mr-1" />
-                                        {Math.floor(exercise.timeLimit / 60)} phút
+                                        {Math.floor(exercise.timeLimit / 60)}{" "}
+                                        phút
                                       </span>
                                     )}
                                   </div>
@@ -2782,7 +3024,9 @@ Q: Viết đoạn văn tả về mùa xuân`}
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  onClick={() => handleDeleteExercise(exercise.id)}
+                                  onClick={() =>
+                                    handleDeleteExercise(exercise.id)
+                                  }
                                   className="text-red-600 hover:text-red-700"
                                 >
                                   <Trash2 className="h-4 w-4" />
@@ -2795,7 +3039,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
                     ) : (
                       <div className="text-center py-8 text-gray-500">
                         <Edit className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                        <p>Chưa có bài tập nào. Tạo bài tập đầu tiên hoặc gán từ kho bài tập!</p>
+                        <p>
+                          Chưa có bài tập nào. Tạo bài tập đầu tiên hoặc gán từ
+                          kho bài tập!
+                        </p>
                       </div>
                     )}
                   </div>
@@ -2806,7 +3053,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
         </Dialog>
 
         {/* Edit Exercise Dialog - with detailed question editing */}
-        <Dialog open={isEditExerciseDialogOpen} onOpenChange={setIsEditExerciseDialogOpen}>
+        <Dialog
+          open={isEditExerciseDialogOpen}
+          onOpenChange={setIsEditExerciseDialogOpen}
+        >
           <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Chỉnh sửa bài tập: {editExercise.title}</DialogTitle>
@@ -2945,7 +3195,8 @@ Q: Viết đoạn văn tả về mùa xuân`}
               <TabsContent value="questions" className="space-y-4">
                 <div className="flex items-center justify-between">
                   <Label className="text-lg font-semibold">
-                    Chỉnh sửa từng câu hỏi ({(editExercise.questions || []).length} câu)
+                    Chỉnh sửa từng câu hỏi (
+                    {(editExercise.questions || []).length} câu)
                   </Label>
                   <div className="flex gap-2">
                     <DropdownMenu>
@@ -2962,9 +3213,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                           <CheckCircle className="mr-2 h-4 w-4" />
                           Trắc nghiệm
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => addQuestion("essay")}
-                        >
+                        <DropdownMenuItem onClick={() => addQuestion("essay")}>
                           <FileText className="mr-2 h-4 w-4" />
                           Tự luận dài
                         </DropdownMenuItem>
@@ -2979,7 +3228,8 @@ Q: Viết đoạn văn tả về mùa xuân`}
                   </div>
                 </div>
 
-                {(!editExercise.questions || editExercise.questions.length === 0) && (
+                {(!editExercise.questions ||
+                  editExercise.questions.length === 0) && (
                   <div className="text-center py-8 text-gray-500">
                     <Edit className="h-12 w-12 mx-auto mb-2 opacity-50" />
                     <p>Chưa có câu hỏi nào. Thêm câu hỏi đầu tiên!</p>
@@ -3016,7 +3266,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
         </Dialog>
 
         {/* Edit Lesson Dialog */}
-        <Dialog open={isEditLessonDialogOpen} onOpenChange={setIsEditLessonDialogOpen}>
+        <Dialog
+          open={isEditLessonDialogOpen}
+          onOpenChange={setIsEditLessonDialogOpen}
+        >
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
               <DialogTitle>Chỉnh sửa b��i giảng</DialogTitle>
@@ -3047,7 +3300,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
                   id="editLessonDescription"
                   value={editLesson.description || ""}
                   onChange={(e) =>
-                    setEditLesson({ ...editLesson, description: e.target.value })
+                    setEditLesson({
+                      ...editLesson,
+                      description: e.target.value,
+                    })
                   }
                   className="col-span-3"
                   placeholder="Mô tả bài giảng"
@@ -3152,7 +3408,9 @@ Q: Viết đoạn văn tả về mùa xuân`}
               </Button>
               <Button
                 onClick={handleUpdateLesson}
-                disabled={!editLesson.title || !editLesson.type || !editLesson.duration}
+                disabled={
+                  !editLesson.title || !editLesson.type || !editLesson.duration
+                }
               >
                 <Save className="h-4 w-4 mr-2" />
                 Lưu thay đổi
@@ -3210,7 +3468,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editSubject" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editSubject"
+                    className="text-right col-span-2"
+                  >
                     Môn học *
                   </Label>
                   <Select
@@ -3261,7 +3522,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editDuration" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editDuration"
+                    className="text-right col-span-2"
+                  >
                     Thời lượng *
                   </Label>
                   <Input
@@ -3276,7 +3540,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editAgeGroup" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editAgeGroup"
+                    className="text-right col-span-2"
+                  >
                     Độ tuổi *
                   </Label>
                   <Select

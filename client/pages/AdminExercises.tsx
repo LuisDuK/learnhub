@@ -315,8 +315,10 @@ export default function AdminExercises() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [selectedExercises, setSelectedExercises] = useState<Set<number>>(new Set());
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedExercises, setSelectedExercises] = useState<Set<number>>(
+    new Set(),
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Bank filters
@@ -353,11 +355,12 @@ export default function AdminExercises() {
   const filteredBankExercises = mockExerciseBank.filter((exercise) => {
     const matchesSearch =
       exercise.title.toLowerCase().includes(bankSearchTerm.toLowerCase()) ||
-      exercise.tags.some(tag => tag.includes(bankSearchTerm.toLowerCase()));
+      exercise.tags.some((tag) => tag.includes(bankSearchTerm.toLowerCase()));
     const matchesSubject =
       bankSubjectFilter === "Tất cả" || exercise.subject === bankSubjectFilter;
     const matchesDepartment =
-      bankDepartmentFilter === "Tất cả" || exercise.department === bankDepartmentFilter;
+      bankDepartmentFilter === "Tất cả" ||
+      exercise.department === bankDepartmentFilter;
     return matchesSearch && matchesSubject && matchesDepartment;
   });
 
@@ -392,28 +395,30 @@ export default function AdminExercises() {
   };
 
   const handleAssignFromBank = () => {
-    const selectedBankExercises = Array.from(selectedExercises).map(id => {
-      const bankExercise = mockExerciseBank.find(ex => ex.id === id);
-      if (bankExercise) {
-        return {
-          id: exercises.length + selectedExercises.size + Math.random(),
-          title: bankExercise.title,
-          type: bankExercise.type,
-          subject: bankExercise.subject,
-          creator: `${bankExercise.creator} (Từ kho)`,
-          createdAt: new Date().toISOString().split("T")[0],
-          totalQuestions: bankExercise.totalQuestions,
-          difficulty: bankExercise.difficulty,
-          submissions: 0,
-          avgScore: 0,
-          department: bankExercise.department,
-          isFromBank: true,
-          tags: bankExercise.tags,
-          description: bankExercise.description,
-        };
-      }
-      return null;
-    }).filter(Boolean);
+    const selectedBankExercises = Array.from(selectedExercises)
+      .map((id) => {
+        const bankExercise = mockExerciseBank.find((ex) => ex.id === id);
+        if (bankExercise) {
+          return {
+            id: exercises.length + selectedExercises.size + Math.random(),
+            title: bankExercise.title,
+            type: bankExercise.type,
+            subject: bankExercise.subject,
+            creator: `${bankExercise.creator} (Từ kho)`,
+            createdAt: new Date().toISOString().split("T")[0],
+            totalQuestions: bankExercise.totalQuestions,
+            difficulty: bankExercise.difficulty,
+            submissions: 0,
+            avgScore: 0,
+            department: bankExercise.department,
+            isFromBank: true,
+            tags: bankExercise.tags,
+            description: bankExercise.description,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
 
     setExercises([...exercises, ...selectedBankExercises]);
     setSelectedExercises(new Set());
@@ -840,12 +845,12 @@ export default function AdminExercises() {
 
   const renderBankExerciseCard = (exercise: BankExercise) => {
     const isSelected = selectedExercises.has(exercise.id);
-    
+
     return (
-      <Card 
-        key={exercise.id} 
+      <Card
+        key={exercise.id}
         className={`cursor-pointer transition-all hover:shadow-lg ${
-          isSelected ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+          isSelected ? "ring-2 ring-blue-500 bg-blue-50" : ""
         }`}
         onClick={() => {
           const newSelected = new Set(selectedExercises);
@@ -886,7 +891,7 @@ export default function AdminExercises() {
           <p className="text-xs text-gray-600 line-clamp-2 mb-3">
             {exercise.description}
           </p>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-500">Khối:</span>
@@ -894,7 +899,9 @@ export default function AdminExercises() {
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-500">Độ khó:</span>
-              <Badge className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
+              <Badge
+                className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
+              >
                 {exercise.difficulty}
               </Badge>
             </div>
@@ -942,7 +949,8 @@ export default function AdminExercises() {
               Quản lý bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho nhiều khóa học
+              Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho
+              nhiều khóa học
             </p>
           </div>
 
@@ -965,7 +973,8 @@ export default function AdminExercises() {
                     Kho bài tập - Chọn bài tập để gán
                   </DialogTitle>
                   <DialogDescription>
-                    Duyệt và chọn bài tập từ kho để gán vào khóa học. Có thể chọn nhiều bài tập cùng lúc.
+                    Duyệt và chọn bài tập từ kho để gán vào khóa học. Có thể
+                    chọn nhiều bài tập cùng lúc.
                   </DialogDescription>
                 </DialogHeader>
 
@@ -981,7 +990,10 @@ export default function AdminExercises() {
                         className="pl-10"
                       />
                     </div>
-                    <Select value={bankSubjectFilter} onValueChange={setBankSubjectFilter}>
+                    <Select
+                      value={bankSubjectFilter}
+                      onValueChange={setBankSubjectFilter}
+                    >
                       <SelectTrigger className="w-40">
                         <SelectValue />
                       </SelectTrigger>
@@ -993,7 +1005,10 @@ export default function AdminExercises() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <Select value={bankDepartmentFilter} onValueChange={setBankDepartmentFilter}>
+                    <Select
+                      value={bankDepartmentFilter}
+                      onValueChange={setBankDepartmentFilter}
+                    >
                       <SelectTrigger className="w-40">
                         <Building2 className="h-4 w-4 mr-2" />
                         <SelectValue />
@@ -1010,16 +1025,16 @@ export default function AdminExercises() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setViewMode('grid')}
-                        className={viewMode === 'grid' ? 'bg-blue-100' : ''}
+                        onClick={() => setViewMode("grid")}
+                        className={viewMode === "grid" ? "bg-blue-100" : ""}
                       >
                         <Grid3X3 className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setViewMode('list')}
-                        className={viewMode === 'list' ? 'bg-blue-100' : ''}
+                        onClick={() => setViewMode("list")}
+                        className={viewMode === "list" ? "bg-blue-100" : ""}
                       >
                         <List className="h-4 w-4" />
                       </Button>
@@ -1044,9 +1059,11 @@ export default function AdminExercises() {
 
                   {/* Exercise Bank Grid/List */}
                   <div className="overflow-y-auto max-h-[500px]">
-                    {viewMode === 'grid' ? (
+                    {viewMode === "grid" ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {filteredBankExercises.map((exercise) => renderBankExerciseCard(exercise))}
+                        {filteredBankExercises.map((exercise) =>
+                          renderBankExerciseCard(exercise),
+                        )}
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -1054,7 +1071,9 @@ export default function AdminExercises() {
                           <Card
                             key={exercise.id}
                             className={`cursor-pointer transition-all hover:shadow-md ${
-                              selectedExercises.has(exercise.id) ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+                              selectedExercises.has(exercise.id)
+                                ? "ring-2 ring-blue-500 bg-blue-50"
+                                : ""
                             }`}
                             onClick={() => {
                               const newSelected = new Set(selectedExercises);
@@ -1072,20 +1091,31 @@ export default function AdminExercises() {
                                   checked={selectedExercises.has(exercise.id)}
                                   onChange={() => {}}
                                 />
-                                <div className="text-2xl">{exercise.thumbnail}</div>
+                                <div className="text-2xl">
+                                  {exercise.thumbnail}
+                                </div>
                                 <div className="flex-1">
-                                  <h3 className="font-semibold">{exercise.title}</h3>
+                                  <h3 className="font-semibold">
+                                    {exercise.title}
+                                  </h3>
                                   <p className="text-sm text-gray-600 line-clamp-1">
                                     {exercise.description}
                                   </p>
                                   <div className="flex items-center gap-2 mt-2">
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       {exercise.subject}
                                     </Badge>
-                                    <Badge className={`text-xs ${getTypeColor(exercise.type)}`}>
+                                    <Badge
+                                      className={`text-xs ${getTypeColor(exercise.type)}`}
+                                    >
                                       {exercise.type}
                                     </Badge>
-                                    <Badge className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}>
+                                    <Badge
+                                      className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
+                                    >
                                       {exercise.difficulty}
                                     </Badge>
                                   </div>
@@ -1601,11 +1631,17 @@ Q: Viết đoạn văn tả về mùa xuân`}
                   </TableCell>
                   <TableCell>
                     {exercise.courseName ? (
-                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-blue-50 text-blue-700"
+                      >
                         {exercise.courseName}
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-xs bg-gray-50 text-gray-500">
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-gray-50 text-gray-500"
+                      >
                         Chưa gán
                       </Badge>
                     )}
@@ -1614,7 +1650,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                     {exercise.creator}
                   </TableCell>
                   <TableCell>
-                    <Badge 
+                    <Badge
                       variant={exercise.isFromBank ? "default" : "outline"}
                       className="text-xs"
                     >
