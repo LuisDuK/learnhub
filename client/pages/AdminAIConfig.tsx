@@ -109,7 +109,7 @@ const mockPrompts = [
   },
   {
     id: 4,
-    name: "Prompt ch��m bài tự động",
+    name: "Prompt chấm bài tự động",
     content:
       "Hãy chấm bài làm của học sinh về môn {{subject}}. Bài làm: {{student_answer}}. Đáp án đúng: {{correct_answer}}. Tiêu chí chấm: {{criteria}}. Hãy đưa ra điểm số ({{max_score}} điểm), nhận xét {{feedback_style}} và gợi ý cải thiện.",
     module: "Chấm bài",
@@ -900,7 +900,7 @@ export default function AdminAIConfig() {
                           <Edit className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI tạo bài tập (Qu��n trị viên)</h3>
+                          <h3 className="font-medium">AI tạo bài tập (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
                             Sinh bài tập động - Điều chỉnh biến {`{{grade}}`}, {`{{topic}}`}, {`{{difficulty}}`}, {`{{questions}}`}
                           </p>
@@ -1045,9 +1045,9 @@ export default function AdminAIConfig() {
                       <TableHead>Thời gian</TableHead>
                       <TableHead>Người dùng</TableHead>
                       <TableHead>Module</TableHead>
-                      <TableHead>Token tiêu thụ</TableHead>
-                      <TableHead>Tiêu thụ Token</TableHead>
-                      <TableHead>Tr���ng thái</TableHead>
+                      <TableHead>Nội dung</TableHead>
+                      <TableHead>Token</TableHead>
+                      <TableHead>Trạng thái & Hành động</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1065,11 +1065,20 @@ export default function AdminAIConfig() {
                             {log.module}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-mono">
-                          {log.tokensUsed}
+                        <TableCell>
+                          <div className="max-w-xs">
+                            <p className="text-sm text-gray-700 truncate" title={log.details}>
+                              {log.details || "Không có mô tả"}
+                            </p>
+                            {log.conversation && (
+                              <Badge variant="outline" className="mt-1 text-xs">
+                                💬 {log.conversation.length} tin nhắn
+                              </Badge>
+                            )}
+                          </div>
                         </TableCell>
                         <TableCell className="font-mono text-blue-600">
-                          {log.tokensUsed} tokens
+                          {log.tokensUsed}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -1079,10 +1088,19 @@ export default function AdminAIConfig() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => alert(`📊 Chi tiết hoạt động AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n🎆 Hệ thống: Free (Không tính phí)\n✅ Trạng thái: ${log.status}`)}
+                              onClick={() => {
+                                if (log.conversation && log.conversation.length > 0) {
+                                  const conversationText = log.conversation
+                                    .map(msg => `[${msg.time}] ${msg.role === 'user' ? '👤 Học sinh' : '🤖 AI'}: ${msg.content}`)
+                                    .join('\n\n');
+                                  alert(`💬 Chi tiết cuộc hội thoại AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n📝 Mô tả: ${log.details}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n✅ Trạng thái: ${log.status}\n\n📋 Cuộc hội thoại:\n${conversationText}`);
+                                } else {
+                                  alert(`📊 Chi tiết hoạt động AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n📝 Mô tả: ${log.details || 'Không có mô tả'}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n🎆 Hệ thống: Free (Không tính phí)\n✅ Trạng thái: ${log.status}`);
+                                }
+                              }}
                               className="text-blue-600 hover:text-blue-800"
                             >
-                              🔍 Xem chi tiết
+                              {log.conversation ? "💬 Xem hội thoại" : "🔍 Xem chi tiết"}
                             </Button>
                           </div>
                         </TableCell>
