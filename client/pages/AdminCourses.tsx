@@ -1628,13 +1628,28 @@ export default function AdminCourses() {
                 </div>
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditLessonDialogOpen(false)}>
-                Hủy
-              </Button>
-              <Button onClick={handleUpdateLesson}>
-                Cập nhật
-              </Button>
+            <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
+              <div className="flex items-center justify-between w-full">
+                <div className="text-xs text-gray-500">
+                  * Các trường bắt buộc
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsEditLessonDialogOpen(false)}
+                    className="border-gray-300 hover:bg-gray-50"
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={handleUpdateLesson}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Cập nhật bài giảng
+                  </Button>
+                </div>
+              </div>
             </DialogFooter>
           </DialogContent>
         </Dialog>
