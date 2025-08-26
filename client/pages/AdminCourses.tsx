@@ -108,7 +108,7 @@ const mockCourses = [
         order: 2,
         completed: false,
         content:
-          "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
+          "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép c��ng...",
         materials: ["worksheet.pdf", "counting_objects.png"],
       },
       {
@@ -243,7 +243,7 @@ const mockCourses = [
       {
         id: 1,
         title: "Color Matching Game",
-        description: "Ghép màu sắc với tên tiếng Anh",
+        description: "Ghép màu sắc v���i tên tiếng Anh",
         type: "game",
         difficulty: "Dễ",
         points: 10,
@@ -816,6 +816,50 @@ export default function AdminCourses() {
     });
 
     setBulkQuestions("");
+  };
+
+  // Assign exercises from bank
+  const handleAssignExercises = () => {
+    if (selectedCourse && selectedExercisesFromBank.length > 0) {
+      const exercisesToAssign = exerciseBank.filter(ex =>
+        selectedExercisesFromBank.includes(ex.id)
+      ).map(ex => ({
+        id: Math.max(...(selectedCourse.exercises?.map(e => e.id) || [0])) + ex.id,
+        title: ex.title,
+        description: `Bài tập được gán từ kho bài tập`,
+        type: ex.type.toLowerCase().replace(/\s+/g, '_'),
+        difficulty: ex.difficulty,
+        points: 10,
+        timeLimit: 600,
+        questions: ex.totalQuestions || 1,
+        assignedFrom: 'bank',
+        originalId: ex.id
+      }));
+
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              exercises: [...(course.exercises || []), ...exercisesToAssign],
+            }
+          : course,
+      );
+
+      setCourses(updatedCourses);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
+      setSelectedExercisesFromBank([]);
+      setIsAssignDialogOpen(false);
+    }
+  };
+
+  const toggleExerciseSelection = (exerciseId: number) => {
+    setSelectedExercisesFromBank(prev =>
+      prev.includes(exerciseId)
+        ? prev.filter(id => id !== exerciseId)
+        : [...prev, exerciseId]
+    );
   };
 
   const getStatusColor = (status: string) => {
