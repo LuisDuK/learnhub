@@ -43,9 +43,19 @@ import {
   TrendingUp,
   Filter,
   BookOpen,
+  Play,
+  FileText,
+  GamepadIcon,
+  Headphones,
+  Eye,
+  PlusCircle,
+  Clock,
+  Award,
+  CheckCircle,
+  Circle,
 } from "lucide-react";
 
-// Mock course data
+// Mock course data with lessons
 const mockCourses = [
   {
     id: 1,
@@ -62,6 +72,53 @@ const mockCourses = [
     status: "Đang mở",
     createdAt: "2024-01-15",
     aiGenerated: true,
+    lessons: [
+      {
+        id: 1,
+        title: "Số từ 1 đến 10",
+        description: "Học cách đếm và nhận biết các số từ 1 đến 10",
+        type: "video",
+        duration: "15 phút",
+        order: 1,
+        completed: false
+      },
+      {
+        id: 2,
+        title: "Phép cộng đơn giản",
+        description: "Thực hành phép cộng với các số nhỏ hơn 10",
+        type: "interactive",
+        duration: "20 phút",
+        order: 2,
+        completed: false
+      },
+      {
+        id: 3,
+        title: "Hình dạng cơ bản",
+        description: "Nhận biết hình tròn, vuông, tam giác",
+        type: "game",
+        duration: "25 phút",
+        order: 3,
+        completed: false
+      }
+    ],
+    exercises: [
+      {
+        id: 1,
+        title: "Bài tập đếm số",
+        description: "Đếm các vật thể trong hình",
+        type: "quiz",
+        difficulty: "Dễ",
+        points: 10
+      },
+      {
+        id: 2,
+        title: "Bài tập cộng trừ",
+        description: "Thực hiện các phép tính cơ bản",
+        type: "practice",
+        difficulty: "Trung bình",
+        points: 15
+      }
+    ]
   },
   {
     id: 2,
@@ -78,6 +135,36 @@ const mockCourses = [
     status: "Đang mở",
     createdAt: "2024-01-20",
     aiGenerated: false,
+    lessons: [
+      {
+        id: 1,
+        title: "Bài thơ: Con gà trống",
+        description: "Học thuộc và hiểu nghĩa bài thơ Con gà trống",
+        type: "reading",
+        duration: "30 phút",
+        order: 1,
+        completed: false
+      },
+      {
+        id: 2,
+        title: "Kỹ năng đọc hiểu",
+        description: "Luyện tập đọc hiểu văn bản ngắn",
+        type: "exercise",
+        duration: "25 phút",
+        order: 2,
+        completed: false
+      }
+    ],
+    exercises: [
+      {
+        id: 1,
+        title: "Trả lời câu hỏi về bài thơ",
+        description: "Câu hỏi về nội dung và ý nghĩa bài thơ",
+        type: "quiz",
+        difficulty: "Trung bình",
+        points: 20
+      }
+    ]
   },
   {
     id: 3,
@@ -94,6 +181,36 @@ const mockCourses = [
     status: "Đang mở",
     createdAt: "2024-01-10",
     aiGenerated: true,
+    lessons: [
+      {
+        id: 1,
+        title: "Hello and Greetings",
+        description: "Học cách chào hỏi bằng tiếng Anh",
+        type: "video",
+        duration: "15 phút",
+        order: 1,
+        completed: false
+      },
+      {
+        id: 2,
+        title: "Colors Song",
+        description: "Học màu sắc qua bài hát vui nhộn",
+        type: "song",
+        duration: "10 phút",
+        order: 2,
+        completed: false
+      }
+    ],
+    exercises: [
+      {
+        id: 1,
+        title: "Color Matching Game",
+        description: "Ghép màu sắc với tên tiếng Anh",
+        type: "game",
+        difficulty: "Dễ",
+        points: 10
+      }
+    ]
   },
   {
     id: 4,
@@ -110,6 +227,27 @@ const mockCourses = [
     status: "Tạm dừng",
     createdAt: "2024-01-05",
     aiGenerated: false,
+    lessons: [
+      {
+        id: 1,
+        title: "Các loại lá cây",
+        description: "Quan sát và phân loại các dạng lá khác nhau",
+        type: "observation",
+        duration: "20 phút",
+        order: 1,
+        completed: false
+      }
+    ],
+    exercises: [
+      {
+        id: 1,
+        title: "Thí nghiệm nảy mầm",
+        description: "Quan sát quá trình nảy mầm của hạt đậu",
+        type: "experiment",
+        difficulty: "Trung bình",
+        points: 25
+      }
+    ]
   },
 ];
 
@@ -144,6 +282,7 @@ export default function AdminCourses() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editCourse, setEditCourse] = useState<typeof newCourse>({});
+  const [activeTab, setActiveTab] = useState<'info' | 'lessons' | 'exercises'>('info');
   const [newCourse, setNewCourse] = useState({
     name: "",
     description: "",
@@ -264,6 +403,29 @@ export default function AdminCourses() {
     if (rate >= 80) return "text-green-600";
     if (rate >= 60) return "text-yellow-600";
     return "text-red-600";
+  };
+
+  const getLessonTypeIcon = (type: string) => {
+    switch (type) {
+      case 'video': return <Play className="h-4 w-4 text-blue-500" />;
+      case 'reading': return <FileText className="h-4 w-4 text-green-500" />;
+      case 'game': return <GamepadIcon className="h-4 w-4 text-purple-500" />;
+      case 'song': return <Headphones className="h-4 w-4 text-pink-500" />;
+      case 'interactive': return <Eye className="h-4 w-4 text-orange-500" />;
+      case 'exercise': return <Edit className="h-4 w-4 text-red-500" />;
+      case 'observation': return <Eye className="h-4 w-4 text-teal-500" />;
+      default: return <FileText className="h-4 w-4 text-gray-500" />;
+    }
+  };
+
+  const getExerciseTypeIcon = (type: string) => {
+    switch (type) {
+      case 'quiz': return <FileText className="h-4 w-4 text-blue-500" />;
+      case 'practice': return <Edit className="h-4 w-4 text-green-500" />;
+      case 'game': return <GamepadIcon className="h-4 w-4 text-purple-500" />;
+      case 'experiment': return <Eye className="h-4 w-4 text-orange-500" />;
+      default: return <FileText className="h-4 w-4 text-gray-500" />;
+    }
   };
 
   return (
@@ -582,6 +744,22 @@ export default function AdminCourses() {
 
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1">
+                      <BookOpen className="h-4 w-4 text-indigo-500" />
+                      <span className="text-gray-500">Bài giảng:</span>
+                    </div>
+                    <span className="font-medium text-indigo-600">{course.lessons?.length || 0}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-1">
+                      <Edit className="h-4 w-4 text-emerald-500" />
+                      <span className="text-gray-500">Bài tập:</span>
+                    </div>
+                    <span className="font-medium text-emerald-600">{course.exercises?.length || 0}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-1">
                       <TrendingUp className="h-4 w-4 text-green-500" />
                       <span className="text-gray-500">Hoàn thành:</span>
                     </div>
@@ -679,85 +857,284 @@ export default function AdminCourses() {
 
         {/* View Course Details Dialog */}
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Chi tiết khóa học</DialogTitle>
+              <DialogTitle>Chi tiết khóa học: {selectedCourse?.name}</DialogTitle>
               <DialogDescription>
-                Thông tin chi tiết về khóa học đã chọn
+                Thông tin chi tiết và nội dung khóa học
               </DialogDescription>
             </DialogHeader>
+
             {selectedCourse && (
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right font-semibold">Tên khóa học:</Label>
-                  <div className="col-span-3">{selectedCourse.name}</div>
+              <div className="space-y-6">
+                {/* Tab Navigation */}
+                <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                  <button
+                    onClick={() => setActiveTab('info')}
+                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                      activeTab === 'info'
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    📋 Thông tin chung
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('lessons')}
+                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                      activeTab === 'lessons'
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    📚 Bài giảng ({selectedCourse.lessons?.length || 0})
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('exercises')}
+                    className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                      activeTab === 'exercises'
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    ✏️ Bài tập ({selectedCourse.exercises?.length || 0})
+                  </button>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right font-semibold">Môn học:</Label>
-                  <div className="col-span-3">
-                    <Badge variant="outline">{selectedCourse.subject}</Badge>
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right font-semibold">Mô tả:</Label>
-                  <div className="col-span-3 text-sm">{selectedCourse.description}</div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid grid-cols-2 items-center gap-2">
-                    <Label className="font-semibold">Độ khó:</Label>
-                    <Badge variant={selectedCourse.difficulty === 'Cơ bản' ? 'default' : selectedCourse.difficulty === 'Trung bình' ? 'secondary' : 'destructive'}>
-                      {selectedCourse.difficulty}
-                    </Badge>
-                  </div>
-                  <div className="grid grid-cols-2 items-center gap-2">
-                    <Label className="font-semibold">Trạng thái:</Label>
-                    <Badge className={getStatusColor(selectedCourse.status)}>
-                      {selectedCourse.status}
-                    </Badge>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid grid-cols-2 items-center gap-2">
-                    <Label className="font-semibold">Độ tuổi:</Label>
-                    <div className="text-sm text-purple-600">{selectedCourse.ageGroup}</div>
-                  </div>
-                  <div className="grid grid-cols-2 items-center gap-2">
-                    <Label className="font-semibold">Thời lượng:</Label>
-                    <div className="text-sm text-orange-600">{selectedCourse.duration}</div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid grid-cols-2 items-center gap-2">
-                    <Label className="font-semibold">Học sinh:</Label>
-                    <div className="text-sm">{selectedCourse.studentsCount}</div>
-                  </div>
-                  <div className="grid grid-cols-2 items-center gap-2">
-                    <Label className="font-semibold">Hoàn thành:</Label>
-                    <div className={`text-sm font-medium ${getCompletionColor(selectedCourse.completionRate)}`}>
-                      {selectedCourse.completionRate}%
+
+                {/* Tab Content */}
+                {activeTab === 'info' && (
+                  <div className="grid gap-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right font-semibold">Tên khóa học:</Label>
+                      <div className="col-span-3">{selectedCourse.name}</div>
                     </div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label className="text-right font-semibold">Ngày tạo:</Label>
-                  <div className="col-span-3 text-sm">{selectedCourse.createdAt}</div>
-                </div>
-                {selectedCourse.aiGenerated && (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label className="text-right font-semibold">AI Generated:</Label>
-                    <div className="col-span-3">
-                      <Badge variant="outline" className="text-blue-600">
-                        🤖 Quản trị AI
-                      </Badge>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right font-semibold">Môn học:</Label>
+                      <div className="col-span-3">
+                        <Badge variant="outline">{selectedCourse.subject}</Badge>
+                      </div>
                     </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right font-semibold">Mô tả:</Label>
+                      <div className="col-span-3 text-sm">{selectedCourse.description}</div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <Label className="font-semibold">Độ khó:</Label>
+                        <Badge variant={selectedCourse.difficulty === 'Cơ bản' ? 'default' : selectedCourse.difficulty === 'Trung bình' ? 'secondary' : 'destructive'}>
+                          {selectedCourse.difficulty}
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <Label className="font-semibold">Trạng thái:</Label>
+                        <Badge className={getStatusColor(selectedCourse.status)}>
+                          {selectedCourse.status}
+                        </Badge>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <Label className="font-semibold">Độ tuổi:</Label>
+                        <div className="text-sm text-purple-600">{selectedCourse.ageGroup}</div>
+                      </div>
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <Label className="font-semibold">Thời lượng:</Label>
+                        <div className="text-sm text-orange-600">{selectedCourse.duration}</div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <Label className="font-semibold">Học sinh:</Label>
+                        <div className="text-sm">{selectedCourse.studentsCount}</div>
+                      </div>
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <Label className="font-semibold">Hoàn thành:</Label>
+                        <div className={`text-sm font-medium ${getCompletionColor(selectedCourse.completionRate)}`}>
+                          {selectedCourse.completionRate}%
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right font-semibold">Ngày tạo:</Label>
+                      <div className="col-span-3 text-sm">{selectedCourse.createdAt}</div>
+                    </div>
+                    {selectedCourse.aiGenerated && (
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label className="text-right font-semibold">AI Generated:</Label>
+                        <div className="col-span-3">
+                          <Badge variant="outline" className="text-blue-600">
+                            🤖 Quản trị AI
+                          </Badge>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === 'lessons' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold">Danh sách bài giảng</h3>
+                      <Button size="sm" className="gap-2">
+                        <PlusCircle className="h-4 w-4" />
+                        Thêm bài giảng
+                      </Button>
+                    </div>
+
+                    {selectedCourse.lessons && selectedCourse.lessons.length > 0 ? (
+                      <div className="space-y-3">
+                        {selectedCourse.lessons
+                          .sort((a, b) => a.order - b.order)
+                          .map((lesson, index) => (
+                          <Card key={lesson.id} className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start gap-3 flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm font-medium text-gray-500">
+                                    #{lesson.order}
+                                  </span>
+                                  {getLessonTypeIcon(lesson.type)}
+                                </div>
+                                <div className="flex-1">
+                                  <h4 className="font-medium text-gray-900">{lesson.title}</h4>
+                                  <p className="text-sm text-gray-600 mt-1">{lesson.description}</p>
+                                  <div className="flex items-center gap-4 mt-2">
+                                    <div className="flex items-center gap-1 text-sm text-gray-500">
+                                      <Clock className="h-3 w-3" />
+                                      {lesson.duration}
+                                    </div>
+                                    <Badge variant="outline" className="text-xs">
+                                      {lesson.type}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {lesson.completed ? (
+                                  <CheckCircle className="h-5 w-5 text-green-500" />
+                                ) : (
+                                  <Circle className="h-5 w-5 text-gray-300" />
+                                )}
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent>
+                                    <DropdownMenuItem>
+                                      <Edit className="mr-2 h-4 w-4" />
+                                      Chỉnh sửa
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className="text-red-600">
+                                      <Trash2 className="mr-2 h-4 w-4" />
+                                      Xóa
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </div>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        <BookOpen className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p>Chưa có bài giảng nào</p>
+                        <Button className="mt-4 gap-2">
+                          <PlusCircle className="h-4 w-4" />
+                          Thêm bài giảng đầu tiên
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeTab === 'exercises' && (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold">Danh sách bài tập</h3>
+                      <Button size="sm" className="gap-2">
+                        <PlusCircle className="h-4 w-4" />
+                        Thêm bài tập
+                      </Button>
+                    </div>
+
+                    {selectedCourse.exercises && selectedCourse.exercises.length > 0 ? (
+                      <div className="space-y-3">
+                        {selectedCourse.exercises.map((exercise) => (
+                          <Card key={exercise.id} className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start gap-3 flex-1">
+                                <div className="flex items-center gap-2">
+                                  {getExerciseTypeIcon(exercise.type)}
+                                </div>
+                                <div className="flex-1">
+                                  <h4 className="font-medium text-gray-900">{exercise.title}</h4>
+                                  <p className="text-sm text-gray-600 mt-1">{exercise.description}</p>
+                                  <div className="flex items-center gap-4 mt-2">
+                                    <Badge
+                                      variant={exercise.difficulty === 'Dễ' ? 'default' : exercise.difficulty === 'Trung bình' ? 'secondary' : 'destructive'}
+                                      className="text-xs"
+                                    >
+                                      {exercise.difficulty}
+                                    </Badge>
+                                    <div className="flex items-center gap-1 text-sm text-gray-500">
+                                      <Award className="h-3 w-3" />
+                                      {exercise.points} điểm
+                                    </div>
+                                    <Badge variant="outline" className="text-xs">
+                                      {exercise.type}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                  <DropdownMenuItem>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Chỉnh sửa
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem className="text-red-600">
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    Xóa
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        <Edit className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p>Chưa có bài tập nào</p>
+                        <Button className="mt-4 gap-2">
+                          <PlusCircle className="h-4 w-4" />
+                          Thêm bài tập đầu tiên
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             )}
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
                 Đóng
               </Button>
+              {activeTab !== 'info' && (
+                <Button className="gap-2">
+                  <Edit className="h-4 w-4" />
+                  Chỉnh sửa nội dung
+                </Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
