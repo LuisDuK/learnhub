@@ -70,7 +70,7 @@ const mockPrompts = [
       { name: "difficulty", type: "select", options: ["dễ", "trung bình", "khó"], description: "Độ khó" },
       { name: "questions", type: "number", min: 1, max: 20, description: "Số câu hỏi" },
       { name: "format", type: "select", options: ["trắc nghiệm", "tự luận", "hỗn hợp"], description: "Dạng bài tập" },
-      { name: "duration", type: "number", min: 5, max: 60, description: "Thời gian làm bài (phút)" }
+      { name: "duration", type: "number", min: 5, max: 60, description: "Thời gian l��m bài (phút)" }
     ],
     createdAt: "2024-01-15",
   },
@@ -948,7 +948,7 @@ export default function AdminAIConfig() {
                       🔗 Kết nối với Prompt mẫu
                     </h4>
                     <p className="text-sm text-blue-800 mb-3">
-                      <strong>Cách sử dụng:</strong> Sau khi bật tính năng AI ở trên, bạn cần:
+                      <strong>Cách sử dụng:</strong> Sau khi bật tính n��ng AI ở trên, bạn cần:
                     </p>
                     <ol className="text-sm text-blue-800 space-y-1 ml-4 list-decimal">
                       <li>Chuyển sang tab <strong>"Prompt mẫu"</strong> để tạo/chỉnh sửa prompt tương ứng</li>
@@ -965,7 +965,7 @@ export default function AdminAIConfig() {
                     </h4>
                     <p className="text-sm text-yellow-800">
                       <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu lại.
-                      AI sẽ hoạt động theo prompt mới ngay lập tức!
+                      AI s��� hoạt động theo prompt mới ngay lập tức!
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
@@ -1130,143 +1130,6 @@ export default function AdminAIConfig() {
           </TabsContent>
         </Tabs>
 
-        {/* AI Logs Dialog */}
-        <Dialog open={isLogDialogOpen} onOpenChange={setIsLogDialogOpen}>
-          <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-orange-700">
-                <Activity className="h-5 w-5" />
-                📊 Theo dõi Log AI - Tất cả hoạt động AI
-              </DialogTitle>
-              <DialogDescription>
-                Xem chi tiết các hoạt động AI, bao gồm cuộc hội thoại và thống kê sử dụng
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4">
-              {/* Filter Controls */}
-              <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-lg border border-orange-200">
-                <div className="flex items-center gap-2">
-                  <Label>Lọc theo Module:</Label>
-                  <Select value={moduleFilter} onValueChange={setModuleFilter}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Tất cả">Tất cả</SelectItem>
-                      <SelectItem value="Bài tập">Bài tập</SelectItem>
-                      <SelectItem value="Lộ trình">Lộ trình</SelectItem>
-                      <SelectItem value="Chatbot">Chatbot</SelectItem>
-                      <SelectItem value="Chấm bài">Chấm bài</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Label>Lọc theo Trạng thái:</Label>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Tất cả">Tất cả</SelectItem>
-                      <SelectItem value="Thành công">Thành công</SelectItem>
-                      <SelectItem value="Lỗi">Lỗi</SelectItem>
-                      <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={exportLogs} variant="outline" className="ml-auto">
-                  <Download className="h-4 w-4 mr-2" />
-                  Xuất CSV
-                </Button>
-              </div>
-
-              {/* Logs Table */}
-              <div className="max-h-96 overflow-y-auto border rounded-lg">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Thời gian</TableHead>
-                      <TableHead>Người dùng</TableHead>
-                      <TableHead>Module</TableHead>
-                      <TableHead>N��i dung</TableHead>
-                      <TableHead>Token</TableHead>
-                      <TableHead>Trạng thái & Hành động</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockAILogs
-                      .filter(log => moduleFilter === "Tất cả" || log.module === moduleFilter)
-                      .filter(log => statusFilter === "Tất cả" || log.status === statusFilter)
-                      .map((log) => (
-                      <TableRow key={log.id}>
-                        <TableCell className="font-mono text-sm">
-                          {log.timestamp}
-                        </TableCell>
-                        <TableCell>{log.user}</TableCell>
-                        <TableCell>
-                          <Badge className={getModuleColor(log.module)}>
-                            {log.module}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="max-w-xs">
-                            <p className="text-sm text-gray-700 truncate" title={log.details}>
-                              {log.details || "Không có mô tả"}
-                            </p>
-                            {log.conversation && (
-                              <Badge variant="outline" className="mt-1 text-xs">
-                                💬 {log.conversation.length} tin nhắn
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-mono text-blue-600">
-                          {log.tokensUsed}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Badge className={getStatusColor(log.status)}>
-                              {log.status}
-                            </Badge>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => showLogDetail(log)}
-                              className="text-blue-600 hover:text-blue-800"
-                            >
-                              {log.conversation ? "💬 Xem hội thoại" : "🔍 Xem chi tiết"}
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Statistics */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <div className="text-2xl font-bold text-blue-600">1,245</div>
-                  <div className="text-sm text-blue-600">Tổng request hôm nay</div>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <div className="text-2xl font-bold text-green-600">98.5%</div>
-                  <div className="text-sm text-green-600">Tỉ lệ thành công</div>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                  <div className="text-2xl font-bold text-orange-600">45,678</div>
-                  <div className="text-sm text-orange-600">Token sử dụng</div>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                  <div className="text-2xl font-bold text-purple-600">45,678</div>
-                  <div className="text-sm text-purple-600">Token hôm nay</div>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
 
         {/* Log Detail Dialog */}
         <Dialog open={isLogDetailDialogOpen} onOpenChange={setIsLogDetailDialogOpen}>
