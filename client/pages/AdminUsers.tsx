@@ -75,7 +75,7 @@ const mockUsers = [
     name: "Nguyễn Văn Bình",
     email: "binh.nguyen@example.com",
     role: "Quản trị viên",
-    status: "Ho��t động",
+    status: "Hoạt động",
     createdAt: "2024-01-15",
   },
 ];

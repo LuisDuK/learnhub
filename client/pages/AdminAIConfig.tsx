@@ -62,7 +62,7 @@ const mockPrompts = [
     id: 1,
     name: "Prompt tạo bài tập toán",
     content:
-      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao g��m {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
+      "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao gồm {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
     module: "Bài tập",
     variables: [
       { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "Lớp học" },
@@ -197,7 +197,7 @@ export default function AdminAIConfig() {
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
-    alert("Cấu hình API đã ��ược lưu thành công!");
+    alert("Cấu hình API đã được lưu thành công!");
   };
 
   const handleAddPrompt = () => {
@@ -320,14 +320,14 @@ export default function AdminAIConfig() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Brain className="h-8 w-8 text-blue-600" />
-              Cấu hình AI (Ch��� Quản trị viên)
+              Cấu hình AI (Chỉ Quản trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
               Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh
             </p>
             <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài, tạo lộ trình, sinh bài tập) được ��iều khiển hoàn toàn bởi quản trị viên thông qua các prompt và cấu hình này.
+                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài, tạo lộ trình, sinh bài tập) được điều khiển hoàn toàn bởi quản trị viên thông qua các prompt và cấu hình này.
               </p>
             </div>
           </div>
@@ -698,7 +698,7 @@ export default function AdminAIConfig() {
                                 content: e.target.value,
                               })
                             }
-                            placeholder={`Nhập nội dung prompt. Sử d��ng {{tên_biến}} để chèn biến động...`}
+                            placeholder={`Nhập nội dung prompt. Sử dụng {{tên_biến}} để chèn biến động...`}
                             rows={8}
                             className="font-mono text-sm"
                           />
@@ -920,7 +920,7 @@ export default function AdminAIConfig() {
                       ⚠️ Quan trọng: Cách thay đổi hành vi AI
                     </h4>
                     <p className="text-sm text-yellow-800">
-                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu l���i.
+                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu lại.
                       AI sẽ hoạt động theo prompt mới ngay lập tức!
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -992,7 +992,7 @@ export default function AdminAIConfig() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Tất cả">Tất cả</SelectItem>
+                        <SelectItem value="Tất cả">T���t cả</SelectItem>
                         <SelectItem value="Thành công">Thành công</SelectItem>
                         <SelectItem value="Lỗi">Lỗi</SelectItem>
                         <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
