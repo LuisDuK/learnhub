@@ -96,7 +96,7 @@ const mockCourses = [
         order: 1,
         completed: false,
         videoUrl: "https://www.youtube.com/watch?v=example123",
-        content: "Nội dung bài giảng về số học...",
+        content: "Nội dung bài gi��ng về số học...",
         materials: [],
       },
       {
@@ -327,6 +327,17 @@ export default function AdminCourses() {
   const [editExercise, setEditExercise] = useState<any>({});
   const [newLesson, setNewLesson] = useState<any>({});
   const [newExercise, setNewExercise] = useState<any>({});
+
+  // AI and bulk import states
+  const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStep, setProcessingStep] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [bulkQuestions, setBulkQuestions] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [newCourse, setNewCourse] = useState({
     name: "",
     description: "",
@@ -1990,7 +2001,7 @@ export default function AdminCourses() {
                   }
                   className="col-span-3"
                   rows={3}
-                  placeholder="Mô tả nội dung bài t��p..."
+                  placeholder="Mô t�� nội dung bài t��p..."
                 />
               </div>
 
