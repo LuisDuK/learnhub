@@ -87,7 +87,7 @@ const mockCourses = [
         completed: false,
         videoUrl: "https://www.youtube.com/watch?v=example123",
         content: "Nội dung bài giảng về số học...",
-        materials: []
+        materials: [],
       },
       {
         id: 2,
@@ -97,8 +97,9 @@ const mockCourses = [
         duration: "20 phút",
         order: 2,
         completed: false,
-        content: "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
-        materials: ["worksheet.pdf", "counting_objects.png"]
+        content:
+          "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
+        materials: ["worksheet.pdf", "counting_objects.png"],
       },
       {
         id: 3,
@@ -110,8 +111,8 @@ const mockCourses = [
         completed: false,
         content: "Trò chơi ghép hình: Ghép các hình dạng vào vị trí đúng...",
         gameUrl: "https://mathgames.com/shapes",
-        materials: []
-      }
+        materials: [],
+      },
     ],
     exercises: [
       {
@@ -127,11 +128,11 @@ const mockCourses = [
             question: "Hãy đếm số quả táo trong hình?",
             image: "apples.jpg",
             options: ["3", "4", "5", "6"],
-            correctAnswer: "5"
-          }
+            correctAnswer: "5",
+          },
         ],
         instructions: "Quan sát hình ảnh và đếm số vật thể",
-        timeLimit: 300
+        timeLimit: 300,
       },
       {
         id: 2,
@@ -140,11 +141,12 @@ const mockCourses = [
         type: "practice",
         difficulty: "Trung bình",
         points: 15,
-        content: "Giải các bài toán sau:\n1. 3 + 2 = ?\n2. 5 - 1 = ?\n3. 4 + 3 = ?",
+        content:
+          "Giải các bài toán sau:\n1. 3 + 2 = ?\n2. 5 - 1 = ?\n3. 4 + 3 = ?",
         submissionType: "text",
-        instructions: "Viết kết quả vào ô trả lời"
-      }
-    ]
+        instructions: "Viết kết quả vào ô trả lời",
+      },
+    ],
   },
   {
     id: 2,
@@ -169,7 +171,7 @@ const mockCourses = [
         type: "reading",
         duration: "30 phút",
         order: 1,
-        completed: false
+        completed: false,
       },
       {
         id: 2,
@@ -178,8 +180,8 @@ const mockCourses = [
         type: "exercise",
         duration: "25 phút",
         order: 2,
-        completed: false
-      }
+        completed: false,
+      },
     ],
     exercises: [
       {
@@ -188,9 +190,9 @@ const mockCourses = [
         description: "Câu hỏi về nội dung và ý nghĩa bài thơ",
         type: "quiz",
         difficulty: "Trung bình",
-        points: 20
-      }
-    ]
+        points: 20,
+      },
+    ],
   },
   {
     id: 3,
@@ -215,7 +217,7 @@ const mockCourses = [
         type: "video",
         duration: "15 phút",
         order: 1,
-        completed: false
+        completed: false,
       },
       {
         id: 2,
@@ -224,8 +226,8 @@ const mockCourses = [
         type: "song",
         duration: "10 phút",
         order: 2,
-        completed: false
-      }
+        completed: false,
+      },
     ],
     exercises: [
       {
@@ -234,9 +236,9 @@ const mockCourses = [
         description: "Ghép màu sắc với tên tiếng Anh",
         type: "game",
         difficulty: "Dễ",
-        points: 10
-      }
-    ]
+        points: 10,
+      },
+    ],
   },
   {
     id: 4,
@@ -261,8 +263,8 @@ const mockCourses = [
         type: "observation",
         duration: "20 phút",
         order: 1,
-        completed: false
-      }
+        completed: false,
+      },
     ],
     exercises: [
       {
@@ -271,24 +273,15 @@ const mockCourses = [
         description: "Quan sát quá trình nảy mầm của hạt đậu",
         type: "experiment",
         difficulty: "Trung bình",
-        points: 25
-      }
-    ]
+        points: 25,
+      },
+    ],
   },
 ];
 
-const subjects = [
-  "Tất cả",
-  "Toán",
-  "Văn",
-  "Anh",
-];
+const subjects = ["Tất cả", "Toán", "Văn", "Anh"];
 
-const difficulties = [
-  "Cơ bản",
-  "Trung bình",
-  "Nâng cao",
-];
+const difficulties = ["Cơ bản", "Trung bình", "Nâng cao"];
 
 const ageGroups = [
   "3-5 tuổi",
@@ -304,15 +297,20 @@ export default function AdminCourses() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<typeof mockCourses[0] | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<
+    (typeof mockCourses)[0] | null
+  >(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editCourse, setEditCourse] = useState<typeof newCourse>({});
-  const [activeTab, setActiveTab] = useState<'info' | 'lessons' | 'exercises'>('info');
+  const [activeTab, setActiveTab] = useState<"info" | "lessons" | "exercises">(
+    "info",
+  );
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
   const [selectedExercise, setSelectedExercise] = useState<any>(null);
   const [isEditLessonDialogOpen, setIsEditLessonDialogOpen] = useState(false);
-  const [isEditExerciseDialogOpen, setIsEditExerciseDialogOpen] = useState(false);
+  const [isEditExerciseDialogOpen, setIsEditExerciseDialogOpen] =
+    useState(false);
   const [isAddLessonDialogOpen, setIsAddLessonDialogOpen] = useState(false);
   const [isAddExerciseDialogOpen, setIsAddExerciseDialogOpen] = useState(false);
   const [editLesson, setEditLesson] = useState<any>({});
@@ -379,12 +377,12 @@ export default function AdminCourses() {
     setCourses(courses.filter((course) => course.id !== id));
   };
 
-  const handleViewCourse = (course: typeof mockCourses[0]) => {
+  const handleViewCourse = (course: (typeof mockCourses)[0]) => {
     setSelectedCourse(course);
     setIsViewDialogOpen(true);
   };
 
-  const handleEditCourse = (course: typeof mockCourses[0]) => {
+  const handleEditCourse = (course: (typeof mockCourses)[0]) => {
     setSelectedCourse(course);
     setEditCourse({
       name: course.name,
@@ -414,7 +412,7 @@ export default function AdminCourses() {
               ageGroup: editCourse.ageGroup,
               image: editCourse.image || course.image,
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
       setIsEditDialogOpen(false);
@@ -458,13 +456,15 @@ export default function AdminCourses() {
                       gameUrl: editLesson.gameUrl,
                       materials: editLesson.materials,
                     }
-                  : lesson
+                  : lesson,
               ),
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
-      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
       setIsEditLessonDialogOpen(false);
       setSelectedLesson(null);
     }
@@ -508,13 +508,15 @@ export default function AdminCourses() {
                       timeLimit: editExercise.timeLimit,
                       submissionType: editExercise.submissionType,
                     }
-                  : exercise
+                  : exercise,
               ),
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
-      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
       setIsEditExerciseDialogOpen(false);
       setSelectedExercise(null);
     }
@@ -526,12 +528,16 @@ export default function AdminCourses() {
         course.id === selectedCourse.id
           ? {
               ...course,
-              lessons: course.lessons?.filter((lesson) => lesson.id !== lessonId),
+              lessons: course.lessons?.filter(
+                (lesson) => lesson.id !== lessonId,
+              ),
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
-      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
     }
   };
 
@@ -541,24 +547,28 @@ export default function AdminCourses() {
         course.id === selectedCourse.id
           ? {
               ...course,
-              exercises: course.exercises?.filter((exercise) => exercise.id !== exerciseId),
+              exercises: course.exercises?.filter(
+                (exercise) => exercise.id !== exerciseId,
+              ),
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
-      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
     }
   };
 
   const handleAddLesson = () => {
     if (selectedCourse && newLesson.title) {
       const lesson = {
-        id: Math.max(...(selectedCourse.lessons?.map(l => l.id) || [0])) + 1,
+        id: Math.max(...(selectedCourse.lessons?.map((l) => l.id) || [0])) + 1,
         title: newLesson.title,
         description: newLesson.description,
         type: newLesson.type,
         duration: newLesson.duration,
-        order: newLesson.order || ((selectedCourse.lessons?.length || 0) + 1),
+        order: newLesson.order || (selectedCourse.lessons?.length || 0) + 1,
         completed: false,
         videoUrl: newLesson.videoUrl || "",
         content: newLesson.content || "",
@@ -572,10 +582,12 @@ export default function AdminCourses() {
               ...course,
               lessons: [...(course.lessons || []), lesson],
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
-      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
       setNewLesson({});
       setIsAddLessonDialogOpen(false);
     }
@@ -584,7 +596,8 @@ export default function AdminCourses() {
   const handleAddExercise = () => {
     if (selectedCourse && newExercise.title) {
       const exercise = {
-        id: Math.max(...(selectedCourse.exercises?.map(e => e.id) || [0])) + 1,
+        id:
+          Math.max(...(selectedCourse.exercises?.map((e) => e.id) || [0])) + 1,
         title: newExercise.title,
         description: newExercise.description,
         type: newExercise.type,
@@ -603,10 +616,12 @@ export default function AdminCourses() {
               ...course,
               exercises: [...(course.exercises || []), exercise],
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
-      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setSelectedCourse(
+        updatedCourses.find((c) => c.id === selectedCourse.id) || null,
+      );
       setNewExercise({});
       setIsAddExerciseDialogOpen(false);
     }
@@ -633,24 +648,37 @@ export default function AdminCourses() {
 
   const getLessonTypeIcon = (type: string) => {
     switch (type) {
-      case 'video': return <Play className="h-4 w-4 text-blue-500" />;
-      case 'reading': return <FileText className="h-4 w-4 text-green-500" />;
-      case 'game': return <GamepadIcon className="h-4 w-4 text-purple-500" />;
-      case 'song': return <Headphones className="h-4 w-4 text-pink-500" />;
-      case 'interactive': return <Eye className="h-4 w-4 text-orange-500" />;
-      case 'exercise': return <Edit className="h-4 w-4 text-red-500" />;
-      case 'observation': return <Eye className="h-4 w-4 text-teal-500" />;
-      default: return <FileText className="h-4 w-4 text-gray-500" />;
+      case "video":
+        return <Play className="h-4 w-4 text-blue-500" />;
+      case "reading":
+        return <FileText className="h-4 w-4 text-green-500" />;
+      case "game":
+        return <GamepadIcon className="h-4 w-4 text-purple-500" />;
+      case "song":
+        return <Headphones className="h-4 w-4 text-pink-500" />;
+      case "interactive":
+        return <Eye className="h-4 w-4 text-orange-500" />;
+      case "exercise":
+        return <Edit className="h-4 w-4 text-red-500" />;
+      case "observation":
+        return <Eye className="h-4 w-4 text-teal-500" />;
+      default:
+        return <FileText className="h-4 w-4 text-gray-500" />;
     }
   };
 
   const getExerciseTypeIcon = (type: string) => {
     switch (type) {
-      case 'quiz': return <FileText className="h-4 w-4 text-blue-500" />;
-      case 'practice': return <Edit className="h-4 w-4 text-green-500" />;
-      case 'game': return <GamepadIcon className="h-4 w-4 text-purple-500" />;
-      case 'experiment': return <Eye className="h-4 w-4 text-orange-500" />;
-      default: return <FileText className="h-4 w-4 text-gray-500" />;
+      case "quiz":
+        return <FileText className="h-4 w-4 text-blue-500" />;
+      case "practice":
+        return <Edit className="h-4 w-4 text-green-500" />;
+      case "game":
+        return <GamepadIcon className="h-4 w-4 text-purple-500" />;
+      case "experiment":
+        return <Eye className="h-4 w-4 text-orange-500" />;
+      default:
+        return <FileText className="h-4 w-4 text-gray-500" />;
     }
   };
 
@@ -665,7 +693,8 @@ export default function AdminCourses() {
               Quản lý khóa học
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý tất cả các khóa học và môn học (Được điều hành bởi Quản trị viên)
+              Quản lý tất cả các khóa học và môn học (Được điều hành bởi Quản
+              trị viên)
             </p>
           </div>
 
@@ -683,7 +712,8 @@ export default function AdminCourses() {
                   Thêm khóa học mới
                 </DialogTitle>
                 <DialogDescription className="text-gray-600">
-                  Tạo khóa học mới cho học sinh. Tất cả nội dung sẽ được quản lý bởi quản trị viên.
+                  Tạo khóa học mới cho học sinh. Tất cả nội dung sẽ được quản lý
+                  bởi quản trị viên.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-6 py-4">
@@ -746,7 +776,10 @@ export default function AdminCourses() {
                   </div>
 
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label htmlFor="difficulty" className="text-right col-span-2">
+                    <Label
+                      htmlFor="difficulty"
+                      className="text-right col-span-2"
+                    >
                       Độ khó *
                     </Label>
                     <Select
@@ -936,11 +969,15 @@ export default function AdminCourses() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleViewCourse(course)}>
+                      <DropdownMenuItem
+                        onClick={() => handleViewCourse(course)}
+                      >
                         <BookOpen className="mr-2 h-4 w-4" />
                         Xem chi tiết
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleEditCourse(course)}>
+                      <DropdownMenuItem
+                        onClick={() => handleEditCourse(course)}
+                      >
                         <Edit className="mr-2 h-4 w-4" />
                         Chỉnh sửa
                       </DropdownMenuItem>
@@ -978,7 +1015,16 @@ export default function AdminCourses() {
 
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">Độ khó:</span>
-                    <Badge variant={course.difficulty === 'Cơ bản' ? 'default' : course.difficulty === 'Trung bình' ? 'secondary' : 'destructive'} className="text-xs">
+                    <Badge
+                      variant={
+                        course.difficulty === "Cơ bản"
+                          ? "default"
+                          : course.difficulty === "Trung bình"
+                            ? "secondary"
+                            : "destructive"
+                      }
+                      className="text-xs"
+                    >
                       {course.difficulty}
                     </Badge>
                   </div>
@@ -996,7 +1042,9 @@ export default function AdminCourses() {
                       <BookOpen className="h-4 w-4 text-indigo-500" />
                       <span className="text-gray-500">Bài giảng:</span>
                     </div>
-                    <span className="font-medium text-indigo-600">{course.lessons?.length || 0}</span>
+                    <span className="font-medium text-indigo-600">
+                      {course.lessons?.length || 0}
+                    </span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
@@ -1004,7 +1052,9 @@ export default function AdminCourses() {
                       <Edit className="h-4 w-4 text-emerald-500" />
                       <span className="text-gray-500">Bài tập:</span>
                     </div>
-                    <span className="font-medium text-emerald-600">{course.exercises?.length || 0}</span>
+                    <span className="font-medium text-emerald-600">
+                      {course.exercises?.length || 0}
+                    </span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
@@ -1025,7 +1075,10 @@ export default function AdminCourses() {
                         <span className="text-xs">🤖</span>
                         <span className="text-gray-500">AI Generated:</span>
                       </div>
-                      <Badge variant="outline" className="text-xs text-blue-600">
+                      <Badge
+                        variant="outline"
+                        className="text-xs text-blue-600"
+                      >
                         Quản trị AI
                       </Badge>
                     </div>
@@ -1108,7 +1161,9 @@ export default function AdminCourses() {
         <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
           <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Chi tiết khóa học: {selectedCourse?.name}</DialogTitle>
+              <DialogTitle>
+                Chi tiết khóa học: {selectedCourse?.name}
+              </DialogTitle>
               <DialogDescription>
                 Thông tin chi tiết và nội dung khóa học
               </DialogDescription>
@@ -1119,31 +1174,31 @@ export default function AdminCourses() {
                 {/* Tab Navigation */}
                 <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
                   <button
-                    onClick={() => setActiveTab('info')}
+                    onClick={() => setActiveTab("info")}
                     className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                      activeTab === 'info'
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
+                      activeTab === "info"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
                     📋 Thông tin chung
                   </button>
                   <button
-                    onClick={() => setActiveTab('lessons')}
+                    onClick={() => setActiveTab("lessons")}
                     className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                      activeTab === 'lessons'
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
+                      activeTab === "lessons"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
                     📚 Bài giảng ({selectedCourse.lessons?.length || 0})
                   </button>
                   <button
-                    onClick={() => setActiveTab('exercises')}
+                    onClick={() => setActiveTab("exercises")}
                     className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-                      activeTab === 'exercises'
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
+                      activeTab === "exercises"
+                        ? "bg-white text-blue-600 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
                     ✏️ Bài tập ({selectedCourse.exercises?.length || 0})
@@ -1151,32 +1206,50 @@ export default function AdminCourses() {
                 </div>
 
                 {/* Tab Content */}
-                {activeTab === 'info' && (
+                {activeTab === "info" && (
                   <div className="grid gap-4">
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label className="text-right font-semibold">Tên khóa học:</Label>
+                      <Label className="text-right font-semibold">
+                        Tên khóa học:
+                      </Label>
                       <div className="col-span-3">{selectedCourse.name}</div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label className="text-right font-semibold">Môn học:</Label>
+                      <Label className="text-right font-semibold">
+                        Môn học:
+                      </Label>
                       <div className="col-span-3">
-                        <Badge variant="outline">{selectedCourse.subject}</Badge>
+                        <Badge variant="outline">
+                          {selectedCourse.subject}
+                        </Badge>
                       </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label className="text-right font-semibold">Mô tả:</Label>
-                      <div className="col-span-3 text-sm">{selectedCourse.description}</div>
+                      <div className="col-span-3 text-sm">
+                        {selectedCourse.description}
+                      </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Độ khó:</Label>
-                        <Badge variant={selectedCourse.difficulty === 'Cơ bản' ? 'default' : selectedCourse.difficulty === 'Trung bình' ? 'secondary' : 'destructive'}>
+                        <Badge
+                          variant={
+                            selectedCourse.difficulty === "Cơ bản"
+                              ? "default"
+                              : selectedCourse.difficulty === "Trung bình"
+                                ? "secondary"
+                                : "destructive"
+                          }
+                        >
                           {selectedCourse.difficulty}
                         </Badge>
                       </div>
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Trạng thái:</Label>
-                        <Badge className={getStatusColor(selectedCourse.status)}>
+                        <Badge
+                          className={getStatusColor(selectedCourse.status)}
+                        >
                           {selectedCourse.status}
                         </Badge>
                       </div>
@@ -1184,32 +1257,46 @@ export default function AdminCourses() {
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Độ tuổi:</Label>
-                        <div className="text-sm text-purple-600">{selectedCourse.ageGroup}</div>
+                        <div className="text-sm text-purple-600">
+                          {selectedCourse.ageGroup}
+                        </div>
                       </div>
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Thời lượng:</Label>
-                        <div className="text-sm text-orange-600">{selectedCourse.duration}</div>
+                        <div className="text-sm text-orange-600">
+                          {selectedCourse.duration}
+                        </div>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Học sinh:</Label>
-                        <div className="text-sm">{selectedCourse.studentsCount}</div>
+                        <div className="text-sm">
+                          {selectedCourse.studentsCount}
+                        </div>
                       </div>
                       <div className="grid grid-cols-2 items-center gap-2">
                         <Label className="font-semibold">Hoàn thành:</Label>
-                        <div className={`text-sm font-medium ${getCompletionColor(selectedCourse.completionRate)}`}>
+                        <div
+                          className={`text-sm font-medium ${getCompletionColor(selectedCourse.completionRate)}`}
+                        >
                           {selectedCourse.completionRate}%
                         </div>
                       </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label className="text-right font-semibold">Ngày tạo:</Label>
-                      <div className="col-span-3 text-sm">{selectedCourse.createdAt}</div>
+                      <Label className="text-right font-semibold">
+                        Ngày tạo:
+                      </Label>
+                      <div className="col-span-3 text-sm">
+                        {selectedCourse.createdAt}
+                      </div>
                     </div>
                     {selectedCourse.aiGenerated && (
                       <div className="grid grid-cols-4 items-center gap-4">
-                        <Label className="text-right font-semibold">AI Generated:</Label>
+                        <Label className="text-right font-semibold">
+                          AI Generated:
+                        </Label>
                         <div className="col-span-3">
                           <Badge variant="outline" className="text-blue-600">
                             🤖 Quản trị AI
@@ -1220,80 +1307,101 @@ export default function AdminCourses() {
                   </div>
                 )}
 
-                {activeTab === 'lessons' && (
+                {activeTab === "lessons" && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Danh sách bài giảng</h3>
-                      <Button size="sm" className="gap-2" onClick={() => setIsAddLessonDialogOpen(true)}>
+                      <h3 className="text-lg font-semibold">
+                        Danh sách bài giảng
+                      </h3>
+                      <Button
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => setIsAddLessonDialogOpen(true)}
+                      >
                         <PlusCircle className="h-4 w-4" />
                         Thêm bài giảng
                       </Button>
                     </div>
 
-                    {selectedCourse.lessons && selectedCourse.lessons.length > 0 ? (
+                    {selectedCourse.lessons &&
+                    selectedCourse.lessons.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.lessons
                           .sort((a, b) => a.order - b.order)
                           .map((lesson, index) => (
-                          <Card key={lesson.id} className="p-4">
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-start gap-3 flex-1">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm font-medium text-gray-500">
-                                    #{lesson.order}
-                                  </span>
-                                  {getLessonTypeIcon(lesson.type)}
-                                </div>
-                                <div className="flex-1">
-                                  <h4 className="font-medium text-gray-900">{lesson.title}</h4>
-                                  <p className="text-sm text-gray-600 mt-1">{lesson.description}</p>
-                                  <div className="flex items-center gap-4 mt-2">
-                                    <div className="flex items-center gap-1 text-sm text-gray-500">
-                                      <Clock className="h-3 w-3" />
-                                      {lesson.duration}
+                            <Card key={lesson.id} className="p-4">
+                              <div className="flex items-start justify-between">
+                                <div className="flex items-start gap-3 flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm font-medium text-gray-500">
+                                      #{lesson.order}
+                                    </span>
+                                    {getLessonTypeIcon(lesson.type)}
+                                  </div>
+                                  <div className="flex-1">
+                                    <h4 className="font-medium text-gray-900">
+                                      {lesson.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      {lesson.description}
+                                    </p>
+                                    <div className="flex items-center gap-4 mt-2">
+                                      <div className="flex items-center gap-1 text-sm text-gray-500">
+                                        <Clock className="h-3 w-3" />
+                                        {lesson.duration}
+                                      </div>
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
+                                        {lesson.type}
+                                      </Badge>
                                     </div>
-                                    <Badge variant="outline" className="text-xs">
-                                      {lesson.type}
-                                    </Badge>
                                   </div>
                                 </div>
+                                <div className="flex items-center gap-2">
+                                  {lesson.completed ? (
+                                    <CheckCircle className="h-5 w-5 text-green-500" />
+                                  ) : (
+                                    <Circle className="h-5 w-5 text-gray-300" />
+                                  )}
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button variant="ghost" size="sm">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                      <DropdownMenuItem
+                                        onClick={() => handleEditLesson(lesson)}
+                                      >
+                                        <Edit className="mr-2 h-4 w-4" />
+                                        Chỉnh sửa
+                                      </DropdownMenuItem>
+                                      <DropdownMenuItem
+                                        className="text-red-600"
+                                        onClick={() =>
+                                          handleDeleteLesson(lesson.id)
+                                        }
+                                      >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Xóa
+                                      </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                {lesson.completed ? (
-                                  <CheckCircle className="h-5 w-5 text-green-500" />
-                                ) : (
-                                  <Circle className="h-5 w-5 text-gray-300" />
-                                )}
-                                <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="sm">
-                                      <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent>
-                                    <DropdownMenuItem onClick={() => handleEditLesson(lesson)}>
-                                      <Edit className="mr-2 h-4 w-4" />
-                                      Chỉnh sửa
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                      className="text-red-600"
-                                      onClick={() => handleDeleteLesson(lesson.id)}
-                                    >
-                                      <Trash2 className="mr-2 h-4 w-4" />
-                                      Xóa
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                              </div>
-                            </div>
-                          </Card>
-                        ))}
+                            </Card>
+                          ))}
                       </div>
                     ) : (
                       <div className="text-center py-8 text-gray-500">
                         <BookOpen className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>Chưa có bài giảng nào</p>
-                        <Button className="mt-4 gap-2" onClick={() => setIsAddLessonDialogOpen(true)}>
+                        <Button
+                          className="mt-4 gap-2"
+                          onClick={() => setIsAddLessonDialogOpen(true)}
+                        >
                           <PlusCircle className="h-4 w-4" />
                           Thêm bài giảng đầu tiên
                         </Button>
@@ -1302,17 +1410,24 @@ export default function AdminCourses() {
                   </div>
                 )}
 
-                {activeTab === 'exercises' && (
+                {activeTab === "exercises" && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Danh sách bài tập</h3>
-                      <Button size="sm" className="gap-2" onClick={() => setIsAddExerciseDialogOpen(true)}>
+                      <h3 className="text-lg font-semibold">
+                        Danh sách bài tập
+                      </h3>
+                      <Button
+                        size="sm"
+                        className="gap-2"
+                        onClick={() => setIsAddExerciseDialogOpen(true)}
+                      >
                         <PlusCircle className="h-4 w-4" />
                         Thêm bài tập
                       </Button>
                     </div>
 
-                    {selectedCourse.exercises && selectedCourse.exercises.length > 0 ? (
+                    {selectedCourse.exercises &&
+                    selectedCourse.exercises.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.exercises.map((exercise) => (
                           <Card key={exercise.id} className="p-4">
@@ -1322,11 +1437,21 @@ export default function AdminCourses() {
                                   {getExerciseTypeIcon(exercise.type)}
                                 </div>
                                 <div className="flex-1">
-                                  <h4 className="font-medium text-gray-900">{exercise.title}</h4>
-                                  <p className="text-sm text-gray-600 mt-1">{exercise.description}</p>
+                                  <h4 className="font-medium text-gray-900">
+                                    {exercise.title}
+                                  </h4>
+                                  <p className="text-sm text-gray-600 mt-1">
+                                    {exercise.description}
+                                  </p>
                                   <div className="flex items-center gap-4 mt-2">
                                     <Badge
-                                      variant={exercise.difficulty === 'Dễ' ? 'default' : exercise.difficulty === 'Trung bình' ? 'secondary' : 'destructive'}
+                                      variant={
+                                        exercise.difficulty === "Dễ"
+                                          ? "default"
+                                          : exercise.difficulty === "Trung bình"
+                                            ? "secondary"
+                                            : "destructive"
+                                      }
                                       className="text-xs"
                                     >
                                       {exercise.difficulty}
@@ -1335,7 +1460,10 @@ export default function AdminCourses() {
                                       <Award className="h-3 w-3" />
                                       {exercise.points} điểm
                                     </div>
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       {exercise.type}
                                     </Badge>
                                   </div>
@@ -1348,13 +1476,17 @@ export default function AdminCourses() {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                  <DropdownMenuItem onClick={() => handleEditExercise(exercise)}>
+                                  <DropdownMenuItem
+                                    onClick={() => handleEditExercise(exercise)}
+                                  >
                                     <Edit className="mr-2 h-4 w-4" />
                                     Chỉnh sửa
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
                                     className="text-red-600"
-                                    onClick={() => handleDeleteExercise(exercise.id)}
+                                    onClick={() =>
+                                      handleDeleteExercise(exercise.id)
+                                    }
                                   >
                                     <Trash2 className="mr-2 h-4 w-4" />
                                     Xóa
@@ -1369,7 +1501,10 @@ export default function AdminCourses() {
                       <div className="text-center py-8 text-gray-500">
                         <Edit className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>Chưa có bài tập nào</p>
-                        <Button className="mt-4 gap-2" onClick={() => setIsAddExerciseDialogOpen(true)}>
+                        <Button
+                          className="mt-4 gap-2"
+                          onClick={() => setIsAddExerciseDialogOpen(true)}
+                        >
                           <PlusCircle className="h-4 w-4" />
                           Thêm bài tập đầu tiên
                         </Button>
@@ -1381,16 +1516,19 @@ export default function AdminCourses() {
             )}
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setIsViewDialogOpen(false)}
+              >
                 Đóng
               </Button>
-              {activeTab !== 'info' && (
+              {activeTab !== "info" && (
                 <Button
                   className="gap-2"
                   onClick={() => {
-                    if (activeTab === 'lessons') {
+                    if (activeTab === "lessons") {
                       setIsAddLessonDialogOpen(true);
-                    } else if (activeTab === 'exercises') {
+                    } else if (activeTab === "exercises") {
                       setIsAddExerciseDialogOpen(true);
                     }
                   }}
@@ -1452,7 +1590,10 @@ export default function AdminCourses() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editSubject" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editSubject"
+                    className="text-right col-span-2"
+                  >
                     Môn học *
                   </Label>
                   <Select
@@ -1475,7 +1616,10 @@ export default function AdminCourses() {
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editDifficulty" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editDifficulty"
+                    className="text-right col-span-2"
+                  >
                     Độ khó *
                   </Label>
                   <Select
@@ -1500,7 +1644,10 @@ export default function AdminCourses() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editDuration" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editDuration"
+                    className="text-right col-span-2"
+                  >
                     Thời lượng *
                   </Label>
                   <Input
@@ -1515,7 +1662,10 @@ export default function AdminCourses() {
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                  <Label htmlFor="editAgeGroup" className="text-right col-span-2">
+                  <Label
+                    htmlFor="editAgeGroup"
+                    className="text-right col-span-2"
+                  >
                     Độ tuổi *
                   </Label>
                   <Select
@@ -1565,7 +1715,10 @@ export default function AdminCourses() {
         </Dialog>
 
         {/* Edit Lesson Dialog */}
-        <Dialog open={isEditLessonDialogOpen} onOpenChange={setIsEditLessonDialogOpen}>
+        <Dialog
+          open={isEditLessonDialogOpen}
+          onOpenChange={setIsEditLessonDialogOpen}
+        >
           <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
             <DialogHeader className="pb-4 border-b border-gray-200">
               <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -1657,7 +1810,10 @@ export default function AdminCourses() {
                   type="number"
                   value={editLesson.order || ""}
                   onChange={(e) =>
-                    setEditLesson({ ...editLesson, order: parseInt(e.target.value) })
+                    setEditLesson({
+                      ...editLesson,
+                      order: parseInt(e.target.value),
+                    })
                   }
                   className="col-span-3"
                   placeholder="1, 2, 3..."
@@ -1666,7 +1822,7 @@ export default function AdminCourses() {
               </div>
 
               {/* Content fields based on lesson type */}
-              {editLesson.type === 'video' && (
+              {editLesson.type === "video" && (
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="videoUrl" className="text-right">
                     <Video className="inline h-4 w-4 mr-1" />
@@ -1684,7 +1840,7 @@ export default function AdminCourses() {
                 </div>
               )}
 
-              {editLesson.type === 'game' && (
+              {editLesson.type === "game" && (
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="gameUrl" className="text-right">
                     <GamepadIcon className="inline h-4 w-4 mr-1" />
@@ -1727,19 +1883,27 @@ export default function AdminCourses() {
                 <div className="col-span-3">
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                     <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500 mb-2">Kéo thả file hoặc click để chọn</p>
+                    <p className="text-sm text-gray-500 mb-2">
+                      Kéo thả file hoặc click để chọn
+                    </p>
                     <Button variant="outline" size="sm">
                       Chọn file
                     </Button>
-                    {editLesson.materials && editLesson.materials.length > 0 && (
-                      <div className="mt-2 space-y-1">
-                        {editLesson.materials.map((file: string, index: number) => (
-                          <div key={index} className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                            {file}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    {editLesson.materials &&
+                      editLesson.materials.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                          {editLesson.materials.map(
+                            (file: string, index: number) => (
+                              <div
+                                key={index}
+                                className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded"
+                              >
+                                {file}
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>
@@ -1771,7 +1935,10 @@ export default function AdminCourses() {
         </Dialog>
 
         {/* Edit Exercise Dialog */}
-        <Dialog open={isEditExerciseDialogOpen} onOpenChange={setIsEditExerciseDialogOpen}>
+        <Dialog
+          open={isEditExerciseDialogOpen}
+          onOpenChange={setIsEditExerciseDialogOpen}
+        >
           <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
             <DialogHeader className="pb-4 border-b border-gray-200">
               <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -1866,7 +2033,10 @@ export default function AdminCourses() {
                     type="number"
                     value={editExercise.points || ""}
                     onChange={(e) =>
-                      setEditExercise({ ...editExercise, points: parseInt(e.target.value) })
+                      setEditExercise({
+                        ...editExercise,
+                        points: parseInt(e.target.value),
+                      })
                     }
                     placeholder="10, 15, 20..."
                     min="1"
@@ -1880,7 +2050,10 @@ export default function AdminCourses() {
                     type="number"
                     value={editExercise.timeLimit || ""}
                     onChange={(e) =>
-                      setEditExercise({ ...editExercise, timeLimit: parseInt(e.target.value) })
+                      setEditExercise({
+                        ...editExercise,
+                        timeLimit: parseInt(e.target.value),
+                      })
                     }
                     placeholder="300, 600..."
                     min="0"
@@ -1896,7 +2069,10 @@ export default function AdminCourses() {
                   id="instructions"
                   value={editExercise.instructions || ""}
                   onChange={(e) =>
-                    setEditExercise({ ...editExercise, instructions: e.target.value })
+                    setEditExercise({
+                      ...editExercise,
+                      instructions: e.target.value,
+                    })
                   }
                   className="col-span-3"
                   rows={2}
@@ -1904,7 +2080,7 @@ export default function AdminCourses() {
                 />
               </div>
 
-              {editExercise.type === 'quiz' && (
+              {editExercise.type === "quiz" && (
                 <div className="col-span-4">
                   <Label className="text-sm font-medium">Câu hỏi Quiz</Label>
                   <div className="mt-2 space-y-3 border rounded-lg p-4">
@@ -1945,7 +2121,9 @@ export default function AdminCourses() {
                       <div className="col-span-3">
                         <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
                           <Image className="h-6 w-6 text-gray-400 mx-auto mb-1" />
-                          <p className="text-xs text-gray-500">Tải lên hình ảnh (nếu có)</p>
+                          <p className="text-xs text-gray-500">
+                            Tải lên hình ảnh (nếu có)
+                          </p>
                           <Button variant="outline" size="sm" className="mt-1">
                             Chọn ảnh
                           </Button>
@@ -1956,7 +2134,8 @@ export default function AdminCourses() {
                 </div>
               )}
 
-              {(editExercise.type === 'practice' || editExercise.type === 'experiment') && (
+              {(editExercise.type === "practice" ||
+                editExercise.type === "experiment") && (
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="exerciseContent" className="text-right">
                     Nội dung bài tập *
@@ -1965,7 +2144,10 @@ export default function AdminCourses() {
                     id="exerciseContent"
                     value={editExercise.content || ""}
                     onChange={(e) =>
-                      setEditExercise({ ...editExercise, content: e.target.value })
+                      setEditExercise({
+                        ...editExercise,
+                        content: e.target.value,
+                      })
                     }
                     className="col-span-3"
                     rows={5}
@@ -2023,7 +2205,10 @@ export default function AdminCourses() {
         </Dialog>
 
         {/* Add Lesson Dialog */}
-        <Dialog open={isAddLessonDialogOpen} onOpenChange={setIsAddLessonDialogOpen}>
+        <Dialog
+          open={isAddLessonDialogOpen}
+          onOpenChange={setIsAddLessonDialogOpen}
+        >
           <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
             <DialogHeader className="pb-4 border-b border-gray-200">
               <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -2044,7 +2229,10 @@ export default function AdminCourses() {
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="newLessonTitle" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="newLessonTitle"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Tiêu đề bài giảng *
                     </Label>
                     <Input
@@ -2059,7 +2247,10 @@ export default function AdminCourses() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="newLessonDesc" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="newLessonDesc"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Mô tả bài giảng *
                     </Label>
                     <Textarea
@@ -2079,7 +2270,12 @@ export default function AdminCourses() {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="newLessonType" className="text-sm font-medium text-gray-700">Loại bài giảng *</Label>
+                      <Label
+                        htmlFor="newLessonType"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Loại bài giảng *
+                      </Label>
                       <Select
                         value={newLesson.type || ""}
                         onValueChange={(value) =>
@@ -2119,12 +2315,20 @@ export default function AdminCourses() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="newLessonDuration" className="text-sm font-medium text-gray-700">Thời lượng *</Label>
+                      <Label
+                        htmlFor="newLessonDuration"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Thời lượng *
+                      </Label>
                       <Input
                         id="newLessonDuration"
                         value={newLesson.duration || ""}
                         onChange={(e) =>
-                          setNewLesson({ ...newLesson, duration: e.target.value })
+                          setNewLesson({
+                            ...newLesson,
+                            duration: e.target.value,
+                          })
                         }
                         placeholder="VD: 15 phút"
                         className="w-full bg-white border-blue-200 focus:border-blue-400"
@@ -2132,13 +2336,21 @@ export default function AdminCourses() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="newLessonOrder" className="text-sm font-medium text-gray-700">Thứ tự</Label>
+                      <Label
+                        htmlFor="newLessonOrder"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Thứ tự
+                      </Label>
                       <Input
                         id="newLessonOrder"
                         type="number"
                         value={newLesson.order || ""}
                         onChange={(e) =>
-                          setNewLesson({ ...newLesson, order: parseInt(e.target.value) })
+                          setNewLesson({
+                            ...newLesson,
+                            order: parseInt(e.target.value),
+                          })
                         }
                         placeholder="1, 2, 3..."
                         min="1"
@@ -2177,7 +2389,10 @@ export default function AdminCourses() {
         </Dialog>
 
         {/* Add Exercise Dialog */}
-        <Dialog open={isAddExerciseDialogOpen} onOpenChange={setIsAddExerciseDialogOpen}>
+        <Dialog
+          open={isAddExerciseDialogOpen}
+          onOpenChange={setIsAddExerciseDialogOpen}
+        >
           <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
             <DialogHeader className="pb-4 border-b border-gray-200">
               <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -2198,14 +2413,20 @@ export default function AdminCourses() {
 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="newExerciseTitle" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="newExerciseTitle"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Tiêu đề bài tập *
                     </Label>
                     <Input
                       id="newExerciseTitle"
                       value={newExercise.title || ""}
                       onChange={(e) =>
-                        setNewExercise({ ...newExercise, title: e.target.value })
+                        setNewExercise({
+                          ...newExercise,
+                          title: e.target.value,
+                        })
                       }
                       placeholder="VD: Bài tập đếm số"
                       className="w-full bg-white border-green-200 focus:border-green-400"
@@ -2213,7 +2434,10 @@ export default function AdminCourses() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="newExerciseDesc" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="newExerciseDesc"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Mô tả bài tập *
                     </Label>
                     <Textarea
@@ -2233,7 +2457,12 @@ export default function AdminCourses() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="newExerciseType" className="text-sm font-medium text-gray-700">Loại bài tập *</Label>
+                      <Label
+                        htmlFor="newExerciseType"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Loại bài tập *
+                      </Label>
                       <Select
                         value={newExercise.type || ""}
                         onValueChange={(value) =>
@@ -2267,7 +2496,12 @@ export default function AdminCourses() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="newExerciseDifficulty" className="text-sm font-medium text-gray-700">Độ khó *</Label>
+                      <Label
+                        htmlFor="newExerciseDifficulty"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Độ khó *
+                      </Label>
                       <Select
                         value={newExercise.difficulty || ""}
                         onValueChange={(value) =>
@@ -2303,13 +2537,21 @@ export default function AdminCourses() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="newExercisePoints" className="text-sm font-medium text-gray-700">Điểm thưởng *</Label>
+                      <Label
+                        htmlFor="newExercisePoints"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Điểm thưởng *
+                      </Label>
                       <Input
                         id="newExercisePoints"
                         type="number"
                         value={newExercise.points || ""}
                         onChange={(e) =>
-                          setNewExercise({ ...newExercise, points: parseInt(e.target.value) })
+                          setNewExercise({
+                            ...newExercise,
+                            points: parseInt(e.target.value),
+                          })
                         }
                         placeholder="10, 15, 20..."
                         min="1"
@@ -2318,13 +2560,21 @@ export default function AdminCourses() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="newExerciseTime" className="text-sm font-medium text-gray-700">Thời gian (phút)</Label>
+                      <Label
+                        htmlFor="newExerciseTime"
+                        className="text-sm font-medium text-gray-700"
+                      >
+                        Thời gian (phút)
+                      </Label>
                       <Input
                         id="newExerciseTime"
                         type="number"
                         value={Math.round((newExercise.timeLimit || 0) / 60)}
                         onChange={(e) =>
-                          setNewExercise({ ...newExercise, timeLimit: parseInt(e.target.value) * 60 })
+                          setNewExercise({
+                            ...newExercise,
+                            timeLimit: parseInt(e.target.value) * 60,
+                          })
                         }
                         placeholder="5, 10, 15..."
                         min="0"
