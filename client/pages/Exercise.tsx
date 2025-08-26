@@ -272,7 +272,7 @@ export default function Exercise() {
               className="border-primary/20 hover:bg-primary/5"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Quay lại
+              Quay l��i
             </Button>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -470,7 +470,7 @@ export default function Exercise() {
                           className="min-h-[150px] border-primary/20 focus:border-primary resize-none"
                         />
                         <p className="text-xs text-muted-foreground">
-                          �� Hãy viết chi tiết cách giải và giải thích từng bước
+                          📝 Hãy viết chi tiết cách giải và giải thích từng bước
                         </p>
                       </TabsContent>
 
