@@ -257,7 +257,8 @@ export default function AdminExercises() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              ✏️ Quản lý bài tập
+              <PenTool className="inline-block h-8 w-8 mr-2" />
+              Quản lý bài tập
             </h1>
             <p className="text-gray-600 mt-1">
               Tạo và quản lý bài tập cho học sinh
@@ -537,7 +538,7 @@ export default function AdminExercises() {
                 <TableHead className="font-semibold">ID</TableHead>
                 <TableHead className="font-semibold">Tên bài tập</TableHead>
                 <TableHead className="font-semibold">Loại</TableHead>
-                <TableHead className="font-semibold">Môn học</TableHead>
+                <TableHead className="font-semibold">Tên khóa học</TableHead>
                 <TableHead className="font-semibold">Độ khó</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold">Ngày tạo</TableHead>
@@ -586,7 +587,7 @@ export default function AdminExercises() {
                         {exercise.submissions} bài nộp
                       </div>
                       <div className="text-gray-500">
-                        Đi��m TB: {exercise.avgScore}
+                        Điểm TB: {exercise.avgScore}
                       </div>
                     </div>
                   </TableCell>
