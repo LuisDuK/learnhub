@@ -120,7 +120,7 @@ const mockExercises = [
     department: "Khối mầm non",
     isFromBank: false,
     tags: ["màu sắc", "số đếm", "từ vựng"],
-    description: "Học từ vựng v��� màu sắc và số",
+    description: "Học từ vựng về màu sắc và số",
     courseName: "Tiếng Anh cho trẻ em",
   },
   {
@@ -137,7 +137,7 @@ const mockExercises = [
     department: "Khối lớp 3-5",
     isFromBank: true,
     tags: ["quan sát", "mô tả"],
-    description: "Bài tập quan sát và mô tả các hiện tượng",
+    description: "Bài t���p quan sát và mô tả các hiện tượng",
     courseName: null, // Chưa gán vào khóa học nào
   },
   {
@@ -819,7 +819,7 @@ export default function AdminExercises() {
               />
             </div>
             <div>
-              <Label>Từ khóa chấp nh��n (cách nhau bởi dấu phẩy)</Label>
+              <Label>Từ khóa chấp nhận (cách nhau bởi dấu phẩy)</Label>
               <Input
                 value={question.keywords?.join(", ") || ""}
                 onChange={(e) =>
@@ -1148,7 +1148,7 @@ export default function AdminExercises() {
                     AI Tạo bài tập
                   </DialogTitle>
                   <DialogDescription>
-                    Mô tả yêu cầu và AI sẽ t��o bài tập phù hợp cho bạn
+                    Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho bạn
                   </DialogDescription>
                 </DialogHeader>
 
@@ -1600,9 +1600,15 @@ Q: Viết đoạn văn tả về mùa xuân`}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
-                      {exercise.courseName || "Chưa gán"}
-                    </Badge>
+                    {exercise.courseName ? (
+                      <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
+                        {exercise.courseName}
+                      </Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-xs bg-gray-50 text-gray-500">
+                        Chưa gán
+                      </Badge>
+                    )}
                   </TableCell>
                   <TableCell className="text-sm text-gray-600">
                     {exercise.creator}
