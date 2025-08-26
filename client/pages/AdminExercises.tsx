@@ -99,7 +99,7 @@ const mockExercises = [
     difficulty: "Trung bình",
     submissions: 32,
     avgScore: 78,
-    department: "Khối l��p 3-5",
+    department: "Khối lớp 3-5",
     isFromBank: false,
     tags: ["văn mẫu", "tả cảnh"],
     description: "Luyện tập kỹ năng viết tả cảnh",
@@ -191,7 +191,7 @@ const mockExerciseBank = [
   {
     id: 105,
     title: "Tả người thân",
-    type: "T��� luận",
+    type: "Tự luận",
     subject: "Văn",
     creator: "Trường Tiểu học Nguyễn Du",
     createdAt: "2024-01-18",
@@ -270,7 +270,7 @@ export default function AdminExercises() {
   const [exercises, setExercises] = useState(mockExercises);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
-  const [typeFilter, setTypeFilter] = useState("Tất cả");
+  const [typeFilter, setTypeFilter] = useState("T��t cả");
   const [departmentFilter, setDepartmentFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
@@ -1560,6 +1560,11 @@ Q: Viết đoạn văn tả về mùa xuân`}
                   <TableCell>
                     <Badge variant="secondary" className="text-xs">
                       {exercise.department}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
+                      {exercise.courseName || "Chưa gán"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-gray-600">
