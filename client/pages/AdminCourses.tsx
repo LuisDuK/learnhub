@@ -124,7 +124,7 @@ const mockCourses = [
         questions: [
           {
             id: 1,
-            question: "H��y đếm số quả táo trong hình?",
+            question: "Hãy đếm số quả táo trong hình?",
             image: "apples.jpg",
             options: ["3", "4", "5", "6"],
             correctAnswer: "5"
@@ -1463,13 +1463,28 @@ export default function AdminCourses() {
                 </div>
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-                Hủy
-              </Button>
-              <Button onClick={handleUpdateCourse}>
-                Cập nhật
-              </Button>
+            <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
+              <div className="flex items-center justify-between w-full">
+                <div className="text-xs text-gray-500">
+                  * Các trường bắt buộc
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsEditDialogOpen(false)}
+                    className="border-gray-300 hover:bg-gray-50"
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={handleUpdateCourse}
+                    className="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white shadow-lg"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Cập nhật khóa học
+                  </Button>
+                </div>
+              </div>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -1737,7 +1752,7 @@ export default function AdminCourses() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn loại" />
+                      <SelectValue placeholder="Chọn lo���i" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="quiz">Quiz</SelectItem>
