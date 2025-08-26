@@ -30,20 +30,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Progress } from "@/components/ui/progress";
 import {
   Search,
@@ -62,8 +54,6 @@ import {
   Download,
   X,
   Wand2,
-  FileSpreadsheet,
-  FilePdf,
   Loader2,
   Save,
   Import,
@@ -155,7 +145,6 @@ export default function AdminExercises() {
   const [typeFilter, setTypeFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
-  const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -353,7 +342,7 @@ export default function AdminExercises() {
           id: "file1",
           question: "Theo tài liệu, đâu là đặc điểm chính của phép cộng?",
           type: "multiple_choice", 
-          options: ["Tính giao hoán", "Tính kết hợp", "Có phần tử đơn vị", "T���t cả đều đúng"],
+          options: ["Tính giao hoán", "Tính kết hợp", "Có phần tử đơn vị", "Tất cả đều đúng"],
           correctAnswer: "D",
           explanation: "Phép cộng có đầy đủ các tính chất được liệt kê"
         }
@@ -398,7 +387,6 @@ export default function AdminExercises() {
     });
     
     setBulkQuestions("");
-    setIsBulkImportOpen(false);
   };
 
   const getTypeColor = (type: string) => {
@@ -519,7 +507,7 @@ export default function AdminExercises() {
             </div>
 
             <div>
-              <Label>Gi��i thích (tùy chọn)</Label>
+              <Label>Giải thích (tùy chọn)</Label>
               <Textarea
                 value={question.explanation || ""}
                 onChange={(e) => updateQuestion(index, "explanation", e.target.value)}
@@ -601,6 +589,7 @@ export default function AdminExercises() {
           </div>
 
           <div className="flex gap-2">
+            {/* AI Dialog */}
             <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0">
@@ -608,8 +597,86 @@ export default function AdminExercises() {
                   AI Tạo bài tập
                 </Button>
               </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-purple-500" />
+                    AI Tạo bài tập
+                  </DialogTitle>
+                  <DialogDescription>
+                    Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho bạn
+                  </DialogDescription>
+                </DialogHeader>
+
+                {isProcessing ? (
+                  <div className="space-y-4 py-4">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>{processingStep}</span>
+                    </div>
+                    <Progress value={uploadProgress} className="w-full" />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <Label>Mô tả bài tập cần tạo</Label>
+                      <Textarea
+                        value={aiPrompt}
+                        onChange={(e) => setAiPrompt(e.target.value)}
+                        placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghiệm về phép cộng trong phạm vi 100, độ khó vừa phải cho học sinh lớp 2..."
+                        rows={4}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Hoặc upload file tài liệu</Label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        <input
+                          type="file"
+                          ref={fileInputRef}
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setUploadedFile(file);
+                              handleFileUpload(file);
+                            }
+                          }}
+                          accept=".pdf,.docx,.xlsx,.txt"
+                          className="hidden"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="w-full"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Chọn file (PDF, Word, Excel, TXT)
+                        </Button>
+                        {uploadedFile && (
+                          <p className="text-sm text-gray-600 mt-2">
+                            Đã chọn: {uploadedFile.name}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <DialogFooter>
+                  <Button 
+                    onClick={handleAIGeneration} 
+                    disabled={!aiPrompt.trim() || isProcessing}
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                  >
+                    <Wand2 className="h-4 w-4 mr-2" />
+                    Tạo bài tập
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
 
+            {/* Main Exercise Dialog */}
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white">
@@ -617,286 +684,205 @@ export default function AdminExercises() {
                   Thêm bài tập
                 </Button>
               </DialogTrigger>
+              <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Tạo bài tập mới</DialogTitle>
+                  <DialogDescription>
+                    Tạo bài tập với nhiều dạng câu hỏi khác nhau
+                  </DialogDescription>
+                </DialogHeader>
+
+                <Tabs defaultValue="basic" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
+                    <TabsTrigger value="questions">
+                      Câu hỏi ({newExercise.questions.length})
+                    </TabsTrigger>
+                    <TabsTrigger value="import">Import hàng loạt</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="basic" className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Tên bài tập</Label>
+                        <Input
+                          value={newExercise.title}
+                          onChange={(e) => setNewExercise({ ...newExercise, title: e.target.value })}
+                          placeholder="Nhập tên bài tập"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Môn học</Label>
+                        <Select
+                          value={newExercise.subject}
+                          onValueChange={(value) => setNewExercise({ ...newExercise, subject: value })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn môn học" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {subjects.slice(1).map((subject) => (
+                              <SelectItem key={subject} value={subject}>
+                                {subject}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label>Loại bài tập</Label>
+                        <Select
+                          value={newExercise.type}
+                          onValueChange={(value) => setNewExercise({ ...newExercise, type: value })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn loại" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Trắc nghiệm">Trắc nghiệm</SelectItem>
+                            <SelectItem value="Tự luận">Tự luận</SelectItem>
+                            <SelectItem value="Hỗn hợp">Hỗn hợp</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Độ khó</Label>
+                        <Select
+                          value={newExercise.difficulty}
+                          onValueChange={(value) => setNewExercise({ ...newExercise, difficulty: value })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn độ khó" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {difficulties.map((difficulty) => (
+                              <SelectItem key={difficulty} value={difficulty}>
+                                {difficulty}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Thời gian (phút)</Label>
+                        <Input
+                          type="number"
+                          value={newExercise.timeLimit}
+                          onChange={(e) => setNewExercise({ ...newExercise, timeLimit: parseInt(e.target.value) })}
+                          placeholder="60"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Mô tả bài tập</Label>
+                      <Textarea
+                        value={newExercise.description}
+                        onChange={(e) => setNewExercise({ ...newExercise, description: e.target.value })}
+                        placeholder="Mô tả ngắn gọn về bài tập..."
+                        rows={3}
+                      />
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="questions" className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-lg font-semibold">Danh sách câu hỏi</Label>
+                      <div className="flex gap-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <Plus className="h-4 w-4 mr-2" />
+                              Thêm câu hỏi
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem onClick={() => addQuestion("multiple_choice")}>
+                              <CheckCircle className="mr-2 h-4 w-4" />
+                              Trắc nghiệm
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => addQuestion("essay")}>
+                              <FileText className="mr-2 h-4 w-4" />
+                              Tự luận dài
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => addQuestion("short_answer")}>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Trả lời ngắn
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </div>
+
+                    {newExercise.questions.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        <PenTool className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                        <p>Chưa có câu hỏi nào. Thêm câu hỏi đầu tiên!</p>
+                      </div>
+                    )}
+
+                    <div className="space-y-4">
+                      {newExercise.questions.map((question, index) => renderQuestionForm(question, index))}
+                    </div>
+                  </TabsContent>
+
+                  <TabsContent value="import" className="space-y-4">
+                    <div className="space-y-4">
+                      <div>
+                        <Label className="text-lg font-semibold">Import câu hỏi hàng loạt</Label>
+                        <p className="text-sm text-gray-600">
+                          Nhập nhiều câu hỏi cùng lúc, mỗi câu hỏi bắt đầu bằng "Q:"
+                        </p>
+                      </div>
+
+                      <Textarea
+                        value={bulkQuestions}
+                        onChange={(e) => setBulkQuestions(e.target.value)}
+                        placeholder={`Q: 2 + 3 = ?
+Q: Thủ đô của Việt Nam là gì?
+Q: Viết đoạn văn tả v��� mùa xuân`}
+                        rows={10}
+                        className="font-mono"
+                      />
+
+                      <div className="flex gap-2">
+                        <Button onClick={handleBulkImport} disabled={!bulkQuestions.trim()}>
+                          <Import className="h-4 w-4 mr-2" />
+                          Import câu hỏi
+                        </Button>
+                        <Button variant="outline" onClick={() => setBulkQuestions("")}>
+                          Xóa tất cả
+                        </Button>
+                      </div>
+
+                      <div className="p-4 bg-blue-50 rounded-lg">
+                        <h4 className="font-semibold text-blue-900 mb-2">Hướng dẫn định dạng:</h4>
+                        <ul className="text-sm text-blue-800 space-y-1">
+                          <li>• Mỗi câu hỏi bắt đầu bằng "Q:"</li>
+                          <li>• Câu hỏi sẽ được tạo dạng trả lời ngắn mặc định</li>
+                          <li>• Có thể chỉnh sửa loại câu hỏi sau khi import</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
+
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => {resetForm(); setIsAddDialogOpen(false);}}>
+                    Hủy
+                  </Button>
+                  <Button onClick={handleAddExercise} disabled={!newExercise.title || !newExercise.subject || newExercise.questions.length === 0}>
+                    <Save className="h-4 w-4 mr-2" />
+                    Lưu bài tập
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
             </Dialog>
           </div>
         </div>
-
-        {/* AI Generation Dialog */}
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-500" />
-              AI Tạo bài tập
-            </DialogTitle>
-            <DialogDescription>
-              Mô tả yêu cầu và AI sẽ tạo bài tập phù hợp cho bạn
-            </DialogDescription>
-          </DialogHeader>
-
-          {isProcessing ? (
-            <div className="space-y-4 py-4">
-              <div className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
-                <span>{processingStep}</span>
-              </div>
-              <Progress value={uploadProgress} className="w-full" />
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <Label>Mô tả bài tập cần tạo</Label>
-                <Textarea
-                  value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
-                  placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghiệm về phép cộng trong phạm vi 100, độ khó vừa phải cho học sinh lớp 2..."
-                  rows={4}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Hoặc upload file tài liệu</Label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setUploadedFile(file);
-                        handleFileUpload(file);
-                      }
-                    }}
-                    accept=".pdf,.docx,.xlsx,.txt"
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="w-full"
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Chọn file (PDF, Word, Excel, TXT)
-                  </Button>
-                  {uploadedFile && (
-                    <p className="text-sm text-gray-600 mt-2">
-                      Đã chọn: {uploadedFile.name}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          <DialogFooter>
-            <Button 
-              onClick={handleAIGeneration} 
-              disabled={!aiPrompt.trim() || isProcessing}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-            >
-              <Wand2 className="h-4 w-4 mr-2" />
-              Tạo bài tập
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-
-        {/* Main Exercise Dialog */}
-        <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Tạo bài tập mới</DialogTitle>
-            <DialogDescription>
-              Tạo bài tập với nhiều dạng câu hỏi khác nhau
-            </DialogDescription>
-          </DialogHeader>
-
-          <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
-              <TabsTrigger value="questions">
-                Câu hỏi ({newExercise.questions.length})
-              </TabsTrigger>
-              <TabsTrigger value="import">Import hàng loạt</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="basic" className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Tên bài tập</Label>
-                  <Input
-                    value={newExercise.title}
-                    onChange={(e) => setNewExercise({ ...newExercise, title: e.target.value })}
-                    placeholder="Nhập tên bài tập"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Môn học</Label>
-                  <Select
-                    value={newExercise.subject}
-                    onValueChange={(value) => setNewExercise({ ...newExercise, subject: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn môn học" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {subjects.slice(1).map((subject) => (
-                        <SelectItem key={subject} value={subject}>
-                          {subject}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label>Loại bài tập</Label>
-                  <Select
-                    value={newExercise.type}
-                    onValueChange={(value) => setNewExercise({ ...newExercise, type: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn loại" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Trắc nghiệm">Trắc nghiệm</SelectItem>
-                      <SelectItem value="Tự luận">Tự luận</SelectItem>
-                      <SelectItem value="Hỗn hợp">Hỗn hợp</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Độ khó</Label>
-                  <Select
-                    value={newExercise.difficulty}
-                    onValueChange={(value) => setNewExercise({ ...newExercise, difficulty: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn độ khó" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {difficulties.map((difficulty) => (
-                        <SelectItem key={difficulty} value={difficulty}>
-                          {difficulty}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Thời gian (phút)</Label>
-                  <Input
-                    type="number"
-                    value={newExercise.timeLimit}
-                    onChange={(e) => setNewExercise({ ...newExercise, timeLimit: parseInt(e.target.value) })}
-                    placeholder="60"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Mô tả bài tập</Label>
-                <Textarea
-                  value={newExercise.description}
-                  onChange={(e) => setNewExercise({ ...newExercise, description: e.target.value })}
-                  placeholder="Mô tả ngắn gọn về bài tập..."
-                  rows={3}
-                />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="questions" className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label className="text-lg font-semibold">Danh sách câu hỏi</Label>
-                <div className="flex gap-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Thêm câu hỏi
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => addQuestion("multiple_choice")}>
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Trắc nghiệm
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => addQuestion("essay")}>
-                        <FileText className="mr-2 h-4 w-4" />
-                        Tự luận dài
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => addQuestion("short_answer")}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        Trả lời ngắn
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </div>
-
-              {newExercise.questions.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  <PenTool className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>Chưa có câu hỏi nào. Thêm câu hỏi đầu tiên!</p>
-                </div>
-              )}
-
-              <div className="space-y-4">
-                {newExercise.questions.map((question, index) => renderQuestionForm(question, index))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="import" className="space-y-4">
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-lg font-semibold">Import câu hỏi hàng loạt</Label>
-                  <p className="text-sm text-gray-600">
-                    Nhập nhiều câu hỏi cùng lúc, mỗi câu hỏi bắt đầu bằng "Q:"
-                  </p>
-                </div>
-
-                <Textarea
-                  value={bulkQuestions}
-                  onChange={(e) => setBulkQuestions(e.target.value)}
-                  placeholder={`Q: 2 + 3 = ?
-Q: Thủ đô của Việt Nam là gì?
-Q: Viết đoạn văn tả về mùa xuân`}
-                  rows={10}
-                  className="font-mono"
-                />
-
-                <div className="flex gap-2">
-                  <Button onClick={handleBulkImport} disabled={!bulkQuestions.trim()}>
-                    <Import className="h-4 w-4 mr-2" />
-                    Import câu hỏi
-                  </Button>
-                  <Button variant="outline" onClick={() => setBulkQuestions("")}>
-                    Xóa tất cả
-                  </Button>
-                </div>
-
-                <div className="p-4 bg-blue-50 rounded-lg">
-                  <h4 className="font-semibold text-blue-900 mb-2">Hướng dẫn định dạng:</h4>
-                  <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• Mỗi câu hỏi bắt đầu bằng "Q:"</li>
-                    <li>• Câu hỏi sẽ được tạo dạng trả lời ngắn mặc định</li>
-                    <li>• Có thể chỉnh sửa loại câu hỏi sau khi import</li>
-                  </ul>
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => {resetForm(); setIsAddDialogOpen(false);}}>
-              Hủy
-            </Button>
-            <Button onClick={handleAddExercise} disabled={!newExercise.title || !newExercise.subject || newExercise.questions.length === 0}>
-              <Save className="h-4 w-4 mr-2" />
-              Lưu bài tập
-            </Button>
-          </DialogFooter>
-        </DialogContent>
 
         {/* Search and Filter Bar */}
         <div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200">
