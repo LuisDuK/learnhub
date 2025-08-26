@@ -137,7 +137,7 @@ const mockExercises = [
     department: "Khối lớp 3-5",
     isFromBank: true,
     tags: ["quan sát", "mô tả"],
-    description: "Bài t���p quan sát và mô tả các hiện tượng",
+    description: "Bài tập quan sát và mô tả các hiện tượng",
     courseName: null, // Chưa gán vào khóa học nào
   },
   {
@@ -942,7 +942,7 @@ export default function AdminExercises() {
               Quản lý bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý bài tập của khóa học - tạo mới hoặc gán từ kho bài tập
+              Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho nhiều khóa học
             </p>
           </div>
 
