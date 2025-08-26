@@ -661,6 +661,126 @@ export default function AdminCourses() {
     }
   };
 
+  // AI Exercise Generation
+  const handleAIGeneration = async () => {
+    setIsProcessing(true);
+    setProcessingStep("Đang xử lý yêu cầu AI...");
+
+    try {
+      // Simulate AI processing
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setProcessingStep("Tạo câu hỏi từ AI...");
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Mock AI generated questions
+      const aiQuestions: Question[] = [
+        {
+          id: "ai1",
+          question: "Tổng của 25 + 37 bằng bao nhiêu?",
+          type: "multiple_choice",
+          options: ["52", "62", "72", "82"],
+          correctAnswer: "B",
+          explanation: "25 + 37 = 62"
+        },
+        {
+          id: "ai2",
+          question: "Hãy giải thích tại sao 5 x 6 = 30",
+          type: "essay",
+          maxWords: 100,
+          keywords: ["phép nhân", "tính chất", "ví dụ"],
+          rubric: "Học sinh cần giải thích khái niệm phép nhân và đưa ra ví dụ cụ thể"
+        }
+      ];
+
+      setNewExercise({
+        ...newExercise,
+        questions: [...(newExercise.questions || []), ...aiQuestions]
+      });
+
+      setProcessingStep("Hoàn thành!");
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setIsAIDialogOpen(false);
+    } catch (error) {
+      console.error("AI generation error:", error);
+    } finally {
+      setIsProcessing(false);
+      setProcessingStep("");
+      setAiPrompt("");
+    }
+  };
+
+  // File Upload Processing
+  const handleFileUpload = async (file: File) => {
+    setIsProcessing(true);
+    setUploadProgress(0);
+    setProcessingStep("Đang tải file...");
+
+    try {
+      // Simulate file processing
+      for (let i = 0; i <= 100; i += 10) {
+        setUploadProgress(i);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+
+      setProcessingStep("Phân tích nội dung file...");
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      setProcessingStep("Tạo câu hỏi từ file...");
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Mock questions from file
+      const fileQuestions: Question[] = [
+        {
+          id: "file1",
+          question: "Theo tài liệu, đâu là đặc điểm chính của phép cộng?",
+          type: "multiple_choice",
+          options: ["Tính giao hoán", "Tính kết hợp", "Có phần tử đơn vị", "Tất cả đều đúng"],
+          correctAnswer: "D",
+          explanation: "Phép cộng có đầy đủ các tính chất được liệt kê"
+        }
+      ];
+
+      setNewExercise({
+        ...newExercise,
+        questions: [...(newExercise.questions || []), ...fileQuestions]
+      });
+
+      setProcessingStep("Hoàn thành!");
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } finally {
+      setIsProcessing(false);
+      setUploadProgress(0);
+      setProcessingStep("");
+      setUploadedFile(null);
+    }
+  };
+
+  // Bulk Import Questions
+  const handleBulkImport = () => {
+    const lines = bulkQuestions.split('\n').filter(line => line.trim());
+    const questions: Question[] = [];
+
+    lines.forEach((line, index) => {
+      if (line.startsWith('Q:')) {
+        const questionText = line.substring(2).trim();
+        questions.push({
+          id: `bulk_${index}`,
+          question: questionText,
+          type: "short_answer",
+          correctAnswer: "",
+          keywords: [],
+        });
+      }
+    });
+
+    setNewExercise({
+      ...newExercise,
+      questions: [...(newExercise.questions || []), ...questions]
+    });
+
+    setBulkQuestions("");
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Đang mở":
@@ -2638,7 +2758,7 @@ export default function AdminCourses() {
                     className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Tạo bài tập
+                    T���o bài tập
                   </Button>
                 </div>
               </div>
