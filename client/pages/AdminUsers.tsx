@@ -50,7 +50,7 @@ const mockUsers = [
     id: 1,
     name: "Trần Thị Mai",
     email: "mai.tran@example.com",
-    role: "Giáo viên",
+    role: "Học sinh",
     status: "Hoạt động",
     createdAt: "2024-01-10",
   },
@@ -66,7 +66,7 @@ const mockUsers = [
     id: 3,
     name: "Lê Văn An",
     email: "an.le@example.com",
-    role: "Giáo viên",
+    role: "Học sinh",
     status: "Tạm khóa",
     createdAt: "2024-01-20",
   },
@@ -125,7 +125,7 @@ export default function AdminUsers() {
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case "Giáo viên":
+      case "Học sinh":
         return "bg-green-100 text-green-800";
       case "Quản trị viên":
         return "bg-purple-100 text-purple-800";
