@@ -195,7 +195,7 @@ export default function AdminAIConfig() {
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
-    alert("Cấu hình API đã ��ư���c lưu thành công!");
+    alert("Cấu hình API đã ��ược lưu thành công!");
   };
 
   const handleAddPrompt = () => {
@@ -915,8 +915,12 @@ export default function AdminAIConfig() {
                   <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                     <h4 className="font-medium text-yellow-900 mb-2 flex items-center gap-2">
                       <Activity className="h-4 w-4" />
-                      Thống kê sử dụng AI - Tất cả prompt và biến do quản trị viên kiểm soát
+                      ⚠️ Quan trọng: Cách thay đổi hành vi AI
                     </h4>
+                    <p className="text-sm text-yellow-800">
+                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu lại.
+                      AI sẽ hoạt động theo prompt mới ngay lập tức!
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <div className="text-2xl font-bold text-blue-600">
