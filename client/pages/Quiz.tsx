@@ -511,7 +511,7 @@ export default function Quiz() {
             </div>
             <Progress value={progress} className="h-3" />
             <p className="text-xs text-muted-foreground mt-2">
-              Đã trả l��i {answers.length}/{quiz.questions.length} câu hỏi
+              Đã trả lời {answers.length}/{quiz.questions.length} câu hỏi
             </p>
           </CardContent>
         </Card>
