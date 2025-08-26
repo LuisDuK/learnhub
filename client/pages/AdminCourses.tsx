@@ -27,6 +27,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,6 +59,14 @@ import {
   Link,
   Image,
   Video,
+  Bot,
+  Sparkles,
+  Wand2,
+  Loader2,
+  Save,
+  Import,
+  Copy,
+  X,
 } from "lucide-react";
 
 // Mock course data with lessons
