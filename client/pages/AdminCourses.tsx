@@ -242,7 +242,7 @@ const mockCourses = [
     id: 4,
     name: "Khoa học tự nhiên",
     description:
-      "Khám phá thế giới xung quanh qua các th�� nghiệm đơn giản và quan sát thiên nhiên.",
+      "Khám phá thế giới xung quanh qua các thí nghiệm đơn giản và quan sát thiên nhiên.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Trung bình",
@@ -756,7 +756,7 @@ export default function AdminCourses() {
                       }
                     >
                       <SelectTrigger className="col-span-2">
-                        <SelectValue placeholder="Chọn độ khó" />
+                        <SelectValue placeholder="Chọn đ�� khó" />
                       </SelectTrigger>
                       <SelectContent>
                         {difficulties.map((difficulty) => (
@@ -1146,7 +1146,7 @@ export default function AdminCourses() {
                         : 'text-gray-500 hover:text-gray-700'
                     }`}
                   >
-                    ✏️ Bài tập ({selectedCourse.exercises?.length || 0})
+                    ✏️ Bài t��p ({selectedCourse.exercises?.length || 0})
                   </button>
                 </div>
 
@@ -1293,7 +1293,7 @@ export default function AdminCourses() {
                       <div className="text-center py-8 text-gray-500">
                         <BookOpen className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>Chưa có bài giảng nào</p>
-                        <Button className="mt-4 gap-2">
+                        <Button className="mt-4 gap-2" onClick={() => setIsAddLessonDialogOpen(true)}>
                           <PlusCircle className="h-4 w-4" />
                           Thêm bài giảng đầu tiên
                         </Button>
