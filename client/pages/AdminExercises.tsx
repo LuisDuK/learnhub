@@ -87,6 +87,7 @@ const mockExercises = [
     isFromBank: false,
     tags: ["cộng", "trừ", "số học"],
     description: "Bài tập cơ bản về phép cộng và trừ",
+    courseName: "Toán học cơ bản",
   },
   {
     id: 2,
@@ -103,6 +104,7 @@ const mockExercises = [
     isFromBank: false,
     tags: ["văn mẫu", "tả cảnh"],
     description: "Luyện tập kỹ năng viết tả cảnh",
+    courseName: "Tiếng Việt lớp 3",
   },
   {
     id: 3,
@@ -119,6 +121,7 @@ const mockExercises = [
     isFromBank: false,
     tags: ["màu sắc", "số đếm", "từ vựng"],
     description: "Học từ vựng về màu sắc và số",
+    courseName: "Tiếng Anh cho trẻ em",
   },
 ];
 
