@@ -18,42 +18,42 @@ import { Button } from "@/components/ui/button";
 
 const menuItems = [
   {
-    title: "📊 Tổng quan",
+    title: "Tổng quan",
     icon: LayoutDashboard,
     href: "/admin",
   },
   {
-    title: "👥 Quản lý người dùng",
+    title: "Quản lý người dùng",
     icon: Users,
     href: "/admin/users",
   },
   {
-    title: "📚 Quản lý khóa học",
+    title: "Quản lý khóa học",
     icon: BookOpen,
     href: "/admin/courses",
   },
   {
-    title: "🗺️ Quản lý lộ trình học",
+    title: "Quản lý lộ trình học",
     icon: Route,
     href: "/admin/learning-paths",
   },
   {
-    title: "✏️ Quản lý bài tập",
+    title: "Quản lý bài tập",
     icon: PenTool,
     href: "/admin/exercises",
   },
   {
-    title: "📈 Báo cáo & Thống kê",
+    title: "Báo cáo & Thống kê",
     icon: BarChart3,
     href: "/admin/reports",
   },
   {
-    title: "🤖 Cấu hình AI",
+    title: "Cấu hình AI (Quản trị viên)",
     icon: Settings,
     href: "/admin/ai-config",
   },
   {
-    title: "⚙️ Cài đặt hệ thống",
+    title: "Cài đặt hệ thống",
     icon: Settings,
     href: "/admin/settings",
   },
@@ -86,7 +86,7 @@ export function AdminSidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-orange-600 bg-clip-text text-transparent">
-              🛡️ KidsLearn Admin
+              KidsLearn Admin
             </span>
             <span className="text-xs text-blue-600">Hệ thống quản trị</span>
           </div>
@@ -138,7 +138,7 @@ export function AdminSidebar() {
               Admin Nguyễn Đức
             </p>
             <p className="text-xs text-blue-600 truncate">
-              🛡️ Quản trị viên hệ thống
+              Quản trị viên hệ thống
             </p>
           </div>
         </div>

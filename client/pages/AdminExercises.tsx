@@ -58,7 +58,7 @@ const mockExercises = [
     id: 1,
     title: "Phép cộng và trừ trong phạm vi 100",
     type: "Trắc nghiệm",
-    subject: "Toán học",
+    subject: "Toán",
     creator: "Cô Nguyễn Thị Mai",
     createdAt: "2024-01-15",
     totalQuestions: 10,
@@ -70,7 +70,7 @@ const mockExercises = [
     id: 2,
     title: "Viết đoạn văn tả cảnh thiên nhiên",
     type: "Tự luận",
-    subject: "Tiếng Việt",
+    subject: "Văn",
     creator: "Cô Trần Thị Lan",
     createdAt: "2024-01-20",
     totalQuestions: 1,
@@ -82,7 +82,7 @@ const mockExercises = [
     id: 3,
     title: "Colors and Numbers",
     type: "Trắc nghiệm",
-    subject: "Tiếng Anh",
+    subject: "Anh",
     creator: "Thầy John Smith",
     createdAt: "2024-01-10",
     totalQuestions: 15,
@@ -94,7 +94,7 @@ const mockExercises = [
     id: 4,
     title: "Quan sát và mô tả hiện tượng",
     type: "Tự luận",
-    subject: "Khoa học",
+    subject: "Toán",
     creator: "Cô Lê Thị Hoa",
     createdAt: "2024-01-25",
     totalQuestions: 3,
@@ -104,15 +104,7 @@ const mockExercises = [
   },
 ];
 
-const subjects = [
-  "Tất cả",
-  "Toán học",
-  "Tiếng Việt",
-  "Tiếng Anh",
-  "Khoa học",
-  "Lịch sử",
-  "Địa lý",
-];
+const subjects = ["Tất cả", "Toán", "Văn", "Anh"];
 const types = ["Tất cả", "Trắc nghiệm", "Tự luận"];
 const difficulties = ["Dễ", "Trung bình", "Khó"];
 
@@ -260,7 +252,8 @@ export default function AdminExercises() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              ✏️ Quản lý bài tập
+              <PenTool className="inline-block h-8 w-8 mr-2" />
+              Quản lý bài tập
             </h1>
             <p className="text-gray-600 mt-1">
               Tạo và quản lý bài tập cho học sinh
@@ -540,7 +533,7 @@ export default function AdminExercises() {
                 <TableHead className="font-semibold">ID</TableHead>
                 <TableHead className="font-semibold">Tên bài tập</TableHead>
                 <TableHead className="font-semibold">Loại</TableHead>
-                <TableHead className="font-semibold">Môn học</TableHead>
+                <TableHead className="font-semibold">Tên khóa học</TableHead>
                 <TableHead className="font-semibold">Độ khó</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold">Ngày tạo</TableHead>
@@ -589,7 +582,7 @@ export default function AdminExercises() {
                         {exercise.submissions} bài nộp
                       </div>
                       <div className="text-gray-500">
-                        Đi��m TB: {exercise.avgScore}
+                        Điểm TB: {exercise.avgScore}
                       </div>
                     </div>
                   </TableCell>

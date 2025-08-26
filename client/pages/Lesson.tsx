@@ -34,8 +34,8 @@ import {
 const mockLessons = {
   1: {
     id: 1,
-    title: "🔢 Phép cộng v�� phép trừ trong phạm vi 100",
-    subject: "Toán học",
+    title: "🔢 Phép cộng và phép trừ trong phạm vi 100",
+    subject: "Toán",
     grade: "Lớp 2",
     duration: "25 phút",
     difficulty: "Dễ",
@@ -254,7 +254,7 @@ export default function Lesson() {
                 {lesson.content.find((c) => c.type === "example") && (
                   <div>
                     <h4 className="font-bold mb-3 text-accent">
-                      💡 Ví dụ minh h���a:
+                      💡 Ví dụ minh họa:
                     </h4>
                     <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
                       <pre className="text-sm whitespace-pre-wrap font-mono">

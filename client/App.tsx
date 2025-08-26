@@ -29,6 +29,7 @@ import AdminLearningPaths from "./pages/AdminLearningPaths";
 import AdminExercises from "./pages/AdminExercises";
 import AdminReports from "./pages/AdminReports";
 import AdminAIConfig from "./pages/AdminAIConfig";
+import AdminSystemSettings from "./pages/AdminSystemSettings";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -70,15 +71,7 @@ function AppRoutes() {
         <Route path="/admin/exercises" element={<AdminExercises />} />
         <Route path="/admin/reports" element={<AdminReports />} />
         <Route path="/admin/ai-config" element={<AdminAIConfig />} />
-        <Route
-          path="/admin/settings"
-          element={
-            <PlaceholderPage
-              title="Cài đặt hệ thống"
-              description="Quản lý cấu hình và thiết lập hệ thống"
-            />
-          }
-        />
+        <Route path="/admin/settings" element={<AdminSystemSettings />} />
 
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
