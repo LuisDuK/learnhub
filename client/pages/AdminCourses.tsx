@@ -2021,6 +2021,346 @@ export default function AdminCourses() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Add Lesson Dialog */}
+        <Dialog open={isAddLessonDialogOpen} onOpenChange={setIsAddLessonDialogOpen}>
+          <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b border-gray-200">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Plus className="h-5 w-5 text-blue-600" />
+                Thêm bài giảng mới
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Tạo bài giảng mới cho khóa học này
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-6 py-6">
+              <div className="bg-blue-50 rounded-lg p-5 space-y-4 border border-blue-200">
+                <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-blue-600" />
+                  Thông tin bài giảng
+                </h4>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="newLessonTitle" className="text-sm font-medium text-gray-700">
+                      Tiêu đề bài giảng *
+                    </Label>
+                    <Input
+                      id="newLessonTitle"
+                      value={newLesson.title || ""}
+                      onChange={(e) =>
+                        setNewLesson({ ...newLesson, title: e.target.value })
+                      }
+                      placeholder="VD: Số từ 1 đến 10"
+                      className="w-full bg-white border-blue-200 focus:border-blue-400"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="newLessonDesc" className="text-sm font-medium text-gray-700">
+                      Mô tả bài giảng *
+                    </Label>
+                    <Textarea
+                      id="newLessonDesc"
+                      value={newLesson.description || ""}
+                      onChange={(e) =>
+                        setNewLesson({
+                          ...newLesson,
+                          description: e.target.value,
+                        })
+                      }
+                      rows={3}
+                      placeholder="Mô tả nội dung và mục tiêu bài giảng..."
+                      className="w-full resize-none bg-white border-blue-200 focus:border-blue-400"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="newLessonType" className="text-sm font-medium text-gray-700">Loại bài giảng *</Label>
+                      <Select
+                        value={newLesson.type || ""}
+                        onValueChange={(value) =>
+                          setNewLesson({ ...newLesson, type: value })
+                        }
+                      >
+                        <SelectTrigger className="w-full bg-white border-blue-200">
+                          <SelectValue placeholder="Chọn loại" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="video">
+                            <div className="flex items-center gap-2">
+                              <Video className="h-4 w-4 text-red-500" />
+                              Video
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="reading">
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-green-500" />
+                              Bài đọc
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="interactive">
+                            <div className="flex items-center gap-2">
+                              <Eye className="h-4 w-4 text-orange-500" />
+                              Tương tác
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="game">
+                            <div className="flex items-center gap-2">
+                              <GamepadIcon className="h-4 w-4 text-purple-500" />
+                              Trò chơi
+                            </div>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="newLessonDuration" className="text-sm font-medium text-gray-700">Thời lượng *</Label>
+                      <Input
+                        id="newLessonDuration"
+                        value={newLesson.duration || ""}
+                        onChange={(e) =>
+                          setNewLesson({ ...newLesson, duration: e.target.value })
+                        }
+                        placeholder="VD: 15 phút"
+                        className="w-full bg-white border-blue-200 focus:border-blue-400"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="newLessonOrder" className="text-sm font-medium text-gray-700">Thứ tự</Label>
+                      <Input
+                        id="newLessonOrder"
+                        type="number"
+                        value={newLesson.order || ""}
+                        onChange={(e) =>
+                          setNewLesson({ ...newLesson, order: parseInt(e.target.value) })
+                        }
+                        placeholder="1, 2, 3..."
+                        min="1"
+                        className="w-full bg-white border-blue-200 focus:border-blue-400"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
+              <div className="flex items-center justify-between w-full">
+                <div className="text-xs text-gray-500">
+                  * Các trường bắt buộc
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsAddLessonDialogOpen(false)}
+                    className="border-gray-300 hover:bg-gray-50"
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={handleAddLesson}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Tạo bài giảng
+                  </Button>
+                </div>
+              </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Exercise Dialog */}
+        <Dialog open={isAddExerciseDialogOpen} onOpenChange={setIsAddExerciseDialogOpen}>
+          <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b border-gray-200">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Plus className="h-5 w-5 text-green-600" />
+                Thêm bài tập mới
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Tạo bài tập mới cho khóa học này
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-6 py-6">
+              <div className="bg-green-50 rounded-lg p-5 space-y-4 border border-green-200">
+                <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <Award className="h-5 w-5 text-green-600" />
+                  Thông tin bài tập
+                </h4>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="newExerciseTitle" className="text-sm font-medium text-gray-700">
+                      Tiêu đề bài tập *
+                    </Label>
+                    <Input
+                      id="newExerciseTitle"
+                      value={newExercise.title || ""}
+                      onChange={(e) =>
+                        setNewExercise({ ...newExercise, title: e.target.value })
+                      }
+                      placeholder="VD: Bài tập đếm số"
+                      className="w-full bg-white border-green-200 focus:border-green-400"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="newExerciseDesc" className="text-sm font-medium text-gray-700">
+                      Mô tả bài tập *
+                    </Label>
+                    <Textarea
+                      id="newExerciseDesc"
+                      value={newExercise.description || ""}
+                      onChange={(e) =>
+                        setNewExercise({
+                          ...newExercise,
+                          description: e.target.value,
+                        })
+                      }
+                      rows={3}
+                      placeholder="Mô tả mục tiêu và nội dung bài tập..."
+                      className="w-full resize-none bg-white border-green-200 focus:border-green-400"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="newExerciseType" className="text-sm font-medium text-gray-700">Loại bài tập *</Label>
+                      <Select
+                        value={newExercise.type || ""}
+                        onValueChange={(value) =>
+                          setNewExercise({ ...newExercise, type: value })
+                        }
+                      >
+                        <SelectTrigger className="w-full bg-white border-green-200">
+                          <SelectValue placeholder="Chọn loại" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="quiz">
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-blue-500" />
+                              Quiz
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="practice">
+                            <div className="flex items-center gap-2">
+                              <Edit className="h-4 w-4 text-green-500" />
+                              Thực hành
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="game">
+                            <div className="flex items-center gap-2">
+                              <GamepadIcon className="h-4 w-4 text-purple-500" />
+                              Trò chơi
+                            </div>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="newExerciseDifficulty" className="text-sm font-medium text-gray-700">Độ khó *</Label>
+                      <Select
+                        value={newExercise.difficulty || ""}
+                        onValueChange={(value) =>
+                          setNewExercise({ ...newExercise, difficulty: value })
+                        }
+                      >
+                        <SelectTrigger className="w-full bg-white border-green-200">
+                          <SelectValue placeholder="Chọn độ khó" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Dễ">
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                              Dễ
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="Trung bình">
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                              Trung bình
+                            </div>
+                          </SelectItem>
+                          <SelectItem value="Khó">
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                              Khó
+                            </div>
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="newExercisePoints" className="text-sm font-medium text-gray-700">Điểm thưởng *</Label>
+                      <Input
+                        id="newExercisePoints"
+                        type="number"
+                        value={newExercise.points || ""}
+                        onChange={(e) =>
+                          setNewExercise({ ...newExercise, points: parseInt(e.target.value) })
+                        }
+                        placeholder="10, 15, 20..."
+                        min="1"
+                        className="w-full bg-white border-green-200 focus:border-green-400"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="newExerciseTime" className="text-sm font-medium text-gray-700">Thời gian (phút)</Label>
+                      <Input
+                        id="newExerciseTime"
+                        type="number"
+                        value={Math.round((newExercise.timeLimit || 0) / 60)}
+                        onChange={(e) =>
+                          setNewExercise({ ...newExercise, timeLimit: parseInt(e.target.value) * 60 })
+                        }
+                        placeholder="5, 10, 15..."
+                        min="0"
+                        className="w-full bg-white border-green-200 focus:border-green-400"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
+              <div className="flex items-center justify-between w-full">
+                <div className="text-xs text-gray-500">
+                  * Các trường bắt buộc
+                </div>
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsAddExerciseDialogOpen(false)}
+                    className="border-gray-300 hover:bg-gray-50"
+                  >
+                    Hủy
+                  </Button>
+                  <Button
+                    onClick={handleAddExercise}
+                    className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Tạo bài tập
+                  </Button>
+                </div>
+              </div>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminLayout>
   );
