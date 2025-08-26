@@ -148,7 +148,7 @@ const mockCourses = [
   },
   {
     id: 2,
-    name: "Tiếng Việt l��p 3",
+    name: "Tiếng Việt lớp 3",
     description:
       "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
@@ -550,6 +550,68 @@ export default function AdminCourses() {
     }
   };
 
+  const handleAddLesson = () => {
+    if (selectedCourse && newLesson.title) {
+      const lesson = {
+        id: Math.max(...(selectedCourse.lessons?.map(l => l.id) || [0])) + 1,
+        title: newLesson.title,
+        description: newLesson.description,
+        type: newLesson.type,
+        duration: newLesson.duration,
+        order: newLesson.order || ((selectedCourse.lessons?.length || 0) + 1),
+        completed: false,
+        videoUrl: newLesson.videoUrl || "",
+        content: newLesson.content || "",
+        gameUrl: newLesson.gameUrl || "",
+        materials: newLesson.materials || [],
+      };
+
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              lessons: [...(course.lessons || []), lesson],
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setNewLesson({});
+      setIsAddLessonDialogOpen(false);
+    }
+  };
+
+  const handleAddExercise = () => {
+    if (selectedCourse && newExercise.title) {
+      const exercise = {
+        id: Math.max(...(selectedCourse.exercises?.map(e => e.id) || [0])) + 1,
+        title: newExercise.title,
+        description: newExercise.description,
+        type: newExercise.type,
+        difficulty: newExercise.difficulty,
+        points: newExercise.points,
+        questions: newExercise.questions || [],
+        content: newExercise.content || "",
+        instructions: newExercise.instructions || "",
+        timeLimit: newExercise.timeLimit || 0,
+        submissionType: newExercise.submissionType || "text",
+      };
+
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              exercises: [...(course.exercises || []), exercise],
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setNewExercise({});
+      setIsAddExerciseDialogOpen(false);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Đang mở":
@@ -762,7 +824,7 @@ export default function AdminCourses() {
                     }
                     className="col-span-3"
                     rows={2}
-                    placeholder="Học sinh sẽ đạt được những mục tiêu gì sau khóa học..."
+                    placeholder="H��c sinh sẽ đạt được những mục tiêu gì sau khóa học..."
                   />
                 </div>
 
@@ -994,7 +1056,7 @@ export default function AdminCourses() {
           <div className="text-center py-12">
             <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Không tìm thấy khóa học nào
+              Không tìm thấy khóa h��c nào
             </h3>
             <p className="text-gray-500 mb-4">
               Thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác
@@ -1776,7 +1838,7 @@ export default function AdminCourses() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Chọn độ khó" />
+                      <SelectValue placeholder="Ch���n độ khó" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Dễ">Dễ</SelectItem>
