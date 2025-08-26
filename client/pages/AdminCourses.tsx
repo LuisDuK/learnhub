@@ -97,7 +97,7 @@ const mockCourses = [
         duration: "20 phút",
         order: 2,
         completed: false,
-        content: "Hướng dẫn: Sử dụng các đ���i tượng cụ thể để thực hiện phép cộng...",
+        content: "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
         materials: ["worksheet.pdf", "counting_objects.png"]
       },
       {
@@ -824,7 +824,7 @@ export default function AdminCourses() {
                     }
                     className="col-span-3"
                     rows={2}
-                    placeholder="Học sinh sẽ đạt được những mục tiêu gì sau khóa học..."
+                    placeholder="Học sinh sẽ đạt được nh��ng mục tiêu gì sau khóa học..."
                   />
                 </div>
 
@@ -1772,7 +1772,7 @@ export default function AdminCourses() {
 
         {/* Edit Exercise Dialog */}
         <Dialog open={isEditExerciseDialogOpen} onOpenChange={setIsEditExerciseDialogOpen}>
-          <DialogContent className="sm:max-w-[850px] max-h-[90vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
             <DialogHeader className="pb-4 border-b border-gray-200">
               <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Award className="h-5 w-5 text-green-600" />
@@ -1782,7 +1782,7 @@ export default function AdminCourses() {
                 Cập nhật thông tin và nội dung bài tập
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="space-y-6 py-6">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="exerciseTitle" className="text-right">
                   Tiêu đề *
