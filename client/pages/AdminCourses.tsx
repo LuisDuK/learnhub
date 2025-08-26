@@ -730,7 +730,7 @@ export default function AdminCourses() {
                       }
                     >
                       <SelectTrigger className="col-span-2">
-                        <SelectValue placeholder="Chọn độ tuổi" />
+                        <SelectValue placeholder="Chọn độ tu���i" />
                       </SelectTrigger>
                       <SelectContent>
                         {ageGroups.map((age) => (
@@ -781,8 +781,28 @@ export default function AdminCourses() {
                   />
                 </div>
               </div>
-              <DialogFooter>
-                <Button onClick={handleAddCourse}>Lưu</Button>
+              <DialogFooter className="bg-gray-50 px-6 py-4 -mx-6 -mb-6 rounded-b-lg border-t border-gray-200">
+                <div className="flex items-center justify-between w-full">
+                  <div className="text-xs text-gray-500">
+                    * Các trường bắt buộc
+                  </div>
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddDialogOpen(false)}
+                      className="border-gray-300 hover:bg-gray-50"
+                    >
+                      Hủy
+                    </Button>
+                    <Button
+                      onClick={handleAddCourse}
+                      className="bg-gradient-to-r from-blue-600 to-orange-600 hover:from-blue-700 hover:to-orange-700 text-white shadow-lg"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Tạo khóa học
+                    </Button>
+                  </div>
+                </div>
               </DialogFooter>
             </DialogContent>
           </Dialog>
