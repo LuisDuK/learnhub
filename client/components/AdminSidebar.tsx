@@ -23,7 +23,7 @@ const menuItems = [
     href: "/admin",
   },
   {
-    title: "Quản lý học sinh",
+    title: "Quản lý người dùng",
     icon: Users,
     href: "/admin/users",
   },

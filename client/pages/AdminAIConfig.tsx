@@ -1009,7 +1009,7 @@ export default function AdminAIConfig() {
                       <TableHead>Người dùng</TableHead>
                       <TableHead>Module</TableHead>
                       <TableHead>Token tiêu thụ</TableHead>
-                      <TableHead>Chi phí</TableHead>
+                      <TableHead>Tiêu thụ Token</TableHead>
                       <TableHead>Trạng thái</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -1031,8 +1031,8 @@ export default function AdminAIConfig() {
                         <TableCell className="font-mono">
                           {log.tokensUsed}
                         </TableCell>
-                        <TableCell className="font-mono text-green-600">
-                          {log.cost}
+                        <TableCell className="font-mono text-blue-600">
+                          {log.tokensUsed} tokens
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -1042,7 +1042,7 @@ export default function AdminAIConfig() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => alert(`📊 Chi tiết hoạt động AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n💰 Chi phí: ${log.cost}\n✅ Trạng thái: ${log.status}`)}
+                              onClick={() => alert(`📊 Chi tiết hoạt động AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n🎆 Hệ thống: Free (Không tính phí)\n✅ Trạng thái: ${log.status}`)}
                               className="text-blue-600 hover:text-blue-800"
                             >
                               🔍 Xem chi tiết
@@ -1079,10 +1079,10 @@ export default function AdminAIConfig() {
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
                     <div className="text-2xl font-bold text-purple-600">
-                      $12.45
+                      45,678
                     </div>
                     <div className="text-sm text-purple-600">
-                      Chi phí hôm nay
+                      Token hôm nay
                     </div>
                   </div>
                 </div>
