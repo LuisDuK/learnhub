@@ -483,7 +483,7 @@ export default function AdminReports() {
                     <TableHead className="font-semibold">Điểm số</TableHead>
                     <TableHead className="font-semibold">Tiến độ</TableHead>
                     <TableHead className="font-semibold">
-                      Hoạt đ��ng cuối
+                      Hoạt động cuối
                     </TableHead>
                   </TableRow>
                 </TableHeader>

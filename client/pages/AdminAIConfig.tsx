@@ -109,7 +109,7 @@ const mockPrompts = [
   },
   {
     id: 4,
-    name: "Prompt chấm bài tự động",
+    name: "Prompt ch��m bài tự động",
     content:
       "Hãy chấm bài làm của học sinh về môn {{subject}}. Bài làm: {{student_answer}}. Đáp án đúng: {{correct_answer}}. Tiêu chí chấm: {{criteria}}. Hãy đưa ra điểm số ({{max_score}} điểm), nhận xét {{feedback_style}} và gợi ý cải thiện.",
     module: "Chấm bài",
@@ -134,6 +134,8 @@ const mockAILogs = [
     tokensUsed: 150,
     status: "Thành công",
     cost: "0.003$",
+    details: "Tạo bài tập toán lớp 3 về phép cộng và trừ",
+    conversation: null
   },
   {
     id: 2,
@@ -143,6 +145,12 @@ const mockAILogs = [
     tokensUsed: 85,
     status: "Thành công",
     cost: "0.002$",
+    details: "Hỗ trợ giải bài tập toán",
+    conversation: [
+      { role: "user", content: "Em không hiểu bài toán này: 25 + 17 = ?", time: "14:25:12" },
+      { role: "assistant", content: "Chào em! Cô sẽ giúp em giải bài toán này nhé. 25 + 17 ta tính như sau:\n\n25 + 17\n= 20 + 5 + 10 + 7\n= 20 + 10 + 5 + 7\n= 30 + 12\n= 42\n\nVậy 25 + 17 = 42. Em hiểu chưa?", time: "14:25:15" },
+      { role: "user", content: "Dạ em hiểu rồi! Cảm ơn cô ạ", time: "14:25:18" }
+    ]
   },
   {
     id: 3,
@@ -152,7 +160,36 @@ const mockAILogs = [
     tokensUsed: 320,
     status: "Lỗi",
     cost: "0.000$",
+    details: "Tạo lộ trình học toán cho học sinh lớp 2",
+    conversation: null
   },
+  {
+    id: 4,
+    timestamp: "2024-01-28 14:15:33",
+    user: "Lê Văn Hùng",
+    module: "Chatbot",
+    tokensUsed: 125,
+    status: "Thành công",
+    cost: "0.002$",
+    details: "Hỗ trợ học từ vựng tiếng Anh",
+    conversation: [
+      { role: "user", content: "How do you say 'con chó' in English?", time: "14:15:33" },
+      { role: "assistant", content: "Hello! 'Con chó' in English is 'dog' 🐕\n\nHere are some examples:\n- This is a dog. (Đây là một con chó)\n- I love dogs. (Tôi yêu những con chó)\n- The dog is cute. (Con chó này dễ thương)\n\nWould you like to learn more animal names?", time: "14:15:36" },
+      { role: "user", content: "Yes! What about 'con mèo'?", time: "14:15:40" },
+      { role: "assistant", content: "Great! 'Con mèo' in English is 'cat' 🐱\n\nExamples:\n- I have a cat. (Tôi có một con mèo)\n- The cat is sleeping. (Con mèo đang ngủ)\n- Cats are cute! (Mèo rất dễ thương!)", time: "14:15:42" }
+    ]
+  },
+  {
+    id: 5,
+    timestamp: "2024-01-28 14:10:15",
+    user: "Nguyễn Thị Hoa",
+    module: "Chấm bài",
+    tokensUsed: 200,
+    status: "Thành công",
+    cost: "0.004$",
+    details: "Chấm bài tự luận môn Văn lớp 4",
+    conversation: null
+  }
 ];
 
 export default function AdminAIConfig() {
@@ -863,7 +900,7 @@ export default function AdminAIConfig() {
                           <Edit className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI tạo bài tập (Quản trị viên)</h3>
+                          <h3 className="font-medium">AI tạo bài tập (Qu��n trị viên)</h3>
                           <p className="text-sm text-gray-600">
                             Sinh bài tập động - Điều chỉnh biến {`{{grade}}`}, {`{{topic}}`}, {`{{difficulty}}`}, {`{{questions}}`}
                           </p>
@@ -992,7 +1029,7 @@ export default function AdminAIConfig() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Tất cả">T���t cả</SelectItem>
+                        <SelectItem value="Tất cả">Tất cả</SelectItem>
                         <SelectItem value="Thành công">Thành công</SelectItem>
                         <SelectItem value="Lỗi">Lỗi</SelectItem>
                         <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
@@ -1010,7 +1047,7 @@ export default function AdminAIConfig() {
                       <TableHead>Module</TableHead>
                       <TableHead>Token tiêu thụ</TableHead>
                       <TableHead>Tiêu thụ Token</TableHead>
-                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Tr���ng thái</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
