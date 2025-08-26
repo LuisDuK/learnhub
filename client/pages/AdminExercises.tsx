@@ -216,7 +216,9 @@ export default function AdminExercises() {
     setExercises(exercises.filter((exercise) => exercise.id !== id));
   };
 
-  const addQuestion = (type: "multiple_choice" | "essay" | "short_answer" = "multiple_choice") => {
+  const addQuestion = (
+    type: "multiple_choice" | "essay" | "short_answer" = "multiple_choice",
+  ) => {
     const newQuestion: Question = {
       id: Date.now().toString(),
       question: "",
@@ -249,11 +251,17 @@ export default function AdminExercises() {
   };
 
   const removeQuestion = (index: number) => {
-    const updatedQuestions = newExercise.questions.filter((_, i) => i !== index);
+    const updatedQuestions = newExercise.questions.filter(
+      (_, i) => i !== index,
+    );
     setNewExercise({ ...newExercise, questions: updatedQuestions });
   };
 
-  const updateOption = (questionIndex: number, optionIndex: number, value: string) => {
+  const updateOption = (
+    questionIndex: number,
+    optionIndex: number,
+    value: string,
+  ) => {
     const updatedQuestions = [...newExercise.questions];
     if (updatedQuestions[questionIndex].options) {
       updatedQuestions[questionIndex].options![optionIndex] = value;
@@ -273,13 +281,13 @@ export default function AdminExercises() {
   const handleAIGeneration = async () => {
     setIsProcessing(true);
     setProcessingStep("Đang xử lý yêu cầu AI...");
-    
+
     try {
       // Simulate AI processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setProcessingStep("Tạo câu hỏi từ AI...");
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // Mock AI generated questions
       const aiQuestions: Question[] = [
         {
@@ -288,25 +296,26 @@ export default function AdminExercises() {
           type: "multiple_choice",
           options: ["52", "62", "72", "82"],
           correctAnswer: "B",
-          explanation: "25 + 37 = 62"
+          explanation: "25 + 37 = 62",
         },
         {
-          id: "ai2", 
+          id: "ai2",
           question: "Hãy giải thích tại sao 5 x 6 = 30",
           type: "essay",
           maxWords: 100,
           keywords: ["phép nhân", "tính chất", "ví dụ"],
-          rubric: "Học sinh cần giải thích khái niệm phép nhân và đưa ra ví dụ cụ thể"
-        }
+          rubric:
+            "Học sinh cần giải thích khái niệm phép nhân và đưa ra ví dụ cụ thể",
+        },
       ];
-      
+
       setNewExercise({
         ...newExercise,
-        questions: [...newExercise.questions, ...aiQuestions]
+        questions: [...newExercise.questions, ...aiQuestions],
       });
-      
+
       setProcessingStep("Hoàn thành!");
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setIsAIDialogOpen(false);
     } catch (error) {
       console.error("AI generation error:", error);
@@ -322,39 +331,44 @@ export default function AdminExercises() {
     setIsProcessing(true);
     setUploadProgress(0);
     setProcessingStep("Đang tải file...");
-    
+
     try {
       // Simulate file processing
       for (let i = 0; i <= 100; i += 10) {
         setUploadProgress(i);
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
-      
+
       setProcessingStep("Phân tích nội dung file...");
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       setProcessingStep("Tạo câu hỏi từ file...");
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Mock questions from file
       const fileQuestions: Question[] = [
         {
           id: "file1",
           question: "Theo tài liệu, đâu là đặc điểm chính của phép cộng?",
-          type: "multiple_choice", 
-          options: ["Tính giao hoán", "Tính kết hợp", "Có phần tử đơn vị", "Tất cả đều đúng"],
+          type: "multiple_choice",
+          options: [
+            "Tính giao hoán",
+            "Tính kết hợp",
+            "Có phần tử đơn vị",
+            "Tất cả đều đúng",
+          ],
           correctAnswer: "D",
-          explanation: "Phép cộng có đầy đủ các tính chất được liệt kê"
-        }
+          explanation: "Phép cộng có đầy đủ các tính chất được liệt kê",
+        },
       ];
-      
+
       setNewExercise({
         ...newExercise,
-        questions: [...newExercise.questions, ...fileQuestions]
+        questions: [...newExercise.questions, ...fileQuestions],
       });
-      
+
       setProcessingStep("Hoàn thành!");
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } finally {
       setIsProcessing(false);
       setUploadProgress(0);
@@ -365,11 +379,11 @@ export default function AdminExercises() {
 
   // Bulk Import Questions
   const handleBulkImport = () => {
-    const lines = bulkQuestions.split('\n').filter(line => line.trim());
+    const lines = bulkQuestions.split("\n").filter((line) => line.trim());
     const questions: Question[] = [];
-    
+
     lines.forEach((line, index) => {
-      if (line.startsWith('Q:')) {
+      if (line.startsWith("Q:")) {
         const questionText = line.substring(2).trim();
         questions.push({
           id: `bulk_${index}`,
@@ -380,12 +394,12 @@ export default function AdminExercises() {
         });
       }
     });
-    
+
     setNewExercise({
       ...newExercise,
-      questions: [...newExercise.questions, ...questions]
+      questions: [...newExercise.questions, ...questions],
     });
-    
+
     setBulkQuestions("");
   };
 
@@ -417,7 +431,10 @@ export default function AdminExercises() {
 
   const renderQuestionForm = (question: Question, index: number) => {
     return (
-      <div key={question.id || index} className="p-4 border border-gray-200 rounded-lg space-y-3">
+      <div
+        key={question.id || index}
+        className="p-4 border border-gray-200 rounded-lg space-y-3"
+      >
         <div className="flex items-center justify-between">
           <Label className="text-lg font-semibold">Câu hỏi {index + 1}</Label>
           <div className="flex gap-2">
@@ -444,9 +461,9 @@ export default function AdminExercises() {
           <Label>Loại câu hỏi</Label>
           <Select
             value={question.type}
-            onValueChange={(value: "multiple_choice" | "essay" | "short_answer") =>
-              updateQuestion(index, "type", value)
-            }
+            onValueChange={(
+              value: "multiple_choice" | "essay" | "short_answer",
+            ) => updateQuestion(index, "type", value)}
           >
             <SelectTrigger>
               <SelectValue />
@@ -480,7 +497,9 @@ export default function AdminExercises() {
                   </span>
                   <Input
                     value={option}
-                    onChange={(e) => updateOption(index, oIndex, e.target.value)}
+                    onChange={(e) =>
+                      updateOption(index, oIndex, e.target.value)
+                    }
                     placeholder={`Lựa chọn ${String.fromCharCode(65 + oIndex)}`}
                   />
                 </div>
@@ -491,15 +510,21 @@ export default function AdminExercises() {
               <Label>Đáp án đúng</Label>
               <Select
                 value={question.correctAnswer}
-                onValueChange={(value) => updateQuestion(index, "correctAnswer", value)}
+                onValueChange={(value) =>
+                  updateQuestion(index, "correctAnswer", value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Chọn đáp án đúng" />
                 </SelectTrigger>
                 <SelectContent>
                   {question.options?.map((_, oIndex) => (
-                    <SelectItem key={oIndex} value={String.fromCharCode(65 + oIndex)}>
-                      {String.fromCharCode(65 + oIndex)}. {question.options![oIndex]}
+                    <SelectItem
+                      key={oIndex}
+                      value={String.fromCharCode(65 + oIndex)}
+                    >
+                      {String.fromCharCode(65 + oIndex)}.{" "}
+                      {question.options![oIndex]}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -510,7 +535,9 @@ export default function AdminExercises() {
               <Label>Giải thích (tùy chọn)</Label>
               <Textarea
                 value={question.explanation || ""}
-                onChange={(e) => updateQuestion(index, "explanation", e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, "explanation", e.target.value)
+                }
                 placeholder="Giải thích tại sao đáp án này đúng..."
                 rows={2}
               />
@@ -525,7 +552,9 @@ export default function AdminExercises() {
               <Input
                 type="number"
                 value={question.maxWords || 300}
-                onChange={(e) => updateQuestion(index, "maxWords", parseInt(e.target.value))}
+                onChange={(e) =>
+                  updateQuestion(index, "maxWords", parseInt(e.target.value))
+                }
                 placeholder="300"
               />
             </div>
@@ -533,7 +562,13 @@ export default function AdminExercises() {
               <Label>Từ khóa đánh giá (cách nhau bởi dấu phẩy)</Label>
               <Input
                 value={question.keywords?.join(", ") || ""}
-                onChange={(e) => updateQuestion(index, "keywords", e.target.value.split(", ").filter(k => k.trim()))}
+                onChange={(e) =>
+                  updateQuestion(
+                    index,
+                    "keywords",
+                    e.target.value.split(", ").filter((k) => k.trim()),
+                  )
+                }
                 placeholder="từ khóa 1, từ khóa 2, từ khóa 3"
               />
             </div>
@@ -541,7 +576,9 @@ export default function AdminExercises() {
               <Label>Rubric đánh giá</Label>
               <Textarea
                 value={question.rubric || ""}
-                onChange={(e) => updateQuestion(index, "rubric", e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, "rubric", e.target.value)
+                }
                 placeholder="Tiêu chí đánh giá bài làm của học sinh..."
                 rows={3}
               />
@@ -555,7 +592,9 @@ export default function AdminExercises() {
               <Label>Đáp án mẫu</Label>
               <Input
                 value={question.correctAnswer || ""}
-                onChange={(e) => updateQuestion(index, "correctAnswer", e.target.value)}
+                onChange={(e) =>
+                  updateQuestion(index, "correctAnswer", e.target.value)
+                }
                 placeholder="Đáp án đúng..."
               />
             </div>
@@ -563,7 +602,13 @@ export default function AdminExercises() {
               <Label>Từ khóa chấp nhận (cách nhau bởi dấu phẩy)</Label>
               <Input
                 value={question.keywords?.join(", ") || ""}
-                onChange={(e) => updateQuestion(index, "keywords", e.target.value.split(", ").filter(k => k.trim()))}
+                onChange={(e) =>
+                  updateQuestion(
+                    index,
+                    "keywords",
+                    e.target.value.split(", ").filter((k) => k.trim()),
+                  )
+                }
                 placeholder="từ khóa 1, từ khóa 2"
               />
             </div>
@@ -584,7 +629,8 @@ export default function AdminExercises() {
               Kho bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho nhiều khóa học
+              Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho
+              nhiều khóa học
             </p>
           </div>
 
@@ -592,7 +638,10 @@ export default function AdminExercises() {
             {/* AI Dialog */}
             <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0">
+                <Button
+                  variant="outline"
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+                >
                   <Bot className="h-4 w-4 mr-2" />
                   AI Tạo bài tập
                 </Button>
@@ -664,8 +713,8 @@ export default function AdminExercises() {
                 )}
 
                 <DialogFooter>
-                  <Button 
-                    onClick={handleAIGeneration} 
+                  <Button
+                    onClick={handleAIGeneration}
                     disabled={!aiPrompt.trim() || isProcessing}
                     className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                   >
@@ -707,7 +756,12 @@ export default function AdminExercises() {
                         <Label>Tên bài tập</Label>
                         <Input
                           value={newExercise.title}
-                          onChange={(e) => setNewExercise({ ...newExercise, title: e.target.value })}
+                          onChange={(e) =>
+                            setNewExercise({
+                              ...newExercise,
+                              title: e.target.value,
+                            })
+                          }
                           placeholder="Nhập tên bài tập"
                         />
                       </div>
@@ -715,7 +769,9 @@ export default function AdminExercises() {
                         <Label>Môn học</Label>
                         <Select
                           value={newExercise.subject}
-                          onValueChange={(value) => setNewExercise({ ...newExercise, subject: value })}
+                          onValueChange={(value) =>
+                            setNewExercise({ ...newExercise, subject: value })
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Chọn môn học" />
@@ -736,13 +792,17 @@ export default function AdminExercises() {
                         <Label>Loại bài tập</Label>
                         <Select
                           value={newExercise.type}
-                          onValueChange={(value) => setNewExercise({ ...newExercise, type: value })}
+                          onValueChange={(value) =>
+                            setNewExercise({ ...newExercise, type: value })
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Chọn loại" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="Trắc nghiệm">Trắc nghiệm</SelectItem>
+                            <SelectItem value="Trắc nghiệm">
+                              Trắc nghiệm
+                            </SelectItem>
                             <SelectItem value="Tự luận">Tự luận</SelectItem>
                             <SelectItem value="Hỗn hợp">Hỗn hợp</SelectItem>
                           </SelectContent>
@@ -752,7 +812,12 @@ export default function AdminExercises() {
                         <Label>Độ khó</Label>
                         <Select
                           value={newExercise.difficulty}
-                          onValueChange={(value) => setNewExercise({ ...newExercise, difficulty: value })}
+                          onValueChange={(value) =>
+                            setNewExercise({
+                              ...newExercise,
+                              difficulty: value,
+                            })
+                          }
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Chọn độ khó" />
@@ -771,7 +836,12 @@ export default function AdminExercises() {
                         <Input
                           type="number"
                           value={newExercise.timeLimit}
-                          onChange={(e) => setNewExercise({ ...newExercise, timeLimit: parseInt(e.target.value) })}
+                          onChange={(e) =>
+                            setNewExercise({
+                              ...newExercise,
+                              timeLimit: parseInt(e.target.value),
+                            })
+                          }
                           placeholder="60"
                         />
                       </div>
@@ -781,7 +851,12 @@ export default function AdminExercises() {
                       <Label>Mô tả bài tập</Label>
                       <Textarea
                         value={newExercise.description}
-                        onChange={(e) => setNewExercise({ ...newExercise, description: e.target.value })}
+                        onChange={(e) =>
+                          setNewExercise({
+                            ...newExercise,
+                            description: e.target.value,
+                          })
+                        }
                         placeholder="Mô tả ngắn gọn về bài tập..."
                         rows={3}
                       />
@@ -790,7 +865,9 @@ export default function AdminExercises() {
 
                   <TabsContent value="questions" className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Label className="text-lg font-semibold">Danh sách câu hỏi</Label>
+                      <Label className="text-lg font-semibold">
+                        Danh sách câu hỏi
+                      </Label>
                       <div className="flex gap-2">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -800,15 +877,21 @@ export default function AdminExercises() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => addQuestion("multiple_choice")}>
+                            <DropdownMenuItem
+                              onClick={() => addQuestion("multiple_choice")}
+                            >
                               <CheckCircle className="mr-2 h-4 w-4" />
                               Trắc nghiệm
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => addQuestion("essay")}>
+                            <DropdownMenuItem
+                              onClick={() => addQuestion("essay")}
+                            >
                               <FileText className="mr-2 h-4 w-4" />
                               Tự luận dài
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => addQuestion("short_answer")}>
+                            <DropdownMenuItem
+                              onClick={() => addQuestion("short_answer")}
+                            >
                               <Edit className="mr-2 h-4 w-4" />
                               Trả lời ngắn
                             </DropdownMenuItem>
@@ -825,16 +908,21 @@ export default function AdminExercises() {
                     )}
 
                     <div className="space-y-4">
-                      {newExercise.questions.map((question, index) => renderQuestionForm(question, index))}
+                      {newExercise.questions.map((question, index) =>
+                        renderQuestionForm(question, index),
+                      )}
                     </div>
                   </TabsContent>
 
                   <TabsContent value="import" className="space-y-4">
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-lg font-semibold">Import câu hỏi hàng loạt</Label>
+                        <Label className="text-lg font-semibold">
+                          Import câu hỏi hàng loạt
+                        </Label>
                         <p className="text-sm text-gray-600">
-                          Nhập nhiều câu hỏi cùng lúc, mỗi câu hỏi bắt đầu bằng "Q:"
+                          Nhập nhiều câu hỏi cùng lúc, mỗi câu hỏi bắt đầu bằng
+                          "Q:"
                         </p>
                       </div>
 
@@ -849,21 +937,33 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       />
 
                       <div className="flex gap-2">
-                        <Button onClick={handleBulkImport} disabled={!bulkQuestions.trim()}>
+                        <Button
+                          onClick={handleBulkImport}
+                          disabled={!bulkQuestions.trim()}
+                        >
                           <Import className="h-4 w-4 mr-2" />
                           Import câu hỏi
                         </Button>
-                        <Button variant="outline" onClick={() => setBulkQuestions("")}>
+                        <Button
+                          variant="outline"
+                          onClick={() => setBulkQuestions("")}
+                        >
                           Xóa tất cả
                         </Button>
                       </div>
 
                       <div className="p-4 bg-blue-50 rounded-lg">
-                        <h4 className="font-semibold text-blue-900 mb-2">Hướng dẫn định dạng:</h4>
+                        <h4 className="font-semibold text-blue-900 mb-2">
+                          Hướng dẫn định dạng:
+                        </h4>
                         <ul className="text-sm text-blue-800 space-y-1">
                           <li>• Mỗi câu hỏi bắt đầu bằng "Q:"</li>
-                          <li>• Câu hỏi sẽ được tạo dạng trả lời ngắn mặc định</li>
-                          <li>• Có thể chỉnh sửa loại câu hỏi sau khi import</li>
+                          <li>
+                            • Câu hỏi sẽ được tạo dạng trả lời ngắn mặc định
+                          </li>
+                          <li>
+                            • Có thể chỉnh sửa loại câu hỏi sau khi import
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -871,10 +971,23 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 </Tabs>
 
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => {resetForm(); setIsAddDialogOpen(false);}}>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      resetForm();
+                      setIsAddDialogOpen(false);
+                    }}
+                  >
                     Hủy
                   </Button>
-                  <Button onClick={handleAddExercise} disabled={!newExercise.title || !newExercise.subject || newExercise.questions.length === 0}>
+                  <Button
+                    onClick={handleAddExercise}
+                    disabled={
+                      !newExercise.title ||
+                      !newExercise.subject ||
+                      newExercise.questions.length === 0
+                    }
+                  >
                     <Save className="h-4 w-4 mr-2" />
                     Lưu bài tập
                   </Button>
@@ -935,7 +1048,9 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold">Ngày tạo</TableHead>
                 <TableHead className="font-semibold">Thống kê</TableHead>
-                <TableHead className="font-semibold text-center">Hành động</TableHead>
+                <TableHead className="font-semibold text-center">
+                  Hành động
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -944,12 +1059,18 @@ Q: Viết đoạn văn tả về mùa xuân`}
                   <TableCell className="font-medium">{exercise.id}</TableCell>
                   <TableCell>
                     <div>
-                      <p className="font-medium text-gray-900">{exercise.title}</p>
-                      <p className="text-xs text-gray-500">{exercise.totalQuestions} câu hỏi</p>
+                      <p className="font-medium text-gray-900">
+                        {exercise.title}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {exercise.totalQuestions} câu hỏi
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge className={getTypeColor(exercise.type)}>{exercise.type}</Badge>
+                    <Badge className={getTypeColor(exercise.type)}>
+                      {exercise.type}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline">{exercise.subject}</Badge>
@@ -959,12 +1080,20 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       {exercise.difficulty}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-sm text-gray-600">{exercise.creator}</TableCell>
-                  <TableCell className="text-sm text-gray-600">{exercise.createdAt}</TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {exercise.creator}
+                  </TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {exercise.createdAt}
+                  </TableCell>
                   <TableCell>
                     <div className="text-sm">
-                      <div className="text-gray-900 font-medium">{exercise.submissions} bài nộp</div>
-                      <div className="text-gray-500">Điểm TB: {exercise.avgScore}</div>
+                      <div className="text-gray-900 font-medium">
+                        {exercise.submissions} bài nộp
+                      </div>
+                      <div className="text-gray-500">
+                        Điểm TB: {exercise.avgScore}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -1010,7 +1139,9 @@ Q: Viết đoạn văn tả về mùa xuân`}
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div className="text-2xl font-bold text-blue-600">{exercises.length}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {exercises.length}
+            </div>
             <div className="text-sm text-blue-600">Tổng bài tập</div>
           </div>
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">

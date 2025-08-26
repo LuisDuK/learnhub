@@ -353,7 +353,9 @@ export default function AdminCourses() {
 
   // Assign from exercise bank states
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-  const [selectedExercisesFromBank, setSelectedExercisesFromBank] = useState<number[]>([]);
+  const [selectedExercisesFromBank, setSelectedExercisesFromBank] = useState<
+    number[]
+  >([]);
   const [exerciseBank] = useState([
     // Mock exercise bank - this would come from the actual exercise bank/kho bài tập
     {
@@ -364,7 +366,7 @@ export default function AdminCourses() {
       difficulty: "Dễ",
       totalQuestions: 10,
       creator: "Cô Nguyễn Thị Mai",
-      createdAt: "2024-01-15"
+      createdAt: "2024-01-15",
     },
     {
       id: 102,
@@ -374,7 +376,7 @@ export default function AdminCourses() {
       difficulty: "Trung bình",
       totalQuestions: 1,
       creator: "Cô Trần Thị Lan",
-      createdAt: "2024-01-20"
+      createdAt: "2024-01-20",
     },
     {
       id: 103,
@@ -384,8 +386,8 @@ export default function AdminCourses() {
       difficulty: "Dễ",
       totalQuestions: 8,
       creator: "Thầy John Smith",
-      createdAt: "2024-01-10"
-    }
+      createdAt: "2024-01-10",
+    },
   ]);
 
   const [newCourse, setNewCourse] = useState({
@@ -705,9 +707,9 @@ export default function AdminCourses() {
 
     try {
       // Simulate AI processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setProcessingStep("Tạo câu hỏi từ AI...");
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Mock AI generated questions
       const aiQuestions: Question[] = [
@@ -717,7 +719,7 @@ export default function AdminCourses() {
           type: "multiple_choice",
           options: ["52", "62", "72", "82"],
           correctAnswer: "B",
-          explanation: "25 + 37 = 62"
+          explanation: "25 + 37 = 62",
         },
         {
           id: "ai2",
@@ -725,17 +727,18 @@ export default function AdminCourses() {
           type: "essay",
           maxWords: 100,
           keywords: ["phép nhân", "tính chất", "ví dụ"],
-          rubric: "Học sinh cần giải thích khái niệm phép nhân và đưa ra ví dụ cụ thể"
-        }
+          rubric:
+            "Học sinh cần giải thích khái niệm phép nhân và đưa ra ví dụ cụ thể",
+        },
       ];
 
       setNewExercise({
         ...newExercise,
-        questions: [...(newExercise.questions || []), ...aiQuestions]
+        questions: [...(newExercise.questions || []), ...aiQuestions],
       });
 
       setProcessingStep("Hoàn thành!");
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setIsAIDialogOpen(false);
     } catch (error) {
       console.error("AI generation error:", error);
@@ -756,14 +759,14 @@ export default function AdminCourses() {
       // Simulate file processing
       for (let i = 0; i <= 100; i += 10) {
         setUploadProgress(i);
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
 
       setProcessingStep("Phân tích nội dung file...");
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       setProcessingStep("Tạo câu hỏi từ file...");
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
       // Mock questions from file
       const fileQuestions: Question[] = [
@@ -771,19 +774,24 @@ export default function AdminCourses() {
           id: "file1",
           question: "Theo tài liệu, đâu là đặc điểm chính của phép cộng?",
           type: "multiple_choice",
-          options: ["Tính giao hoán", "Tính kết hợp", "Có phần tử đơn vị", "Tất cả đều đúng"],
+          options: [
+            "Tính giao hoán",
+            "Tính kết hợp",
+            "Có phần tử đơn vị",
+            "Tất cả đều đúng",
+          ],
           correctAnswer: "D",
-          explanation: "Phép cộng có đầy đủ các tính chất được liệt kê"
-        }
+          explanation: "Phép cộng có đầy đủ các tính chất được liệt kê",
+        },
       ];
 
       setNewExercise({
         ...newExercise,
-        questions: [...(newExercise.questions || []), ...fileQuestions]
+        questions: [...(newExercise.questions || []), ...fileQuestions],
       });
 
       setProcessingStep("Hoàn thành!");
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } finally {
       setIsProcessing(false);
       setUploadProgress(0);
@@ -794,11 +802,11 @@ export default function AdminCourses() {
 
   // Bulk Import Questions
   const handleBulkImport = () => {
-    const lines = bulkQuestions.split('\n').filter(line => line.trim());
+    const lines = bulkQuestions.split("\n").filter((line) => line.trim());
     const questions: Question[] = [];
 
     lines.forEach((line, index) => {
-      if (line.startsWith('Q:')) {
+      if (line.startsWith("Q:")) {
         const questionText = line.substring(2).trim();
         questions.push({
           id: `bulk_${index}`,
@@ -812,7 +820,7 @@ export default function AdminCourses() {
 
     setNewExercise({
       ...newExercise,
-      questions: [...(newExercise.questions || []), ...questions]
+      questions: [...(newExercise.questions || []), ...questions],
     });
 
     setBulkQuestions("");
@@ -821,20 +829,22 @@ export default function AdminCourses() {
   // Assign exercises from bank
   const handleAssignExercises = () => {
     if (selectedCourse && selectedExercisesFromBank.length > 0) {
-      const exercisesToAssign = exerciseBank.filter(ex =>
-        selectedExercisesFromBank.includes(ex.id)
-      ).map(ex => ({
-        id: Math.max(...(selectedCourse.exercises?.map(e => e.id) || [0])) + ex.id,
-        title: ex.title,
-        description: `Bài tập được gán từ kho bài tập`,
-        type: ex.type.toLowerCase().replace(/\s+/g, '_'),
-        difficulty: ex.difficulty,
-        points: 10,
-        timeLimit: 600,
-        questions: ex.totalQuestions || 1,
-        assignedFrom: 'bank',
-        originalId: ex.id
-      }));
+      const exercisesToAssign = exerciseBank
+        .filter((ex) => selectedExercisesFromBank.includes(ex.id))
+        .map((ex) => ({
+          id:
+            Math.max(...(selectedCourse.exercises?.map((e) => e.id) || [0])) +
+            ex.id,
+          title: ex.title,
+          description: `Bài tập được gán từ kho bài tập`,
+          type: ex.type.toLowerCase().replace(/\s+/g, "_"),
+          difficulty: ex.difficulty,
+          points: 10,
+          timeLimit: 600,
+          questions: ex.totalQuestions || 1,
+          assignedFrom: "bank",
+          originalId: ex.id,
+        }));
 
       const updatedCourses = courses.map((course) =>
         course.id === selectedCourse.id
@@ -855,10 +865,10 @@ export default function AdminCourses() {
   };
 
   const toggleExerciseSelection = (exerciseId: number) => {
-    setSelectedExercisesFromBank(prev =>
+    setSelectedExercisesFromBank((prev) =>
       prev.includes(exerciseId)
-        ? prev.filter(id => id !== exerciseId)
-        : [...prev, exerciseId]
+        ? prev.filter((id) => id !== exerciseId)
+        : [...prev, exerciseId],
     );
   };
 
