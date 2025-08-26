@@ -824,7 +824,7 @@ export default function AdminCourses() {
                     }
                     className="col-span-3"
                     rows={2}
-                    placeholder="H��c sinh sẽ đạt được những mục tiêu gì sau khóa học..."
+                    placeholder="Học sinh sẽ đạt được những mục tiêu gì sau khóa học..."
                   />
                 </div>
 
@@ -1056,7 +1056,7 @@ export default function AdminCourses() {
           <div className="text-center py-12">
             <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Không tìm thấy khóa h��c nào
+              Không tìm th���y khóa học nào
             </h3>
             <p className="text-gray-500 mb-4">
               Thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác
@@ -1224,7 +1224,7 @@ export default function AdminCourses() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">Danh sách bài giảng</h3>
-                      <Button size="sm" className="gap-2">
+                      <Button size="sm" className="gap-2" onClick={() => setIsAddLessonDialogOpen(true)}>
                         <PlusCircle className="h-4 w-4" />
                         Thêm bài giảng
                       </Button>
@@ -1838,7 +1838,7 @@ export default function AdminCourses() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Ch���n độ khó" />
+                      <SelectValue placeholder="Chọn độ khó" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Dễ">Dễ</SelectItem>
