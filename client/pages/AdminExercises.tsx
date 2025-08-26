@@ -99,7 +99,7 @@ const mockExercises = [
     difficulty: "Trung bình",
     submissions: 32,
     avgScore: 78,
-    department: "Khối lớp 3-5",
+    department: "Khối l��p 3-5",
     isFromBank: false,
     tags: ["văn mẫu", "tả cảnh"],
     description: "Luyện tập kỹ năng viết tả cảnh",
@@ -191,7 +191,7 @@ const mockExerciseBank = [
   {
     id: 105,
     title: "Tả người thân",
-    type: "Tự luận",
+    type: "T��� luận",
     subject: "Văn",
     creator: "Trường Tiểu học Nguyễn Du",
     createdAt: "2024-01-18",
@@ -1517,6 +1517,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Môn học</TableHead>
                 <TableHead className="font-semibold">Độ khó</TableHead>
                 <TableHead className="font-semibold">Khối</TableHead>
+                <TableHead className="font-semibold">Khóa học</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold">Nguồn</TableHead>
                 <TableHead className="font-semibold text-center">
