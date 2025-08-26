@@ -139,7 +139,7 @@ const mockCourses = [
       {
         id: 1,
         title: "Bài thơ: Con gà trống",
-        description: "Học thuộc và hiểu nghĩa bài thơ Con gà trống",
+        description: "Học thu���c và hiểu nghĩa bài thơ Con gà trống",
         type: "reading",
         duration: "30 phút",
         order: 1,
@@ -283,6 +283,12 @@ export default function AdminCourses() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editCourse, setEditCourse] = useState<typeof newCourse>({});
   const [activeTab, setActiveTab] = useState<'info' | 'lessons' | 'exercises'>('info');
+  const [selectedLesson, setSelectedLesson] = useState<any>(null);
+  const [selectedExercise, setSelectedExercise] = useState<any>(null);
+  const [isEditLessonDialogOpen, setIsEditLessonDialogOpen] = useState(false);
+  const [isEditExerciseDialogOpen, setIsEditExerciseDialogOpen] = useState(false);
+  const [editLesson, setEditLesson] = useState<any>({});
+  const [editExercise, setEditExercise] = useState<any>({});
   const [newCourse, setNewCourse] = useState({
     name: "",
     description: "",
@@ -383,6 +389,116 @@ export default function AdminCourses() {
       setCourses(updatedCourses);
       setIsEditDialogOpen(false);
       setSelectedCourse(null);
+    }
+  };
+
+  const handleEditLesson = (lesson: any) => {
+    setSelectedLesson(lesson);
+    setEditLesson({
+      title: lesson.title,
+      description: lesson.description,
+      type: lesson.type,
+      duration: lesson.duration,
+      order: lesson.order,
+    });
+    setIsEditLessonDialogOpen(true);
+  };
+
+  const handleUpdateLesson = () => {
+    if (selectedCourse && selectedLesson && editLesson.title) {
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              lessons: course.lessons?.map((lesson) =>
+                lesson.id === selectedLesson.id
+                  ? {
+                      ...lesson,
+                      title: editLesson.title,
+                      description: editLesson.description,
+                      type: editLesson.type,
+                      duration: editLesson.duration,
+                      order: editLesson.order,
+                    }
+                  : lesson
+              ),
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setIsEditLessonDialogOpen(false);
+      setSelectedLesson(null);
+    }
+  };
+
+  const handleEditExercise = (exercise: any) => {
+    setSelectedExercise(exercise);
+    setEditExercise({
+      title: exercise.title,
+      description: exercise.description,
+      type: exercise.type,
+      difficulty: exercise.difficulty,
+      points: exercise.points,
+    });
+    setIsEditExerciseDialogOpen(true);
+  };
+
+  const handleUpdateExercise = () => {
+    if (selectedCourse && selectedExercise && editExercise.title) {
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              exercises: course.exercises?.map((exercise) =>
+                exercise.id === selectedExercise.id
+                  ? {
+                      ...exercise,
+                      title: editExercise.title,
+                      description: editExercise.description,
+                      type: editExercise.type,
+                      difficulty: editExercise.difficulty,
+                      points: editExercise.points,
+                    }
+                  : exercise
+              ),
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+      setIsEditExerciseDialogOpen(false);
+      setSelectedExercise(null);
+    }
+  };
+
+  const handleDeleteLesson = (lessonId: number) => {
+    if (selectedCourse) {
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              lessons: course.lessons?.filter((lesson) => lesson.id !== lessonId),
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
+    }
+  };
+
+  const handleDeleteExercise = (exerciseId: number) => {
+    if (selectedCourse) {
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              exercises: course.exercises?.filter((exercise) => exercise.id !== exerciseId),
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setSelectedCourse(updatedCourses.find(c => c.id === selectedCourse.id) || null);
     }
   };
 
@@ -1022,11 +1138,14 @@ export default function AdminCourses() {
                                     </Button>
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleEditLesson(lesson)}>
                                       <Edit className="mr-2 h-4 w-4" />
                                       Chỉnh sửa
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-red-600">
+                                    <DropdownMenuItem
+                                      className="text-red-600"
+                                      onClick={() => handleDeleteLesson(lesson.id)}
+                                    >
                                       <Trash2 className="mr-2 h-4 w-4" />
                                       Xóa
                                     </DropdownMenuItem>
@@ -1096,11 +1215,14 @@ export default function AdminCourses() {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                  <DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleEditExercise(exercise)}>
                                     <Edit className="mr-2 h-4 w-4" />
                                     Chỉnh sửa
                                   </DropdownMenuItem>
-                                  <DropdownMenuItem className="text-red-600">
+                                  <DropdownMenuItem
+                                    className="text-red-600"
+                                    onClick={() => handleDeleteExercise(exercise.id)}
+                                  >
                                     <Trash2 className="mr-2 h-4 w-4" />
                                     Xóa
                                   </DropdownMenuItem>
@@ -1276,6 +1398,228 @@ export default function AdminCourses() {
                 Hủy
               </Button>
               <Button onClick={handleUpdateCourse}>
+                Cập nhật
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Edit Lesson Dialog */}
+        <Dialog open={isEditLessonDialogOpen} onOpenChange={setIsEditLessonDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Chỉnh sửa bài giảng</DialogTitle>
+              <DialogDescription>
+                Cập nhật thông tin bài giảng
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lessonTitle" className="text-right">
+                  Tiêu đề *
+                </Label>
+                <Input
+                  id="lessonTitle"
+                  value={editLesson.title || ""}
+                  onChange={(e) =>
+                    setEditLesson({ ...editLesson, title: e.target.value })
+                  }
+                  className="col-span-3"
+                  placeholder="VD: Số từ 1 đến 10"
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lessonDesc" className="text-right">
+                  Mô tả *
+                </Label>
+                <Textarea
+                  id="lessonDesc"
+                  value={editLesson.description || ""}
+                  onChange={(e) =>
+                    setEditLesson({
+                      ...editLesson,
+                      description: e.target.value,
+                    })
+                  }
+                  className="col-span-3"
+                  rows={3}
+                  placeholder="Mô tả nội dung bài giảng..."
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 items-center gap-2">
+                  <Label htmlFor="lessonType">Loại bài *</Label>
+                  <Select
+                    value={editLesson.type || ""}
+                    onValueChange={(value) =>
+                      setEditLesson({ ...editLesson, type: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn loại" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="video">Video</SelectItem>
+                      <SelectItem value="reading">Bài đọc</SelectItem>
+                      <SelectItem value="interactive">Tương tác</SelectItem>
+                      <SelectItem value="game">Trò chơi</SelectItem>
+                      <SelectItem value="song">Bài hát</SelectItem>
+                      <SelectItem value="exercise">Bài tập</SelectItem>
+                      <SelectItem value="observation">Quan sát</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 items-center gap-2">
+                  <Label htmlFor="lessonDuration">Thời lượng *</Label>
+                  <Input
+                    id="lessonDuration"
+                    value={editLesson.duration || ""}
+                    onChange={(e) =>
+                      setEditLesson({ ...editLesson, duration: e.target.value })
+                    }
+                    placeholder="VD: 15 phút"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lessonOrder" className="text-right">
+                  Thứ tự *
+                </Label>
+                <Input
+                  id="lessonOrder"
+                  type="number"
+                  value={editLesson.order || ""}
+                  onChange={(e) =>
+                    setEditLesson({ ...editLesson, order: parseInt(e.target.value) })
+                  }
+                  className="col-span-3"
+                  placeholder="1, 2, 3..."
+                  min="1"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditLessonDialogOpen(false)}>
+                Hủy
+              </Button>
+              <Button onClick={handleUpdateLesson}>
+                Cập nhật
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Edit Exercise Dialog */}
+        <Dialog open={isEditExerciseDialogOpen} onOpenChange={setIsEditExerciseDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>Chỉnh sửa bài tập</DialogTitle>
+              <DialogDescription>
+                Cập nhật thông tin bài tập
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="exerciseTitle" className="text-right">
+                  Tiêu đề *
+                </Label>
+                <Input
+                  id="exerciseTitle"
+                  value={editExercise.title || ""}
+                  onChange={(e) =>
+                    setEditExercise({ ...editExercise, title: e.target.value })
+                  }
+                  className="col-span-3"
+                  placeholder="VD: Bài tập đếm số"
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="exerciseDesc" className="text-right">
+                  Mô tả *
+                </Label>
+                <Textarea
+                  id="exerciseDesc"
+                  value={editExercise.description || ""}
+                  onChange={(e) =>
+                    setEditExercise({
+                      ...editExercise,
+                      description: e.target.value,
+                    })
+                  }
+                  className="col-span-3"
+                  rows={3}
+                  placeholder="Mô tả nội dung bài tập..."
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 items-center gap-2">
+                  <Label htmlFor="exerciseType">Loại bài *</Label>
+                  <Select
+                    value={editExercise.type || ""}
+                    onValueChange={(value) =>
+                      setEditExercise({ ...editExercise, type: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn loại" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="quiz">Quiz</SelectItem>
+                      <SelectItem value="practice">Thực hành</SelectItem>
+                      <SelectItem value="game">Trò chơi</SelectItem>
+                      <SelectItem value="experiment">Thí nghiệm</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 items-center gap-2">
+                  <Label htmlFor="exerciseDifficulty">Độ khó *</Label>
+                  <Select
+                    value={editExercise.difficulty || ""}
+                    onValueChange={(value) =>
+                      setEditExercise({ ...editExercise, difficulty: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn độ khó" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dễ">Dễ</SelectItem>
+                      <SelectItem value="Trung bình">Trung bình</SelectItem>
+                      <SelectItem value="Khó">Khó</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="exercisePoints" className="text-right">
+                  Điểm số *
+                </Label>
+                <Input
+                  id="exercisePoints"
+                  type="number"
+                  value={editExercise.points || ""}
+                  onChange={(e) =>
+                    setEditExercise({ ...editExercise, points: parseInt(e.target.value) })
+                  }
+                  className="col-span-3"
+                  placeholder="10, 15, 20..."
+                  min="1"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditExerciseDialogOpen(false)}>
+                Hủy
+              </Button>
+              <Button onClick={handleUpdateExercise}>
                 Cập nhật
               </Button>
             </DialogFooter>
