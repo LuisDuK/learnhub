@@ -85,6 +85,7 @@ const mockExercises = [
     avgScore: 85,
     department: "Khối lớp 1-2",
     isFromBank: false,
+    isAIGenerated: false,
     tags: ["cộng", "trừ", "số học"],
     description: "Bài tập cơ bản về phép cộng và trừ",
     courseName: "Toán học cơ bản",
@@ -102,6 +103,7 @@ const mockExercises = [
     avgScore: 78,
     department: "Khối lớp 3-5",
     isFromBank: false,
+    isAIGenerated: true,
     tags: ["văn mẫu", "tả cảnh"],
     description: "Luyện tập kỹ năng viết tả cảnh",
     courseName: "Tiếng Việt lớp 3",
@@ -119,6 +121,7 @@ const mockExercises = [
     avgScore: 92,
     department: "Khối mầm non",
     isFromBank: false,
+    isAIGenerated: false,
     tags: ["màu sắc", "số đếm", "từ vựng"],
     description: "Học từ vựng về màu sắc và số",
     courseName: "Tiếng Anh cho trẻ em",
@@ -136,6 +139,7 @@ const mockExercises = [
     avgScore: 65,
     department: "Khối lớp 3-5",
     isFromBank: true,
+    isAIGenerated: false,
     tags: ["quan sát", "mô tả"],
     description: "Bài tập quan sát và mô tả các hiện tượng",
     courseName: null, // Chưa gán vào khóa học nào
@@ -153,6 +157,7 @@ const mockExercises = [
     avgScore: 0,
     department: "Khối lớp 1-2",
     isFromBank: true,
+    isAIGenerated: false,
     tags: ["bảng cửu chương", "nhân"],
     description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
     courseName: null, // Chưa gán vào khóa học nào
@@ -385,6 +390,7 @@ export default function AdminExercises() {
         avgScore: 0,
         department: "Tùy chỉnh",
         isFromBank: false,
+        isAIGenerated: false,
         tags: [],
         description: newExercise.description || "",
       };
@@ -412,6 +418,7 @@ export default function AdminExercises() {
             avgScore: 0,
             department: bankExercise.department,
             isFromBank: true,
+            isAIGenerated: false,
             tags: bankExercise.tags,
             description: bankExercise.description,
           };
@@ -1654,7 +1661,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       variant={exercise.isFromBank ? "default" : "outline"}
                       className="text-xs"
                     >
-                      {exercise.isFromBank ? "Từ kho" : "T��� tạo"}
+                      {exercise.isFromBank ? "Từ kho" : exercise.isAIGenerated ? "AI tạo" : "Tạo"}
                     </Badge>
                   </TableCell>
                   <TableCell>
