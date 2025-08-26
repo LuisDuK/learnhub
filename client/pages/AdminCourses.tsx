@@ -124,7 +124,7 @@ const mockCourses = [
         questions: [
           {
             id: 1,
-            question: "Hãy đếm số quả táo trong hình?",
+            question: "H��y đếm số quả táo trong hình?",
             image: "apples.jpg",
             options: ["3", "4", "5", "6"],
             correctAnswer: "5"
@@ -730,7 +730,7 @@ export default function AdminCourses() {
                       }
                     >
                       <SelectTrigger className="col-span-2">
-                        <SelectValue placeholder="Chọn độ tu���i" />
+                        <SelectValue placeholder="Chọn độ tuổi" />
                       </SelectTrigger>
                       <SelectContent>
                         {ageGroups.map((age) => (
@@ -1330,10 +1330,13 @@ export default function AdminCourses() {
 
         {/* Edit Course Dialog */}
         <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Chỉnh sửa khóa học</DialogTitle>
-              <DialogDescription>
+          <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b border-gray-200">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Edit className="h-5 w-5 text-orange-600" />
+                Chỉnh sửa khóa học
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
                 Cập nhật thông tin khóa học
               </DialogDescription>
             </DialogHeader>
