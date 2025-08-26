@@ -85,6 +85,7 @@ const mockExercises = [
     avgScore: 85,
     department: "Khối lớp 1-2",
     isFromBank: false,
+    isAIGenerated: false,
     tags: ["cộng", "trừ", "số học"],
     description: "Bài tập cơ bản về phép cộng và trừ",
     courseName: "Toán học cơ bản",
@@ -94,7 +95,7 @@ const mockExercises = [
     title: "Viết đoạn văn tả cảnh thiên nhiên",
     type: "Tự luận",
     subject: "Văn",
-    creator: "Cô Trần Thị Lan",
+    creator: "Cô Tr��n Thị Lan",
     createdAt: "2024-01-20",
     totalQuestions: 1,
     difficulty: "Trung bình",
@@ -102,6 +103,7 @@ const mockExercises = [
     avgScore: 78,
     department: "Khối lớp 3-5",
     isFromBank: false,
+    isAIGenerated: true,
     tags: ["văn mẫu", "tả cảnh"],
     description: "Luyện tập kỹ năng viết tả cảnh",
     courseName: "Tiếng Việt lớp 3",
@@ -119,6 +121,7 @@ const mockExercises = [
     avgScore: 92,
     department: "Khối mầm non",
     isFromBank: false,
+    isAIGenerated: false,
     tags: ["màu sắc", "số đếm", "từ vựng"],
     description: "Học từ vựng về màu sắc và số",
     courseName: "Tiếng Anh cho trẻ em",
@@ -136,6 +139,7 @@ const mockExercises = [
     avgScore: 65,
     department: "Khối lớp 3-5",
     isFromBank: true,
+    isAIGenerated: false,
     tags: ["quan sát", "mô tả"],
     description: "Bài tập quan sát và mô tả các hiện tượng",
     courseName: null, // Chưa gán vào khóa học nào
@@ -153,9 +157,46 @@ const mockExercises = [
     avgScore: 0,
     department: "Khối lớp 1-2",
     isFromBank: true,
+    isAIGenerated: false,
     tags: ["bảng cửu chương", "nhân"],
     description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
     courseName: null, // Chưa gán vào khóa học nào
+  },
+  {
+    id: 6,
+    title: "Đọc hiểu đoạn văn về động vật",
+    type: "Trắc nghiệm",
+    subject: "Văn",
+    creator: "AI Assistant",
+    createdAt: "2024-01-28",
+    totalQuestions: 8,
+    difficulty: "Dễ",
+    submissions: 23,
+    avgScore: 88,
+    department: "Khối lớp 1-2",
+    isFromBank: false,
+    isAIGenerated: true,
+    tags: ["đọc hiểu", "động vật"],
+    description: "Bài tập đọc hiểu được tạo bởi AI về chủ đề động vật",
+    courseName: "Tiếng Việt lớp 2",
+  },
+  {
+    id: 7,
+    title: "Phép nhân và chia cơ bản",
+    type: "Hỗn hợp",
+    subject: "Toán",
+    creator: "AI Assistant",
+    createdAt: "2024-01-29",
+    totalQuestions: 12,
+    difficulty: "Trung bình",
+    submissions: 31,
+    avgScore: 76,
+    department: "Khối lớp 3-5",
+    isFromBank: false,
+    isAIGenerated: true,
+    tags: ["nhân", "chia", "toán cơ bản"],
+    description: "Bài tập về phép nhân và chia được AI tạo tự động",
+    courseName: "Toán học lớp 3",
   },
 ];
 
@@ -307,7 +348,7 @@ export default function AdminExercises() {
   const [exercises, setExercises] = useState(mockExercises);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
-  const [typeFilter, setTypeFilter] = useState("T��t cả");
+  const [typeFilter, setTypeFilter] = useState("Tất cả");
   const [departmentFilter, setDepartmentFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
@@ -339,6 +380,7 @@ export default function AdminExercises() {
   const [aiPrompt, setAiPrompt] = useState("");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [bulkQuestions, setBulkQuestions] = useState("");
+  const [hasAIContent, setHasAIContent] = useState(false);
 
   const filteredExercises = exercises.filter((exercise) => {
     const matchesSearch =
@@ -385,6 +427,7 @@ export default function AdminExercises() {
         avgScore: 0,
         department: "Tùy chỉnh",
         isFromBank: false,
+        isAIGenerated: hasAIContent,
         tags: [],
         description: newExercise.description || "",
       };
@@ -412,6 +455,7 @@ export default function AdminExercises() {
             avgScore: 0,
             department: bankExercise.department,
             isFromBank: true,
+            isAIGenerated: false,
             tags: bankExercise.tags,
             description: bankExercise.description,
           };
@@ -435,6 +479,7 @@ export default function AdminExercises() {
       description: "",
       questions: [],
     });
+    setHasAIContent(false);
   };
 
   const handleDeleteExercise = (id: number) => {
@@ -538,6 +583,7 @@ export default function AdminExercises() {
         ...newExercise,
         questions: [...newExercise.questions, ...aiQuestions],
       });
+      setHasAIContent(true);
 
       setProcessingStep("Hoàn thành!");
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -757,7 +803,7 @@ export default function AdminExercises() {
             </div>
 
             <div>
-              <Label>Giải thích (tùy chọn)</Label>
+              <Label>Giải thích (tùy ch��n)</Label>
               <Textarea
                 value={question.explanation || ""}
                 onChange={(e) =>
@@ -955,12 +1001,16 @@ export default function AdminExercises() {
           </div>
 
           <div className="flex gap-2">
-            {/* Exercise Bank Dialog */}
-            <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen}>
+            {/* Exercise Bank Dialog - Hidden */}
+            <Dialog
+              open={isBankDialogOpen}
+              onOpenChange={setIsBankDialogOpen}
+              className="hidden"
+            >
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0"
+                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 hidden"
                 >
                   <Package className="h-4 w-4 mr-2" />
                   Kho bài tập
@@ -1045,7 +1095,7 @@ export default function AdminExercises() {
                   {selectedExercises.size > 0 && (
                     <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
                       <span className="text-blue-800 font-medium">
-                        Đã chọn {selectedExercises.size} bài tập
+                        Đã chọn {selectedExercises.size} bài t���p
                       </span>
                       <Button
                         variant="outline"
@@ -1197,7 +1247,7 @@ export default function AdminExercises() {
                       <Textarea
                         value={aiPrompt}
                         onChange={(e) => setAiPrompt(e.target.value)}
-                        placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghiệm về phép cộng trong phạm vi 100, độ khó vừa phải cho học sinh lớp 2..."
+                        placeholder="Ví dụ: Tạo 5 câu hỏi trắc nghi��m về phép cộng trong phạm vi 100, độ khó vừa phải cho học sinh lớp 2..."
                         rows={4}
                       />
                     </div>
@@ -1287,7 +1337,7 @@ export default function AdminExercises() {
                               title: e.target.value,
                             })
                           }
-                          placeholder="Nhập tên bài tập"
+                          placeholder="Nhập tên b��i tập"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1586,7 +1636,6 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Khối</TableHead>
                 <TableHead className="font-semibold">Khóa học</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
-                <TableHead className="font-semibold">Nguồn</TableHead>
                 <TableHead className="font-semibold text-center">
                   Hành động
                 </TableHead>
@@ -1650,14 +1699,6 @@ Q: Viết đoạn văn tả về mùa xuân`}
                     {exercise.creator}
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={exercise.isFromBank ? "default" : "outline"}
-                      className="text-xs"
-                    >
-                      {exercise.isFromBank ? "Từ kho" : "T��� tạo"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
@@ -1686,7 +1727,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                           onClick={() => handleDeleteExercise(exercise.id)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Gỡ bỏ
+                          G��� bỏ
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
