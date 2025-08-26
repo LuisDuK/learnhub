@@ -1001,12 +1001,12 @@ export default function AdminExercises() {
           </div>
 
           <div className="flex gap-2">
-            {/* Exercise Bank Dialog */}
-            <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen}>
+            {/* Exercise Bank Dialog - Hidden */}
+            <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen} className="hidden">
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0"
+                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 hidden"
                 >
                   <Package className="h-4 w-4 mr-2" />
                   Kho bài tập
@@ -1632,7 +1632,6 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Khối</TableHead>
                 <TableHead className="font-semibold">Khóa học</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
-                <TableHead className="font-semibold">Nguồn</TableHead>
                 <TableHead className="font-semibold text-center">
                   Hành động
                 </TableHead>
@@ -1694,14 +1693,6 @@ Q: Viết đoạn văn tả về mùa xuân`}
                   </TableCell>
                   <TableCell className="text-sm text-gray-600">
                     {exercise.creator}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={exercise.isFromBank ? "default" : "outline"}
-                      className="text-xs"
-                    >
-                      {exercise.isFromBank ? "Từ kho" : exercise.isAIGenerated ? "AI tạo" : "Tạo"}
-                    </Badge>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
