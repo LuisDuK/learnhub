@@ -37,6 +37,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Search,
   Plus,
@@ -58,9 +60,17 @@ import {
   Save,
   Import,
   Sparkles,
+  BookOpen,
+  Users,
+  Clock,
+  Grid3X3,
+  List,
+  Package,
+  Building2,
+  Star,
 } from "lucide-react";
 
-// Mock exercise data
+// Mock exercise data - includes both created and bank exercises
 const mockExercises = [
   {
     id: 1,
@@ -73,6 +83,11 @@ const mockExercises = [
     difficulty: "Dễ",
     submissions: 45,
     avgScore: 85,
+    department: "Khối lớp 1-2",
+    isFromBank: false,
+    tags: ["cộng", "trừ", "số học"],
+    description: "Bài tập cơ bản về phép cộng và trừ",
+    courseName: "Toán học cơ bản",
   },
   {
     id: 2,
@@ -85,6 +100,11 @@ const mockExercises = [
     difficulty: "Trung bình",
     submissions: 32,
     avgScore: 78,
+    department: "Khối lớp 3-5",
+    isFromBank: false,
+    tags: ["văn mẫu", "tả cảnh"],
+    description: "Luyện tập kỹ năng viết tả cảnh",
+    courseName: "Tiếng Việt lớp 3",
   },
   {
     id: 3,
@@ -97,6 +117,11 @@ const mockExercises = [
     difficulty: "Dễ",
     submissions: 67,
     avgScore: 92,
+    department: "Khối mầm non",
+    isFromBank: false,
+    tags: ["màu sắc", "số đếm", "từ vựng"],
+    description: "Học từ vựng về màu sắc và số",
+    courseName: "Tiếng Anh cho trẻ em",
   },
   {
     id: 4,
@@ -109,12 +134,135 @@ const mockExercises = [
     difficulty: "Khó",
     submissions: 28,
     avgScore: 65,
+    department: "Khối lớp 3-5",
+    isFromBank: true,
+    tags: ["quan sát", "mô tả"],
+    description: "Bài tập quan sát và mô tả các hiện tượng",
+    courseName: null, // Chưa gán vào khóa học nào
+  },
+  {
+    id: 5,
+    title: "Bảng cửu chương 2-3-4",
+    type: "Trắc nghiệm",
+    subject: "Toán",
+    creator: "Bộ GD&ĐT",
+    createdAt: "2024-01-01",
+    totalQuestions: 20,
+    difficulty: "Dễ",
+    submissions: 0,
+    avgScore: 0,
+    department: "Khối lớp 1-2",
+    isFromBank: true,
+    tags: ["bảng cửu chương", "nhân"],
+    description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
+    courseName: null, // Chưa gán vào khóa học nào
+  },
+];
+
+// Mock exercise bank - exercises available for assignment
+const mockExerciseBank = [
+  {
+    id: 101,
+    title: "Bảng cửu chương 2-3-4",
+    type: "Trắc nghiệm",
+    subject: "Toán",
+    creator: "Bộ GD&ĐT",
+    createdAt: "2024-01-01",
+    totalQuestions: 20,
+    difficulty: "Dễ",
+    usageCount: 156,
+    rating: 4.8,
+    department: "Khối lớp 1-2",
+    tags: ["bảng cửu chương", "nhân"],
+    description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
+    thumbnail: "🔢",
+  },
+  {
+    id: 102,
+    title: "Đọc hiểu văn bản ngắn",
+    type: "Hỗn hợp",
+    subject: "Văn",
+    creator: "Bộ GD&ĐT",
+    createdAt: "2024-01-05",
+    totalQuestions: 8,
+    difficulty: "Trung bình",
+    usageCount: 89,
+    rating: 4.6,
+    department: "Khối lớp 3-5",
+    tags: ["đọc hiểu", "văn bản"],
+    description: "Rèn luyện kỹ năng đọc hiểu văn bản",
+    thumbnail: "📖",
+  },
+  {
+    id: 103,
+    title: "Family Members Vocabulary",
+    type: "Trắc nghiệm",
+    subject: "Anh",
+    creator: "Cambridge Kids",
+    createdAt: "2024-01-03",
+    totalQuestions: 12,
+    difficulty: "Dễ",
+    usageCount: 234,
+    rating: 4.9,
+    department: "Khối mầm non",
+    tags: ["gia đình", "từ vựng"],
+    description: "Học từ vựng về các thành viên trong gia đình",
+    thumbnail: "👨‍👩‍👧‍👦",
+  },
+  {
+    id: 104,
+    title: "Phép chia có dư",
+    type: "Trắc nghiệm",
+    subject: "Toán",
+    creator: "Trường Tiểu học Chu Văn An",
+    createdAt: "2024-01-12",
+    totalQuestions: 15,
+    difficulty: "Trung bình",
+    usageCount: 67,
+    rating: 4.4,
+    department: "Khối lớp 3-5",
+    tags: ["chia", "số dư"],
+    description: "Luyện tập phép chia có số dư",
+    thumbnail: "➗",
+  },
+  {
+    id: 105,
+    title: "Tả người thân",
+    type: "Tự luận",
+    subject: "Văn",
+    creator: "Trường Tiểu học Nguyễn Du",
+    createdAt: "2024-01-18",
+    totalQuestions: 2,
+    difficulty: "Dễ",
+    usageCount: 45,
+    rating: 4.2,
+    department: "Khối lớp 1-2",
+    tags: ["tả người", "gia đình"],
+    description: "Viết đoạn văn tả về người thân",
+    thumbnail: "👥",
+  },
+  {
+    id: 106,
+    title: "Weather and Seasons",
+    type: "Hỗn hợp",
+    subject: "Anh",
+    creator: "British Council Kids",
+    createdAt: "2024-01-14",
+    totalQuestions: 18,
+    difficulty: "Trung bình",
+    usageCount: 123,
+    rating: 4.7,
+    department: "Khối lớp 3-5",
+    tags: ["thời tiết", "mùa"],
+    description: "Từ vựng và cấu trúc câu về thời tiết",
+    thumbnail: "🌦️",
   },
 ];
 
 const subjects = ["Tất cả", "Toán", "Văn", "Anh"];
 const types = ["Tất cả", "Trắc nghiệm", "Tự luận", "Hỗn hợp"];
 const difficulties = ["Dễ", "Trung bình", "Khó"];
+const departments = ["Tất cả", "Khối mầm non", "Khối lớp 1-2", "Khối lớp 3-5"];
 
 interface Question {
   id?: string;
@@ -138,17 +286,45 @@ interface ExerciseForm {
   questions: Question[];
 }
 
+interface BankExercise {
+  id: number;
+  title: string;
+  type: string;
+  subject: string;
+  creator: string;
+  createdAt: string;
+  totalQuestions: number;
+  difficulty: string;
+  usageCount: number;
+  rating: number;
+  department: string;
+  tags: string[];
+  description: string;
+  thumbnail: string;
+}
+
 export default function AdminExercises() {
   const [exercises, setExercises] = useState(mockExercises);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
-  const [typeFilter, setTypeFilter] = useState("Tất cả");
+  const [typeFilter, setTypeFilter] = useState("T��t cả");
+  const [departmentFilter, setDepartmentFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isAIDialogOpen, setIsAIDialogOpen] = useState(false);
+  const [isBankDialogOpen, setIsBankDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedExercises, setSelectedExercises] = useState<Set<number>>(
+    new Set(),
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Bank filters
+  const [bankSearchTerm, setBankSearchTerm] = useState("");
+  const [bankSubjectFilter, setBankSubjectFilter] = useState("Tất cả");
+  const [bankDepartmentFilter, setBankDepartmentFilter] = useState("Tất cả");
 
   const [newExercise, setNewExercise] = useState<ExerciseForm>({
     title: "",
@@ -171,7 +347,21 @@ export default function AdminExercises() {
     const matchesSubject =
       subjectFilter === "Tất cả" || exercise.subject === subjectFilter;
     const matchesType = typeFilter === "Tất cả" || exercise.type === typeFilter;
-    return matchesSearch && matchesSubject && matchesType;
+    const matchesDepartment =
+      departmentFilter === "Tất cả" || exercise.department === departmentFilter;
+    return matchesSearch && matchesSubject && matchesType && matchesDepartment;
+  });
+
+  const filteredBankExercises = mockExerciseBank.filter((exercise) => {
+    const matchesSearch =
+      exercise.title.toLowerCase().includes(bankSearchTerm.toLowerCase()) ||
+      exercise.tags.some((tag) => tag.includes(bankSearchTerm.toLowerCase()));
+    const matchesSubject =
+      bankSubjectFilter === "Tất cả" || exercise.subject === bankSubjectFilter;
+    const matchesDepartment =
+      bankDepartmentFilter === "Tất cả" ||
+      exercise.department === bankDepartmentFilter;
+    return matchesSearch && matchesSubject && matchesDepartment;
   });
 
   const handleAddExercise = () => {
@@ -193,11 +383,46 @@ export default function AdminExercises() {
         difficulty: newExercise.difficulty,
         submissions: 0,
         avgScore: 0,
+        department: "Tùy chỉnh",
+        isFromBank: false,
+        tags: [],
+        description: newExercise.description || "",
       };
       setExercises([...exercises, exercise]);
       resetForm();
       setIsAddDialogOpen(false);
     }
+  };
+
+  const handleAssignFromBank = () => {
+    const selectedBankExercises = Array.from(selectedExercises)
+      .map((id) => {
+        const bankExercise = mockExerciseBank.find((ex) => ex.id === id);
+        if (bankExercise) {
+          return {
+            id: exercises.length + selectedExercises.size + Math.random(),
+            title: bankExercise.title,
+            type: bankExercise.type,
+            subject: bankExercise.subject,
+            creator: `${bankExercise.creator} (Từ kho)`,
+            createdAt: new Date().toISOString().split("T")[0],
+            totalQuestions: bankExercise.totalQuestions,
+            difficulty: bankExercise.difficulty,
+            submissions: 0,
+            avgScore: 0,
+            department: bankExercise.department,
+            isFromBank: true,
+            tags: bankExercise.tags,
+            description: bankExercise.description,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    setExercises([...exercises, ...selectedBankExercises]);
+    setSelectedExercises(new Set());
+    setIsBankDialogOpen(false);
   };
 
   const resetForm = () => {
@@ -618,6 +843,101 @@ export default function AdminExercises() {
     );
   };
 
+  const renderBankExerciseCard = (exercise: BankExercise) => {
+    const isSelected = selectedExercises.has(exercise.id);
+
+    return (
+      <Card
+        key={exercise.id}
+        className={`cursor-pointer transition-all hover:shadow-lg ${
+          isSelected ? "ring-2 ring-blue-500 bg-blue-50" : ""
+        }`}
+        onClick={() => {
+          const newSelected = new Set(selectedExercises);
+          if (isSelected) {
+            newSelected.delete(exercise.id);
+          } else {
+            newSelected.add(exercise.id);
+          }
+          setSelectedExercises(newSelected);
+        }}
+      >
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">{exercise.thumbnail}</div>
+              <div className="flex-1">
+                <CardTitle className="text-sm line-clamp-2">
+                  {exercise.title}
+                </CardTitle>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge variant="outline" className="text-xs">
+                    {exercise.subject}
+                  </Badge>
+                  <Badge className={`text-xs ${getTypeColor(exercise.type)}`}>
+                    {exercise.type}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+            <Checkbox
+              checked={isSelected}
+              onChange={() => {}}
+              className="mt-1"
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <p className="text-xs text-gray-600 line-clamp-2 mb-3">
+            {exercise.description}
+          </p>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Khối:</span>
+              <span className="font-medium">{exercise.department}</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Độ khó:</span>
+              <Badge
+                className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
+              >
+                {exercise.difficulty}
+              </Badge>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Đánh giá:</span>
+              <div className="flex items-center gap-1">
+                <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                <span className="font-medium">{exercise.rating}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-500">Đã sử dụng:</span>
+              <span className="font-medium">{exercise.usageCount} lần</span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-1 mt-3">
+            {exercise.tags.slice(0, 3).map((tag, index) => (
+              <span
+                key={index}
+                className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs"
+              >
+                #{tag}
+              </span>
+            ))}
+            {exercise.tags.length > 3 && (
+              <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded text-xs">
+                +{exercise.tags.length - 3}
+              </span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -626,7 +946,7 @@ export default function AdminExercises() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
               <PenTool className="inline-block h-8 w-8 mr-2" />
-              Kho bài tập
+              Quản lý bài tập
             </h1>
             <p className="text-gray-600 mt-1">
               Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho
@@ -635,6 +955,211 @@ export default function AdminExercises() {
           </div>
 
           <div className="flex gap-2">
+            {/* Exercise Bank Dialog */}
+            <Dialog open={isBankDialogOpen} onOpenChange={setIsBankDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0"
+                >
+                  <Package className="h-4 w-4 mr-2" />
+                  Kho bài tập
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[1200px] max-h-[90vh] overflow-hidden">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center gap-2">
+                    <Package className="h-5 w-5 text-green-500" />
+                    Kho bài tập - Chọn bài tập để gán
+                  </DialogTitle>
+                  <DialogDescription>
+                    Duyệt và chọn bài tập từ kho để gán vào khóa học. Có thể
+                    chọn nhiều bài tập cùng lúc.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  {/* Bank Search and Filters */}
+                  <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                    <div className="relative flex-1 max-w-md">
+                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                      <Input
+                        placeholder="Tìm kiếm trong kho bài tập..."
+                        value={bankSearchTerm}
+                        onChange={(e) => setBankSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                    <Select
+                      value={bankSubjectFilter}
+                      onValueChange={setBankSubjectFilter}
+                    >
+                      <SelectTrigger className="w-40">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {subjects.map((subject) => (
+                          <SelectItem key={subject} value={subject}>
+                            {subject}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={bankDepartmentFilter}
+                      onValueChange={setBankDepartmentFilter}
+                    >
+                      <SelectTrigger className="w-40">
+                        <Building2 className="h-4 w-4 mr-2" />
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {departments.map((dept) => (
+                          <SelectItem key={dept} value={dept}>
+                            {dept}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setViewMode("grid")}
+                        className={viewMode === "grid" ? "bg-blue-100" : ""}
+                      >
+                        <Grid3X3 className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setViewMode("list")}
+                        className={viewMode === "list" ? "bg-blue-100" : ""}
+                      >
+                        <List className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Selected Counter */}
+                  {selectedExercises.size > 0 && (
+                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <span className="text-blue-800 font-medium">
+                        Đã chọn {selectedExercises.size} bài tập
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedExercises(new Set())}
+                      >
+                        Bỏ chọn tất cả
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Exercise Bank Grid/List */}
+                  <div className="overflow-y-auto max-h-[500px]">
+                    {viewMode === "grid" ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {filteredBankExercises.map((exercise) =>
+                          renderBankExerciseCard(exercise),
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {filteredBankExercises.map((exercise) => (
+                          <Card
+                            key={exercise.id}
+                            className={`cursor-pointer transition-all hover:shadow-md ${
+                              selectedExercises.has(exercise.id)
+                                ? "ring-2 ring-blue-500 bg-blue-50"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              const newSelected = new Set(selectedExercises);
+                              if (selectedExercises.has(exercise.id)) {
+                                newSelected.delete(exercise.id);
+                              } else {
+                                newSelected.add(exercise.id);
+                              }
+                              setSelectedExercises(newSelected);
+                            }}
+                          >
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-4">
+                                <Checkbox
+                                  checked={selectedExercises.has(exercise.id)}
+                                  onChange={() => {}}
+                                />
+                                <div className="text-2xl">
+                                  {exercise.thumbnail}
+                                </div>
+                                <div className="flex-1">
+                                  <h3 className="font-semibold">
+                                    {exercise.title}
+                                  </h3>
+                                  <p className="text-sm text-gray-600 line-clamp-1">
+                                    {exercise.description}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      {exercise.subject}
+                                    </Badge>
+                                    <Badge
+                                      className={`text-xs ${getTypeColor(exercise.type)}`}
+                                    >
+                                      {exercise.type}
+                                    </Badge>
+                                    <Badge
+                                      className={`text-xs ${getDifficultyColor(exercise.difficulty)}`}
+                                    >
+                                      {exercise.difficulty}
+                                    </Badge>
+                                  </div>
+                                </div>
+                                <div className="text-right text-sm">
+                                  <div className="flex items-center gap-1 mb-1">
+                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                                    <span>{exercise.rating}</span>
+                                  </div>
+                                  <div className="text-gray-500">
+                                    {exercise.usageCount} lượt sử dụng
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSelectedExercises(new Set());
+                      setIsBankDialogOpen(false);
+                    }}
+                  >
+                    Đóng
+                  </Button>
+                  <Button
+                    onClick={handleAssignFromBank}
+                    disabled={selectedExercises.size === 0}
+                    className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Gán {selectedExercises.size} bài tập được chọn
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
             {/* AI Dialog */}
             <Dialog open={isAIDialogOpen} onOpenChange={setIsAIDialogOpen}>
               <DialogTrigger asChild>
@@ -730,7 +1255,7 @@ export default function AdminExercises() {
               <DialogTrigger asChild>
                 <Button className="bg-gradient-to-r from-blue-500 to-orange-500 hover:from-blue-600 hover:to-orange-600 text-white">
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm bài tập
+                  Tạo bài tập mới
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
@@ -745,7 +1270,7 @@ export default function AdminExercises() {
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
                     <TabsTrigger value="questions">
-                      Câu h��i ({newExercise.questions.length})
+                      Câu hỏi ({newExercise.questions.length})
                     </TabsTrigger>
                     <TabsTrigger value="import">Import hàng loạt</TabsTrigger>
                   </TabsList>
@@ -1033,6 +1558,19 @@ Q: Viết đoạn văn tả về mùa xuân`}
               ))}
             </SelectContent>
           </Select>
+          <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+            <SelectTrigger className="w-40">
+              <Building2 className="h-4 w-4 mr-2" />
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {departments.map((dept) => (
+                <SelectItem key={dept} value={dept}>
+                  {dept}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Exercises Table */}
@@ -1045,9 +1583,10 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Loại</TableHead>
                 <TableHead className="font-semibold">Môn học</TableHead>
                 <TableHead className="font-semibold">Độ khó</TableHead>
+                <TableHead className="font-semibold">Khối</TableHead>
+                <TableHead className="font-semibold">Khóa học</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
-                <TableHead className="font-semibold">Ngày tạo</TableHead>
-                <TableHead className="font-semibold">Thống kê</TableHead>
+                <TableHead className="font-semibold">Nguồn</TableHead>
                 <TableHead className="font-semibold text-center">
                   Hành động
                 </TableHead>
@@ -1065,6 +1604,11 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       <p className="text-xs text-gray-500">
                         {exercise.totalQuestions} câu hỏi
                       </p>
+                      {exercise.description && (
+                        <p className="text-xs text-gray-400 line-clamp-1 mt-1">
+                          {exercise.description}
+                        </p>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -1080,21 +1624,38 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       {exercise.difficulty}
                     </Badge>
                   </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className="text-xs">
+                      {exercise.department}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {exercise.courseName ? (
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-blue-50 text-blue-700"
+                      >
+                        {exercise.courseName}
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="outline"
+                        className="text-xs bg-gray-50 text-gray-500"
+                      >
+                        Chưa gán
+                      </Badge>
+                    )}
+                  </TableCell>
                   <TableCell className="text-sm text-gray-600">
                     {exercise.creator}
                   </TableCell>
-                  <TableCell className="text-sm text-gray-600">
-                    {exercise.createdAt}
-                  </TableCell>
                   <TableCell>
-                    <div className="text-sm">
-                      <div className="text-gray-900 font-medium">
-                        {exercise.submissions} bài nộp
-                      </div>
-                      <div className="text-gray-500">
-                        Điểm TB: {exercise.avgScore}
-                      </div>
-                    </div>
+                    <Badge
+                      variant={exercise.isFromBank ? "default" : "outline"}
+                      className="text-xs"
+                    >
+                      {exercise.isFromBank ? "Từ kho" : "T��� tạo"}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -1106,7 +1667,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem>
                           <Eye className="mr-2 h-4 w-4" />
-                          Xem kết quả
+                          Xem chi tiết
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Edit className="mr-2 h-4 w-4" />
@@ -1125,7 +1686,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                           onClick={() => handleDeleteExercise(exercise.id)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Xóa
+                          Gỡ bỏ
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -1137,7 +1698,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
         </div>
 
         {/* Summary Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
             <div className="text-2xl font-bold text-blue-600">
               {exercises.length}
@@ -1158,9 +1719,15 @@ Q: Viết đoạn văn tả về mùa xuân`}
           </div>
           <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
             <div className="text-2xl font-bold text-orange-600">
+              {exercises.filter((e) => e.isFromBank).length}
+            </div>
+            <div className="text-sm text-orange-600">Từ kho bài tập</div>
+          </div>
+          <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+            <div className="text-2xl font-bold text-red-600">
               {exercises.reduce((sum, e) => sum + e.submissions, 0)}
             </div>
-            <div className="text-sm text-orange-600">Tổng bài nộp</div>
+            <div className="text-sm text-red-600">Tổng bài nộp</div>
           </div>
         </div>
       </div>
