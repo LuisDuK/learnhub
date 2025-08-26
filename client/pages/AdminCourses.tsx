@@ -1450,11 +1450,14 @@ export default function AdminCourses() {
 
         {/* Edit Lesson Dialog */}
         <Dialog open={isEditLessonDialogOpen} onOpenChange={setIsEditLessonDialogOpen}>
-          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Chỉnh sửa bài giảng</DialogTitle>
-              <DialogDescription>
-                Cập nhật thông tin bài giảng
+          <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+            <DialogHeader className="pb-4 border-b border-gray-200">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                <Edit className="h-5 w-5 text-blue-600" />
+                Chỉnh sửa bài giảng
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                Cập nhật thông tin và nội dung bài giảng
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
