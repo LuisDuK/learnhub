@@ -104,12 +104,7 @@ const mockExercises = [
   },
 ];
 
-const subjects = [
-  "Tất cả",
-  "Toán",
-  "Văn",
-  "Anh",
-];
+const subjects = ["Tất cả", "Toán", "Văn", "Anh"];
 const types = ["Tất cả", "Trắc nghiệm", "Tự luận"];
 const difficulties = ["Dễ", "Trung bình", "Khó"];
 

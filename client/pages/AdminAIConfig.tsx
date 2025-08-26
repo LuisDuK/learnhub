@@ -65,12 +65,39 @@ const mockPrompts = [
       "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao gồm {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
     module: "Bài tập",
     variables: [
-      { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "Lớp học" },
+      {
+        name: "grade",
+        type: "select",
+        options: ["1", "2", "3", "4", "5"],
+        description: "Lớp học",
+      },
       { name: "topic", type: "text", description: "Chủ đề bài học" },
-      { name: "difficulty", type: "select", options: ["dễ", "trung bình", "khó"], description: "Độ khó" },
-      { name: "questions", type: "number", min: 1, max: 20, description: "Số câu hỏi" },
-      { name: "format", type: "select", options: ["trắc nghiệm", "tự luận", "hỗn hợp"], description: "Dạng bài tập" },
-      { name: "duration", type: "number", min: 5, max: 60, description: "Thời gian l��m bài (phút)" }
+      {
+        name: "difficulty",
+        type: "select",
+        options: ["dễ", "trung bình", "khó"],
+        description: "Độ khó",
+      },
+      {
+        name: "questions",
+        type: "number",
+        min: 1,
+        max: 20,
+        description: "Số câu hỏi",
+      },
+      {
+        name: "format",
+        type: "select",
+        options: ["trắc nghiệm", "tự luận", "hỗn hợp"],
+        description: "Dạng bài tập",
+      },
+      {
+        name: "duration",
+        type: "number",
+        min: 5,
+        max: 60,
+        description: "Thời gian l��m bài (phút)",
+      },
     ],
     createdAt: "2024-01-15",
   },
@@ -82,12 +109,44 @@ const mockPrompts = [
     module: "Lộ trình",
     variables: [
       { name: "goal", type: "text", description: "Mục tiêu học tập" },
-      { name: "duration", type: "select", options: ["1 tuần", "2 tuần", "1 tháng", "2 tháng", "3 tháng"], description: "Thời gian học" },
-      { name: "age_group", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi" },
-      { name: "level", type: "select", options: ["mới bắt đầu", "cơ bản", "trung bình", "nâng cao"], description: "Trình độ hiện tại" },
-      { name: "subject", type: "select", options: ["Toán", "Văn", "Anh"], description: "Môn học" },
-      { name: "sessions", type: "number", min: 3, max: 20, description: "Số buổi học" },
-      { name: "session_duration", type: "number", min: 15, max: 60, description: "Thời lượng mỗi buổi (phút)" }
+      {
+        name: "duration",
+        type: "select",
+        options: ["1 tuần", "2 tuần", "1 tháng", "2 tháng", "3 tháng"],
+        description: "Thời gian học",
+      },
+      {
+        name: "age_group",
+        type: "select",
+        options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"],
+        description: "Độ tuổi",
+      },
+      {
+        name: "level",
+        type: "select",
+        options: ["mới bắt đầu", "cơ bản", "trung bình", "nâng cao"],
+        description: "Trình độ hiện tại",
+      },
+      {
+        name: "subject",
+        type: "select",
+        options: ["Toán", "Văn", "Anh"],
+        description: "Môn học",
+      },
+      {
+        name: "sessions",
+        type: "number",
+        min: 3,
+        max: 20,
+        description: "Số buổi học",
+      },
+      {
+        name: "session_duration",
+        type: "number",
+        min: 15,
+        max: 60,
+        description: "Thời lượng mỗi buổi (phút)",
+      },
     ],
     createdAt: "2024-01-20",
   },
@@ -98,12 +157,37 @@ const mockPrompts = [
       "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
     module: "Chatbot",
     variables: [
-      { name: "age", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi học sinh" },
+      {
+        name: "age",
+        type: "select",
+        options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"],
+        description: "Độ tuổi học sinh",
+      },
       { name: "question", type: "text", description: "Câu hỏi của học sinh" },
-      { name: "subject", type: "select", options: ["Toán", "Văn", "Anh", "tổng hợp"], description: "Môn học" },
-      { name: "tone", type: "select", options: ["vui vẻ", "khuyến khích", "tự nhiên", "năng động"], description: "Giọng điệu" },
-      { name: "complexity", type: "select", options: ["đơn giản", "dễ hiểu", "chi tiết hơn"], description: "Độ phức tạp" },
-      { name: "language", type: "select", options: ["tiếng Việt", "tiếng Anh", "song ngữ"], description: "Ngôn ngữ trả lời" }
+      {
+        name: "subject",
+        type: "select",
+        options: ["Toán", "Văn", "Anh", "tổng hợp"],
+        description: "Môn học",
+      },
+      {
+        name: "tone",
+        type: "select",
+        options: ["vui vẻ", "khuyến khích", "tự nhiên", "năng động"],
+        description: "Giọng điệu",
+      },
+      {
+        name: "complexity",
+        type: "select",
+        options: ["đơn giản", "dễ hiểu", "chi tiết hơn"],
+        description: "Độ phức tạp",
+      },
+      {
+        name: "language",
+        type: "select",
+        options: ["tiếng Việt", "tiếng Anh", "song ngữ"],
+        description: "Ngôn ngữ trả lời",
+      },
     ],
     createdAt: "2024-01-10",
   },
@@ -114,15 +198,39 @@ const mockPrompts = [
       "Hãy chấm bài làm của học sinh về môn {{subject}}. Bài làm: {{student_answer}}. Đáp án đúng: {{correct_answer}}. Tiêu chí chấm: {{criteria}}. Hãy đưa ra điểm số ({{max_score}} điểm), nhận xét {{feedback_style}} và gợi ý cải thiện.",
     module: "Chấm bài",
     variables: [
-      { name: "subject", type: "select", options: ["Toán", "Văn", "Anh"], description: "Môn học" },
-      { name: "student_answer", type: "textarea", description: "Bài làm của học sinh" },
-      { name: "correct_answer", type: "textarea", description: "Đáp án chính xác" },
+      {
+        name: "subject",
+        type: "select",
+        options: ["Toán", "Văn", "Anh"],
+        description: "Môn học",
+      },
+      {
+        name: "student_answer",
+        type: "textarea",
+        description: "Bài làm của học sinh",
+      },
+      {
+        name: "correct_answer",
+        type: "textarea",
+        description: "Đáp án chính xác",
+      },
       { name: "criteria", type: "textarea", description: "Tiêu chí chấm điểm" },
-      { name: "max_score", type: "number", min: 1, max: 100, description: "Điểm tối đa" },
-      { name: "feedback_style", type: "select", options: ["khuyến khích", "chi tiết", "tóm tắt", "xây dựng"], description: "Kiểu phản hồi" }
+      {
+        name: "max_score",
+        type: "number",
+        min: 1,
+        max: 100,
+        description: "Điểm tối đa",
+      },
+      {
+        name: "feedback_style",
+        type: "select",
+        options: ["khuyến khích", "chi tiết", "tóm tắt", "xây dựng"],
+        description: "Kiểu phản hồi",
+      },
     ],
     createdAt: "2024-01-25",
-  }
+  },
 ];
 
 const mockAILogs = [
@@ -135,7 +243,7 @@ const mockAILogs = [
     status: "Thành công",
     cost: "0.003$",
     details: "Tạo bài tập toán lớp 3 về phép cộng và trừ",
-    conversation: null
+    conversation: null,
   },
   {
     id: 2,
@@ -147,10 +255,23 @@ const mockAILogs = [
     cost: "0.002$",
     details: "Hỗ trợ giải bài tập toán",
     conversation: [
-      { role: "user", content: "Em không hiểu bài toán này: 25 + 17 = ?", time: "14:25:12" },
-      { role: "assistant", content: "Chào em! Cô sẽ giúp em giải bài toán này nhé. 25 + 17 ta tính như sau:\n\n25 + 17\n= 20 + 5 + 10 + 7\n= 20 + 10 + 5 + 7\n= 30 + 12\n= 42\n\nVậy 25 + 17 = 42. Em hiểu chưa?", time: "14:25:15" },
-      { role: "user", content: "Dạ em hiểu rồi! Cảm ơn cô ạ", time: "14:25:18" }
-    ]
+      {
+        role: "user",
+        content: "Em không hiểu bài toán này: 25 + 17 = ?",
+        time: "14:25:12",
+      },
+      {
+        role: "assistant",
+        content:
+          "Chào em! Cô sẽ giúp em giải bài toán này nhé. 25 + 17 ta tính như sau:\n\n25 + 17\n= 20 + 5 + 10 + 7\n= 20 + 10 + 5 + 7\n= 30 + 12\n= 42\n\nVậy 25 + 17 = 42. Em hiểu chưa?",
+        time: "14:25:15",
+      },
+      {
+        role: "user",
+        content: "Dạ em hiểu rồi! Cảm ơn cô ạ",
+        time: "14:25:18",
+      },
+    ],
   },
   {
     id: 3,
@@ -161,7 +282,7 @@ const mockAILogs = [
     status: "Lỗi",
     cost: "0.000$",
     details: "Tạo lộ trình học toán cho học sinh lớp 2",
-    conversation: null
+    conversation: null,
   },
   {
     id: 4,
@@ -173,11 +294,25 @@ const mockAILogs = [
     cost: "0.002$",
     details: "Hỗ trợ học từ vựng tiếng Anh",
     conversation: [
-      { role: "user", content: "How do you say 'con chó' in English?", time: "14:15:33" },
-      { role: "assistant", content: "Hello! 'Con chó' in English is 'dog' 🐕\n\nHere are some examples:\n- This is a dog. (Đây là một con chó)\n- I love dogs. (Tôi yêu những con chó)\n- The dog is cute. (Con chó này dễ thương)\n\nWould you like to learn more animal names?", time: "14:15:36" },
+      {
+        role: "user",
+        content: "How do you say 'con chó' in English?",
+        time: "14:15:33",
+      },
+      {
+        role: "assistant",
+        content:
+          "Hello! 'Con chó' in English is 'dog' 🐕\n\nHere are some examples:\n- This is a dog. (Đây là một con chó)\n- I love dogs. (Tôi yêu những con chó)\n- The dog is cute. (Con chó này dễ thương)\n\nWould you like to learn more animal names?",
+        time: "14:15:36",
+      },
       { role: "user", content: "Yes! What about 'con mèo'?", time: "14:15:40" },
-      { role: "assistant", content: "Great! 'Con mèo' in English is 'cat' 🐱\n\nExamples:\n- I have a cat. (Tôi có một con mèo)\n- The cat is sleeping. (Con mèo đang ngủ)\n- Cats are cute! (Mèo rất dễ thương!)", time: "14:15:42" }
-    ]
+      {
+        role: "assistant",
+        content:
+          "Great! 'Con mèo' in English is 'cat' 🐱\n\nExamples:\n- I have a cat. (Tôi có một con mèo)\n- The cat is sleeping. (Con mèo đang ngủ)\n- Cats are cute! (Mèo rất dễ thương!)",
+        time: "14:15:42",
+      },
+    ],
   },
   {
     id: 5,
@@ -188,8 +323,8 @@ const mockAILogs = [
     status: "Thành công",
     cost: "0.004$",
     details: "Chấm bài tự luận môn Văn lớp 4",
-    conversation: null
-  }
+    conversation: null,
+  },
 ];
 
 export default function AdminAIConfig() {
@@ -243,8 +378,8 @@ export default function AdminAIConfig() {
     if (newPrompt.name && newPrompt.module && newPrompt.content) {
       if (isEditingPrompt) {
         // Update existing prompt
-        const updatedPrompts = prompts.map(p =>
-          p.id === editingPromptId ? { ...newPrompt, id: editingPromptId } : p
+        const updatedPrompts = prompts.map((p) =>
+          p.id === editingPromptId ? { ...newPrompt, id: editingPromptId } : p,
         );
         setPrompts(updatedPrompts);
         setIsEditingPrompt(false);
@@ -268,7 +403,7 @@ export default function AdminAIConfig() {
       name: prompt.name,
       module: prompt.module,
       content: prompt.content,
-      variables: prompt.variables || []
+      variables: prompt.variables || [],
     });
     setIsEditingPrompt(true);
     setEditingPromptId(prompt.id);
@@ -279,11 +414,11 @@ export default function AdminAIConfig() {
     if (currentVariable.name && currentVariable.description) {
       const newVar = { ...currentVariable };
       if (newVar.type === "select" && typeof newVar.options === "string") {
-        newVar.options = newVar.options.split(",").map(opt => opt.trim());
+        newVar.options = newVar.options.split(",").map((opt) => opt.trim());
       }
       setNewPrompt({
         ...newPrompt,
-        variables: [...newPrompt.variables, newVar]
+        variables: [...newPrompt.variables, newVar],
       });
       setCurrentVariable({
         name: "",
@@ -303,7 +438,9 @@ export default function AdminAIConfig() {
   };
 
   const insertVariableIntoPrompt = (variableName) => {
-    const cursorPosition = document.getElementById("promptContent")?.selectionStart || newPrompt.content.length;
+    const cursorPosition =
+      document.getElementById("promptContent")?.selectionStart ||
+      newPrompt.content.length;
     const beforeCursor = newPrompt.content.slice(0, cursorPosition);
     const afterCursor = newPrompt.content.slice(cursorPosition);
     const newContent = beforeCursor + `{{${variableName}}}` + afterCursor;
@@ -367,11 +504,14 @@ export default function AdminAIConfig() {
               Cấu hình AI (Chỉ Quản trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh
+              Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên
+              mới có quyền điều chỉnh
             </p>
             <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
-                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài, tạo lộ trình, sinh bài tập) được điều khiển hoàn toàn bởi quản trị viên thông qua các prompt và cấu hình này.
+                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài,
+                tạo lộ trình, sinh bài tập) được điều khiển hoàn toàn bởi quản
+                trị viên thông qua các prompt và cấu hình này.
               </p>
             </div>
           </div>
@@ -539,9 +679,13 @@ export default function AdminAIConfig() {
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
                       <DialogHeader>
-                        <DialogTitle>{isEditingPrompt ? "Chỉnh sửa" : "Thêm"} Prompt (Quản trị viên)</DialogTitle>
+                        <DialogTitle>
+                          {isEditingPrompt ? "Chỉnh sửa" : "Thêm"} Prompt (Quản
+                          trị viên)
+                        </DialogTitle>
                         <DialogDescription>
-                          Tạo prompt mẫu với biến động cho các module AI - Chỉ quản trị viên có quyền thêm/sửa prompt
+                          Tạo prompt mẫu với biến động cho các module AI - Chỉ
+                          quản trị viên có quyền thêm/sửa prompt
                         </DialogDescription>
                       </DialogHeader>
                       <div className="space-y-6">
@@ -573,9 +717,13 @@ export default function AdminAIConfig() {
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="Bài tập">Bài tập</SelectItem>
-                                <SelectItem value="Lộ trình">Lộ trình</SelectItem>
+                                <SelectItem value="Lộ trình">
+                                  Lộ trình
+                                </SelectItem>
                                 <SelectItem value="Chatbot">Chatbot</SelectItem>
-                                <SelectItem value="Chấm bài">Chấm bài</SelectItem>
+                                <SelectItem value="Chấm bài">
+                                  Chấm bài
+                                </SelectItem>
                                 <SelectItem value="Báo cáo">Báo cáo</SelectItem>
                               </SelectContent>
                             </Select>
@@ -585,12 +733,16 @@ export default function AdminAIConfig() {
                         {/* Variables Section */}
                         <div className="border border-blue-200 rounded-lg p-4">
                           <div className="flex items-center justify-between mb-4">
-                            <Label className="text-lg font-semibold text-blue-700">Biến động (Variables)</Label>
+                            <Label className="text-lg font-semibold text-blue-700">
+                              Biến động (Variables)
+                            </Label>
                             <Button
                               type="button"
                               variant="outline"
                               size="sm"
-                              onClick={() => setShowVariableEditor(!showVariableEditor)}
+                              onClick={() =>
+                                setShowVariableEditor(!showVariableEditor)
+                              }
                               className="border-blue-300 text-blue-600"
                             >
                               <Plus className="h-4 w-4 mr-1" />
@@ -602,18 +754,27 @@ export default function AdminAIConfig() {
                           {newPrompt.variables.length > 0 && (
                             <div className="space-y-2 mb-4">
                               {newPrompt.variables.map((variable, index) => (
-                                <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded border border-blue-200">
+                                <div
+                                  key={index}
+                                  className="flex items-center justify-between p-3 bg-blue-50 rounded border border-blue-200"
+                                >
                                   <div className="flex-1">
                                     <div className="font-medium text-blue-900">{`{{${variable.name}}}`}</div>
-                                    <div className="text-sm text-blue-600">{variable.description}</div>
-                                    <div className="text-xs text-blue-500">Loại: {variable.type}</div>
+                                    <div className="text-sm text-blue-600">
+                                      {variable.description}
+                                    </div>
+                                    <div className="text-xs text-blue-500">
+                                      Loại: {variable.type}
+                                    </div>
                                   </div>
                                   <div className="flex gap-2">
                                     <Button
                                       type="button"
                                       variant="ghost"
                                       size="sm"
-                                      onClick={() => insertVariableIntoPrompt(variable.name)}
+                                      onClick={() =>
+                                        insertVariableIntoPrompt(variable.name)
+                                      }
                                       className="text-blue-600 hover:bg-blue-100"
                                     >
                                       Chèn
@@ -622,7 +783,9 @@ export default function AdminAIConfig() {
                                       type="button"
                                       variant="ghost"
                                       size="sm"
-                                      onClick={() => handleRemoveVariable(index)}
+                                      onClick={() =>
+                                        handleRemoveVariable(index)
+                                      }
                                       className="text-red-600 hover:bg-red-100"
                                     >
                                       <Trash2 className="h-4 w-4" />
@@ -641,7 +804,12 @@ export default function AdminAIConfig() {
                                   <Label>Tên biến</Label>
                                   <Input
                                     value={currentVariable.name}
-                                    onChange={(e) => setCurrentVariable({...currentVariable, name: e.target.value})}
+                                    onChange={(e) =>
+                                      setCurrentVariable({
+                                        ...currentVariable,
+                                        name: e.target.value,
+                                      })
+                                    }
                                     placeholder="VD: grade, topic, difficulty"
                                   />
                                 </div>
@@ -649,16 +817,27 @@ export default function AdminAIConfig() {
                                   <Label>Loại dữ liệu</Label>
                                   <Select
                                     value={currentVariable.type}
-                                    onValueChange={(value) => setCurrentVariable({...currentVariable, type: value})}
+                                    onValueChange={(value) =>
+                                      setCurrentVariable({
+                                        ...currentVariable,
+                                        type: value,
+                                      })
+                                    }
                                   >
                                     <SelectTrigger>
                                       <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      <SelectItem value="text">Văn bản</SelectItem>
-                                      <SelectItem value="textarea">Văn bản dài</SelectItem>
+                                      <SelectItem value="text">
+                                        Văn bản
+                                      </SelectItem>
+                                      <SelectItem value="textarea">
+                                        Văn bản dài
+                                      </SelectItem>
                                       <SelectItem value="number">Số</SelectItem>
-                                      <SelectItem value="select">Lựa chọn</SelectItem>
+                                      <SelectItem value="select">
+                                        Lựa chọn
+                                      </SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>
@@ -668,17 +847,33 @@ export default function AdminAIConfig() {
                                 <Label>Mô tả</Label>
                                 <Input
                                   value={currentVariable.description}
-                                  onChange={(e) => setCurrentVariable({...currentVariable, description: e.target.value})}
+                                  onChange={(e) =>
+                                    setCurrentVariable({
+                                      ...currentVariable,
+                                      description: e.target.value,
+                                    })
+                                  }
                                   placeholder="Mô tả mục đích của biến"
                                 />
                               </div>
 
                               {currentVariable.type === "select" && (
                                 <div>
-                                  <Label>Các lựa chọn (cách nhau bằng dấu phẩy)</Label>
+                                  <Label>
+                                    Các lựa chọn (cách nhau bằng dấu phẩy)
+                                  </Label>
                                   <Input
-                                    value={Array.isArray(currentVariable.options) ? currentVariable.options.join(", ") : currentVariable.options}
-                                    onChange={(e) => setCurrentVariable({...currentVariable, options: e.target.value})}
+                                    value={
+                                      Array.isArray(currentVariable.options)
+                                        ? currentVariable.options.join(", ")
+                                        : currentVariable.options
+                                    }
+                                    onChange={(e) =>
+                                      setCurrentVariable({
+                                        ...currentVariable,
+                                        options: e.target.value,
+                                      })
+                                    }
                                     placeholder="VD: dễ, trung bình, khó"
                                   />
                                 </div>
@@ -691,7 +886,12 @@ export default function AdminAIConfig() {
                                     <Input
                                       type="number"
                                       value={currentVariable.min}
-                                      onChange={(e) => setCurrentVariable({...currentVariable, min: parseInt(e.target.value)})}
+                                      onChange={(e) =>
+                                        setCurrentVariable({
+                                          ...currentVariable,
+                                          min: parseInt(e.target.value),
+                                        })
+                                      }
                                     />
                                   </div>
                                   <div>
@@ -699,7 +899,12 @@ export default function AdminAIConfig() {
                                     <Input
                                       type="number"
                                       value={currentVariable.max}
-                                      onChange={(e) => setCurrentVariable({...currentVariable, max: parseInt(e.target.value)})}
+                                      onChange={(e) =>
+                                        setCurrentVariable({
+                                          ...currentVariable,
+                                          max: parseInt(e.target.value),
+                                        })
+                                      }
                                     />
                                   </div>
                                 </div>
@@ -727,7 +932,9 @@ export default function AdminAIConfig() {
                           )}
 
                           <div className="text-sm text-blue-600 bg-blue-50 p-3 rounded">
-                            <strong>💡 Hướng dẫn:</strong> Sử dụng cú pháp {`{{tên_biến}}`} trong nội dung prompt. VD: {`{{grade}}`}, {`{{topic}}`}
+                            <strong>💡 Hướng dẫn:</strong> Sử dụng cú pháp{" "}
+                            {`{{tên_biến}}`} trong nội dung prompt. VD:{" "}
+                            {`{{grade}}`}, {`{{topic}}`}
                           </div>
                         </div>
 
@@ -756,12 +963,20 @@ export default function AdminAIConfig() {
                               setIsAddPromptDialogOpen(false);
                               setIsEditingPrompt(false);
                               setEditingPromptId(null);
-                              setNewPrompt({ name: "", module: "", content: "", variables: [] });
+                              setNewPrompt({
+                                name: "",
+                                module: "",
+                                content: "",
+                                variables: [],
+                              });
                             }}
                           >
                             Hủy
                           </Button>
-                          <Button onClick={handleAddPrompt} className="bg-green-600 hover:bg-green-700">
+                          <Button
+                            onClick={handleAddPrompt}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
                             {isEditingPrompt ? "Cập nhật" : "Lưu"} Prompt
                           </Button>
                         </div>
@@ -804,12 +1019,18 @@ export default function AdminAIConfig() {
                           <div className="flex flex-wrap gap-1 max-w-xs">
                             {prompt.variables && prompt.variables.length > 0 ? (
                               prompt.variables.map((variable, idx) => (
-                                <Badge key={idx} variant="outline" className="text-xs">
+                                <Badge
+                                  key={idx}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
                                   {`{{${variable.name}}}`}
                                 </Badge>
                               ))
                             ) : (
-                              <span className="text-gray-400 text-xs italic">Không có biến</span>
+                              <span className="text-gray-400 text-xs italic">
+                                Không có biến
+                              </span>
                             )}
                           </div>
                         </TableCell>
@@ -827,7 +1048,9 @@ export default function AdminAIConfig() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleEditPrompt(prompt)}>
+                              <DropdownMenuItem
+                                onClick={() => handleEditPrompt(prompt)}
+                              >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Chỉnh sửa
                               </DropdownMenuItem>
@@ -867,9 +1090,13 @@ export default function AdminAIConfig() {
                           <Settings className="h-5 w-5 text-purple-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI chấm bài (Quản trị viên)</h3>
+                          <h3 className="font-medium">
+                            AI chấm bài (Quản trị viên)
+                          </h3>
                           <p className="text-sm text-gray-600">
-                            Tự động chấm điểm - Cấu hình prompt với biến {`{{student_answer}}`}, {`{{correct_answer}}`}, {`{{criteria}}`}
+                            Tự động chấm điểm - Cấu hình prompt với biến{" "}
+                            {`{{student_answer}}`}, {`{{correct_answer}}`},{" "}
+                            {`{{criteria}}`}
                           </p>
                         </div>
                       </div>
@@ -887,9 +1114,12 @@ export default function AdminAIConfig() {
                           <FileText className="h-5 w-5 text-green-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI sinh lộ trình (Quản trị viên)</h3>
+                          <h3 className="font-medium">
+                            AI sinh lộ trình (Quản trị viên)
+                          </h3>
                           <p className="text-sm text-gray-600">
-                            Tạo lộ trình cá nhân - Sử dụng biến {`{{goal}}`}, {`{{duration}}`}, {`{{level}}`}, {`{{subject}}`}
+                            Tạo lộ trình cá nhân - Sử dụng biến {`{{goal}}`},{" "}
+                            {`{{duration}}`}, {`{{level}}`}, {`{{subject}}`}
                           </p>
                         </div>
                       </div>
@@ -907,9 +1137,12 @@ export default function AdminAIConfig() {
                           <Edit className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI tạo bài tập (Quản trị viên)</h3>
+                          <h3 className="font-medium">
+                            AI tạo bài tập (Quản trị viên)
+                          </h3>
                           <p className="text-sm text-gray-600">
-                            Sinh bài tập động - Điều chỉnh biến {`{{grade}}`}, {`{{topic}}`}, {`{{difficulty}}`}, {`{{questions}}`}
+                            Sinh bài tập động - Điều chỉnh biến {`{{grade}}`},{" "}
+                            {`{{topic}}`}, {`{{difficulty}}`}, {`{{questions}}`}
                           </p>
                         </div>
                       </div>
@@ -927,9 +1160,13 @@ export default function AdminAIConfig() {
                           <Activity className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
-                          <h3 className="font-medium">AI báo cáo tiến độ (Quản trị viên)</h3>
+                          <h3 className="font-medium">
+                            AI báo cáo tiến độ (Quản trị viên)
+                          </h3>
                           <p className="text-sm text-gray-600">
-                            Phân tích thông minh - Tùy chỉnh biến {`{{time_period}}`}, {`{{metrics}}`}, {`{{student_group}}`}
+                            Phân tích thông minh - Tùy chỉnh biến{" "}
+                            {`{{time_period}}`}, {`{{metrics}}`},{" "}
+                            {`{{student_group}}`}
                           </p>
                         </div>
                       </div>
@@ -948,13 +1185,25 @@ export default function AdminAIConfig() {
                       🔗 Kết nối với Prompt mẫu
                     </h4>
                     <p className="text-sm text-blue-800 mb-3">
-                      <strong>Cách sử dụng:</strong> Sau khi bật tính n��ng AI ở trên, bạn cần:
+                      <strong>Cách sử dụng:</strong> Sau khi bật tính n��ng AI ở
+                      trên, bạn cần:
                     </p>
                     <ol className="text-sm text-blue-800 space-y-1 ml-4 list-decimal">
-                      <li>Chuyển sang tab <strong>"Prompt mẫu"</strong> để tạo/chỉnh sửa prompt tương ứng</li>
-                      <li>Mỗi tính năng AI sẽ sử dụng prompt có Module phù hợp (VD: "Chấm bài", "Lộ trình", "Bài tập")</li>
-                      <li>Tùy chỉnh biến trong prompt để điều khiển hành vi AI</li>
-                      <li>Lưu prompt để tính năng AI hoạt động theo cấu hình của bạn</li>
+                      <li>
+                        Chuyển sang tab <strong>"Prompt mẫu"</strong> để
+                        tạo/chỉnh sửa prompt tương ứng
+                      </li>
+                      <li>
+                        Mỗi tính năng AI sẽ sử dụng prompt có Module phù hợp
+                        (VD: "Chấm bài", "Lộ trình", "Bài tập")
+                      </li>
+                      <li>
+                        Tùy chỉnh biến trong prompt để điều khiển hành vi AI
+                      </li>
+                      <li>
+                        Lưu prompt để tính năng AI hoạt động theo cấu hình của
+                        bạn
+                      </li>
                     </ol>
                   </div>
 
@@ -964,8 +1213,10 @@ export default function AdminAIConfig() {
                       ⚠️ Quan trọng: Cách thay đổi hành vi AI
                     </h4>
                     <p className="text-sm text-yellow-800">
-                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội dung và biến → Lưu lại.
-                      AI s��� hoạt động theo prompt mới ngay lập tức!
+                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab
+                      "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội
+                      dung và biến → Lưu lại. AI s��� hoạt động theo prompt mới
+                      ngay lập tức!
                     </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
@@ -1016,7 +1267,10 @@ export default function AdminAIConfig() {
                 <div className="flex items-center gap-4 mt-4">
                   <div className="flex items-center gap-2">
                     <Label>Lọc theo Module:</Label>
-                    <Select value={moduleFilter} onValueChange={setModuleFilter}>
+                    <Select
+                      value={moduleFilter}
+                      onValueChange={setModuleFilter}
+                    >
                       <SelectTrigger className="w-40">
                         <SelectValue />
                       </SelectTrigger>
@@ -1031,7 +1285,10 @@ export default function AdminAIConfig() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Label>Lọc theo Trạng thái:</Label>
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <Select
+                      value={statusFilter}
+                      onValueChange={setStatusFilter}
+                    >
                       <SelectTrigger className="w-40">
                         <SelectValue />
                       </SelectTrigger>
@@ -1059,69 +1316,97 @@ export default function AdminAIConfig() {
                   </TableHeader>
                   <TableBody>
                     {mockAILogs
-                      .filter(log => moduleFilter === "Tất cả" || log.module === moduleFilter)
-                      .filter(log => statusFilter === "Tất cả" || log.status === statusFilter)
+                      .filter(
+                        (log) =>
+                          moduleFilter === "Tất cả" ||
+                          log.module === moduleFilter,
+                      )
+                      .filter(
+                        (log) =>
+                          statusFilter === "Tất cả" ||
+                          log.status === statusFilter,
+                      )
                       .map((log) => (
-                      <TableRow key={log.id}>
-                        <TableCell className="font-mono text-sm">
-                          {log.timestamp}
-                        </TableCell>
-                        <TableCell>{log.user}</TableCell>
-                        <TableCell>
-                          <Badge className={getModuleColor(log.module)}>
-                            {log.module}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="max-w-xs">
-                            <p className="text-sm text-gray-700 truncate" title={log.details}>
-                              {log.details || "Không có mô tả"}
-                            </p>
-                            {log.conversation && (
-                              <Badge variant="outline" className="mt-1 text-xs">
-                                💬 {log.conversation.length} tin nhắn
-                              </Badge>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-mono text-blue-600">
-                          {log.tokensUsed}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Badge className={getStatusColor(log.status)}>
-                              {log.status}
+                        <TableRow key={log.id}>
+                          <TableCell className="font-mono text-sm">
+                            {log.timestamp}
+                          </TableCell>
+                          <TableCell>{log.user}</TableCell>
+                          <TableCell>
+                            <Badge className={getModuleColor(log.module)}>
+                              {log.module}
                             </Badge>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => showLogDetail(log)}
-                              className="text-blue-600 hover:text-blue-800"
-                            >
-                              {log.conversation ? "💬 Xem hội thoại" : "🔍 Xem chi tiết"}
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </TableCell>
+                          <TableCell>
+                            <div className="max-w-xs">
+                              <p
+                                className="text-sm text-gray-700 truncate"
+                                title={log.details}
+                              >
+                                {log.details || "Không có mô tả"}
+                              </p>
+                              {log.conversation && (
+                                <Badge
+                                  variant="outline"
+                                  className="mt-1 text-xs"
+                                >
+                                  💬 {log.conversation.length} tin nhắn
+                                </Badge>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-mono text-blue-600">
+                            {log.tokensUsed}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Badge className={getStatusColor(log.status)}>
+                                {log.status}
+                              </Badge>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => showLogDetail(log)}
+                                className="text-blue-600 hover:text-blue-800"
+                              >
+                                {log.conversation
+                                  ? "💬 Xem hội thoại"
+                                  : "🔍 Xem chi tiết"}
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
 
                 <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-600">1,245</div>
-                    <div className="text-sm text-blue-600">Tổng request hôm nay</div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      1,245
+                    </div>
+                    <div className="text-sm text-blue-600">
+                      Tổng request hôm nay
+                    </div>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <div className="text-2xl font-bold text-green-600">98.5%</div>
-                    <div className="text-sm text-green-600">Tỉ lệ thành công</div>
+                    <div className="text-2xl font-bold text-green-600">
+                      98.5%
+                    </div>
+                    <div className="text-sm text-green-600">
+                      Tỉ lệ thành công
+                    </div>
                   </div>
                   <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                    <div className="text-2xl font-bold text-orange-600">45,678</div>
+                    <div className="text-2xl font-bold text-orange-600">
+                      45,678
+                    </div>
                     <div className="text-sm text-orange-600">Token sử dụng</div>
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <div className="text-2xl font-bold text-purple-600">45,678</div>
+                    <div className="text-2xl font-bold text-purple-600">
+                      45,678
+                    </div>
                     <div className="text-sm text-purple-600">Token hôm nay</div>
                   </div>
                 </div>
@@ -1130,9 +1415,11 @@ export default function AdminAIConfig() {
           </TabsContent>
         </Tabs>
 
-
         {/* Log Detail Dialog */}
-        <Dialog open={isLogDetailDialogOpen} onOpenChange={setIsLogDetailDialogOpen}>
+        <Dialog
+          open={isLogDetailDialogOpen}
+          onOpenChange={setIsLogDetailDialogOpen}
+        >
           <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -1149,15 +1436,23 @@ export default function AdminAIConfig() {
                 <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">🕰️ Thời gian:</span>
-                      <span className="text-sm font-mono">{selectedLog.timestamp}</span>
+                      <span className="text-sm font-medium text-gray-600">
+                        🕰️ Thời gian:
+                      </span>
+                      <span className="text-sm font-mono">
+                        {selectedLog.timestamp}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">👤 Người dùng:</span>
+                      <span className="text-sm font-medium text-gray-600">
+                        👤 Người dùng:
+                      </span>
                       <span className="text-sm">{selectedLog.user}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">💻 Module:</span>
+                      <span className="text-sm font-medium text-gray-600">
+                        💻 Module:
+                      </span>
                       <Badge className={getModuleColor(selectedLog.module)}>
                         {selectedLog.module}
                       </Badge>
@@ -1165,15 +1460,25 @@ export default function AdminAIConfig() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">🎩 Token tiêu thụ:</span>
-                      <span className="text-sm font-mono text-blue-600">{selectedLog.tokensUsed}</span>
+                      <span className="text-sm font-medium text-gray-600">
+                        🎩 Token tiêu thụ:
+                      </span>
+                      <span className="text-sm font-mono text-blue-600">
+                        {selectedLog.tokensUsed}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">🎆 Hệ thống:</span>
-                      <span className="text-sm text-green-600">Free (Không tính phí)</span>
+                      <span className="text-sm font-medium text-gray-600">
+                        🎆 Hệ thống:
+                      </span>
+                      <span className="text-sm text-green-600">
+                        Free (Không tính phí)
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">✅ Trạng thái:</span>
+                      <span className="text-sm font-medium text-gray-600">
+                        ✅ Trạng thái:
+                      </span>
                       <Badge className={getStatusColor(selectedLog.status)}>
                         {selectedLog.status}
                       </Badge>
@@ -1190,35 +1495,45 @@ export default function AdminAIConfig() {
                 </div>
 
                 {/* Conversation */}
-                {selectedLog.conversation && selectedLog.conversation.length > 0 && (
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-gray-800 flex items-center gap-2">
-                      💬 Cuộc hội thoại ({selectedLog.conversation.length} tin nhắn):
-                    </h4>
-                    <div className="max-h-64 overflow-y-auto space-y-3 p-4 bg-gray-50 rounded-lg border">
-                      {selectedLog.conversation.map((msg, index) => (
-                        <div
-                          key={index}
-                          className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div className={`max-w-[80%] p-3 rounded-lg ${
-                            msg.role === 'user'
-                              ? 'bg-blue-500 text-white'
-                              : 'bg-white border border-gray-200'
-                          }`}>
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-medium">
-                                {msg.role === 'user' ? '👤 Học sinh' : '🤖 AI Assistant'}
-                              </span>
-                              <span className="text-xs opacity-70">{msg.time}</span>
+                {selectedLog.conversation &&
+                  selectedLog.conversation.length > 0 && (
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-gray-800 flex items-center gap-2">
+                        💬 Cuộc hội thoại ({selectedLog.conversation.length} tin
+                        nhắn):
+                      </h4>
+                      <div className="max-h-64 overflow-y-auto space-y-3 p-4 bg-gray-50 rounded-lg border">
+                        {selectedLog.conversation.map((msg, index) => (
+                          <div
+                            key={index}
+                            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                          >
+                            <div
+                              className={`max-w-[80%] p-3 rounded-lg ${
+                                msg.role === "user"
+                                  ? "bg-blue-500 text-white"
+                                  : "bg-white border border-gray-200"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="text-xs font-medium">
+                                  {msg.role === "user"
+                                    ? "👤 Học sinh"
+                                    : "🤖 AI Assistant"}
+                                </span>
+                                <span className="text-xs opacity-70">
+                                  {msg.time}
+                                </span>
+                              </div>
+                              <p className="text-sm whitespace-pre-wrap">
+                                {msg.content}
+                              </p>
                             </div>
-                            <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             )}
 
