@@ -147,7 +147,7 @@ const mockCourses = [
       {
         id: 2,
         title: "Bài tập cộng trừ",
-        description: "Thực hiện các phép tính cơ bản",
+        description: "Thực hi���n các phép tính cơ bản",
         type: "practice",
         difficulty: "Trung bình",
         points: 15,
@@ -1453,7 +1453,7 @@ export default function AdminCourses() {
                         </Label>
                         <div className="col-span-3">
                           <Badge variant="outline" className="text-blue-600">
-                            🤖 Quản trị AI
+                            �� Quản trị AI
                           </Badge>
                         </div>
                       </div>
@@ -1570,14 +1570,25 @@ export default function AdminCourses() {
                       <h3 className="text-lg font-semibold">
                         Danh sách bài tập
                       </h3>
-                      <Button
-                        size="sm"
-                        className="gap-2"
-                        onClick={() => setIsAddExerciseDialogOpen(true)}
-                      >
-                        <PlusCircle className="h-4 w-4" />
-                        Thêm bài tập
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+                          onClick={() => setIsAIDialogOpen(true)}
+                        >
+                          <Bot className="h-4 w-4" />
+                          AI Tạo bài tập
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="gap-2"
+                          onClick={() => setIsAddExerciseDialogOpen(true)}
+                        >
+                          <PlusCircle className="h-4 w-4" />
+                          Thêm bài tập
+                        </Button>
+                      </div>
                     </div>
 
                     {selectedCourse.exercises &&
