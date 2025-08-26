@@ -53,6 +53,10 @@ import {
   Award,
   CheckCircle,
   Circle,
+  Upload,
+  Link,
+  Image,
+  Video,
 } from "lucide-react";
 
 // Mock course data with lessons
@@ -80,7 +84,10 @@ const mockCourses = [
         type: "video",
         duration: "15 phút",
         order: 1,
-        completed: false
+        completed: false,
+        videoUrl: "https://www.youtube.com/watch?v=example123",
+        content: "Nội dung bài giảng về số học...",
+        materials: []
       },
       {
         id: 2,
@@ -89,7 +96,9 @@ const mockCourses = [
         type: "interactive",
         duration: "20 phút",
         order: 2,
-        completed: false
+        completed: false,
+        content: "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
+        materials: ["worksheet.pdf", "counting_objects.png"]
       },
       {
         id: 3,
@@ -98,7 +107,10 @@ const mockCourses = [
         type: "game",
         duration: "25 phút",
         order: 3,
-        completed: false
+        completed: false,
+        content: "Trò chơi ghép hình: Ghép các hình dạng vào vị trí đúng...",
+        gameUrl: "https://mathgames.com/shapes",
+        materials: []
       }
     ],
     exercises: [
@@ -108,7 +120,18 @@ const mockCourses = [
         description: "Đếm các vật thể trong hình",
         type: "quiz",
         difficulty: "Dễ",
-        points: 10
+        points: 10,
+        questions: [
+          {
+            id: 1,
+            question: "Hãy đếm số quả táo trong hình?",
+            image: "apples.jpg",
+            options: ["3", "4", "5", "6"],
+            correctAnswer: "5"
+          }
+        ],
+        instructions: "Quan sát hình ảnh và đếm số vật thể",
+        timeLimit: 300
       },
       {
         id: 2,
@@ -116,7 +139,10 @@ const mockCourses = [
         description: "Thực hiện các phép tính cơ bản",
         type: "practice",
         difficulty: "Trung bình",
-        points: 15
+        points: 15,
+        content: "Giải các bài toán sau:\n1. 3 + 2 = ?\n2. 5 - 1 = ?\n3. 4 + 3 = ?",
+        submissionType: "text",
+        instructions: "Viết kết quả vào ô trả lời"
       }
     ]
   },
@@ -139,7 +165,7 @@ const mockCourses = [
       {
         id: 1,
         title: "Bài thơ: Con gà trống",
-        description: "Học thu���c và hiểu nghĩa bài thơ Con gà trống",
+        description: "Học thuộc và hiểu nghĩa bài thơ Con gà trống",
         type: "reading",
         duration: "30 phút",
         order: 1,
@@ -400,6 +426,10 @@ export default function AdminCourses() {
       type: lesson.type,
       duration: lesson.duration,
       order: lesson.order,
+      videoUrl: lesson.videoUrl || "",
+      content: lesson.content || "",
+      gameUrl: lesson.gameUrl || "",
+      materials: lesson.materials || [],
     });
     setIsEditLessonDialogOpen(true);
   };
@@ -419,6 +449,10 @@ export default function AdminCourses() {
                       type: editLesson.type,
                       duration: editLesson.duration,
                       order: editLesson.order,
+                      videoUrl: editLesson.videoUrl,
+                      content: editLesson.content,
+                      gameUrl: editLesson.gameUrl,
+                      materials: editLesson.materials,
                     }
                   : lesson
               ),
@@ -440,6 +474,11 @@ export default function AdminCourses() {
       type: exercise.type,
       difficulty: exercise.difficulty,
       points: exercise.points,
+      questions: exercise.questions || [],
+      content: exercise.content || "",
+      instructions: exercise.instructions || "",
+      timeLimit: exercise.timeLimit || 0,
+      submissionType: exercise.submissionType || "text",
     });
     setIsEditExerciseDialogOpen(true);
   };
@@ -459,6 +498,11 @@ export default function AdminCourses() {
                       type: editExercise.type,
                       difficulty: editExercise.difficulty,
                       points: editExercise.points,
+                      questions: editExercise.questions,
+                      content: editExercise.content,
+                      instructions: editExercise.instructions,
+                      timeLimit: editExercise.timeLimit,
+                      submissionType: editExercise.submissionType,
                     }
                   : exercise
               ),
@@ -1406,7 +1450,7 @@ export default function AdminCourses() {
 
         {/* Edit Lesson Dialog */}
         <Dialog open={isEditLessonDialogOpen} onOpenChange={setIsEditLessonDialogOpen}>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Chỉnh sửa bài giảng</DialogTitle>
               <DialogDescription>
@@ -1444,7 +1488,7 @@ export default function AdminCourses() {
                   }
                   className="col-span-3"
                   rows={3}
-                  placeholder="Mô tả nội dung bài giảng..."
+                  placeholder="Mô tả n��i dung bài giảng..."
                 />
               </div>
 
@@ -1501,6 +1545,85 @@ export default function AdminCourses() {
                   min="1"
                 />
               </div>
+
+              {/* Content fields based on lesson type */}
+              {editLesson.type === 'video' && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="videoUrl" className="text-right">
+                    <Video className="inline h-4 w-4 mr-1" />
+                    Link Video *
+                  </Label>
+                  <Input
+                    id="videoUrl"
+                    value={editLesson.videoUrl || ""}
+                    onChange={(e) =>
+                      setEditLesson({ ...editLesson, videoUrl: e.target.value })
+                    }
+                    className="col-span-3"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                  />
+                </div>
+              )}
+
+              {editLesson.type === 'game' && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="gameUrl" className="text-right">
+                    <GamepadIcon className="inline h-4 w-4 mr-1" />
+                    Link Game *
+                  </Label>
+                  <Input
+                    id="gameUrl"
+                    value={editLesson.gameUrl || ""}
+                    onChange={(e) =>
+                      setEditLesson({ ...editLesson, gameUrl: e.target.value })
+                    }
+                    className="col-span-3"
+                    placeholder="https://mathgames.com/..."
+                  />
+                </div>
+              )}
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lessonContent" className="text-right">
+                  <FileText className="inline h-4 w-4 mr-1" />
+                  Nội dung bài giảng
+                </Label>
+                <Textarea
+                  id="lessonContent"
+                  value={editLesson.content || ""}
+                  onChange={(e) =>
+                    setEditLesson({ ...editLesson, content: e.target.value })
+                  }
+                  className="col-span-3"
+                  rows={4}
+                  placeholder="Nội dung chi tiết, hướng dẫn, ghi chú..."
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lessonMaterials" className="text-right">
+                  <Upload className="inline h-4 w-4 mr-1" />
+                  Tài liệu đính kèm
+                </Label>
+                <div className="col-span-3">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500 mb-2">Kéo thả file hoặc click để chọn</p>
+                    <Button variant="outline" size="sm">
+                      Chọn file
+                    </Button>
+                    {editLesson.materials && editLesson.materials.length > 0 && (
+                      <div className="mt-2 space-y-1">
+                        {editLesson.materials.map((file: string, index: number) => (
+                          <div key={index} className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                            {file}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsEditLessonDialogOpen(false)}>
@@ -1515,7 +1638,7 @@ export default function AdminCourses() {
 
         {/* Edit Exercise Dialog */}
         <Dialog open={isEditExerciseDialogOpen} onOpenChange={setIsEditExerciseDialogOpen}>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Chỉnh sửa bài tập</DialogTitle>
               <DialogDescription>
@@ -1553,7 +1676,7 @@ export default function AdminCourses() {
                   }
                   className="col-span-3"
                   rows={3}
-                  placeholder="Mô tả nội dung bài tập..."
+                  placeholder="Mô tả nội dung bài t��p..."
                 />
               </div>
 
@@ -1598,21 +1721,142 @@ export default function AdminCourses() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 items-center gap-2">
+                  <Label htmlFor="exercisePoints">Điểm số *</Label>
+                  <Input
+                    id="exercisePoints"
+                    type="number"
+                    value={editExercise.points || ""}
+                    onChange={(e) =>
+                      setEditExercise({ ...editExercise, points: parseInt(e.target.value) })
+                    }
+                    placeholder="10, 15, 20..."
+                    min="1"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 items-center gap-2">
+                  <Label htmlFor="timeLimit">Thời gian (giây)</Label>
+                  <Input
+                    id="timeLimit"
+                    type="number"
+                    value={editExercise.timeLimit || ""}
+                    onChange={(e) =>
+                      setEditExercise({ ...editExercise, timeLimit: parseInt(e.target.value) })
+                    }
+                    placeholder="300, 600..."
+                    min="0"
+                  />
+                </div>
+              </div>
+
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="exercisePoints" className="text-right">
-                  Điểm số *
+                <Label htmlFor="instructions" className="text-right">
+                  Hướng dẫn *
                 </Label>
-                <Input
-                  id="exercisePoints"
-                  type="number"
-                  value={editExercise.points || ""}
+                <Textarea
+                  id="instructions"
+                  value={editExercise.instructions || ""}
                   onChange={(e) =>
-                    setEditExercise({ ...editExercise, points: parseInt(e.target.value) })
+                    setEditExercise({ ...editExercise, instructions: e.target.value })
                   }
                   className="col-span-3"
-                  placeholder="10, 15, 20..."
-                  min="1"
+                  rows={2}
+                  placeholder="Hướng dẫn làm bài cho học sinh..."
                 />
+              </div>
+
+              {editExercise.type === 'quiz' && (
+                <div className="col-span-4">
+                  <Label className="text-sm font-medium">Câu hỏi Quiz</Label>
+                  <div className="mt-2 space-y-3 border rounded-lg p-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right">Câu hỏi:</Label>
+                      <Input
+                        placeholder="Nhập câu hỏi..."
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right">Tùy chọn A:</Label>
+                      <Input placeholder="Tùy chọn A" className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right">Tùy chọn B:</Label>
+                      <Input placeholder="Tùy chọn B" className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right">Tùy chọn C:</Label>
+                      <Input placeholder="Tùy chọn C" className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right">Đáp án đúng:</Label>
+                      <Select>
+                        <SelectTrigger className="col-span-3">
+                          <SelectValue placeholder="Chọn đáp án đúng" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="A">Tùy chọn A</SelectItem>
+                          <SelectItem value="B">Tùy chọn B</SelectItem>
+                          <SelectItem value="C">Tùy chọn C</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label className="text-right">Hình ảnh:</Label>
+                      <div className="col-span-3">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                          <Image className="h-6 w-6 text-gray-400 mx-auto mb-1" />
+                          <p className="text-xs text-gray-500">Tải lên hình ảnh (nếu có)</p>
+                          <Button variant="outline" size="sm" className="mt-1">
+                            Chọn ảnh
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {(editExercise.type === 'practice' || editExercise.type === 'experiment') && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="exerciseContent" className="text-right">
+                    Nội dung bài tập *
+                  </Label>
+                  <Textarea
+                    id="exerciseContent"
+                    value={editExercise.content || ""}
+                    onChange={(e) =>
+                      setEditExercise({ ...editExercise, content: e.target.value })
+                    }
+                    className="col-span-3"
+                    rows={5}
+                    placeholder="Nhập đề bài, câu hỏi, yêu cầu..."
+                  />
+                </div>
+              )}
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="submissionType" className="text-right">
+                  Kiểu nộp bài
+                </Label>
+                <Select
+                  value={editExercise.submissionType || "text"}
+                  onValueChange={(value) =>
+                    setEditExercise({ ...editExercise, submissionType: value })
+                  }
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Chọn kiểu nộp bài" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="text">Nhập văn bản</SelectItem>
+                    <SelectItem value="file">Tải lên file</SelectItem>
+                    <SelectItem value="image">Tải lên hình ảnh</SelectItem>
+                    <SelectItem value="audio">Ghi âm âm thanh</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             <DialogFooter>
