@@ -97,7 +97,7 @@ const mockCourses = [
         duration: "20 phút",
         order: 2,
         completed: false,
-        content: "Hướng dẫn: Sử dụng các đối tượng cụ thể để thực hiện phép cộng...",
+        content: "Hướng dẫn: Sử dụng các đ���i tượng cụ thể để thực hiện phép cộng...",
         materials: ["worksheet.pdf", "counting_objects.png"]
       },
       {
@@ -1385,7 +1385,16 @@ export default function AdminCourses() {
                 Đóng
               </Button>
               {activeTab !== 'info' && (
-                <Button className="gap-2">
+                <Button
+                  className="gap-2"
+                  onClick={() => {
+                    if (activeTab === 'lessons') {
+                      setIsAddLessonDialogOpen(true);
+                    } else if (activeTab === 'exercises') {
+                      setIsAddExerciseDialogOpen(true);
+                    }
+                  }}
+                >
                   <Edit className="h-4 w-4" />
                   Chỉnh sửa nội dung
                 </Button>
