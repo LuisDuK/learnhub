@@ -140,6 +140,10 @@ export default function AdminCourses() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<typeof mockCourses[0] | null>(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editCourse, setEditCourse] = useState<typeof newCourse>({});
   const [newCourse, setNewCourse] = useState({
     name: "",
     description: "",
@@ -198,6 +202,49 @@ export default function AdminCourses() {
 
   const handleDeleteCourse = (id: number) => {
     setCourses(courses.filter((course) => course.id !== id));
+  };
+
+  const handleViewCourse = (course: typeof mockCourses[0]) => {
+    setSelectedCourse(course);
+    setIsViewDialogOpen(true);
+  };
+
+  const handleEditCourse = (course: typeof mockCourses[0]) => {
+    setSelectedCourse(course);
+    setEditCourse({
+      name: course.name,
+      description: course.description,
+      subject: course.subject,
+      difficulty: course.difficulty,
+      duration: course.duration,
+      ageGroup: course.ageGroup,
+      objectives: "",
+      prerequisites: "",
+      image: course.image,
+    });
+    setIsEditDialogOpen(true);
+  };
+
+  const handleUpdateCourse = () => {
+    if (selectedCourse && editCourse.name) {
+      const updatedCourses = courses.map((course) =>
+        course.id === selectedCourse.id
+          ? {
+              ...course,
+              name: editCourse.name,
+              description: editCourse.description,
+              subject: editCourse.subject,
+              difficulty: editCourse.difficulty,
+              duration: editCourse.duration,
+              ageGroup: editCourse.ageGroup,
+              image: editCourse.image || course.image,
+            }
+          : course
+      );
+      setCourses(updatedCourses);
+      setIsEditDialogOpen(false);
+      setSelectedCourse(null);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -478,11 +525,11 @@ export default function AdminCourses() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleViewCourse(course)}>
                         <BookOpen className="mr-2 h-4 w-4" />
                         Xem chi tiết
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditCourse(course)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Chỉnh sửa
                       </DropdownMenuItem>
@@ -629,6 +676,234 @@ export default function AdminCourses() {
             <div className="text-sm text-purple-600">Hoàn thành TB</div>
           </div>
         </div>
+
+        {/* View Course Details Dialog */}
+        <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Chi tiết khóa học</DialogTitle>
+              <DialogDescription>
+                Thông tin chi tiết về khóa học đã chọn
+              </DialogDescription>
+            </DialogHeader>
+            {selectedCourse && (
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right font-semibold">Tên khóa học:</Label>
+                  <div className="col-span-3">{selectedCourse.name}</div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right font-semibold">Môn học:</Label>
+                  <div className="col-span-3">
+                    <Badge variant="outline">{selectedCourse.subject}</Badge>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right font-semibold">Mô tả:</Label>
+                  <div className="col-span-3 text-sm">{selectedCourse.description}</div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 items-center gap-2">
+                    <Label className="font-semibold">Độ khó:</Label>
+                    <Badge variant={selectedCourse.difficulty === 'Cơ bản' ? 'default' : selectedCourse.difficulty === 'Trung bình' ? 'secondary' : 'destructive'}>
+                      {selectedCourse.difficulty}
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 items-center gap-2">
+                    <Label className="font-semibold">Trạng thái:</Label>
+                    <Badge className={getStatusColor(selectedCourse.status)}>
+                      {selectedCourse.status}
+                    </Badge>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 items-center gap-2">
+                    <Label className="font-semibold">Độ tuổi:</Label>
+                    <div className="text-sm text-purple-600">{selectedCourse.ageGroup}</div>
+                  </div>
+                  <div className="grid grid-cols-2 items-center gap-2">
+                    <Label className="font-semibold">Thời lượng:</Label>
+                    <div className="text-sm text-orange-600">{selectedCourse.duration}</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 items-center gap-2">
+                    <Label className="font-semibold">Học sinh:</Label>
+                    <div className="text-sm">{selectedCourse.studentsCount}</div>
+                  </div>
+                  <div className="grid grid-cols-2 items-center gap-2">
+                    <Label className="font-semibold">Hoàn thành:</Label>
+                    <div className={`text-sm font-medium ${getCompletionColor(selectedCourse.completionRate)}`}>
+                      {selectedCourse.completionRate}%
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right font-semibold">Ngày tạo:</Label>
+                  <div className="col-span-3 text-sm">{selectedCourse.createdAt}</div>
+                </div>
+                {selectedCourse.aiGenerated && (
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right font-semibold">AI Generated:</Label>
+                    <div className="col-span-3">
+                      <Badge variant="outline" className="text-blue-600">
+                        🤖 Quản trị AI
+                      </Badge>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
+                Đóng
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Edit Course Dialog */}
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Chỉnh sửa khóa học</DialogTitle>
+              <DialogDescription>
+                Cập nhật thông tin khóa học
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-6 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="editCourseName" className="text-right">
+                  Tên khóa học *
+                </Label>
+                <Input
+                  id="editCourseName"
+                  value={editCourse.name || ""}
+                  onChange={(e) =>
+                    setEditCourse({ ...editCourse, name: e.target.value })
+                  }
+                  className="col-span-3"
+                  placeholder="VD: Toán học cơ bản"
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="editCourseDesc" className="text-right">
+                  Mô tả *
+                </Label>
+                <Textarea
+                  id="editCourseDesc"
+                  value={editCourse.description || ""}
+                  onChange={(e) =>
+                    setEditCourse({
+                      ...editCourse,
+                      description: e.target.value,
+                    })
+                  }
+                  className="col-span-3"
+                  rows={3}
+                  placeholder="Mô tả chi tiết về khóa học..."
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                  <Label htmlFor="editSubject" className="text-right col-span-2">
+                    Môn học *
+                  </Label>
+                  <Select
+                    value={editCourse.subject || ""}
+                    onValueChange={(value) =>
+                      setEditCourse({ ...editCourse, subject: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-2">
+                      <SelectValue placeholder="Chọn môn" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {subjects.slice(1).map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                          {subject}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                  <Label htmlFor="editDifficulty" className="text-right col-span-2">
+                    Độ khó *
+                  </Label>
+                  <Select
+                    value={editCourse.difficulty || ""}
+                    onValueChange={(value) =>
+                      setEditCourse({ ...editCourse, difficulty: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-2">
+                      <SelectValue placeholder="Chọn độ khó" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {difficulties.map((difficulty) => (
+                        <SelectItem key={difficulty} value={difficulty}>
+                          {difficulty}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                  <Label htmlFor="editDuration" className="text-right col-span-2">
+                    Thời lượng *
+                  </Label>
+                  <Input
+                    id="editDuration"
+                    value={editCourse.duration || ""}
+                    onChange={(e) =>
+                      setEditCourse({ ...editCourse, duration: e.target.value })
+                    }
+                    className="col-span-2"
+                    placeholder="VD: 8 tuần"
+                  />
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4 col-span-1">
+                  <Label htmlFor="editAgeGroup" className="text-right col-span-2">
+                    Độ tuổi *
+                  </Label>
+                  <Select
+                    value={editCourse.ageGroup || ""}
+                    onValueChange={(value) =>
+                      setEditCourse({ ...editCourse, ageGroup: value })
+                    }
+                  >
+                    <SelectTrigger className="col-span-2">
+                      <SelectValue placeholder="Chọn độ tuổi" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ageGroups.map((age) => (
+                        <SelectItem key={age} value={age}>
+                          {age}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+                Hủy
+              </Button>
+              <Button onClick={handleUpdateCourse}>
+                Cập nhật
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminLayout>
   );
