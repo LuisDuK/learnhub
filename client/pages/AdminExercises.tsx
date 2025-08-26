@@ -162,6 +162,42 @@ const mockExercises = [
     description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
     courseName: null, // Chưa gán vào khóa học nào
   },
+  {
+    id: 6,
+    title: "Đọc hiểu đoạn văn về động vật",
+    type: "Trắc nghiệm",
+    subject: "Văn",
+    creator: "AI Assistant",
+    createdAt: "2024-01-28",
+    totalQuestions: 8,
+    difficulty: "Dễ",
+    submissions: 23,
+    avgScore: 88,
+    department: "Khối lớp 1-2",
+    isFromBank: false,
+    isAIGenerated: true,
+    tags: ["đọc hiểu", "động vật"],
+    description: "Bài tập đọc hiểu được tạo bởi AI về chủ đề động vật",
+    courseName: "Tiếng Việt lớp 2",
+  },
+  {
+    id: 7,
+    title: "Phép nhân và chia cơ bản",
+    type: "Hỗn hợp",
+    subject: "Toán",
+    creator: "AI Assistant",
+    createdAt: "2024-01-29",
+    totalQuestions: 12,
+    difficulty: "Trung bình",
+    submissions: 31,
+    avgScore: 76,
+    department: "Khối lớp 3-5",
+    isFromBank: false,
+    isAIGenerated: true,
+    tags: ["nhân", "chia", "toán cơ bản"],
+    description: "Bài tập về phép nhân và chia được AI tạo tự động",
+    courseName: "Toán học lớp 3",
+  },
 ];
 
 // Mock exercise bank - exercises available for assignment
@@ -1052,7 +1088,7 @@ export default function AdminExercises() {
                   {selectedExercises.size > 0 && (
                     <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
                       <span className="text-blue-800 font-medium">
-                        Đã chọn {selectedExercises.size} bài tập
+                        Đã chọn {selectedExercises.size} bài t���p
                       </span>
                       <Button
                         variant="outline"
