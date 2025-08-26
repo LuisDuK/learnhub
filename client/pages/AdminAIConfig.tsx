@@ -87,7 +87,7 @@ const mockPrompts = [
       { name: "level", type: "select", options: ["mới bắt đầu", "cơ bản", "trung bình", "nâng cao"], description: "Trình độ hiện tại" },
       { name: "subject", type: "select", options: ["Toán", "Văn", "Anh"], description: "Môn học" },
       { name: "sessions", type: "number", min: 3, max: 20, description: "Số buổi học" },
-      { name: "session_duration", type: "number", min: 15, max: 60, description: "Thời lượng mỗi buổi (phút)" }
+      { name: "session_duration", type: "number", min: 15, max: 60, description: "Th��i lượng mỗi buổi (phút)" }
     ],
     createdAt: "2024-01-20",
   },
@@ -232,6 +232,8 @@ export default function AdminAIConfig() {
   const [moduleFilter, setModuleFilter] = useState("Tất cả");
   const [statusFilter, setStatusFilter] = useState("Tất cả");
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
+  const [selectedLog, setSelectedLog] = useState(null);
+  const [isLogDetailDialogOpen, setIsLogDetailDialogOpen] = useState(false);
 
   const handleSaveApiConfig = () => {
     // In a real app, this would save to backend
@@ -322,6 +324,11 @@ export default function AdminAIConfig() {
     alert("Đang xuất báo cáo CSV...");
   };
 
+  const showLogDetail = (log) => {
+    setSelectedLog(log);
+    setIsLogDetailDialogOpen(true);
+  };
+
   const getModuleColor = (module: string) => {
     switch (module) {
       case "Bài tập":
@@ -358,7 +365,7 @@ export default function AdminAIConfig() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Brain className="h-8 w-8 text-blue-600" />
-              Cấu hình AI (Chỉ Quản trị viên)
+              Cấu hình AI (Chỉ Qu���n trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
               Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh
@@ -1105,16 +1112,7 @@ export default function AdminAIConfig() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => {
-                                if (log.conversation && log.conversation.length > 0) {
-                                  const conversationText = log.conversation
-                                    .map(msg => `[${msg.time}] ${msg.role === 'user' ? '👤 Học sinh' : '🤖 AI'}: ${msg.content}`)
-                                    .join('\n\n');
-                                  alert(`💬 Chi tiết cuộc hội thoại AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n📝 Mô tả: ${log.details}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n✅ Trạng thái: ${log.status}\n\n📋 Cuộc hội thoại:\n${conversationText}`);
-                                } else {
-                                  alert(`📊 Chi tiết hoạt động AI:\n\n🕰️ Thời gian: ${log.timestamp}\n👤 Người dùng: ${log.user}\n💻 Module: ${log.module}\n📝 Mô tả: ${log.details || 'Không có mô tả'}\n🎩 Token tiêu thụ: ${log.tokensUsed}\n🎆 Hệ thống: Free (Không tính phí)\n✅ Trạng thái: ${log.status}`);
-                                }
-                              }}
+                              onClick={() => showLogDetail(log)}
                               className="text-blue-600 hover:text-blue-800"
                             >
                               {log.conversation ? "💬 Xem hội thoại" : "🔍 Xem chi tiết"}
@@ -1147,6 +1145,108 @@ export default function AdminAIConfig() {
                 </div>
               </div>
             </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Log Detail Dialog */}
+        <Dialog open={isLogDetailDialogOpen} onOpenChange={setIsLogDetailDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                📊 Chi tiết hoạt động AI
+              </DialogTitle>
+              <DialogDescription>
+                Thông tin chi tiết về hoạt động AI và cuộc hội thoại
+              </DialogDescription>
+            </DialogHeader>
+
+            {selectedLog && (
+              <div className="space-y-4">
+                {/* Basic Info */}
+                <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-600">🕰️ Thời gian:</span>
+                      <span className="text-sm font-mono">{selectedLog.timestamp}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-600">👤 Người dùng:</span>
+                      <span className="text-sm">{selectedLog.user}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-600">💻 Module:</span>
+                      <Badge className={getModuleColor(selectedLog.module)}>
+                        {selectedLog.module}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-600">🎩 Token tiêu thụ:</span>
+                      <span className="text-sm font-mono text-blue-600">{selectedLog.tokensUsed}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-600">🎆 Hệ thống:</span>
+                      <span className="text-sm text-green-600">Free (Không tính phí)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-600">✅ Trạng thái:</span>
+                      <Badge className={getStatusColor(selectedLog.status)}>
+                        {selectedLog.status}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h4 className="font-medium text-blue-800 mb-2">📝 Mô tả:</h4>
+                  <p className="text-sm text-blue-700">
+                    {selectedLog.details || "Không có mô tả"}
+                  </p>
+                </div>
+
+                {/* Conversation */}
+                {selectedLog.conversation && selectedLog.conversation.length > 0 && (
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-gray-800 flex items-center gap-2">
+                      💬 Cuộc hội thoại ({selectedLog.conversation.length} tin nhắn):
+                    </h4>
+                    <div className="max-h-64 overflow-y-auto space-y-3 p-4 bg-gray-50 rounded-lg border">
+                      {selectedLog.conversation.map((msg, index) => (
+                        <div
+                          key={index}
+                          className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div className={`max-w-[80%] p-3 rounded-lg ${
+                            msg.role === 'user'
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-white border border-gray-200'
+                          }`}>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-xs font-medium">
+                                {msg.role === 'user' ? '👤 Học sinh' : '🤖 AI Assistant'}
+                              </span>
+                              <span className="text-xs opacity-70">{msg.time}</span>
+                            </div>
+                            <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsLogDetailDialogOpen(false)}
+              >
+                Đóng
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
