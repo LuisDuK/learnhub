@@ -145,6 +145,22 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex flex-col items-center justify-center p-4">
+      {/* Logo Section */}
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-800 shadow-xl animate-pulse">
+            <Sparkles className="h-10 w-10 text-white" />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
+              🌟 KidsLearn
+            </h1>
+            <p className="text-xl text-gray-600 font-medium">
+              Hệ thống học tập cá nhân hóa
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Login/Register Card */}
       <Card className="w-full max-w-md border-blue-200 shadow-2xl bg-white rounded-3xl overflow-hidden">
