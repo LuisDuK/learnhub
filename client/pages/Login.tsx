@@ -526,15 +526,6 @@ export default function Login() {
                   </Button>
                 </form>
 
-                {/* Security Notice */}
-                <Alert className="border-blue-200 bg-blue-50">
-                  <Shield className="h-4 w-4 text-blue-600" />
-                  <AlertDescription className="text-blue-800 text-sm">
-                    🔐 <strong>Bảo mật:</strong> Sau khi đăng ký, hệ thống sẽ
-                    gửi email xác thực. Bạn cần xác nhận email để kích hoạt tài
-                    khoản và hỗ trợ xác thực 2 bước.
-                  </AlertDescription>
-                </Alert>
 
                 {/* Teacher Registration Section */}
                 <div className="border-t border-gray-200 pt-6 mt-6">
@@ -785,7 +776,7 @@ export default function Login() {
 
                                 <div className="space-y-2">
                                   <Label htmlFor="teacherQualification" className="text-green-700 font-medium">
-                                    Trình đ��� học vấn *
+                                    Trình độ học vấn *
                                   </Label>
                                   <Select
                                     value={teacherForm.qualification}
