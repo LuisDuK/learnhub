@@ -19,6 +19,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Sparkles,
@@ -33,6 +41,10 @@ import {
   CheckCircle,
   Shield,
   Loader2,
+  GraduationCap,
+  Building2,
+  Phone,
+  FileText,
 } from "lucide-react";
 
 export default function Login() {
