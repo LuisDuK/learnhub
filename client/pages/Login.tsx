@@ -116,6 +116,33 @@ export default function Login() {
     }, 1500);
   };
 
+  const handleTeacherRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Simulate teacher registration process
+    setTimeout(() => {
+      setIsLoading(false);
+      setTeacherRegisterSuccess(true);
+    }, 2000);
+  };
+
+  const resetTeacherForm = () => {
+    setTeacherForm({
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      school: "",
+      subject: "",
+      experience: "",
+      qualification: "",
+      bio: "",
+    });
+    setTeacherRegisterSuccess(false);
+    setShowTeacherRegisterDialog(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex flex-col items-center justify-center p-4">
       {/* Logo Section */}
@@ -477,7 +504,7 @@ export default function Login() {
                       <Input
                         id="confirmPassword"
                         type={showConfirmPassword ? "text" : "password"}
-                        placeholder="••���•••••"
+                        placeholder="••••••••"
                         required
                         className="border-orange-200 focus:border-orange-500 rounded-xl h-12 text-base pr-12"
                       />
