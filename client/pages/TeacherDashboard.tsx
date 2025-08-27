@@ -104,11 +104,17 @@ const recentActivities = [
 export default function TeacherDashboard() {
   const navigate = useNavigate();
 
-  const totalStudents = teacherCourses.reduce((sum, course) => sum + course.studentsCount, 0);
-  const averageCompletion = Math.round(
-    teacherCourses.reduce((sum, course) => sum + course.completionRate, 0) / teacherCourses.length
+  const totalStudents = teacherCourses.reduce(
+    (sum, course) => sum + course.studentsCount,
+    0,
   );
-  const activeCourses = teacherCourses.filter(course => course.status === 'active').length;
+  const averageCompletion = Math.round(
+    teacherCourses.reduce((sum, course) => sum + course.completionRate, 0) /
+      teacherCourses.length,
+  );
+  const activeCourses = teacherCourses.filter(
+    (course) => course.status === "active",
+  ).length;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -162,11 +168,12 @@ export default function TeacherDashboard() {
               Chào mừng, Giáo viên Nguyễn Thị Lan!
             </h1>
             <p className="text-gray-600 mt-1">
-              Hôm nay là {new Date().toLocaleDateString('vi-VN', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+              Hôm nay là{" "}
+              {new Date().toLocaleDateString("vi-VN", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
               })}
             </p>
           </div>
@@ -192,7 +199,9 @@ export default function TeacherDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tổng khóa học</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Tổng khóa học
+              </CardTitle>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -205,7 +214,9 @@ export default function TeacherDashboard() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tổng học sinh</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Tổng học sinh
+              </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -218,7 +229,9 @@ export default function TeacherDashboard() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tỷ lệ hoàn thành</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Tỷ lệ hoàn thành
+              </CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -231,7 +244,9 @@ export default function TeacherDashboard() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Hoạt động hôm nay</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Hoạt động hôm nay
+              </CardTitle>
               <Target className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -270,12 +285,16 @@ export default function TeacherDashboard() {
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-gray-900">{course.name}</h3>
+                        <h3 className="font-semibold text-gray-900">
+                          {course.name}
+                        </h3>
                         <Badge className={getStatusColor(course.status)}>
                           {getStatusText(course.status)}
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">{course.description}</p>
+                      <p className="text-sm text-gray-600 mb-2">
+                        {course.description}
+                      </p>
                       <div className="flex items-center gap-4 text-sm text-gray-500">
                         <span className="flex items-center gap-1">
                           <Users className="h-3 w-3" />
@@ -283,14 +302,18 @@ export default function TeacherDashboard() {
                         </span>
                         <span className="flex items-center gap-1">
                           <BookOpen className="h-3 w-3" />
-                          {course.completedLessons}/{course.totalLessons} bài học
+                          {course.completedLessons}/{course.totalLessons} bài
+                          học
                         </span>
                         <span className="flex items-center gap-1">
                           <TrendingUp className="h-3 w-3" />
                           {course.completionRate}% hoàn thành
                         </span>
                       </div>
-                      <Progress value={course.completionRate} className="mt-2 h-2" />
+                      <Progress
+                        value={course.completionRate}
+                        className="mt-2 h-2"
+                      />
                     </div>
                     <div className="flex items-center gap-2 ml-4">
                       <Button size="sm" variant="outline">
@@ -299,7 +322,11 @@ export default function TeacherDashboard() {
                       <Button size="sm" variant="outline">
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-red-600 hover:text-red-700"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -325,11 +352,15 @@ export default function TeacherDashboard() {
                       {getActivityIcon(activity.type)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900">{activity.message}</p>
+                      <p className="text-sm text-gray-900">
+                        {activity.message}
+                      </p>
                       <div className="flex items-center gap-2 mt-1">
                         <p className="text-xs text-gray-500">{activity.time}</p>
                         <span className="text-xs text-gray-300">•</span>
-                        <p className="text-xs text-blue-600">{activity.course}</p>
+                        <p className="text-xs text-blue-600">
+                          {activity.course}
+                        </p>
                       </div>
                     </div>
                   </div>

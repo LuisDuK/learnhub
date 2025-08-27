@@ -102,7 +102,10 @@ export function TeacherSidebar() {
               {isActive ? (
                 <>
                   <item.icon
-                    className={cn("h-5 w-5 transition-colors", "text-green-600")}
+                    className={cn(
+                      "h-5 w-5 transition-colors",
+                      "text-green-600",
+                    )}
                   />
                   <span className="flex-1">{item.title}</span>
                   <ChevronRight className="h-4 w-4 text-green-600" />

@@ -59,7 +59,7 @@ const mockSecurityData = {
   sessionTimeout: 30, // minutes
   allowedIPs: ["192.168.1.100", "10.0.0.50"],
   blockedIPs: [],
-  
+
   // Security questions
   securityQuestions: [
     {
@@ -93,7 +93,7 @@ const mockSecurityData = {
     {
       id: 2,
       device: "Safari trên iPhone",
-      location: "TP.HCM, Việt Nam", 
+      location: "TP.HCM, Việt Nam",
       time: "2024-03-12 08:15",
       ip: "192.168.1.101",
       status: "success",
@@ -185,7 +185,9 @@ export default function TeacherSecurity() {
   const handleRevokeDevice = (deviceId: number) => {
     setSecurityData({
       ...securityData,
-      connectedDevices: securityData.connectedDevices.filter(device => device.id !== deviceId)
+      connectedDevices: securityData.connectedDevices.filter(
+        (device) => device.id !== deviceId,
+      ),
     });
   };
 
@@ -240,7 +242,7 @@ export default function TeacherSecurity() {
               Quản lý cài đặt bảo mật và quyền riêng tư của bạn
             </p>
           </div>
-          
+
           <Button onClick={handleSaveSettings} disabled={isSaving}>
             {isSaving ? (
               <>
@@ -268,13 +270,25 @@ export default function TeacherSecurity() {
 
         {/* Security Status Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className={securityData.twoFactorEnabled ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"}>
+          <Card
+            className={
+              securityData.twoFactorEnabled
+                ? "border-green-200 bg-green-50"
+                : "border-yellow-200 bg-yellow-50"
+            }
+          >
             <CardContent className="p-4 text-center">
-              <Shield className={`h-8 w-8 mx-auto mb-2 ${securityData.twoFactorEnabled ? "text-green-600" : "text-yellow-600"}`} />
-              <h3 className={`font-semibold ${securityData.twoFactorEnabled ? "text-green-900" : "text-yellow-900"}`}>
+              <Shield
+                className={`h-8 w-8 mx-auto mb-2 ${securityData.twoFactorEnabled ? "text-green-600" : "text-yellow-600"}`}
+              />
+              <h3
+                className={`font-semibold ${securityData.twoFactorEnabled ? "text-green-900" : "text-yellow-900"}`}
+              >
                 Xác thực 2 bước
               </h3>
-              <p className={`text-sm ${securityData.twoFactorEnabled ? "text-green-700" : "text-yellow-700"}`}>
+              <p
+                className={`text-sm ${securityData.twoFactorEnabled ? "text-green-700" : "text-yellow-700"}`}
+              >
                 {securityData.twoFactorEnabled ? "Đã bật" : "Chưa bật"}
               </p>
             </CardContent>
@@ -285,7 +299,13 @@ export default function TeacherSecurity() {
               <Key className="h-8 w-8 text-blue-600 mx-auto mb-2" />
               <h3 className="font-semibold text-blue-900">Mật khẩu</h3>
               <p className="text-sm text-blue-700">
-                Đổi {Math.floor((new Date().getTime() - new Date(securityData.lastPasswordChange).getTime()) / (1000 * 60 * 60 * 24))} ngày trước
+                Đổi{" "}
+                {Math.floor(
+                  (new Date().getTime() -
+                    new Date(securityData.lastPasswordChange).getTime()) /
+                    (1000 * 60 * 60 * 24),
+                )}{" "}
+                ngày trước
               </p>
             </CardContent>
           </Card>
@@ -311,7 +331,11 @@ export default function TeacherSecurity() {
           </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="password">Mật khẩu</TabsTrigger>
             <TabsTrigger value="2fa">Xác thực 2 bước</TabsTrigger>
@@ -340,7 +364,12 @@ export default function TeacherSecurity() {
                       id="currentPassword"
                       type={showCurrentPassword ? "text" : "password"}
                       value={passwordForm.currentPassword}
-                      onChange={(e) => setPasswordForm({...passwordForm, currentPassword: e.target.value})}
+                      onChange={(e) =>
+                        setPasswordForm({
+                          ...passwordForm,
+                          currentPassword: e.target.value,
+                        })
+                      }
                       className="pr-10"
                     />
                     <Button
@@ -348,9 +377,15 @@ export default function TeacherSecurity() {
                       variant="ghost"
                       size="sm"
                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                      onClick={() =>
+                        setShowCurrentPassword(!showCurrentPassword)
+                      }
                     >
-                      {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showCurrentPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -362,7 +397,12 @@ export default function TeacherSecurity() {
                       id="newPassword"
                       type={showNewPassword ? "text" : "password"}
                       value={passwordForm.newPassword}
-                      onChange={(e) => setPasswordForm({...passwordForm, newPassword: e.target.value})}
+                      onChange={(e) =>
+                        setPasswordForm({
+                          ...passwordForm,
+                          newPassword: e.target.value,
+                        })
+                      }
                       className="pr-10"
                     />
                     <Button
@@ -372,19 +412,30 @@ export default function TeacherSecurity() {
                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
                       onClick={() => setShowNewPassword(!showNewPassword)}
                     >
-                      {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showNewPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới *</Label>
+                  <Label htmlFor="confirmPassword">
+                    Xác nhận mật khẩu mới *
+                  </Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       value={passwordForm.confirmPassword}
-                      onChange={(e) => setPasswordForm({...passwordForm, confirmPassword: e.target.value})}
+                      onChange={(e) =>
+                        setPasswordForm({
+                          ...passwordForm,
+                          confirmPassword: e.target.value,
+                        })
+                      }
                       className="pr-10"
                     />
                     <Button
@@ -392,9 +443,15 @@ export default function TeacherSecurity() {
                       variant="ghost"
                       size="sm"
                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                     >
-                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -412,9 +469,14 @@ export default function TeacherSecurity() {
                   </AlertDescription>
                 </Alert>
 
-                <Button 
-                  onClick={handlePasswordChange} 
-                  disabled={isChangingPassword || !passwordForm.currentPassword || !passwordForm.newPassword || passwordForm.newPassword !== passwordForm.confirmPassword}
+                <Button
+                  onClick={handlePasswordChange}
+                  disabled={
+                    isChangingPassword ||
+                    !passwordForm.currentPassword ||
+                    !passwordForm.newPassword ||
+                    passwordForm.newPassword !== passwordForm.confirmPassword
+                  }
                   className="w-full"
                 >
                   {isChangingPassword ? (
@@ -441,7 +503,10 @@ export default function TeacherSecurity() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {securityData.securityQuestions.map((question) => (
-                  <div key={question.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={question.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div>
                       <p className="font-medium">{question.question}</p>
                       <p className="text-sm text-gray-600">
@@ -479,7 +544,9 @@ export default function TeacherSecurity() {
                   </div>
                   <Switch
                     checked={securityData.twoFactorEnabled}
-                    onCheckedChange={(checked) => handleSettingChange("twoFactorEnabled", checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("twoFactorEnabled", checked)
+                    }
                   />
                 </div>
 
@@ -487,7 +554,8 @@ export default function TeacherSecurity() {
                   <Alert className="border-green-200 bg-green-50">
                     <CheckCircle className="h-4 w-4 text-green-600" />
                     <AlertDescription className="text-green-800">
-                      Xác thực hai bước đã được bật. Tài khoản của bạn được bảo vệ tốt hơn.
+                      Xác thực hai bước đã được bật. Tài khoản của bạn được bảo
+                      vệ tốt hơn.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -495,7 +563,8 @@ export default function TeacherSecurity() {
                 <div className="space-y-4">
                   <h4 className="font-medium">Ứng dụng xác thực</h4>
                   <p className="text-sm text-gray-600">
-                    Sử dụng ứng dụng như Google Authenticator hoặc Microsoft Authenticator
+                    Sử dụng ứng dụng như Google Authenticator hoặc Microsoft
+                    Authenticator
                   </p>
                   <div className="flex gap-2">
                     <Button variant="outline">
@@ -534,7 +603,9 @@ export default function TeacherSecurity() {
                   </div>
                   <Switch
                     checked={securityData.loginNotifications}
-                    onCheckedChange={(checked) => handleSettingChange("loginNotifications", checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("loginNotifications", checked)
+                    }
                   />
                 </div>
 
@@ -547,7 +618,9 @@ export default function TeacherSecurity() {
                   </div>
                   <Switch
                     checked={securityData.deviceNotifications}
-                    onCheckedChange={(checked) => handleSettingChange("deviceNotifications", checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("deviceNotifications", checked)
+                    }
                   />
                 </div>
 
@@ -560,7 +633,9 @@ export default function TeacherSecurity() {
                   </div>
                   <Switch
                     checked={securityData.suspiciousActivityAlerts}
-                    onCheckedChange={(checked) => handleSettingChange("suspiciousActivityAlerts", checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("suspiciousActivityAlerts", checked)
+                    }
                   />
                 </div>
 
@@ -573,7 +648,9 @@ export default function TeacherSecurity() {
                   </div>
                   <Switch
                     checked={securityData.accountLockoutEnabled}
-                    onCheckedChange={(checked) => handleSettingChange("accountLockoutEnabled", checked)}
+                    onCheckedChange={(checked) =>
+                      handleSettingChange("accountLockoutEnabled", checked)
+                    }
                   />
                 </div>
               </CardContent>
@@ -592,7 +669,12 @@ export default function TeacherSecurity() {
                   <Input
                     type="number"
                     value={securityData.sessionTimeout}
-                    onChange={(e) => handleSettingChange("sessionTimeout", parseInt(e.target.value))}
+                    onChange={(e) =>
+                      handleSettingChange(
+                        "sessionTimeout",
+                        parseInt(e.target.value),
+                      )
+                    }
                     min={15}
                     max={480}
                   />
@@ -618,7 +700,10 @@ export default function TeacherSecurity() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {securityData.connectedDevices.map((device) => (
-                  <div key={device.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={device.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {getDeviceIcon(device.type)}
                       <div>
@@ -669,7 +754,10 @@ export default function TeacherSecurity() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {securityData.recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={activity.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       <div className="flex flex-col items-center">
                         {getDeviceIcon("desktop")}
@@ -722,9 +810,16 @@ export default function TeacherSecurity() {
                   <Label>IP được phép</Label>
                   <div className="space-y-2 mt-2">
                     {securityData.allowedIPs.map((ip, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-green-50 rounded">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-green-50 rounded"
+                      >
                         <span className="text-sm text-green-800">{ip}</span>
-                        <Button size="sm" variant="ghost" className="text-red-600">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-red-600"
+                        >
                           <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>

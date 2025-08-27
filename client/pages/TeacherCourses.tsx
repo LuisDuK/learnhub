@@ -64,7 +64,8 @@ const mockTeacherCourses = [
   {
     id: 1,
     name: "Toán học lớp 3",
-    description: "Khóa học toán học cơ bản cho học sinh lớp 3, bao gồm các phép tính cơ bản và hình học đơn giản.",
+    description:
+      "Khóa học toán học cơ bản cho học sinh lớp 3, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -77,7 +78,8 @@ const mockTeacherCourses = [
     lastActivity: "2024-03-10",
     totalLessons: 12,
     completedLessons: 9,
-    objectives: "Giúp học sinh nắm vững các phép tính cơ bản và áp dụng vào thực tế",
+    objectives:
+      "Giúp học sinh nắm vững các phép tính cơ bản và áp dụng vào thực tế",
     prerequisites: "Biết đếm số từ 1 đến 100",
     lessons: [
       {
@@ -158,7 +160,13 @@ const mockTeacherCourses = [
 
 const subjects = ["Tất cả", "Toán", "Văn", "Anh", "Khoa học"];
 const difficulties = ["Cơ bản", "Trung bình", "Nâng cao"];
-const ageGroups = ["6-7 tuổi", "7-8 tuổi", "8-9 tuổi", "9-10 tuổi", "10-12 tuổi"];
+const ageGroups = [
+  "6-7 tuổi",
+  "7-8 tuổi",
+  "8-9 tuổi",
+  "9-10 tuổi",
+  "10-12 tuổi",
+];
 const durations = ["4 tuần", "6 tuần", "8 tuần", "10 tuần", "12 tuần"];
 
 export default function TeacherCourses() {
@@ -169,8 +177,12 @@ export default function TeacherCourses() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<typeof mockTeacherCourses[0] | null>(null);
-  const [activeTab, setActiveTab] = useState<"info" | "lessons" | "exercises" | "analytics">("info");
+  const [selectedCourse, setSelectedCourse] = useState<
+    (typeof mockTeacherCourses)[0] | null
+  >(null);
+  const [activeTab, setActiveTab] = useState<
+    "info" | "lessons" | "exercises" | "analytics"
+  >("info");
 
   const [newCourse, setNewCourse] = useState({
     name: "",
@@ -210,7 +222,7 @@ export default function TeacherCourses() {
   const handleAddCourse = () => {
     if (newCourse.name && newCourse.description && newCourse.subject) {
       const course = {
-        id: Math.max(...courses.map(c => c.id)) + 1,
+        id: Math.max(...courses.map((c) => c.id)) + 1,
         ...newCourse,
         studentsCount: 0,
         completionRate: 0,
@@ -238,7 +250,7 @@ export default function TeacherCourses() {
     }
   };
 
-  const handleEditCourse = (course: typeof mockTeacherCourses[0]) => {
+  const handleEditCourse = (course: (typeof mockTeacherCourses)[0]) => {
     setSelectedCourse(course);
     setEditCourse({
       name: course.name,
@@ -263,7 +275,7 @@ export default function TeacherCourses() {
               ...editCourse,
               lastActivity: new Date().toISOString().split("T")[0],
             }
-          : course
+          : course,
       );
       setCourses(updatedCourses);
       setIsEditDialogOpen(false);
@@ -275,17 +287,23 @@ export default function TeacherCourses() {
     setCourses(courses.filter((course) => course.id !== courseId));
   };
 
-  const handleViewCourse = (course: typeof mockTeacherCourses[0]) => {
+  const handleViewCourse = (course: (typeof mockTeacherCourses)[0]) => {
     setSelectedCourse(course);
     setIsViewDialogOpen(true);
   };
 
   const toggleCourseStatus = (courseId: number) => {
-    setCourses(courses.map(course => 
-      course.id === courseId 
-        ? { ...course, status: course.status === 'active' ? 'draft' : 'active' as const }
-        : course
-    ));
+    setCourses(
+      courses.map((course) =>
+        course.id === courseId
+          ? {
+              ...course,
+              status:
+                course.status === "active" ? "draft" : ("active" as const),
+            }
+          : course,
+      ),
+    );
   };
 
   const getStatusColor = (status: string) => {
@@ -388,7 +406,9 @@ export default function TeacherCourses() {
                   <Input
                     id="courseName"
                     value={newCourse.name}
-                    onChange={(e) => setNewCourse({ ...newCourse, name: e.target.value })}
+                    onChange={(e) =>
+                      setNewCourse({ ...newCourse, name: e.target.value })
+                    }
                     className="col-span-3"
                     placeholder="VD: Toán học lớp 3"
                   />
@@ -401,7 +421,12 @@ export default function TeacherCourses() {
                   <Textarea
                     id="courseDesc"
                     value={newCourse.description}
-                    onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
+                    onChange={(e) =>
+                      setNewCourse({
+                        ...newCourse,
+                        description: e.target.value,
+                      })
+                    }
                     className="col-span-3"
                     rows={3}
                     placeholder="Mô tả chi tiết về khóa học..."
@@ -413,7 +438,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Môn học *</Label>
                     <Select
                       value={newCourse.subject}
-                      onValueChange={(value) => setNewCourse({ ...newCourse, subject: value })}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, subject: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue placeholder="Chọn môn học" />
@@ -432,7 +459,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Độ khó *</Label>
                     <Select
                       value={newCourse.difficulty}
-                      onValueChange={(value) => setNewCourse({ ...newCourse, difficulty: value })}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, difficulty: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue placeholder="Chọn độ khó" />
@@ -453,7 +482,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Thời lượng</Label>
                     <Select
                       value={newCourse.duration}
-                      onValueChange={(value) => setNewCourse({ ...newCourse, duration: value })}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, duration: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue placeholder="Chọn thời lượng" />
@@ -472,7 +503,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Độ tuổi</Label>
                     <Select
                       value={newCourse.ageGroup}
-                      onValueChange={(value) => setNewCourse({ ...newCourse, ageGroup: value })}
+                      onValueChange={(value) =>
+                        setNewCourse({ ...newCourse, ageGroup: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue placeholder="Chọn độ tuổi" />
@@ -495,7 +528,9 @@ export default function TeacherCourses() {
                   <Textarea
                     id="objectives"
                     value={newCourse.objectives}
-                    onChange={(e) => setNewCourse({ ...newCourse, objectives: e.target.value })}
+                    onChange={(e) =>
+                      setNewCourse({ ...newCourse, objectives: e.target.value })
+                    }
                     className="col-span-3"
                     rows={2}
                     placeholder="Mục tiêu của khóa học..."
@@ -509,7 +544,12 @@ export default function TeacherCourses() {
                   <Textarea
                     id="prerequisites"
                     value={newCourse.prerequisites}
-                    onChange={(e) => setNewCourse({ ...newCourse, prerequisites: e.target.value })}
+                    onChange={(e) =>
+                      setNewCourse({
+                        ...newCourse,
+                        prerequisites: e.target.value,
+                      })
+                    }
                     className="col-span-3"
                     rows={2}
                     placeholder="Kiến thức cần có trước khi học..."
@@ -542,7 +582,8 @@ export default function TeacherCourses() {
             <CardContent>
               <div className="text-2xl font-bold">{courses.length}</div>
               <p className="text-xs text-muted-foreground">
-                {courses.filter(c => c.status === 'active').length} đang hoạt động
+                {courses.filter((c) => c.status === "active").length} đang hoạt
+                động
               </p>
             </CardContent>
           </Card>
@@ -570,12 +611,14 @@ export default function TeacherCourses() {
             <CardContent>
               <div className="text-2xl font-bold">
                 {Math.round(
-                  courses.reduce((sum, course) => sum + course.completionRate, 0) / courses.length
-                )}%
+                  courses.reduce(
+                    (sum, course) => sum + course.completionRate,
+                    0,
+                  ) / courses.length,
+                )}
+                %
               </div>
-              <p className="text-xs text-muted-foreground">
-                Trung bình
-              </p>
+              <p className="text-xs text-muted-foreground">Trung bình</p>
             </CardContent>
           </Card>
 
@@ -588,9 +631,7 @@ export default function TeacherCourses() {
               <div className="text-2xl font-bold">
                 {courses.reduce((sum, course) => sum + course.totalLessons, 0)}
               </div>
-              <p className="text-xs text-muted-foreground">
-                Tổng số bài học
-              </p>
+              <p className="text-xs text-muted-foreground">Tổng số bài học</p>
             </CardContent>
           </Card>
         </div>
@@ -636,7 +677,10 @@ export default function TeacherCourses() {
         {/* Courses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course) => (
-            <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card
+              key={course.id}
+              className="overflow-hidden hover:shadow-lg transition-shadow"
+            >
               <div className="relative">
                 <img
                   src={course.image}
@@ -651,21 +695,30 @@ export default function TeacherCourses() {
                 <div className="absolute top-2 right-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0 bg-white/80 hover:bg-white">
+                      <Button
+                        variant="ghost"
+                        className="h-8 w-8 p-0 bg-white/80 hover:bg-white"
+                      >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleViewCourse(course)}>
+                      <DropdownMenuItem
+                        onClick={() => handleViewCourse(course)}
+                      >
                         <Eye className="mr-2 h-4 w-4" />
                         Xem chi tiết
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleEditCourse(course)}>
+                      <DropdownMenuItem
+                        onClick={() => handleEditCourse(course)}
+                      >
                         <Edit className="mr-2 h-4 w-4" />
                         Chỉnh sửa
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => toggleCourseStatus(course.id)}>
-                        {course.status === 'active' ? (
+                      <DropdownMenuItem
+                        onClick={() => toggleCourseStatus(course.id)}
+                      >
+                        {course.status === "active" ? (
                           <>
                             <Eye className="mr-2 h-4 w-4" />
                             Chuyển thành nháp
@@ -677,7 +730,7 @@ export default function TeacherCourses() {
                           </>
                         )}
                       </DropdownMenuItem>
-                      <DropdownMenuItem 
+                      <DropdownMenuItem
                         onClick={() => handleDeleteCourse(course.id)}
                         className="text-red-600"
                       >
@@ -688,7 +741,7 @@ export default function TeacherCourses() {
                   </DropdownMenu>
                 </div>
               </div>
-              
+
               <CardHeader>
                 <div className="space-y-2">
                   <div className="flex items-start justify-between">
@@ -704,7 +757,7 @@ export default function TeacherCourses() {
                   </div>
                 </div>
               </CardHeader>
-              
+
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
                   {course.description}
@@ -716,12 +769,16 @@ export default function TeacherCourses() {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Bài học:</span>
-                    <span className="font-medium">{course.completedLessons}/{course.totalLessons}</span>
+                    <span className="font-medium">
+                      {course.completedLessons}/{course.totalLessons}
+                    </span>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Hoàn thành:</span>
-                      <span className={`font-medium ${getCompletionColor(course.completionRate)}`}>
+                      <span
+                        className={`font-medium ${getCompletionColor(course.completionRate)}`}
+                      >
                         {course.completionRate}%
                       </span>
                     </div>
@@ -729,11 +786,17 @@ export default function TeacherCourses() {
                   </div>
                 </div>
               </CardContent>
-              
+
               <CardFooter className="text-xs text-muted-foreground">
                 <div className="flex items-center justify-between w-full">
-                  <span>Tạo: {new Date(course.createdAt).toLocaleDateString('vi-VN')}</span>
-                  <span>Cập nhật: {new Date(course.lastActivity).toLocaleDateString('vi-VN')}</span>
+                  <span>
+                    Tạo:{" "}
+                    {new Date(course.createdAt).toLocaleDateString("vi-VN")}
+                  </span>
+                  <span>
+                    Cập nhật:{" "}
+                    {new Date(course.lastActivity).toLocaleDateString("vi-VN")}
+                  </span>
                 </div>
               </CardFooter>
             </Card>
@@ -761,7 +824,9 @@ export default function TeacherCourses() {
                   <Input
                     id="editCourseName"
                     value={editCourse.name}
-                    onChange={(e) => setEditCourse({ ...editCourse, name: e.target.value })}
+                    onChange={(e) =>
+                      setEditCourse({ ...editCourse, name: e.target.value })
+                    }
                     className="col-span-3"
                   />
                 </div>
@@ -773,7 +838,12 @@ export default function TeacherCourses() {
                   <Textarea
                     id="editCourseDesc"
                     value={editCourse.description}
-                    onChange={(e) => setEditCourse({ ...editCourse, description: e.target.value })}
+                    onChange={(e) =>
+                      setEditCourse({
+                        ...editCourse,
+                        description: e.target.value,
+                      })
+                    }
                     className="col-span-3"
                     rows={3}
                   />
@@ -784,7 +854,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Môn học *</Label>
                     <Select
                       value={editCourse.subject}
-                      onValueChange={(value) => setEditCourse({ ...editCourse, subject: value })}
+                      onValueChange={(value) =>
+                        setEditCourse({ ...editCourse, subject: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue />
@@ -803,7 +875,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Độ khó *</Label>
                     <Select
                       value={editCourse.difficulty}
-                      onValueChange={(value) => setEditCourse({ ...editCourse, difficulty: value })}
+                      onValueChange={(value) =>
+                        setEditCourse({ ...editCourse, difficulty: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue />
@@ -824,7 +898,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Thời lượng</Label>
                     <Select
                       value={editCourse.duration}
-                      onValueChange={(value) => setEditCourse({ ...editCourse, duration: value })}
+                      onValueChange={(value) =>
+                        setEditCourse({ ...editCourse, duration: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue />
@@ -843,7 +919,9 @@ export default function TeacherCourses() {
                     <Label className="text-right col-span-2">Độ tuổi</Label>
                     <Select
                       value={editCourse.ageGroup}
-                      onValueChange={(value) => setEditCourse({ ...editCourse, ageGroup: value })}
+                      onValueChange={(value) =>
+                        setEditCourse({ ...editCourse, ageGroup: value })
+                      }
                     >
                       <SelectTrigger className="col-span-2">
                         <SelectValue />
@@ -866,7 +944,12 @@ export default function TeacherCourses() {
                   <Textarea
                     id="editObjectives"
                     value={editCourse.objectives}
-                    onChange={(e) => setEditCourse({ ...editCourse, objectives: e.target.value })}
+                    onChange={(e) =>
+                      setEditCourse({
+                        ...editCourse,
+                        objectives: e.target.value,
+                      })
+                    }
                     className="col-span-3"
                     rows={2}
                   />
@@ -879,7 +962,12 @@ export default function TeacherCourses() {
                   <Textarea
                     id="editPrerequisites"
                     value={editCourse.prerequisites}
-                    onChange={(e) => setEditCourse({ ...editCourse, prerequisites: e.target.value })}
+                    onChange={(e) =>
+                      setEditCourse({
+                        ...editCourse,
+                        prerequisites: e.target.value,
+                      })
+                    }
                     className="col-span-3"
                     rows={2}
                   />
@@ -915,8 +1003,12 @@ export default function TeacherCourses() {
                     Chi tiết và thống kê khóa học
                   </DialogDescription>
                 </DialogHeader>
-                
-                <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)} className="w-full">
+
+                <Tabs
+                  value={activeTab}
+                  onValueChange={(value) => setActiveTab(value as any)}
+                  className="w-full"
+                >
                   <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="info">Thông tin</TabsTrigger>
                     <TabsTrigger value="lessons">
@@ -925,58 +1017,91 @@ export default function TeacherCourses() {
                     <TabsTrigger value="exercises">
                       Bài tập ({selectedCourse.exercises?.length || 0})
                     </TabsTrigger>
-                    <TabsTrigger value="analytics">
-                      Thống kê
-                    </TabsTrigger>
+                    <TabsTrigger value="analytics">Thống kê</TabsTrigger>
                   </TabsList>
-                  
+
                   <TabsContent value="info" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Môn học</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Môn học
+                        </Label>
                         <p className="text-sm">{selectedCourse.subject}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Độ khó</Label>
-                        <Badge className={getDifficultyColor(selectedCourse.difficulty)}>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Độ khó
+                        </Label>
+                        <Badge
+                          className={getDifficultyColor(
+                            selectedCourse.difficulty,
+                          )}
+                        >
                           {selectedCourse.difficulty}
                         </Badge>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Thời lượng</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Thời lượng
+                        </Label>
                         <p className="text-sm">{selectedCourse.duration}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Độ tuổi</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Độ tuổi
+                        </Label>
                         <p className="text-sm">{selectedCourse.ageGroup}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Trạng thái</Label>
-                        <Badge className={getStatusColor(selectedCourse.status)}>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Trạng thái
+                        </Label>
+                        <Badge
+                          className={getStatusColor(selectedCourse.status)}
+                        >
                           {getStatusText(selectedCourse.status)}
                         </Badge>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Ngày tạo</Label>
-                        <p className="text-sm">{new Date(selectedCourse.createdAt).toLocaleDateString('vi-VN')}</p>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Ngày tạo
+                        </Label>
+                        <p className="text-sm">
+                          {new Date(
+                            selectedCourse.createdAt,
+                          ).toLocaleDateString("vi-VN")}
+                        </p>
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Mô tả</Label>
-                      <p className="text-sm mt-1">{selectedCourse.description}</p>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Mô tả
+                      </Label>
+                      <p className="text-sm mt-1">
+                        {selectedCourse.description}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Mục tiêu</Label>
-                      <p className="text-sm mt-1">{selectedCourse.objectives || "Chưa có mục tiêu"}</p>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Mục tiêu
+                      </Label>
+                      <p className="text-sm mt-1">
+                        {selectedCourse.objectives || "Chưa có mục tiêu"}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Yêu cầu trước</Label>
-                      <p className="text-sm mt-1">{selectedCourse.prerequisites || "Không yêu cầu"}</p>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Yêu cầu trước
+                      </Label>
+                      <p className="text-sm mt-1">
+                        {selectedCourse.prerequisites || "Không yêu cầu"}
+                      </p>
                     </div>
                   </TabsContent>
-                  
+
                   <TabsContent value="lessons" className="space-y-4">
-                    {selectedCourse.lessons && selectedCourse.lessons.length > 0 ? (
+                    {selectedCourse.lessons &&
+                    selectedCourse.lessons.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.lessons.map((lesson, index) => (
                           <Card key={lesson.id}>
@@ -985,10 +1110,17 @@ export default function TeacherCourses() {
                                 <div className="flex items-center gap-3">
                                   {getLessonTypeIcon(lesson.type)}
                                   <div>
-                                    <h4 className="font-medium">{lesson.title}</h4>
-                                    <p className="text-sm text-gray-600">{lesson.description}</p>
+                                    <h4 className="font-medium">
+                                      {lesson.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-600">
+                                      {lesson.description}
+                                    </p>
                                     <div className="flex items-center gap-2 mt-1">
-                                      <Badge variant="outline" className="text-xs">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
                                         {lesson.duration}
                                       </Badge>
                                       {lesson.completed ? (
@@ -996,14 +1128,19 @@ export default function TeacherCourses() {
                                           Hoàn thành
                                         </Badge>
                                       ) : (
-                                        <Badge variant="secondary" className="text-xs">
+                                        <Badge
+                                          variant="secondary"
+                                          className="text-xs"
+                                        >
                                           Chưa hoàn thành
                                         </Badge>
                                       )}
                                     </div>
                                   </div>
                                 </div>
-                                <span className="text-sm text-gray-500">#{lesson.order}</span>
+                                <span className="text-sm text-gray-500">
+                                  #{lesson.order}
+                                </span>
                               </div>
                             </CardContent>
                           </Card>
@@ -1020,9 +1157,10 @@ export default function TeacherCourses() {
                       </div>
                     )}
                   </TabsContent>
-                  
+
                   <TabsContent value="exercises" className="space-y-4">
-                    {selectedCourse.exercises && selectedCourse.exercises.length > 0 ? (
+                    {selectedCourse.exercises &&
+                    selectedCourse.exercises.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.exercises.map((exercise, index) => (
                           <Card key={exercise.id}>
@@ -1031,17 +1169,29 @@ export default function TeacherCourses() {
                                 <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-blue-500" />
                                   <div>
-                                    <h4 className="font-medium">{exercise.title}</h4>
-                                    <p className="text-sm text-gray-600">{exercise.description}</p>
+                                    <h4 className="font-medium">
+                                      {exercise.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-600">
+                                      {exercise.description}
+                                    </p>
                                     <div className="flex items-center gap-2 mt-1">
-                                      <Badge variant="outline" className="text-xs">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
                                         {exercise.type}
                                       </Badge>
-                                      <Badge className={getDifficultyColor(exercise.difficulty)} >
+                                      <Badge
+                                        className={getDifficultyColor(
+                                          exercise.difficulty,
+                                        )}
+                                      >
                                         {exercise.difficulty}
                                       </Badge>
                                       <span className="text-xs text-gray-500">
-                                        {exercise.completed}/{exercise.total} đã nộp
+                                        {exercise.completed}/{exercise.total} đã
+                                        nộp
                                       </span>
                                     </div>
                                   </div>
@@ -1065,7 +1215,7 @@ export default function TeacherCourses() {
                       </div>
                     )}
                   </TabsContent>
-                  
+
                   <TabsContent value="analytics" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <Card>
@@ -1074,22 +1224,36 @@ export default function TeacherCourses() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Học sinh tham gia:</span>
-                            <span className="font-medium">{selectedCourse.studentsCount}</span>
+                            <span className="text-sm text-gray-600">
+                              Học sinh tham gia:
+                            </span>
+                            <span className="font-medium">
+                              {selectedCourse.studentsCount}
+                            </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Tỷ lệ hoàn thành:</span>
-                            <span className={`font-medium ${getCompletionColor(selectedCourse.completionRate)}`}>
+                            <span className="text-sm text-gray-600">
+                              Tỷ lệ hoàn thành:
+                            </span>
+                            <span
+                              className={`font-medium ${getCompletionColor(selectedCourse.completionRate)}`}
+                            >
                               {selectedCourse.completionRate}%
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Bài học:</span>
+                            <span className="text-sm text-gray-600">
+                              Bài học:
+                            </span>
                             <span className="font-medium">
-                              {selectedCourse.completedLessons}/{selectedCourse.totalLessons}
+                              {selectedCourse.completedLessons}/
+                              {selectedCourse.totalLessons}
                             </span>
                           </div>
-                          <Progress value={selectedCourse.completionRate} className="h-2" />
+                          <Progress
+                            value={selectedCourse.completionRate}
+                            className="h-2"
+                          />
                         </CardContent>
                       </Card>
 
@@ -1099,19 +1263,34 @@ export default function TeacherCourses() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Lần cập nhật cuối:</span>
+                            <span className="text-sm text-gray-600">
+                              Lần cập nhật cuối:
+                            </span>
                             <span className="font-medium">
-                              {new Date(selectedCourse.lastActivity).toLocaleDateString('vi-VN')}
+                              {new Date(
+                                selectedCourse.lastActivity,
+                              ).toLocaleDateString("vi-VN")}
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Tuổi khóa học:</span>
+                            <span className="text-sm text-gray-600">
+                              Tuổi khóa học:
+                            </span>
                             <span className="font-medium">
-                              {Math.floor((new Date().getTime() - new Date(selectedCourse.createdAt).getTime()) / (1000 * 60 * 60 * 24))} ngày
+                              {Math.floor(
+                                (new Date().getTime() -
+                                  new Date(
+                                    selectedCourse.createdAt,
+                                  ).getTime()) /
+                                  (1000 * 60 * 60 * 24),
+                              )}{" "}
+                              ngày
                             </span>
                           </div>
                           <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Đánh giá trung bình:</span>
+                            <span className="text-sm text-gray-600">
+                              Đánh giá trung bình:
+                            </span>
                             <div className="flex items-center gap-1">
                               <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                               <span className="font-medium">4.8</span>

@@ -65,7 +65,8 @@ const mockCourses = [
   {
     id: 1,
     name: "Toán học cơ bản",
-    description: "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
+    description:
+      "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -103,7 +104,8 @@ const mockCourses = [
   {
     id: 2,
     name: "Tiếng Việt lớp 3",
-    description: "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
+    description:
+      "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
     subject: "Văn",
     difficulty: "Trung bình",
@@ -157,10 +159,11 @@ const mockPendingContent = [
     status: "pending",
     details: {
       name: "Tiếng Anh cơ bản",
-      description: "Khóa học tiếng Anh cho trẻ em từ 5-7 tuổi với các hoạt động vui nhộn",
+      description:
+        "Khóa học tiếng Anh cho trẻ em từ 5-7 tuổi với các hoạt động vui nhộn",
       objectives: "Giúp trẻ em làm quen với tiếng Anh cơ bản",
       prerequisites: "Không yêu cầu kiến thức trước",
-    }
+    },
   },
   {
     id: "lesson_4",
@@ -179,11 +182,11 @@ const mockPendingContent = [
       type: "interactive",
       duration: "20 phút",
       content: "Nội dung bài học về phép trừ...",
-    }
+    },
   },
   {
     id: "exercise_5",
-    type: "exercise", 
+    type: "exercise",
     action: "update",
     title: "Cập nhật bài tập: Bài tập đếm số",
     description: "Chỉnh sửa câu hỏi trong bài tập đếm số",
@@ -198,7 +201,7 @@ const mockPendingContent = [
       type: "quiz",
       difficulty: "Dễ",
       changes: "Thêm 3 câu hỏi mới và cập nhật hình ảnh",
-    }
+    },
   },
   {
     id: "course_4",
@@ -206,14 +209,14 @@ const mockPendingContent = [
     action: "delete",
     title: "Xóa khóa học: Khoa học tự nhiên",
     description: "Yêu cầu xóa khóa học không còn phù hợp",
-    submittedAt: "2024-03-04", 
+    submittedAt: "2024-03-04",
     submittedBy: "Giáo viên Trần Văn Dũng",
     status: "pending",
     details: {
       reason: "Khóa học không còn phù hợp với chương trình mới",
       affectedStudents: 25,
       alternativeCourse: "Khoa học vui nhộn",
-    }
+    },
   },
 ];
 
@@ -224,7 +227,9 @@ export default function AdminCourses() {
   const [pendingContent, setPendingContent] = useState(mockPendingContent);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
-  const [selectedCourse, setSelectedCourse] = useState<(typeof mockCourses)[0] | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<
+    (typeof mockCourses)[0] | null
+  >(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isApprovalDialogOpen, setIsApprovalDialogOpen] = useState(false);
   const [selectedPendingItem, setSelectedPendingItem] = useState<any>(null);
@@ -241,9 +246,9 @@ export default function AdminCourses() {
   });
 
   const pendingCounts = {
-    courses: pendingContent.filter(item => item.type === 'course').length,
-    lessons: pendingContent.filter(item => item.type === 'lesson').length,
-    exercises: pendingContent.filter(item => item.type === 'exercise').length,
+    courses: pendingContent.filter((item) => item.type === "course").length,
+    lessons: pendingContent.filter((item) => item.type === "lesson").length,
+    exercises: pendingContent.filter((item) => item.type === "exercise").length,
     total: pendingContent.length,
   };
 
@@ -253,15 +258,17 @@ export default function AdminCourses() {
   };
 
   const handleApproval = (item: any, approved: boolean) => {
-    const updatedPending = pendingContent.filter(p => p.id !== item.id);
+    const updatedPending = pendingContent.filter((p) => p.id !== item.id);
     setPendingContent(updatedPending);
-    
+
     // In a real app, this would make an API call to approve/reject the content
-    console.log(`${approved ? 'Approved' : 'Rejected'} ${item.type}: ${item.title}`);
+    console.log(
+      `${approved ? "Approved" : "Rejected"} ${item.type}: ${item.title}`,
+    );
     if (approvalComment) {
       console.log(`Comment: ${approvalComment}`);
     }
-    
+
     setSelectedPendingItem(null);
     setApprovalComment("");
   };
@@ -359,7 +366,10 @@ export default function AdminCourses() {
           </div>
 
           <div className="flex gap-3">
-            <Dialog open={isApprovalDialogOpen} onOpenChange={setIsApprovalDialogOpen}>
+            <Dialog
+              open={isApprovalDialogOpen}
+              onOpenChange={setIsApprovalDialogOpen}
+            >
               <DialogTrigger asChild>
                 <Button className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white">
                   <CheckCircle className="h-4 w-4 mr-2" />
@@ -378,7 +388,8 @@ export default function AdminCourses() {
                     Phê duyệt nội dung
                   </DialogTitle>
                   <DialogDescription className="text-gray-600">
-                    Xem và phê duyệt các nội dung mới, chỉnh sửa hoặc xóa đang chờ duyệt
+                    Xem và phê duyệt các nội dung mới, chỉnh sửa hoặc xóa đang
+                    chờ duyệt
                   </DialogDescription>
                 </DialogHeader>
 
@@ -387,25 +398,35 @@ export default function AdminCourses() {
                   <div className="grid grid-cols-4 gap-4 mb-6">
                     <Card>
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-600">{pendingCounts.total}</div>
-                        <div className="text-sm text-gray-600">Tổng chờ duyệt</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          {pendingCounts.total}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Tổng chờ duyệt
+                        </div>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-green-600">{pendingCounts.courses}</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          {pendingCounts.courses}
+                        </div>
                         <div className="text-sm text-gray-600">Khóa học</div>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600">{pendingCounts.lessons}</div>
+                        <div className="text-2xl font-bold text-orange-600">
+                          {pendingCounts.lessons}
+                        </div>
                         <div className="text-sm text-gray-600">Bài giảng</div>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-purple-600">{pendingCounts.exercises}</div>
+                        <div className="text-2xl font-bold text-purple-600">
+                          {pendingCounts.exercises}
+                        </div>
                         <div className="text-sm text-gray-600">Bài tập</div>
                       </CardContent>
                     </Card>
@@ -420,32 +441,46 @@ export default function AdminCourses() {
                       </div>
                     ) : (
                       pendingContent.map((item) => (
-                        <Card key={item.id} className="border border-yellow-200 bg-yellow-50">
+                        <Card
+                          key={item.id}
+                          className="border border-yellow-200 bg-yellow-50"
+                        >
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
                                 <div className="flex items-center gap-2 mb-2">
-                                  <Badge className={getActionColor(item.action)}>
+                                  <Badge
+                                    className={getActionColor(item.action)}
+                                  >
                                     {getActionText(item.action)}
                                   </Badge>
-                                  <Badge variant="outline" className="capitalize">
-                                    {item.type === 'course' ? 'Khóa học' : 
-                                     item.type === 'lesson' ? 'Bài giảng' : 'Bài tập'}
+                                  <Badge
+                                    variant="outline"
+                                    className="capitalize"
+                                  >
+                                    {item.type === "course"
+                                      ? "Khóa học"
+                                      : item.type === "lesson"
+                                        ? "Bài giảng"
+                                        : "Bài tập"}
                                   </Badge>
                                   {item.courseName && (
-                                    <Badge variant="secondary" className="text-xs">
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs"
+                                    >
                                       {item.courseName}
                                     </Badge>
                                   )}
                                 </div>
-                                
+
                                 <h3 className="font-semibold text-gray-900 mb-1">
                                   {item.title}
                                 </h3>
                                 <p className="text-sm text-gray-600 mb-2">
                                   {item.description}
                                 </p>
-                                
+
                                 <div className="flex items-center gap-4 text-xs text-gray-500">
                                   <div className="flex items-center gap-1">
                                     <User className="h-3 w-3" />
@@ -453,11 +488,13 @@ export default function AdminCourses() {
                                   </div>
                                   <div className="flex items-center gap-1">
                                     <Calendar className="h-3 w-3" />
-                                    {new Date(item.submittedAt).toLocaleDateString('vi-VN')}
+                                    {new Date(
+                                      item.submittedAt,
+                                    ).toLocaleDateString("vi-VN")}
                                   </div>
                                 </div>
                               </div>
-                              
+
                               <div className="flex gap-2 ml-4">
                                 <Button
                                   size="sm"
@@ -505,9 +542,7 @@ export default function AdminCourses() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{courses.length}</div>
-              <p className="text-xs text-muted-foreground">
-                Đã được phê duyệt
-              </p>
+              <p className="text-xs text-muted-foreground">Đã được phê duyệt</p>
             </CardContent>
           </Card>
           <Card>
@@ -519,9 +554,7 @@ export default function AdminCourses() {
               <div className="text-2xl font-bold">
                 {courses.reduce((acc, course) => acc + course.studentsCount, 0)}
               </div>
-              <p className="text-xs text-muted-foreground">
-                Tổng số học sinh
-              </p>
+              <p className="text-xs text-muted-foreground">Tổng số học sinh</p>
             </CardContent>
           </Card>
           <Card>
@@ -532,13 +565,14 @@ export default function AdminCourses() {
             <CardContent>
               <div className="text-2xl font-bold">
                 {Math.round(
-                  courses.reduce((acc, course) => acc + course.completionRate, 0) /
-                    courses.length
-                )}%
+                  courses.reduce(
+                    (acc, course) => acc + course.completionRate,
+                    0,
+                  ) / courses.length,
+                )}
+                %
               </div>
-              <p className="text-xs text-muted-foreground">
-                Trung bình
-              </p>
+              <p className="text-xs text-muted-foreground">Trung bình</p>
             </CardContent>
           </Card>
           <Card>
@@ -547,10 +581,10 @@ export default function AdminCourses() {
               <AlertCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">{pendingCounts.total}</div>
-              <p className="text-xs text-muted-foreground">
-                Nội dung mới
-              </p>
+              <div className="text-2xl font-bold text-yellow-600">
+                {pendingCounts.total}
+              </div>
+              <p className="text-xs text-muted-foreground">Nội dung mới</p>
             </CardContent>
           </Card>
         </div>
@@ -585,7 +619,10 @@ export default function AdminCourses() {
         {/* Courses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course) => (
-            <Card key={course.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card
+              key={course.id}
+              className="overflow-hidden hover:shadow-lg transition-shadow"
+            >
               <div className="relative">
                 <img
                   src={course.image}
@@ -619,7 +656,9 @@ export default function AdminCourses() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleViewCourse(course)}>
+                      <DropdownMenuItem
+                        onClick={() => handleViewCourse(course)}
+                      >
                         <Eye className="mr-2 h-4 w-4" />
                         Xem chi tiết
                       </DropdownMenuItem>
@@ -647,7 +686,9 @@ export default function AdminCourses() {
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Hoàn thành:</span>
-                      <span className={getCompletionColor(course.completionRate)}>
+                      <span
+                        className={getCompletionColor(course.completionRate)}
+                      >
                         {course.completionRate}%
                       </span>
                     </div>
@@ -657,7 +698,10 @@ export default function AdminCourses() {
               </CardContent>
               <CardFooter className="text-xs text-muted-foreground">
                 <div className="flex items-center justify-between w-full">
-                  <span>Tạo: {new Date(course.createdAt).toLocaleDateString('vi-VN')}</span>
+                  <span>
+                    Tạo:{" "}
+                    {new Date(course.createdAt).toLocaleDateString("vi-VN")}
+                  </span>
                   <span>Bởi: {course.createdBy}</span>
                 </div>
               </CardFooter>
@@ -679,7 +723,7 @@ export default function AdminCourses() {
                     Chi tiết khóa học đã được phê duyệt
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <Tabs defaultValue="info" className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="info">Thông tin</TabsTrigger>
@@ -690,42 +734,59 @@ export default function AdminCourses() {
                       Bài tập ({selectedCourse.exercises?.length || 0})
                     </TabsTrigger>
                   </TabsList>
-                  
+
                   <TabsContent value="info" className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Môn học</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Môn học
+                        </Label>
                         <p className="text-sm">{selectedCourse.subject}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Độ khó</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Độ khó
+                        </Label>
                         <p className="text-sm">{selectedCourse.difficulty}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Thời lượng</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Thời lượng
+                        </Label>
                         <p className="text-sm">{selectedCourse.duration}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Độ tuổi</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Độ tuổi
+                        </Label>
                         <p className="text-sm">{selectedCourse.ageGroup}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Tạo bởi</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Tạo bởi
+                        </Label>
                         <p className="text-sm">{selectedCourse.createdBy}</p>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-gray-500">Phê duyệt bởi</Label>
+                        <Label className="text-sm font-medium text-gray-500">
+                          Phê duyệt bởi
+                        </Label>
                         <p className="text-sm">{selectedCourse.approvedBy}</p>
                       </div>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Mô tả</Label>
-                      <p className="text-sm mt-1">{selectedCourse.description}</p>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Mô tả
+                      </Label>
+                      <p className="text-sm mt-1">
+                        {selectedCourse.description}
+                      </p>
                     </div>
                   </TabsContent>
-                  
+
                   <TabsContent value="lessons" className="space-y-4">
-                    {selectedCourse.lessons && selectedCourse.lessons.length > 0 ? (
+                    {selectedCourse.lessons &&
+                    selectedCourse.lessons.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.lessons.map((lesson, index) => (
                           <Card key={lesson.id}>
@@ -734,13 +795,24 @@ export default function AdminCourses() {
                                 <div className="flex items-center gap-3">
                                   {getLessonTypeIcon(lesson.type)}
                                   <div>
-                                    <h4 className="font-medium">{lesson.title}</h4>
-                                    <p className="text-sm text-gray-600">{lesson.description}</p>
+                                    <h4 className="font-medium">
+                                      {lesson.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-600">
+                                      {lesson.description}
+                                    </p>
                                     <div className="flex items-center gap-2 mt-1">
-                                      <Badge variant="outline" className="text-xs">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
                                         {lesson.duration}
                                       </Badge>
-                                      <Badge className={getStatusColor(lesson.status)} >
+                                      <Badge
+                                        className={getStatusColor(
+                                          lesson.status,
+                                        )}
+                                      >
                                         Đã duyệt
                                       </Badge>
                                     </div>
@@ -758,9 +830,10 @@ export default function AdminCourses() {
                       </div>
                     )}
                   </TabsContent>
-                  
+
                   <TabsContent value="exercises" className="space-y-4">
-                    {selectedCourse.exercises && selectedCourse.exercises.length > 0 ? (
+                    {selectedCourse.exercises &&
+                    selectedCourse.exercises.length > 0 ? (
                       <div className="space-y-3">
                         {selectedCourse.exercises.map((exercise, index) => (
                           <Card key={exercise.id}>
@@ -769,16 +842,30 @@ export default function AdminCourses() {
                                 <div className="flex items-center gap-3">
                                   <FileText className="h-5 w-5 text-blue-500" />
                                   <div>
-                                    <h4 className="font-medium">{exercise.title}</h4>
-                                    <p className="text-sm text-gray-600">{exercise.description}</p>
+                                    <h4 className="font-medium">
+                                      {exercise.title}
+                                    </h4>
+                                    <p className="text-sm text-gray-600">
+                                      {exercise.description}
+                                    </p>
                                     <div className="flex items-center gap-2 mt-1">
-                                      <Badge variant="outline" className="text-xs">
+                                      <Badge
+                                        variant="outline"
+                                        className="text-xs"
+                                      >
                                         {exercise.type}
                                       </Badge>
-                                      <Badge variant="secondary" className="text-xs">
+                                      <Badge
+                                        variant="secondary"
+                                        className="text-xs"
+                                      >
                                         {exercise.difficulty}
                                       </Badge>
-                                      <Badge className={getStatusColor(exercise.status)}>
+                                      <Badge
+                                        className={getStatusColor(
+                                          exercise.status,
+                                        )}
+                                      >
                                         Đã duyệt
                                       </Badge>
                                     </div>
@@ -803,54 +890,81 @@ export default function AdminCourses() {
         </Dialog>
 
         {/* Pending Item Detail Dialog */}
-        <Dialog open={!!selectedPendingItem} onOpenChange={() => setSelectedPendingItem(null)}>
+        <Dialog
+          open={!!selectedPendingItem}
+          onOpenChange={() => setSelectedPendingItem(null)}
+        >
           <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
             {selectedPendingItem && (
               <>
                 <DialogHeader className="pb-4 border-b border-gray-200">
                   <DialogTitle className="text-xl font-bold text-gray-900">
-                    Chi tiết yêu cầu {getActionText(selectedPendingItem.action).toLowerCase()}
+                    Chi tiết yêu cầu{" "}
+                    {getActionText(selectedPendingItem.action).toLowerCase()}
                   </DialogTitle>
                   <DialogDescription className="text-gray-600">
                     {selectedPendingItem.title}
                   </DialogDescription>
                 </DialogHeader>
-                
+
                 <div className="py-4 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Loại</Label>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Loại
+                      </Label>
                       <p className="text-sm capitalize">
-                        {selectedPendingItem.type === 'course' ? 'Khóa học' : 
-                         selectedPendingItem.type === 'lesson' ? 'Bài giảng' : 'Bài tập'}
+                        {selectedPendingItem.type === "course"
+                          ? "Khóa học"
+                          : selectedPendingItem.type === "lesson"
+                            ? "Bài giảng"
+                            : "Bài tập"}
                       </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Hành động</Label>
-                      <Badge className={getActionColor(selectedPendingItem.action)}>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Hành động
+                      </Label>
+                      <Badge
+                        className={getActionColor(selectedPendingItem.action)}
+                      >
                         {getActionText(selectedPendingItem.action)}
                       </Badge>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Người gửi</Label>
-                      <p className="text-sm">{selectedPendingItem.submittedBy}</p>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Người gửi
+                      </Label>
+                      <p className="text-sm">
+                        {selectedPendingItem.submittedBy}
+                      </p>
                     </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Ngày gửi</Label>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Ngày gửi
+                      </Label>
                       <p className="text-sm">
-                        {new Date(selectedPendingItem.submittedAt).toLocaleDateString('vi-VN')}
+                        {new Date(
+                          selectedPendingItem.submittedAt,
+                        ).toLocaleDateString("vi-VN")}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">Mô tả</Label>
-                    <p className="text-sm mt-1">{selectedPendingItem.description}</p>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Mô tả
+                    </Label>
+                    <p className="text-sm mt-1">
+                      {selectedPendingItem.description}
+                    </p>
                   </div>
-                  
+
                   {selectedPendingItem.details && (
                     <div>
-                      <Label className="text-sm font-medium text-gray-500">Chi tiết</Label>
+                      <Label className="text-sm font-medium text-gray-500">
+                        Chi tiết
+                      </Label>
                       <div className="mt-2 p-3 bg-gray-50 rounded-lg">
                         <pre className="text-xs text-gray-700 whitespace-pre-wrap">
                           {JSON.stringify(selectedPendingItem.details, null, 2)}
@@ -858,9 +972,11 @@ export default function AdminCourses() {
                       </div>
                     </div>
                   )}
-                  
+
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">Ghi chú phê duyệt (tùy chọn)</Label>
+                    <Label className="text-sm font-medium text-gray-500">
+                      Ghi chú phê duyệt (tùy chọn)
+                    </Label>
                     <textarea
                       value={approvalComment}
                       onChange={(e) => setApprovalComment(e.target.value)}
@@ -870,7 +986,7 @@ export default function AdminCourses() {
                     />
                   </div>
                 </div>
-                
+
                 <DialogFooter className="border-t border-gray-200 pt-4">
                   <Button
                     variant="outline"

@@ -60,10 +60,12 @@ export default function Login() {
   const [activeTab, setActiveTab] = useState("login");
 
   // Teacher registration states
-  const [showTeacherRegisterDialog, setShowTeacherRegisterDialog] = useState(false);
+  const [showTeacherRegisterDialog, setShowTeacherRegisterDialog] =
+    useState(false);
   const [teacherRegisterSuccess, setTeacherRegisterSuccess] = useState(false);
   const [showTeacherPassword, setShowTeacherPassword] = useState(false);
-  const [showTeacherConfirmPassword, setShowTeacherConfirmPassword] = useState(false);
+  const [showTeacherConfirmPassword, setShowTeacherConfirmPassword] =
+    useState(false);
   const [teacherForm, setTeacherForm] = useState({
     fullName: "",
     email: "",
@@ -542,7 +544,6 @@ export default function Login() {
                   </Button>
                 </form>
 
-
                 {/* Teacher Registration Section */}
                 <div className="border-t border-gray-200 pt-6 mt-6">
                   <div className="text-center">
@@ -570,7 +571,8 @@ export default function Login() {
                             👩‍🏫 Đăng ký tài khoản giáo viên
                           </DialogTitle>
                           <DialogDescription className="text-gray-600">
-                            Tạo tài khoản giáo viên để quản lý lớp học và tạo nội dung giáo dục
+                            Tạo tài khoản giáo viên để quản lý lớp học và tạo
+                            nội dung giáo dục
                           </DialogDescription>
                         </DialogHeader>
 
@@ -582,9 +584,11 @@ export default function Login() {
                                 🎉 Đăng ký thành công!
                                 <br />
                                 <span className="text-sm mt-2 block">
-                                  Tài khoản giáo viên của bạn đang chờ phê duyệt từ quản trị viên.
+                                  Tài khoản giáo viên của bạn đang chờ phê duyệt
+                                  từ quản trị viên.
                                   <br />
-                                  Bạn sẽ nhận được email thông báo trong vòng 24-48 giờ.
+                                  Bạn sẽ nhận được email thông báo trong vòng
+                                  24-48 giờ.
                                 </span>
                               </AlertDescription>
                               <div className="flex gap-2 mt-4">
@@ -608,7 +612,10 @@ export default function Login() {
                             </Alert>
                           </div>
                         ) : (
-                          <form onSubmit={handleTeacherRegister} className="space-y-4 py-4">
+                          <form
+                            onSubmit={handleTeacherRegister}
+                            className="space-y-4 py-4"
+                          >
                             {/* Personal Information */}
                             <div className="space-y-4">
                               <h3 className="font-semibold text-gray-900 flex items-center gap-2">
@@ -618,7 +625,10 @@ export default function Login() {
 
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherFullName" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherFullName"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Họ và tên *
                                   </Label>
                                   <Input
@@ -626,14 +636,22 @@ export default function Login() {
                                     type="text"
                                     placeholder="Nguyễn Thị Lan"
                                     value={teacherForm.fullName}
-                                    onChange={(e) => setTeacherForm({...teacherForm, fullName: e.target.value})}
+                                    onChange={(e) =>
+                                      setTeacherForm({
+                                        ...teacherForm,
+                                        fullName: e.target.value,
+                                      })
+                                    }
                                     required
                                     className="border-green-200 focus:border-green-500 rounded-lg"
                                   />
                                 </div>
 
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherPhone" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherPhone"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Số điện thoại *
                                   </Label>
                                   <Input
@@ -641,7 +659,12 @@ export default function Login() {
                                     type="tel"
                                     placeholder="0123456789"
                                     value={teacherForm.phone}
-                                    onChange={(e) => setTeacherForm({...teacherForm, phone: e.target.value})}
+                                    onChange={(e) =>
+                                      setTeacherForm({
+                                        ...teacherForm,
+                                        phone: e.target.value,
+                                      })
+                                    }
                                     required
                                     className="border-green-200 focus:border-green-500 rounded-lg"
                                   />
@@ -649,7 +672,10 @@ export default function Login() {
                               </div>
 
                               <div className="space-y-2">
-                                <Label htmlFor="teacherEmail" className="text-green-700 font-medium">
+                                <Label
+                                  htmlFor="teacherEmail"
+                                  className="text-green-700 font-medium"
+                                >
                                   Email *
                                 </Label>
                                 <Input
@@ -657,7 +683,12 @@ export default function Login() {
                                   type="email"
                                   placeholder="giaovien@email.com"
                                   value={teacherForm.email}
-                                  onChange={(e) => setTeacherForm({...teacherForm, email: e.target.value})}
+                                  onChange={(e) =>
+                                    setTeacherForm({
+                                      ...teacherForm,
+                                      email: e.target.value,
+                                    })
+                                  }
                                   required
                                   className="border-green-200 focus:border-green-500 rounded-lg"
                                 />
@@ -665,16 +696,28 @@ export default function Login() {
 
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherPassword" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherPassword"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Mật khẩu *
                                   </Label>
                                   <div className="relative">
                                     <Input
                                       id="teacherPassword"
-                                      type={showTeacherPassword ? "text" : "password"}
+                                      type={
+                                        showTeacherPassword
+                                          ? "text"
+                                          : "password"
+                                      }
                                       placeholder="••••••••"
                                       value={teacherForm.password}
-                                      onChange={(e) => setTeacherForm({...teacherForm, password: e.target.value})}
+                                      onChange={(e) =>
+                                        setTeacherForm({
+                                          ...teacherForm,
+                                          password: e.target.value,
+                                        })
+                                      }
                                       required
                                       className="border-green-200 focus:border-green-500 rounded-lg pr-10"
                                     />
@@ -683,24 +726,44 @@ export default function Login() {
                                       variant="ghost"
                                       size="sm"
                                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                                      onClick={() => setShowTeacherPassword(!showTeacherPassword)}
+                                      onClick={() =>
+                                        setShowTeacherPassword(
+                                          !showTeacherPassword,
+                                        )
+                                      }
                                     >
-                                      {showTeacherPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                      {showTeacherPassword ? (
+                                        <EyeOff className="h-4 w-4" />
+                                      ) : (
+                                        <Eye className="h-4 w-4" />
+                                      )}
                                     </Button>
                                   </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherConfirmPassword" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherConfirmPassword"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Xác nhận mật khẩu *
                                   </Label>
                                   <div className="relative">
                                     <Input
                                       id="teacherConfirmPassword"
-                                      type={showTeacherConfirmPassword ? "text" : "password"}
+                                      type={
+                                        showTeacherConfirmPassword
+                                          ? "text"
+                                          : "password"
+                                      }
                                       placeholder="••••••••"
                                       value={teacherForm.confirmPassword}
-                                      onChange={(e) => setTeacherForm({...teacherForm, confirmPassword: e.target.value})}
+                                      onChange={(e) =>
+                                        setTeacherForm({
+                                          ...teacherForm,
+                                          confirmPassword: e.target.value,
+                                        })
+                                      }
                                       required
                                       className="border-green-200 focus:border-green-500 rounded-lg pr-10"
                                     />
@@ -709,9 +772,17 @@ export default function Login() {
                                       variant="ghost"
                                       size="sm"
                                       className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
-                                      onClick={() => setShowTeacherConfirmPassword(!showTeacherConfirmPassword)}
+                                      onClick={() =>
+                                        setShowTeacherConfirmPassword(
+                                          !showTeacherConfirmPassword,
+                                        )
+                                      }
                                     >
-                                      {showTeacherConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                      {showTeacherConfirmPassword ? (
+                                        <EyeOff className="h-4 w-4" />
+                                      ) : (
+                                        <Eye className="h-4 w-4" />
+                                      )}
                                     </Button>
                                   </div>
                                 </div>
@@ -727,7 +798,10 @@ export default function Login() {
 
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherSchool" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherSchool"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Trường học hiện tại *
                                   </Label>
                                   <Input
@@ -735,33 +809,64 @@ export default function Login() {
                                     type="text"
                                     placeholder="Trường Tiểu học ABC"
                                     value={teacherForm.school}
-                                    onChange={(e) => setTeacherForm({...teacherForm, school: e.target.value})}
+                                    onChange={(e) =>
+                                      setTeacherForm({
+                                        ...teacherForm,
+                                        school: e.target.value,
+                                      })
+                                    }
                                     required
                                     className="border-green-200 focus:border-green-500 rounded-lg"
                                   />
                                 </div>
 
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherSubject" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherSubject"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Môn học chuyên môn *
                                   </Label>
                                   <Select
                                     value={teacherForm.subject}
-                                    onValueChange={(value) => setTeacherForm({...teacherForm, subject: value})}
+                                    onValueChange={(value) =>
+                                      setTeacherForm({
+                                        ...teacherForm,
+                                        subject: value,
+                                      })
+                                    }
                                   >
                                     <SelectTrigger className="border-green-200 focus:border-green-500 rounded-lg">
                                       <SelectValue placeholder="Chọn môn học" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      <SelectItem value="toan">Toán học</SelectItem>
-                                      <SelectItem value="van">Tiếng Việt</SelectItem>
-                                      <SelectItem value="anh">Tiếng Anh</SelectItem>
-                                      <SelectItem value="khoa-hoc">Khoa học tự nhiên</SelectItem>
-                                      <SelectItem value="xa-hoi">Khoa học xã hội</SelectItem>
-                                      <SelectItem value="the-duc">Thể dục</SelectItem>
-                                      <SelectItem value="my-thuat">Mỹ thuật</SelectItem>
-                                      <SelectItem value="am-nhac">Âm nhạc</SelectItem>
-                                      <SelectItem value="tin-hoc">Tin học</SelectItem>
+                                      <SelectItem value="toan">
+                                        Toán học
+                                      </SelectItem>
+                                      <SelectItem value="van">
+                                        Tiếng Việt
+                                      </SelectItem>
+                                      <SelectItem value="anh">
+                                        Tiếng Anh
+                                      </SelectItem>
+                                      <SelectItem value="khoa-hoc">
+                                        Khoa học tự nhiên
+                                      </SelectItem>
+                                      <SelectItem value="xa-hoi">
+                                        Khoa học xã hội
+                                      </SelectItem>
+                                      <SelectItem value="the-duc">
+                                        Thể dục
+                                      </SelectItem>
+                                      <SelectItem value="my-thuat">
+                                        Mỹ thuật
+                                      </SelectItem>
+                                      <SelectItem value="am-nhac">
+                                        Âm nhạc
+                                      </SelectItem>
+                                      <SelectItem value="tin-hoc">
+                                        Tin học
+                                      </SelectItem>
                                       <SelectItem value="khac">Khác</SelectItem>
                                     </SelectContent>
                                   </Select>
@@ -770,42 +875,76 @@ export default function Login() {
 
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherExperience" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherExperience"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Số năm kinh nghiệm *
                                   </Label>
                                   <Select
                                     value={teacherForm.experience}
-                                    onValueChange={(value) => setTeacherForm({...teacherForm, experience: value})}
+                                    onValueChange={(value) =>
+                                      setTeacherForm({
+                                        ...teacherForm,
+                                        experience: value,
+                                      })
+                                    }
                                   >
                                     <SelectTrigger className="border-green-200 focus:border-green-500 rounded-lg">
                                       <SelectValue placeholder="Chọn kinh nghiệm" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      <SelectItem value="moi">Mới tốt nghiệp</SelectItem>
-                                      <SelectItem value="1-3">1-3 năm</SelectItem>
-                                      <SelectItem value="3-5">3-5 năm</SelectItem>
-                                      <SelectItem value="5-10">5-10 năm</SelectItem>
-                                      <SelectItem value="10+">Trên 10 năm</SelectItem>
+                                      <SelectItem value="moi">
+                                        Mới tốt nghiệp
+                                      </SelectItem>
+                                      <SelectItem value="1-3">
+                                        1-3 năm
+                                      </SelectItem>
+                                      <SelectItem value="3-5">
+                                        3-5 năm
+                                      </SelectItem>
+                                      <SelectItem value="5-10">
+                                        5-10 năm
+                                      </SelectItem>
+                                      <SelectItem value="10+">
+                                        Trên 10 năm
+                                      </SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>
 
                                 <div className="space-y-2">
-                                  <Label htmlFor="teacherQualification" className="text-green-700 font-medium">
+                                  <Label
+                                    htmlFor="teacherQualification"
+                                    className="text-green-700 font-medium"
+                                  >
                                     Trình độ học vấn *
                                   </Label>
                                   <Select
                                     value={teacherForm.qualification}
-                                    onValueChange={(value) => setTeacherForm({...teacherForm, qualification: value})}
+                                    onValueChange={(value) =>
+                                      setTeacherForm({
+                                        ...teacherForm,
+                                        qualification: value,
+                                      })
+                                    }
                                   >
                                     <SelectTrigger className="border-green-200 focus:border-green-500 rounded-lg">
                                       <SelectValue placeholder="Chọn trình độ" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                      <SelectItem value="cao-dang">Cao đẳng sư phạm</SelectItem>
-                                      <SelectItem value="dai-hoc">Đại học sư phạm</SelectItem>
-                                      <SelectItem value="thac-si">Thạc sĩ</SelectItem>
-                                      <SelectItem value="tien-si">Tiến sĩ</SelectItem>
+                                      <SelectItem value="cao-dang">
+                                        Cao đẳng sư phạm
+                                      </SelectItem>
+                                      <SelectItem value="dai-hoc">
+                                        Đại học sư phạm
+                                      </SelectItem>
+                                      <SelectItem value="thac-si">
+                                        Thạc sĩ
+                                      </SelectItem>
+                                      <SelectItem value="tien-si">
+                                        Tiến sĩ
+                                      </SelectItem>
                                       <SelectItem value="khac">Khác</SelectItem>
                                     </SelectContent>
                                   </Select>
@@ -813,14 +952,22 @@ export default function Login() {
                               </div>
 
                               <div className="space-y-2">
-                                <Label htmlFor="teacherBio" className="text-green-700 font-medium">
+                                <Label
+                                  htmlFor="teacherBio"
+                                  className="text-green-700 font-medium"
+                                >
                                   Giới thiệu bản thân (tùy chọn)
                                 </Label>
                                 <Textarea
                                   id="teacherBio"
                                   placeholder="Chia sẻ về phương pháp giảng dạy và kinh nghiệm của bạn..."
                                   value={teacherForm.bio}
-                                  onChange={(e) => setTeacherForm({...teacherForm, bio: e.target.value})}
+                                  onChange={(e) =>
+                                    setTeacherForm({
+                                      ...teacherForm,
+                                      bio: e.target.value,
+                                    })
+                                  }
                                   className="border-green-200 focus:border-green-500 rounded-lg"
                                   rows={3}
                                 />
@@ -851,8 +998,10 @@ export default function Login() {
                               <Alert className="border-green-200 bg-green-50 mt-4">
                                 <FileText className="h-4 w-4 text-green-600" />
                                 <AlertDescription className="text-green-800 text-sm">
-                                  📋 <strong>Lưu ý:</strong> Tài khoản giáo viên cần được phê duyệt bởi
-                                  quản trị viên trước khi có thể sử dụng. Quá trình này thường mất 24-48 giờ.
+                                  📋 <strong>Lưu ý:</strong> Tài khoản giáo viên
+                                  cần được phê duyệt bởi quản trị viên trước khi
+                                  có thể sử dụng. Quá trình này thường mất 24-48
+                                  giờ.
                                 </AlertDescription>
                               </Alert>
                             </div>

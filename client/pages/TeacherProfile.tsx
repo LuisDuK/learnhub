@@ -53,7 +53,7 @@ const mockTeacherData = {
   email: "nguyenthilan@email.com",
   phone: "0123456789",
   avatar: "/placeholder.svg",
-  
+
   // Professional Information
   school: "Trường Tiểu học Chu Văn An",
   subject: "Toán học",
@@ -61,7 +61,7 @@ const mockTeacherData = {
   qualification: "Thạc sĩ",
   position: "Giáo viên chính",
   teachingLevel: "Tiểu học",
-  
+
   // Personal Information
   dateOfBirth: "1990-05-15",
   gender: "female",
@@ -69,28 +69,28 @@ const mockTeacherData = {
   emergencyContact: "0987654321",
   emergencyContactName: "Nguyễn Văn Nam",
   idNumber: "123456789012",
-  
+
   // Bio and Description
   bio: "Tôi là giáo viên Toán với 8 năm kinh nghiệm giảng dạy. Tôi luôn tìm cách làm cho môn Toán trở nên thú vị và dễ hiểu cho các em học sinh.",
   specializations: ["Toán tư duy", "Toán nâng cao", "Bồi dưỡng học sinh giỏi"],
   achievements: [
     "Giáo viên giỏi cấp thành phố 2023",
     "Hướng dẫn học sinh đạt giải Nhất Olympic Toán 2022",
-    "Chứng chỉ Intel Teach 2021"
+    "Chứng chỉ Intel Teach 2021",
   ],
-  
+
   // Teaching Preferences
   preferredAgeGroups: ["6-8 tuổi", "8-10 tuổi"],
   teachingMethods: ["Trực quan", "Tương tác", "Trò chơi"],
   availableHours: "7:00-17:00",
-  
+
   // Statistics
   joinDate: "2022-01-15",
   totalCourses: 5,
   totalStudents: 58,
   averageRating: 4.8,
   totalLessons: 35,
-  
+
   // Settings
   profileVisibility: "public",
   allowMessages: true,
@@ -99,8 +99,15 @@ const mockTeacherData = {
 };
 
 const subjects = [
-  "Toán học", "Tiếng Việt", "Tiếng Anh", "Khoa học tự nhiên", 
-  "Khoa học xã hội", "Thể dục", "Mỹ thuật", "Âm nhạc", "Tin học"
+  "Toán học",
+  "Tiếng Việt",
+  "Tiếng Anh",
+  "Khoa học tự nhiên",
+  "Khoa học xã hội",
+  "Thể dục",
+  "Mỹ thuật",
+  "Âm nhạc",
+  "Tin học",
 ];
 
 const experiences = [
@@ -119,7 +126,10 @@ const qualifications = [
 ];
 
 const teachingLevels = [
-  "Mầm non", "Tiểu học", "Trung học cơ sở", "Trung học phổ thông"
+  "Mầm non",
+  "Tiểu học",
+  "Trung học cơ sở",
+  "Trung học phổ thông",
 ];
 
 const genders = [
@@ -163,12 +173,19 @@ export default function TeacherProfile() {
     setEditedData({ ...editedData, [field]: value });
   };
 
-  const handleArrayChange = (field: string, value: string, action: "add" | "remove") => {
+  const handleArrayChange = (
+    field: string,
+    value: string,
+    action: "add" | "remove",
+  ) => {
     const currentArray = (editedData as any)[field] || [];
     if (action === "add" && value && !currentArray.includes(value)) {
       setEditedData({ ...editedData, [field]: [...currentArray, value] });
     } else if (action === "remove") {
-      setEditedData({ ...editedData, [field]: currentArray.filter((item: string) => item !== value) });
+      setEditedData({
+        ...editedData,
+        [field]: currentArray.filter((item: string) => item !== value),
+      });
     }
   };
 
@@ -188,7 +205,7 @@ export default function TeacherProfile() {
               Quản lý hồ sơ và thông tin giảng dạy của bạn
             </p>
           </div>
-          
+
           <div className="flex gap-3">
             {isEditing ? (
               <>
@@ -234,9 +251,15 @@ export default function TeacherProfile() {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage src={currentData.avatar} alt={currentData.fullName} />
+                  <AvatarImage
+                    src={currentData.avatar}
+                    alt={currentData.fullName}
+                  />
                   <AvatarFallback className="text-2xl">
-                    {currentData.fullName.split(" ").map(n => n[0]).join("")}
+                    {currentData.fullName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 {isEditing && (
@@ -248,41 +271,61 @@ export default function TeacherProfile() {
                   </Button>
                 )}
               </div>
-              
+
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-gray-900">{currentData.fullName}</h2>
-                <p className="text-gray-600">{currentData.position} - {currentData.subject}</p>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  {currentData.fullName}
+                </h2>
+                <p className="text-gray-600">
+                  {currentData.position} - {currentData.subject}
+                </p>
                 <p className="text-sm text-gray-500">{currentData.school}</p>
-                
+
                 <div className="flex items-center gap-4 mt-3">
                   <Badge className="bg-green-100 text-green-800">
-                    {experiences.find(e => e.value === currentData.experience)?.label}
+                    {
+                      experiences.find(
+                        (e) => e.value === currentData.experience,
+                      )?.label
+                    }
                   </Badge>
                   <Badge className="bg-blue-100 text-blue-800">
-                    {qualifications.find(q => q.value === currentData.qualification)?.label}
+                    {
+                      qualifications.find(
+                        (q) => q.value === currentData.qualification,
+                      )?.label
+                    }
                   </Badge>
                   <Badge className="bg-purple-100 text-purple-800">
                     {currentData.teachingLevel}
                   </Badge>
                 </div>
               </div>
-              
+
               <div className="text-right">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">{currentData.totalCourses}</div>
+                    <div className="text-2xl font-bold text-green-600">
+                      {currentData.totalCourses}
+                    </div>
                     <div className="text-xs text-gray-600">Khóa học</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">{currentData.totalStudents}</div>
+                    <div className="text-2xl font-bold text-blue-600">
+                      {currentData.totalStudents}
+                    </div>
                     <div className="text-xs text-gray-600">Học sinh</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-yellow-600">{currentData.averageRating}</div>
+                    <div className="text-2xl font-bold text-yellow-600">
+                      {currentData.averageRating}
+                    </div>
                     <div className="text-xs text-gray-600">Đánh giá</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">{currentData.totalLessons}</div>
+                    <div className="text-2xl font-bold text-purple-600">
+                      {currentData.totalLessons}
+                    </div>
                     <div className="text-xs text-gray-600">Bài học</div>
                   </div>
                 </div>
@@ -292,10 +335,16 @@ export default function TeacherProfile() {
         </Card>
 
         {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="personal">Thông tin cá nhân</TabsTrigger>
-            <TabsTrigger value="professional">Thông tin nghề nghiệp</TabsTrigger>
+            <TabsTrigger value="professional">
+              Thông tin nghề nghiệp
+            </TabsTrigger>
             <TabsTrigger value="bio">Giới thiệu</TabsTrigger>
             <TabsTrigger value="achievements">Thành tích</TabsTrigger>
             <TabsTrigger value="settings">Cài đặt</TabsTrigger>
@@ -318,13 +367,17 @@ export default function TeacherProfile() {
                       <Input
                         id="fullName"
                         value={currentData.fullName}
-                        onChange={(e) => handleInputChange("fullName", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("fullName", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.fullName}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.fullName}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="dateOfBirth">Ngày sinh</Label>
                     {isEditing ? (
@@ -332,19 +385,28 @@ export default function TeacherProfile() {
                         id="dateOfBirth"
                         type="date"
                         value={currentData.dateOfBirth}
-                        onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("dateOfBirth", e.target.value)
+                        }
                       />
                     ) : (
                       <div className="p-2 bg-gray-50 rounded">
-                        {new Date(currentData.dateOfBirth).toLocaleDateString('vi-VN')}
+                        {new Date(currentData.dateOfBirth).toLocaleDateString(
+                          "vi-VN",
+                        )}
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="gender">Giới tính</Label>
                     {isEditing ? (
-                      <Select value={currentData.gender} onValueChange={(value) => handleInputChange("gender", value)}>
+                      <Select
+                        value={currentData.gender}
+                        onValueChange={(value) =>
+                          handleInputChange("gender", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -358,36 +420,47 @@ export default function TeacherProfile() {
                       </Select>
                     ) : (
                       <div className="p-2 bg-gray-50 rounded">
-                        {genders.find(g => g.value === currentData.gender)?.label}
+                        {
+                          genders.find((g) => g.value === currentData.gender)
+                            ?.label
+                        }
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="idNumber">CCCD/CMND</Label>
                     {isEditing ? (
                       <Input
                         id="idNumber"
                         value={currentData.idNumber}
-                        onChange={(e) => handleInputChange("idNumber", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("idNumber", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.idNumber}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.idNumber}
+                      </div>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="address">Địa chỉ</Label>
                   {isEditing ? (
                     <Textarea
                       id="address"
                       value={currentData.address}
-                      onChange={(e) => handleInputChange("address", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("address", e.target.value)
+                      }
                       rows={2}
                     />
                   ) : (
-                    <div className="p-2 bg-gray-50 rounded">{currentData.address}</div>
+                    <div className="p-2 bg-gray-50 rounded">
+                      {currentData.address}
+                    </div>
                   )}
                 </div>
               </CardContent>
@@ -409,49 +482,70 @@ export default function TeacherProfile() {
                         id="email"
                         type="email"
                         value={currentData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.email}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.email}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="phone">Số điện thoại *</Label>
                     {isEditing ? (
                       <Input
                         id="phone"
                         value={currentData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("phone", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.phone}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.phone}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="emergencyContactName">Người liên hệ khẩn cấp</Label>
+                    <Label htmlFor="emergencyContactName">
+                      Người liên hệ khẩn cấp
+                    </Label>
                     {isEditing ? (
                       <Input
                         id="emergencyContactName"
                         value={currentData.emergencyContactName}
-                        onChange={(e) => handleInputChange("emergencyContactName", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "emergencyContactName",
+                            e.target.value,
+                          )
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.emergencyContactName}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.emergencyContactName}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="emergencyContact">SĐT khẩn cấp</Label>
                     {isEditing ? (
                       <Input
                         id="emergencyContact"
                         value={currentData.emergencyContact}
-                        onChange={(e) => handleInputChange("emergencyContact", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("emergencyContact", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.emergencyContact}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.emergencyContact}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -476,30 +570,43 @@ export default function TeacherProfile() {
                       <Input
                         id="school"
                         value={currentData.school}
-                        onChange={(e) => handleInputChange("school", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("school", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.school}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.school}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="position">Chức vụ</Label>
                     {isEditing ? (
                       <Input
                         id="position"
                         value={currentData.position}
-                        onChange={(e) => handleInputChange("position", e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange("position", e.target.value)
+                        }
                       />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.position}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.position}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="subject">Môn học chuyên môn *</Label>
                     {isEditing ? (
-                      <Select value={currentData.subject} onValueChange={(value) => handleInputChange("subject", value)}>
+                      <Select
+                        value={currentData.subject}
+                        onValueChange={(value) =>
+                          handleInputChange("subject", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -512,14 +619,21 @@ export default function TeacherProfile() {
                         </SelectContent>
                       </Select>
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.subject}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.subject}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="teachingLevel">Cấp học giảng dạy</Label>
                     {isEditing ? (
-                      <Select value={currentData.teachingLevel} onValueChange={(value) => handleInputChange("teachingLevel", value)}>
+                      <Select
+                        value={currentData.teachingLevel}
+                        onValueChange={(value) =>
+                          handleInputChange("teachingLevel", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -532,14 +646,21 @@ export default function TeacherProfile() {
                         </SelectContent>
                       </Select>
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">{currentData.teachingLevel}</div>
+                      <div className="p-2 bg-gray-50 rounded">
+                        {currentData.teachingLevel}
+                      </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="experience">Số năm kinh nghiệm *</Label>
                     {isEditing ? (
-                      <Select value={currentData.experience} onValueChange={(value) => handleInputChange("experience", value)}>
+                      <Select
+                        value={currentData.experience}
+                        onValueChange={(value) =>
+                          handleInputChange("experience", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -553,15 +674,24 @@ export default function TeacherProfile() {
                       </Select>
                     ) : (
                       <div className="p-2 bg-gray-50 rounded">
-                        {experiences.find(e => e.value === currentData.experience)?.label}
+                        {
+                          experiences.find(
+                            (e) => e.value === currentData.experience,
+                          )?.label
+                        }
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="qualification">Trình độ học vấn *</Label>
                     {isEditing ? (
-                      <Select value={currentData.qualification} onValueChange={(value) => handleInputChange("qualification", value)}>
+                      <Select
+                        value={currentData.qualification}
+                        onValueChange={(value) =>
+                          handleInputChange("qualification", value)
+                        }
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -575,23 +705,31 @@ export default function TeacherProfile() {
                       </Select>
                     ) : (
                       <div className="p-2 bg-gray-50 rounded">
-                        {qualifications.find(q => q.value === currentData.qualification)?.label}
+                        {
+                          qualifications.find(
+                            (q) => q.value === currentData.qualification,
+                          )?.label
+                        }
                       </div>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="availableHours">Giờ giảng dạy</Label>
                   {isEditing ? (
                     <Input
                       id="availableHours"
                       value={currentData.availableHours}
-                      onChange={(e) => handleInputChange("availableHours", e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange("availableHours", e.target.value)
+                      }
                       placeholder="VD: 7:00-17:00"
                     />
                   ) : (
-                    <div className="p-2 bg-gray-50 rounded">{currentData.availableHours}</div>
+                    <div className="p-2 bg-gray-50 rounded">
+                      {currentData.availableHours}
+                    </div>
                   )}
                 </div>
               </CardContent>
@@ -609,11 +747,21 @@ export default function TeacherProfile() {
                   <Label>Chuyên môn</Label>
                   <div className="flex flex-wrap gap-2">
                     {currentData.specializations.map((spec, index) => (
-                      <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
                         {spec}
                         {isEditing && (
                           <button
-                            onClick={() => handleArrayChange("specializations", spec, "remove")}
+                            onClick={() =>
+                              handleArrayChange(
+                                "specializations",
+                                spec,
+                                "remove",
+                              )
+                            }
                             className="ml-1 text-red-500 hover:text-red-700"
                           >
                             ×
@@ -623,16 +771,26 @@ export default function TeacherProfile() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Nhóm tuổi ưa thích</Label>
                   <div className="flex flex-wrap gap-2">
                     {currentData.preferredAgeGroups.map((age, index) => (
-                      <Badge key={index} variant="outline" className="flex items-center gap-1">
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="flex items-center gap-1"
+                      >
                         {age}
                         {isEditing && (
                           <button
-                            onClick={() => handleArrayChange("preferredAgeGroups", age, "remove")}
+                            onClick={() =>
+                              handleArrayChange(
+                                "preferredAgeGroups",
+                                age,
+                                "remove",
+                              )
+                            }
                             className="ml-1 text-red-500 hover:text-red-700"
                           >
                             ×
@@ -642,16 +800,26 @@ export default function TeacherProfile() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Phương pháp giảng dạy</Label>
                   <div className="flex flex-wrap gap-2">
                     {currentData.teachingMethods.map((method, index) => (
-                      <Badge key={index} variant="outline" className="flex items-center gap-1">
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="flex items-center gap-1"
+                      >
                         {method}
                         {isEditing && (
                           <button
-                            onClick={() => handleArrayChange("teachingMethods", method, "remove")}
+                            onClick={() =>
+                              handleArrayChange(
+                                "teachingMethods",
+                                method,
+                                "remove",
+                              )
+                            }
                             className="ml-1 text-red-500 hover:text-red-700"
                           >
                             ×
@@ -710,14 +878,23 @@ export default function TeacherProfile() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   {currentData.achievements.map((achievement, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-3 border rounded-lg"
+                    >
                       <Award className="h-5 w-5 text-yellow-500" />
                       <span className="flex-1">{achievement}</span>
                       {isEditing && (
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => handleArrayChange("achievements", achievement, "remove")}
+                          onClick={() =>
+                            handleArrayChange(
+                              "achievements",
+                              achievement,
+                              "remove",
+                            )
+                          }
                           className="text-red-500 hover:text-red-700"
                         >
                           ×
@@ -728,7 +905,7 @@ export default function TeacherProfile() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -741,22 +918,30 @@ export default function TeacherProfile() {
                   <div className="flex justify-between py-2">
                     <span className="text-gray-600">Ngày tham gia:</span>
                     <span className="font-medium">
-                      {new Date(currentData.joinDate).toLocaleDateString('vi-VN')}
+                      {new Date(currentData.joinDate).toLocaleDateString(
+                        "vi-VN",
+                      )}
                     </span>
                   </div>
                   <div className="flex justify-between py-2">
                     <span className="text-gray-600">Tổng khóa học:</span>
-                    <span className="font-medium">{currentData.totalCourses}</span>
+                    <span className="font-medium">
+                      {currentData.totalCourses}
+                    </span>
                   </div>
                   <div className="flex justify-between py-2">
                     <span className="text-gray-600">Tổng học sinh:</span>
-                    <span className="font-medium">{currentData.totalStudents}</span>
+                    <span className="font-medium">
+                      {currentData.totalStudents}
+                    </span>
                   </div>
                   <div className="flex justify-between py-2">
                     <span className="text-gray-600">Đánh gi�� trung bình:</span>
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">{currentData.averageRating}</span>
+                      <span className="font-medium">
+                        {currentData.averageRating}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -783,13 +968,16 @@ export default function TeacherProfile() {
                   </div>
                   <Switch
                     checked={currentData.profileVisibility === "public"}
-                    onCheckedChange={(checked) => 
-                      handleInputChange("profileVisibility", checked ? "public" : "private")
+                    onCheckedChange={(checked) =>
+                      handleInputChange(
+                        "profileVisibility",
+                        checked ? "public" : "private",
+                      )
                     }
                     disabled={!isEditing}
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Cho phép nhận tin nhắn</Label>
@@ -799,7 +987,9 @@ export default function TeacherProfile() {
                   </div>
                   <Switch
                     checked={currentData.allowMessages}
-                    onCheckedChange={(checked) => handleInputChange("allowMessages", checked)}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("allowMessages", checked)
+                    }
                     disabled={!isEditing}
                   />
                 </div>
@@ -823,11 +1013,13 @@ export default function TeacherProfile() {
                   </div>
                   <Switch
                     checked={currentData.notificationEmail}
-                    onCheckedChange={(checked) => handleInputChange("notificationEmail", checked)}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("notificationEmail", checked)
+                    }
                     disabled={!isEditing}
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Thông báo đẩy</Label>
@@ -837,7 +1029,9 @@ export default function TeacherProfile() {
                   </div>
                   <Switch
                     checked={currentData.notificationPush}
-                    onCheckedChange={(checked) => handleInputChange("notificationPush", checked)}
+                    onCheckedChange={(checked) =>
+                      handleInputChange("notificationPush", checked)
+                    }
                     disabled={!isEditing}
                   />
                 </div>
