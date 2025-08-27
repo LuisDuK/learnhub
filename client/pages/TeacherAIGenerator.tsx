@@ -151,7 +151,7 @@ export default function TeacherAIGenerator() {
     setSelectedTemplate(template.name);
     const prompt = template.template
       .replace("{count}", formData.count.toString())
-      .replace("{type}", exerciseTypes.find(t => t.value === formData.exerciseType)?.label || "câu hỏi")
+      .replace("{type}", exerciseTypes.find(t => t.value === formData.exerciseType)?.label || "c��u hỏi")
       .replace("{topic}", formData.topic || "chủ đề")
       .replace("{ageGroup}", formData.ageGroup || "học sinh")
       .replace("{difficulty}", formData.difficulty || "phù hợp")
@@ -387,12 +387,12 @@ export default function TeacherAIGenerator() {
             <CardContent className="p-4 text-center">
               <Target className="h-8 w-8 text-green-600 mx-auto mb-2" />
               <h3 className="font-semibold text-green-900">Chính xác</h3>
-              <p className="text-sm text-green-700">Độ khó và nội dung phù h��p với lứa tuổi</p>
+              <p className="text-sm text-green-700">Độ khó và nội dung phù hợp với lứa tuổi</p>
             </CardContent>
           </Card>
           <Card className="border-orange-200 bg-orange-50">
             <CardContent className="p-4 text-center">
-              <Magic className="h-8 w-8 text-orange-600 mx-auto mb-2" />
+              <Wand2 className="h-8 w-8 text-orange-600 mx-auto mb-2" />
               <h3 className="font-semibold text-orange-900">Đa dạng</h3>
               <p className="text-sm text-orange-700">Nhiều loại câu hỏi và phong cách</p>
             </CardContent>
