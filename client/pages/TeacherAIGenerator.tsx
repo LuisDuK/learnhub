@@ -46,7 +46,6 @@ import {
   Lightbulb,
   Zap,
   Brain,
-  Magic,
 } from "lucide-react";
 
 // Mock AI-generated content
@@ -388,7 +387,7 @@ export default function TeacherAIGenerator() {
             <CardContent className="p-4 text-center">
               <Target className="h-8 w-8 text-green-600 mx-auto mb-2" />
               <h3 className="font-semibold text-green-900">Chính xác</h3>
-              <p className="text-sm text-green-700">Độ khó và nội dung phù hợp với lứa tuổi</p>
+              <p className="text-sm text-green-700">Độ khó và nội dung phù h��p với lứa tuổi</p>
             </CardContent>
           </Card>
           <Card className="border-orange-200 bg-orange-50">
