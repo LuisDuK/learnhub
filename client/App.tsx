@@ -80,6 +80,14 @@ function AppRoutes() {
         <Route path="/admin/ai-config" element={<AdminAIConfig />} />
         <Route path="/admin/settings" element={<AdminSystemSettings />} />
 
+        {/* Teacher Routes */}
+        <Route path="/teacher" element={<TeacherDashboard />} />
+        <Route path="/teacher/courses" element={<TeacherCourses />} />
+        <Route path="/teacher/ai-generator" element={<TeacherAIGenerator />} />
+        <Route path="/teacher/reports" element={<TeacherReports />} />
+        <Route path="/teacher/profile" element={<TeacherProfile />} />
+        <Route path="/teacher/security" element={<TeacherSecurity />} />
+
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
