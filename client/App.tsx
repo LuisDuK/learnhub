@@ -30,6 +30,13 @@ import AdminExercises from "./pages/AdminExercises";
 import AdminReports from "./pages/AdminReports";
 import AdminAIConfig from "./pages/AdminAIConfig";
 import AdminSystemSettings from "./pages/AdminSystemSettings";
+// Teacher pages
+import TeacherDashboard from "./pages/TeacherDashboard";
+import TeacherCourses from "./pages/TeacherCourses";
+import TeacherReports from "./pages/TeacherReports";
+import TeacherProfile from "./pages/TeacherProfile";
+import TeacherAIGenerator from "./pages/TeacherAIGenerator";
+import TeacherSecurity from "./pages/TeacherSecurity";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 
 const queryClient = new QueryClient();
