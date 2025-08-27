@@ -551,6 +551,326 @@ export default function Login() {
                     khoản và hỗ trợ xác thực 2 bước.
                   </AlertDescription>
                 </Alert>
+
+                {/* Teacher Registration Section */}
+                <div className="border-t border-gray-200 pt-6 mt-6">
+                  <div className="text-center">
+                    <div className="text-sm text-gray-600 mb-3">
+                      Bạn là giáo viên?
+                    </div>
+                    <Dialog
+                      open={showTeacherRegisterDialog}
+                      onOpenChange={setShowTeacherRegisterDialog}
+                    >
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-full border-green-300 text-green-700 hover:bg-green-50 hover:border-green-400 rounded-xl h-12 font-bold"
+                        >
+                          <GraduationCap className="h-5 w-5 mr-2" />
+                          👩‍🏫 Đăng ký tài khoản giáo viên
+                        </Button>
+                      </DialogTrigger>
+
+                      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                        <DialogHeader className="pb-4 border-b border-gray-200">
+                          <DialogTitle className="text-xl font-bold text-green-700 flex items-center gap-2">
+                            <GraduationCap className="h-6 w-6" />
+                            👩‍🏫 Đăng ký tài khoản giáo viên
+                          </DialogTitle>
+                          <DialogDescription className="text-gray-600">
+                            Tạo tài khoản giáo viên để quản lý lớp học và tạo nội dung giáo dục
+                          </DialogDescription>
+                        </DialogHeader>
+
+                        {teacherRegisterSuccess ? (
+                          <div className="py-6">
+                            <Alert className="border-green-200 bg-green-50 text-center">
+                              <CheckCircle className="h-6 w-6 text-green-600 mx-auto mb-3" />
+                              <AlertDescription className="text-green-800 font-medium text-lg">
+                                🎉 Đăng ký thành công!
+                                <br />
+                                <span className="text-sm mt-2 block">
+                                  Tài khoản giáo viên của bạn đang chờ phê duyệt từ quản trị viên.
+                                  <br />
+                                  Bạn sẽ nhận được email thông báo trong vòng 24-48 giờ.
+                                </span>
+                              </AlertDescription>
+                              <div className="flex gap-2 mt-4">
+                                <Button
+                                  onClick={() => {
+                                    resetTeacherForm();
+                                    setActiveTab("login");
+                                  }}
+                                  className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white"
+                                >
+                                  Đăng nhập
+                                </Button>
+                                <Button
+                                  onClick={resetTeacherForm}
+                                  variant="outline"
+                                  className="flex-1 border-green-300 text-green-700 hover:bg-green-100"
+                                >
+                                  Đóng
+                                </Button>
+                              </div>
+                            </Alert>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleTeacherRegister} className="space-y-4 py-4">
+                            {/* Personal Information */}
+                            <div className="space-y-4">
+                              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                                <User className="h-4 w-4" />
+                                Thông tin cá nhân
+                              </h3>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherFullName" className="text-green-700 font-medium">
+                                    Họ và tên *
+                                  </Label>
+                                  <Input
+                                    id="teacherFullName"
+                                    type="text"
+                                    placeholder="Nguyễn Thị Lan"
+                                    value={teacherForm.fullName}
+                                    onChange={(e) => setTeacherForm({...teacherForm, fullName: e.target.value})}
+                                    required
+                                    className="border-green-200 focus:border-green-500 rounded-lg"
+                                  />
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherPhone" className="text-green-700 font-medium">
+                                    Số điện thoại *
+                                  </Label>
+                                  <Input
+                                    id="teacherPhone"
+                                    type="tel"
+                                    placeholder="0123456789"
+                                    value={teacherForm.phone}
+                                    onChange={(e) => setTeacherForm({...teacherForm, phone: e.target.value})}
+                                    required
+                                    className="border-green-200 focus:border-green-500 rounded-lg"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor="teacherEmail" className="text-green-700 font-medium">
+                                  Email *
+                                </Label>
+                                <Input
+                                  id="teacherEmail"
+                                  type="email"
+                                  placeholder="giaovien@email.com"
+                                  value={teacherForm.email}
+                                  onChange={(e) => setTeacherForm({...teacherForm, email: e.target.value})}
+                                  required
+                                  className="border-green-200 focus:border-green-500 rounded-lg"
+                                />
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherPassword" className="text-green-700 font-medium">
+                                    Mật khẩu *
+                                  </Label>
+                                  <div className="relative">
+                                    <Input
+                                      id="teacherPassword"
+                                      type={showTeacherPassword ? "text" : "password"}
+                                      placeholder="••••••••"
+                                      value={teacherForm.password}
+                                      onChange={(e) => setTeacherForm({...teacherForm, password: e.target.value})}
+                                      required
+                                      className="border-green-200 focus:border-green-500 rounded-lg pr-10"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                                      onClick={() => setShowTeacherPassword(!showTeacherPassword)}
+                                    >
+                                      {showTeacherPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </Button>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherConfirmPassword" className="text-green-700 font-medium">
+                                    Xác nhận mật khẩu *
+                                  </Label>
+                                  <div className="relative">
+                                    <Input
+                                      id="teacherConfirmPassword"
+                                      type={showTeacherConfirmPassword ? "text" : "password"}
+                                      placeholder="••••••••"
+                                      value={teacherForm.confirmPassword}
+                                      onChange={(e) => setTeacherForm({...teacherForm, confirmPassword: e.target.value})}
+                                      required
+                                      className="border-green-200 focus:border-green-500 rounded-lg pr-10"
+                                    />
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                                      onClick={() => setShowTeacherConfirmPassword(!showTeacherConfirmPassword)}
+                                    >
+                                      {showTeacherConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Professional Information */}
+                            <div className="space-y-4 border-t border-gray-200 pt-4">
+                              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                                <Building2 className="h-4 w-4" />
+                                Thông tin nghề nghiệp
+                              </h3>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherSchool" className="text-green-700 font-medium">
+                                    Trường học hiện tại *
+                                  </Label>
+                                  <Input
+                                    id="teacherSchool"
+                                    type="text"
+                                    placeholder="Trường Tiểu học ABC"
+                                    value={teacherForm.school}
+                                    onChange={(e) => setTeacherForm({...teacherForm, school: e.target.value})}
+                                    required
+                                    className="border-green-200 focus:border-green-500 rounded-lg"
+                                  />
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherSubject" className="text-green-700 font-medium">
+                                    Môn học chuyên môn *
+                                  </Label>
+                                  <Select
+                                    value={teacherForm.subject}
+                                    onValueChange={(value) => setTeacherForm({...teacherForm, subject: value})}
+                                  >
+                                    <SelectTrigger className="border-green-200 focus:border-green-500 rounded-lg">
+                                      <SelectValue placeholder="Chọn môn học" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="toan">Toán học</SelectItem>
+                                      <SelectItem value="van">Tiếng Việt</SelectItem>
+                                      <SelectItem value="anh">Tiếng Anh</SelectItem>
+                                      <SelectItem value="khoa-hoc">Khoa học tự nhiên</SelectItem>
+                                      <SelectItem value="xa-hoi">Khoa học xã hội</SelectItem>
+                                      <SelectItem value="the-duc">Thể dục</SelectItem>
+                                      <SelectItem value="my-thuat">Mỹ thuật</SelectItem>
+                                      <SelectItem value="am-nhac">Âm nhạc</SelectItem>
+                                      <SelectItem value="tin-hoc">Tin học</SelectItem>
+                                      <SelectItem value="khac">Khác</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherExperience" className="text-green-700 font-medium">
+                                    Số năm kinh nghiệm *
+                                  </Label>
+                                  <Select
+                                    value={teacherForm.experience}
+                                    onValueChange={(value) => setTeacherForm({...teacherForm, experience: value})}
+                                  >
+                                    <SelectTrigger className="border-green-200 focus:border-green-500 rounded-lg">
+                                      <SelectValue placeholder="Chọn kinh nghiệm" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="moi">Mới tốt nghiệp</SelectItem>
+                                      <SelectItem value="1-3">1-3 năm</SelectItem>
+                                      <SelectItem value="3-5">3-5 năm</SelectItem>
+                                      <SelectItem value="5-10">5-10 năm</SelectItem>
+                                      <SelectItem value="10+">Trên 10 năm</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+
+                                <div className="space-y-2">
+                                  <Label htmlFor="teacherQualification" className="text-green-700 font-medium">
+                                    Trình độ học vấn *
+                                  </Label>
+                                  <Select
+                                    value={teacherForm.qualification}
+                                    onValueChange={(value) => setTeacherForm({...teacherForm, qualification: value})}
+                                  >
+                                    <SelectTrigger className="border-green-200 focus:border-green-500 rounded-lg">
+                                      <SelectValue placeholder="Chọn trình độ" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="cao-dang">Cao đẳng sư phạm</SelectItem>
+                                      <SelectItem value="dai-hoc">Đại học sư phạm</SelectItem>
+                                      <SelectItem value="thac-si">Thạc sĩ</SelectItem>
+                                      <SelectItem value="tien-si">Tiến sĩ</SelectItem>
+                                      <SelectItem value="khac">Khác</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor="teacherBio" className="text-green-700 font-medium">
+                                  Giới thiệu bản thân (tùy chọn)
+                                </Label>
+                                <Textarea
+                                  id="teacherBio"
+                                  placeholder="Chia sẻ về phương pháp giảng dạy và kinh nghiệm của bạn..."
+                                  value={teacherForm.bio}
+                                  onChange={(e) => setTeacherForm({...teacherForm, bio: e.target.value})}
+                                  className="border-green-200 focus:border-green-500 rounded-lg"
+                                  rows={3}
+                                />
+                              </div>
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="border-t border-gray-200 pt-4">
+                              <Button
+                                type="submit"
+                                className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-lg h-12 text-lg"
+                                disabled={isLoading}
+                              >
+                                {isLoading ? (
+                                  <div className="flex items-center gap-2">
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    Đang tạo tài khoản...
+                                  </div>
+                                ) : (
+                                  <>
+                                    <GraduationCap className="h-5 w-5 mr-2" />
+                                    🎓 Đăng ký giáo viên
+                                  </>
+                                )}
+                              </Button>
+
+                              {/* Teacher Registration Notice */}
+                              <Alert className="border-green-200 bg-green-50 mt-4">
+                                <FileText className="h-4 w-4 text-green-600" />
+                                <AlertDescription className="text-green-800 text-sm">
+                                  📋 <strong>Lưu ý:</strong> Tài khoản giáo viên cần được phê duyệt bởi
+                                  quản trị viên trước khi có thể sử dụng. Quá trình này thường mất 24-48 giờ.
+                                </AlertDescription>
+                              </Alert>
+                            </div>
+                          </form>
+                        )}
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
           )}
