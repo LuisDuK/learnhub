@@ -416,42 +416,10 @@ export default function TeacherAIGenerator() {
 
         {/* AI Features Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="border-purple-200 bg-purple-50">
-            <CardContent className="p-4 text-center">
-              <Brain className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-              <h3 className="font-semibold text-purple-900">Thông minh</h3>
-              <p className="text-sm text-purple-700">
-                AI hiểu nội dung và tạo câu hỏi phù hợp
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="border-blue-200 bg-blue-50">
-            <CardContent className="p-4 text-center">
-              <Zap className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-              <h3 className="font-semibold text-blue-900">Nhanh chóng</h3>
-              <p className="text-sm text-blue-700">
-                Tạo hàng chục câu hỏi trong vài giây
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="border-green-200 bg-green-50">
-            <CardContent className="p-4 text-center">
-              <Target className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <h3 className="font-semibold text-green-900">Chính xác</h3>
-              <p className="text-sm text-green-700">
-                Độ khó và nội dung phù hợp với lứa tuổi
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="border-orange-200 bg-orange-50">
-            <CardContent className="p-4 text-center">
-              <Wand2 className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-              <h3 className="font-semibold text-orange-900">Đa dạng</h3>
-              <p className="text-sm text-orange-700">
-                Nhiều loại câu hỏi và phong cách
-              </p>
-            </CardContent>
-          </Card>
+          <Card className="border-purple-200 bg-purple-50" />
+          <Card className="border-blue-200 bg-blue-50" />
+          <Card className="border-green-200 bg-green-50" />
+          <Card className="border-orange-200 bg-orange-50" />
         </div>
 
         <Tabs
@@ -459,7 +427,7 @@ export default function TeacherAIGenerator() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
             <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
