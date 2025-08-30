@@ -39,13 +39,10 @@ import {
   Edit,
   Eye,
   Clock,
-  Target,
   BookOpen,
   CheckCircle,
   AlertCircle,
   Lightbulb,
-  Zap,
-  Brain,
 } from "lucide-react";
 
 // Mock AI-generated content
@@ -414,13 +411,6 @@ export default function TeacherAIGenerator() {
           </div>
         </div>
 
-        {/* AI Features Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="border-purple-200 bg-purple-50" />
-          <Card className="border-blue-200 bg-blue-50" />
-          <Card className="border-green-200 bg-green-50" />
-          <Card className="border-orange-200 bg-orange-50" />
-        </div>
 
         <Tabs
           value={activeTab}
@@ -601,7 +591,7 @@ export default function TeacherAIGenerator() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="customPrompt">Yêu cầu tùy chỉnh</Label>
+                      <Label htmlFor="customPrompt">Yêu c��u tùy chỉnh</Label>
                       <Textarea
                         id="customPrompt"
                         value={formData.customPrompt}
