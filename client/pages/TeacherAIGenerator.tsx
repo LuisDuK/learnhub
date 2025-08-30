@@ -169,7 +169,7 @@ export default function TeacherAIGenerator() {
       .replace(
         "{type}",
         exerciseTypes.find((t) => t.value === formData.exerciseType)?.label ||
-          "c��u hỏi",
+          "câu hỏi",
       )
       .replace("{topic}", formData.topic || "chủ đề")
       .replace("{ageGroup}", formData.ageGroup || "học sinh")
@@ -479,7 +479,7 @@ export default function TeacherAIGenerator() {
                       Thông tin bài tập
                     </CardTitle>
                     <CardDescription>
-                      Điền thông tin để AI tạo bài tập phù hợp
+                      Điền thông tin để AI tạo bài tập phù h���p
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -773,7 +773,7 @@ export default function TeacherAIGenerator() {
                     Chưa có lịch sử tạo bài tập
                   </h3>
                   <p className="text-gray-500">
-                    Các bài tập đã tạo sẽ được lưu lại ở đây để bạn có thể xem
+                    Các bài tập đã tạo s��� được lưu lại ở đây để bạn có thể xem
                     lại
                   </p>
                 </CardContent>

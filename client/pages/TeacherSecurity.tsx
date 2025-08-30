@@ -236,7 +236,7 @@ export default function TeacherSecurity() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <Shield className="h-8 w-8 text-green-600" />
-              Bảo mật tài kho��n
+              Bảo mật tài khoản
             </h1>
             <p className="text-gray-600 mt-1">
               Quản lý cài đặt bảo mật và quyền riêng tư của bạn

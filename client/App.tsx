@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { FloatingChatbot } from "@/components/FloatingChatbot";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -47,6 +47,13 @@ function AppProviders({ children }: { children: React.ReactNode }) {
       <TooltipProvider>{children}</TooltipProvider>
     </QueryClientProvider>
   );
+}
+
+function ChatbotMount() {
+  const location = useLocation();
+  const hide = location.pathname.startsWith("/admin") || location.pathname.startsWith("/teacher");
+  if (hide) return null;
+  return <FloatingChatbot />;
 }
 
 function AppRoutes() {
@@ -91,6 +98,7 @@ function AppRoutes() {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
+        <ChatbotMount />
     </BrowserRouter>
   );
 }
@@ -100,7 +108,6 @@ function App() {
     <StrictMode>
       <AppProviders>
         <AppRoutes />
-        <FloatingChatbot />
         <Toaster />
         <Sonner />
       </AppProviders>
