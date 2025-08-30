@@ -396,7 +396,7 @@ export default function TeacherAIGenerator() {
               AI Sinh bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Sử dụng AI để tạo bài tập và đề kiểm tra chất lượng cao
+              Sử dụng AI để tạo bài tập và đề ki��m tra chất lượng cao
             </p>
           </div>
 
@@ -479,7 +479,7 @@ export default function TeacherAIGenerator() {
                       Thông tin bài tập
                     </CardTitle>
                     <CardDescription>
-                      Điền thông tin để AI tạo bài tập phù h���p
+                      Điền thông tin để AI tạo bài tập phù hợp
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -773,7 +773,7 @@ export default function TeacherAIGenerator() {
                     Chưa có lịch sử tạo bài tập
                   </h3>
                   <p className="text-gray-500">
-                    Các bài tập đã tạo s��� được lưu lại ở đây để bạn có thể xem
+                    Các bài tập đã tạo sẽ được lưu lại ở đây để bạn có thể xem
                     lại
                   </p>
                 </CardContent>
