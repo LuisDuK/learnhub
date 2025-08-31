@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Bell, PlayCircle, FileText, Trophy, ClipboardList } from "lucide-react";
+import { Bell, PlayCircle, FileText, Trophy, ClipboardList, Flag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
