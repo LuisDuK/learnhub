@@ -42,16 +42,25 @@ export function BottomNav() {
                         isActive && "scale-100 opacity-100",
                       )}
                     />
-                    <Icon className={cn("mb-0.5 h-6 w-6 transition-transform", isActive ? "animate-bounce" : "group-hover:scale-110")}/>
+                    <Icon
+                      className={cn(
+                        "mb-0.5 h-6 w-6 transition-transform",
+                        isActive ? "animate-bounce" : "group-hover:scale-110",
+                      )}
+                    />
                     <span className="leading-none">{label}</span>
                     <span
                       className={cn(
                         "mt-1 h-1 w-1 rounded-full bg-primary transition-opacity",
-                        isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50",
+                        isActive
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-50",
                       )}
                     />
                     {label === "Bài tập" && (
-                      <span className="absolute -right-1 -top-1 rounded-full bg-gradient-to-r from-red-400 to-pink-400 px-1.5 text-[10px] font-bold text-white shadow-sm">2</span>
+                      <span className="absolute -right-1 -top-1 rounded-full bg-gradient-to-r from-red-400 to-pink-400 px-1.5 text-[10px] font-bold text-white shadow-sm">
+                        2
+                      </span>
                     )}
                   </>
                 )}

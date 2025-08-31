@@ -68,7 +68,10 @@ function AppProviders({ children }: { children: React.ReactNode }) {
 
 function ChatbotMount() {
   const location = useLocation();
-  const hide = location.pathname.startsWith("/admin") || location.pathname.startsWith("/teacher") || location.pathname.startsWith("/m");
+  const hide =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/teacher") ||
+    location.pathname.startsWith("/m");
   if (hide) return null;
   return <FloatingChatbot />;
 }
@@ -125,8 +128,14 @@ function AppRoutes() {
           <Route path="plan/create" element={<MobileLearningPathCreate />} />
           <Route path="profile" element={<MobileProfile />} />
           <Route path="course/:id" element={<MobileCourseDetail />} />
-          <Route path="course/:id/lesson/:lessonId" element={<MobileLesson />} />
-          <Route path="course/:id/material/:materialId" element={<MobileMaterial />} />
+          <Route
+            path="course/:id/lesson/:lessonId"
+            element={<MobileLesson />}
+          />
+          <Route
+            path="course/:id/material/:materialId"
+            element={<MobileMaterial />}
+          />
           <Route path="quiz/:id" element={<MobileQuiz />} />
           <Route path="results" element={<MobileResults />} />
         </Route>
@@ -134,7 +143,7 @@ function AppRoutes() {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-        <ChatbotMount />
+      <ChatbotMount />
     </BrowserRouter>
   );
 }

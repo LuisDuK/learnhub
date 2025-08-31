@@ -22,11 +22,16 @@ export default function MobileLearningPath() {
           <div>
             <p className="text-xs text-muted-foreground">Lộ trình học</p>
             <p className="text-2xl font-extrabold text-primary">{pct}%</p>
-            <p className="text-xs text-muted-foreground">{doneCount}/{path.length} chương</p>
+            <p className="text-xs text-muted-foreground">
+              {doneCount}/{path.length} chương
+            </p>
           </div>
           <div className="flex-1">
             <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
-              <div className="h-full bg-gradient-to-r from-primary to-accent" style={{ width: `${pct}%` }} />
+              <div
+                className="h-full bg-gradient-to-r from-primary to-accent"
+                style={{ width: `${pct}%` }}
+              />
             </div>
           </div>
         </CardContent>
@@ -50,28 +55,42 @@ export default function MobileLearningPath() {
               const isLocked = p.status === "locked";
               return (
                 <li key={p.id} className="mb-5 ml-4">
-                  <span className={`absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-                    isDone
-                      ? "border-primary bg-primary/20"
-                      : isCurrent
-                      ? "border-accent bg-accent/20 animate-pulse"
-                      : "border-muted bg-muted"
-                  }`}>
-                    {isDone && <CheckCircle2 className="h-4 w-4 text-primary" />}
+                  <span
+                    className={`absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+                      isDone
+                        ? "border-primary bg-primary/20"
+                        : isCurrent
+                          ? "border-accent bg-accent/20 animate-pulse"
+                          : "border-muted bg-muted"
+                    }`}
+                  >
+                    {isDone && (
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                    )}
                     {isCurrent && <Play className="h-4 w-4 text-accent" />}
-                    {isLocked && <Lock className="h-4 w-4 text-muted-foreground" />}
+                    {isLocked && (
+                      <Lock className="h-4 w-4 text-muted-foreground" />
+                    )}
                   </span>
-                  <div className={`rounded-xl border p-3 shadow-sm ${
-                    isDone
-                      ? "border-primary/20 bg-gradient-to-r from-primary/10 to-white"
-                      : isCurrent
-                      ? "border-accent/30 bg-gradient-to-r from-accent/10 to-white"
-                      : "border-muted bg-card"
-                  }`}>
+                  <div
+                    className={`rounded-xl border p-3 shadow-sm ${
+                      isDone
+                        ? "border-primary/20 bg-gradient-to-r from-primary/10 to-white"
+                        : isCurrent
+                          ? "border-accent/30 bg-gradient-to-r from-accent/10 to-white"
+                          : "border-muted bg-card"
+                    }`}
+                  >
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold">{p.title}</p>
-                        <p className="text-xs text-muted-foreground">{isDone ? "Đã hoàn thành" : isCurrent ? "Đang học" : "Chưa mở khóa"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {isDone
+                            ? "Đã hoàn thành"
+                            : isCurrent
+                              ? "Đang học"
+                              : "Chưa mở khóa"}
+                        </p>
                       </div>
                       {isCurrent ? (
                         <Link to="/m/courses">
@@ -79,7 +98,9 @@ export default function MobileLearningPath() {
                         </Link>
                       ) : isDone ? (
                         <Link to="/m/courses">
-                          <Button size="sm" variant="outline">Ôn lại</Button>
+                          <Button size="sm" variant="outline">
+                            Ôn lại
+                          </Button>
                         </Link>
                       ) : (
                         <Button size="sm" variant="outline" disabled>

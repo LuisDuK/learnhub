@@ -30,7 +30,9 @@ export default function MobileProfile() {
         </CardContent>
       </Card>
 
-      <Button className="w-full" variant="destructive">Đăng xuất</Button>
+      <Button className="w-full" variant="destructive">
+        Đăng xuất
+      </Button>
     </div>
   );
 }

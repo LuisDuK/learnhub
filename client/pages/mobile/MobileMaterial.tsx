@@ -8,14 +8,18 @@ export default function MobileMaterial() {
   return (
     <div className="space-y-4 p-4">
       <Card className="border-accent/30">
-        <CardHeader className="pb-2"><CardTitle className="text-base">Tài liệu: {materialId}</CardTitle></CardHeader>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Tài liệu: {materialId}</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-3">
           <div className="aspect-video w-full overflow-hidden rounded-xl border border-accent/30 bg-gradient-to-br from-accent/10 to-secondary/10"></div>
           <div className="flex gap-2">
             <Button>Tải PDF</Button>
             <Button variant="outline">Mở đọc</Button>
           </div>
-          <p className="text-sm text-muted-foreground">Tài liệu thuộc khóa: {id}.</p>
+          <p className="text-sm text-muted-foreground">
+            Tài liệu thuộc khóa: {id}.
+          </p>
         </CardContent>
       </Card>
     </div>

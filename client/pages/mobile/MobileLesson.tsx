@@ -7,10 +7,14 @@ export default function MobileLesson() {
   return (
     <div className="space-y-4 p-4">
       <Card className="border-primary/20">
-        <CardHeader className="pb-2"><CardTitle className="text-base">Bài giảng: {lessonId}</CardTitle></CardHeader>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base">Bài giảng: {lessonId}</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-3">
           <div className="aspect-video w-full overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10"></div>
-          <p className="text-sm text-muted-foreground">Video bài học và ghi chú sẽ hiển thị ở đây. Khóa học: {id}.</p>
+          <p className="text-sm text-muted-foreground">
+            Video bài học và ghi chú sẽ hiển thị ở đây. Khóa học: {id}.
+          </p>
         </CardContent>
       </Card>
     </div>
