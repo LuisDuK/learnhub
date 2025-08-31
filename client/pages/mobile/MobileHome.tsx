@@ -12,7 +12,7 @@ const enrolled = [
 
 const quick = [
   { to: "/m/assignments", title: "Bài tập", desc: "Làm ngay", icon: ClipboardList, color: "bg-gradient-to-br from-primary/10 to-accent/10" },
-  { to: "/m/courses", title: "Tiếp tục học", desc: "Bài gần đây", icon: PlayCircle, color: "bg-gradient-to-br from-accent/10 to-secondary/10" },
+  { to: "/m/plan", title: "Lộ trình", desc: "Từng bước", icon: Flag, color: "bg-gradient-to-br from-accent/10 to-secondary/10" },
   { to: "/m/progress", title: "Thử thách", desc: "Tăng streak", icon: Trophy, color: "bg-gradient-to-br from-secondary/10 to-primary/10" },
   { to: "/m/courses", title: "Tài liệu", desc: "PDF, bài tập", icon: FileText, color: "bg-gradient-to-br from-primary/10 to-secondary/10" },
 ];
