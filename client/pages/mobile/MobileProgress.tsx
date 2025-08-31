@@ -32,8 +32,9 @@ export default function MobileProgress() {
       </div>
 
       <Card className="border-accent/30">
-        <CardHeader className="p-4 pb-0">
+        <CardHeader className="flex items-center justify-between p-4 pb-0">
           <CardTitle className="text-base">Hoạt động tuần này</CardTitle>
+          <a href="/m/progress/detail" className="text-xs font-semibold text-primary underline">Xem chi tiết</a>
         </CardHeader>
         <CardContent className="p-4">
           <div className="flex items-end justify-between gap-1">
