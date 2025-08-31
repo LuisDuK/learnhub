@@ -28,17 +28,23 @@ export default function MobileCourseDetail() {
           <CardTitle className="text-base">Danh sách bài học</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {lessons.map((l) => (
-            <div key={l.id} className="flex items-center justify-between rounded-xl border border-primary/10 p-3">
-              <div>
-                <p className="text-sm font-semibold">{l.title}</p>
-                <p className="text-xs text-muted-foreground">{l.type.toUpperCase()}</p>
+          {lessons.map((l) => {
+            let to = "";
+            if (l.type === "video") to = `/m/course/${id}/lesson/${l.id}`;
+            else if (l.type === "exercise") to = `/m/quiz/${l.id}`;
+            else to = `/m/course/${id}/material/${l.id}`;
+            return (
+              <div key={l.id} className="flex items-center justify-between rounded-xl border border-primary/10 p-3">
+                <div>
+                  <p className="text-sm font-semibold">{l.title}</p>
+                  <p className="text-xs text-muted-foreground">{l.type.toUpperCase()}</p>
+                </div>
+                <Link to={to}>
+                  <Button variant="outline">Vào học</Button>
+                </Link>
               </div>
-              <Link to={`/m/quiz/${l.id}`}>
-                <Button variant="outline">Vào học</Button>
-              </Link>
-            </div>
-          ))}
+            );
+          })}
         </CardContent>
       </Card>
     </div>
