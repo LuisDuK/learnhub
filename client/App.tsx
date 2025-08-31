@@ -107,6 +107,20 @@ function AppRoutes() {
         <Route path="/teacher/profile" element={<TeacherProfile />} />
         <Route path="/teacher/security" element={<TeacherSecurity />} />
 
+        {/* Mobile App Routes */}
+        <Route path="/m/login" element={<MobileLogin />} />
+        <Route path="/m/register" element={<MobileRegister />} />
+        <Route path="/m" element={<MobileLayout />}>
+          <Route index element={<MobileHome />} />
+          <Route path="courses" element={<MobileCourses />} />
+          <Route path="assignments" element={<MobileAssignments />} />
+          <Route path="progress" element={<MobileProgress />} />
+          <Route path="profile" element={<MobileProfile />} />
+          <Route path="course/:id" element={<MobileCourseDetail />} />
+          <Route path="quiz/:id" element={<MobileQuiz />} />
+          <Route path="results" element={<MobileResults />} />
+        </Route>
+
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
