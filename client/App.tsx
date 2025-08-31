@@ -54,6 +54,7 @@ import MobileProgressDetail from "@/pages/mobile/MobileProgressDetail";
 import MobileLearningPath from "@/pages/mobile/MobileLearningPath";
 import MobileLesson from "@/pages/mobile/MobileLesson";
 import MobileMaterial from "@/pages/mobile/MobileMaterial";
+import MobileLearningPathCreate from "@/pages/mobile/MobileLearningPathCreate";
 
 const queryClient = new QueryClient();
 
