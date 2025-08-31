@@ -58,9 +58,6 @@ export default function MobileProgress() {
             <Link to="/m/progress/detail">
               <Button variant="outline" className="rounded-2xl h-10 px-4">Xem chi tiết</Button>
             </Link>
-            <Link to="/m/plan">
-              <Button className="rounded-2xl h-10 px-4">Xem lộ trình</Button>
-            </Link>
           </div>
         </CardContent>
       </Card>
