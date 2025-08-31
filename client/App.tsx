@@ -119,8 +119,12 @@ function AppRoutes() {
           <Route path="courses" element={<MobileCourses />} />
           <Route path="assignments" element={<MobileAssignments />} />
           <Route path="progress" element={<MobileProgress />} />
+          <Route path="progress/detail" element={<MobileProgressDetail />} />
+          <Route path="plan" element={<MobileLearningPath />} />
           <Route path="profile" element={<MobileProfile />} />
           <Route path="course/:id" element={<MobileCourseDetail />} />
+          <Route path="course/:id/lesson/:lessonId" element={<MobileLesson />} />
+          <Route path="course/:id/material/:materialId" element={<MobileMaterial />} />
           <Route path="quiz/:id" element={<MobileQuiz />} />
           <Route path="results" element={<MobileResults />} />
         </Route>
