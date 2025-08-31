@@ -122,6 +122,7 @@ function AppRoutes() {
           <Route path="progress" element={<MobileProgress />} />
           <Route path="progress/detail" element={<MobileProgressDetail />} />
           <Route path="plan" element={<MobileLearningPath />} />
+          <Route path="plan/create" element={<MobileLearningPathCreate />} />
           <Route path="profile" element={<MobileProfile />} />
           <Route path="course/:id" element={<MobileCourseDetail />} />
           <Route path="course/:id/lesson/:lessonId" element={<MobileLesson />} />
