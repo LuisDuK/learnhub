@@ -50,6 +50,10 @@ import MobileRegister from "@/pages/mobile/MobileRegister";
 import MobileCourseDetail from "@/pages/mobile/MobileCourseDetail";
 import MobileQuiz from "@/pages/mobile/MobileQuiz";
 import MobileResults from "@/pages/mobile/MobileResults";
+import MobileProgressDetail from "@/pages/mobile/MobileProgressDetail";
+import MobileLearningPath from "@/pages/mobile/MobileLearningPath";
+import MobileLesson from "@/pages/mobile/MobileLesson";
+import MobileMaterial from "@/pages/mobile/MobileMaterial";
 
 const queryClient = new QueryClient();
 
