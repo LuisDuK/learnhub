@@ -38,6 +38,23 @@ import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAIGenerator from "./pages/TeacherAIGenerator";
 import TeacherSecurity from "./pages/TeacherSecurity";
 import { PlaceholderPage } from "./components/PlaceholderPage";
+// Mobile layout & pages
+import MobileLayout from "@/components/mobile/MobileLayout";
+import MobileHome from "@/pages/mobile/MobileHome";
+import MobileCourses from "@/pages/mobile/MobileCourses";
+import MobileAssignments from "@/pages/mobile/MobileAssignments";
+import MobileProgress from "@/pages/mobile/MobileProgress";
+import MobileProfile from "@/pages/mobile/MobileProfile";
+import MobileLogin from "@/pages/mobile/MobileLogin";
+import MobileRegister from "@/pages/mobile/MobileRegister";
+import MobileCourseDetail from "@/pages/mobile/MobileCourseDetail";
+import MobileQuiz from "@/pages/mobile/MobileQuiz";
+import MobileResults from "@/pages/mobile/MobileResults";
+import MobileProgressDetail from "@/pages/mobile/MobileProgressDetail";
+import MobileLearningPath from "@/pages/mobile/MobileLearningPath";
+import MobileLesson from "@/pages/mobile/MobileLesson";
+import MobileMaterial from "@/pages/mobile/MobileMaterial";
+import MobileLearningPathCreate from "@/pages/mobile/MobileLearningPathCreate";
 
 const queryClient = new QueryClient();
 
@@ -51,7 +68,10 @@ function AppProviders({ children }: { children: React.ReactNode }) {
 
 function ChatbotMount() {
   const location = useLocation();
-  const hide = location.pathname.startsWith("/admin") || location.pathname.startsWith("/teacher");
+  const hide =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/teacher") ||
+    location.pathname.startsWith("/m");
   if (hide) return null;
   return <FloatingChatbot />;
 }
@@ -95,10 +115,35 @@ function AppRoutes() {
         <Route path="/teacher/profile" element={<TeacherProfile />} />
         <Route path="/teacher/security" element={<TeacherSecurity />} />
 
+        {/* Mobile App Routes */}
+        <Route path="/m/login" element={<MobileLogin />} />
+        <Route path="/m/register" element={<MobileRegister />} />
+        <Route path="/m" element={<MobileLayout />}>
+          <Route index element={<MobileHome />} />
+          <Route path="courses" element={<MobileCourses />} />
+          <Route path="assignments" element={<MobileAssignments />} />
+          <Route path="progress" element={<MobileProgress />} />
+          <Route path="progress/detail" element={<MobileProgressDetail />} />
+          <Route path="plan" element={<MobileLearningPath />} />
+          <Route path="plan/create" element={<MobileLearningPathCreate />} />
+          <Route path="profile" element={<MobileProfile />} />
+          <Route path="course/:id" element={<MobileCourseDetail />} />
+          <Route
+            path="course/:id/lesson/:lessonId"
+            element={<MobileLesson />}
+          />
+          <Route
+            path="course/:id/material/:materialId"
+            element={<MobileMaterial />}
+          />
+          <Route path="quiz/:id" element={<MobileQuiz />} />
+          <Route path="results" element={<MobileResults />} />
+        </Route>
+
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-        <ChatbotMount />
+      <ChatbotMount />
     </BrowserRouter>
   );
 }
