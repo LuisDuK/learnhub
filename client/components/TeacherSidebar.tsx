@@ -34,7 +34,7 @@ const menuItems = [
     href: "/teacher/ai-generator",
   },
   {
-    title: "B��o cáo & Thống kê",
+    title: "Báo cáo & Thống kê",
     icon: BarChart3,
     href: "/teacher/reports",
   },

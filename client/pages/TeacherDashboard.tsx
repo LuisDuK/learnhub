@@ -34,7 +34,7 @@ const teacherCourses = [
   {
     id: 1,
     name: "Toán học lớp 3",
-    description: "Khóa học toán học cơ b���n cho học sinh lớp 3",
+    description: "Khóa học toán học cơ bản cho học sinh lớp 3",
     studentsCount: 25,
     completionRate: 78,
     status: "active",

@@ -936,7 +936,7 @@ export default function TeacherProfile() {
                     </span>
                   </div>
                   <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Đánh gi�� trung bình:</span>
+                    <span className="text-gray-600">Đánh giá trung bình:</span>
                     <div className="flex items-center gap-1">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                       <span className="font-medium">
