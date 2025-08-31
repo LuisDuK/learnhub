@@ -38,6 +38,18 @@ import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAIGenerator from "./pages/TeacherAIGenerator";
 import TeacherSecurity from "./pages/TeacherSecurity";
 import { PlaceholderPage } from "./components/PlaceholderPage";
+// Mobile layout & pages
+import MobileLayout from "@/components/mobile/MobileLayout";
+import MobileHome from "@/pages/mobile/MobileHome";
+import MobileCourses from "@/pages/mobile/MobileCourses";
+import MobileAssignments from "@/pages/mobile/MobileAssignments";
+import MobileProgress from "@/pages/mobile/MobileProgress";
+import MobileProfile from "@/pages/mobile/MobileProfile";
+import MobileLogin from "@/pages/mobile/MobileLogin";
+import MobileRegister from "@/pages/mobile/MobileRegister";
+import MobileCourseDetail from "@/pages/mobile/MobileCourseDetail";
+import MobileQuiz from "@/pages/mobile/MobileQuiz";
+import MobileResults from "@/pages/mobile/MobileResults";
 
 const queryClient = new QueryClient();
 
