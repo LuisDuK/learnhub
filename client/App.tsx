@@ -63,7 +63,7 @@ function AppProviders({ children }: { children: React.ReactNode }) {
 
 function ChatbotMount() {
   const location = useLocation();
-  const hide = location.pathname.startsWith("/admin") || location.pathname.startsWith("/teacher");
+  const hide = location.pathname.startsWith("/admin") || location.pathname.startsWith("/teacher") || location.pathname.startsWith("/m");
   if (hide) return null;
   return <FloatingChatbot />;
 }
