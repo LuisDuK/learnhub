@@ -30,6 +30,7 @@ import AdminExercises from "./pages/AdminExercises";
 import AdminReports from "./pages/AdminReports";
 import AdminAIConfig from "./pages/AdminAIConfig";
 import AdminSystemSettings from "./pages/AdminSystemSettings";
+import AdminTeacherApproval from "./pages/AdminTeacherApproval";
 // Teacher pages
 import TeacherDashboard from "./pages/TeacherDashboard";
 import TeacherCourses from "./pages/TeacherCourses";
