@@ -154,7 +154,7 @@ const mockPrompts = [
     id: 3,
     name: "Prompt chatbot hỗ trợ",
     content:
-      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} đ��� trả lời.",
     module: "Chatbot",
     variables: [
       {
@@ -1179,72 +1179,7 @@ export default function AdminAIConfig() {
                     </div>
                   </div>
 
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <h4 className="font-medium text-blue-900 mb-2 flex items-center gap-2">
-                      <MessageSquare className="h-5 w-5" />
-                      🔗 Kết nối với Prompt mẫu
-                    </h4>
-                    <p className="text-sm text-blue-800 mb-3">
-                      <strong>Cách sử dụng:</strong> Sau khi bật tính n��ng AI ở
-                      trên, bạn cần:
-                    </p>
-                    <ol className="text-sm text-blue-800 space-y-1 ml-4 list-decimal">
-                      <li>
-                        Chuyển sang tab <strong>"Prompt mẫu"</strong> để
-                        tạo/chỉnh sửa prompt tương ứng
-                      </li>
-                      <li>
-                        Mỗi tính năng AI sẽ sử dụng prompt có Module phù hợp
-                        (VD: "Chấm bài", "Lộ trình", "Bài tập")
-                      </li>
-                      <li>
-                        Tùy chỉnh biến trong prompt để điều khiển hành vi AI
-                      </li>
-                      <li>
-                        Lưu prompt để tính năng AI hoạt động theo cấu hình của
-                        bạn
-                      </li>
-                    </ol>
-                  </div>
 
-                  <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                    <h4 className="font-medium text-yellow-900 mb-2 flex items-center gap-2">
-                      <Activity className="h-4 w-4" />
-                      ⚠️ Quan trọng: Cách thay đổi hành vi AI
-                    </h4>
-                    <p className="text-sm text-yellow-800">
-                      <strong>Để thay đổi cách AI hoạt động:</strong> Vào tab
-                      "Prompt mẫu" → Chọn "Chỉnh sửa" prompt tương ứng → Sửa nội
-                      dung và biến → Lưu lại. AI s��� hoạt động theo prompt mới
-                      ngay lập tức!
-                    </p>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <div className="text-2xl font-bold text-blue-600">
-                          245
-                        </div>
-                        <div className="text-blue-600">Bài chấm tự động</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-green-600">
-                          18
-                        </div>
-                        <div className="text-green-600">Lộ trình đã tạo</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-orange-600">
-                          67
-                        </div>
-                        <div className="text-orange-600">Bài tập AI sinh</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-bold text-purple-600">
-                          152
-                        </div>
-                        <div className="text-purple-600">Báo cáo đã tạo</div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </CardContent>
             </Card>
