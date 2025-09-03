@@ -5,7 +5,13 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import { FloatingChatbot } from "@/components/FloatingChatbot";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -30,6 +36,7 @@ import AdminExercises from "./pages/AdminExercises";
 import AdminReports from "./pages/AdminReports";
 import AdminAIConfig from "./pages/AdminAIConfig";
 import AdminSystemSettings from "./pages/AdminSystemSettings";
+import AdminTeacherApproval from "./pages/AdminTeacherApproval";
 // Teacher pages
 import TeacherDashboard from "./pages/TeacherDashboard";
 import TeacherCourses from "./pages/TeacherCourses";
@@ -105,6 +112,10 @@ function AppRoutes() {
         <Route path="/admin/exercises" element={<AdminExercises />} />
         <Route path="/admin/reports" element={<AdminReports />} />
         <Route path="/admin/ai-config" element={<AdminAIConfig />} />
+        <Route
+          path="/admin/teacher-approvals"
+          element={<Navigate to="/admin/users?tab=approvals" replace />}
+        />
         <Route path="/admin/settings" element={<AdminSystemSettings />} />
 
         {/* Teacher Routes */}
