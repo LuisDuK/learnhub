@@ -1171,8 +1171,6 @@ export default function AdminAIConfig() {
                       />
                     </div>
                   </div>
-
-
                 </div>
               </CardContent>
             </Card>

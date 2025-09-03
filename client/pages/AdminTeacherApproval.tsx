@@ -52,7 +52,8 @@ export default function AdminTeacherApproval() {
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const qs = status === "all" ? "" : `?status=${encodeURIComponent(status)}`;
+      const qs =
+        status === "all" ? "" : `?status=${encodeURIComponent(status)}`;
       const res = await fetch(`/api/teachers/applications${qs}`);
       const data: TeacherApplicationsListResponse = await res.json();
       setItems(data.items);
@@ -93,11 +94,16 @@ export default function AdminTeacherApproval() {
       await fetchItems();
       toast({ title: "Đã duyệt", description: `Hồ sơ #${id} đã được duyệt.` });
     } catch (e) {
-      toast({ title: "Lỗi", description: "Không duyệt được hồ sơ.", variant: "destructive" });
+      toast({
+        title: "Lỗi",
+        description: "Không duyệt được hồ sơ.",
+        variant: "destructive",
+      });
     }
   };
 
-  const openReject = (id: number) => setRejectDialog({ open: true, id, reason: "" });
+  const openReject = (id: number) =>
+    setRejectDialog({ open: true, id, reason: "" });
 
   const reject = async () => {
     if (!rejectDialog.id) return;
@@ -113,9 +119,16 @@ export default function AdminTeacherApproval() {
       if (!res.ok) throw new Error();
       setRejectDialog({ open: false, id: null, reason: "" });
       await fetchItems();
-      toast({ title: "Đã từ chối", description: `Hồ sơ #${rejectDialog.id} đã bị từ chối.` });
+      toast({
+        title: "Đã từ chối",
+        description: `Hồ sơ #${rejectDialog.id} đã bị từ chối.`,
+      });
     } catch (e) {
-      toast({ title: "Lỗi", description: "Không từ chối được hồ sơ.", variant: "destructive" });
+      toast({
+        title: "Lỗi",
+        description: "Không từ chối được hồ sơ.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -135,8 +148,12 @@ export default function AdminTeacherApproval() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">🛡️ Duyệt giáo viên</h1>
-            <p className="text-gray-600 mt-1">Xem xét và phê duyệt hồ sơ đăng ký giáo viên</p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              🛡️ Duyệt giáo viên
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Xem xét và phê duyệt hồ sơ đăng ký giáo viên
+            </p>
           </div>
         </div>
 
@@ -184,7 +201,9 @@ export default function AdminTeacherApproval() {
                 <TableHead className="font-semibold">Kinh nghiệm</TableHead>
                 <TableHead className="font-semibold">Ngày nộp</TableHead>
                 <TableHead className="font-semibold">Trạng thái</TableHead>
-                <TableHead className="font-semibold text-center">Hành động</TableHead>
+                <TableHead className="font-semibold text-center">
+                  Hành động
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -199,27 +218,37 @@ export default function AdminTeacherApproval() {
                     {new Date(i.createdAt).toLocaleDateString("vi-VN")}
                   </TableCell>
                   <TableCell>
-                    <Badge className={statusBadge(i.status)}>{
-                      i.status === "pending"
+                    <Badge className={statusBadge(i.status)}>
+                      {i.status === "pending"
                         ? "Chờ duyệt"
                         : i.status === "approved"
                           ? "Đã duyệt"
-                          : "Từ chối"
-                    }</Badge>
+                          : "Từ chối"}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     {i.status === "pending" ? (
                       <div className="flex gap-2 justify-end">
-                        <Button size="sm" onClick={() => approve(i.id)} className="bg-green-600 hover:bg-green-700 text-white">
+                        <Button
+                          size="sm"
+                          onClick={() => approve(i.id)}
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                        >
                           <Check className="h-4 w-4 mr-1" /> Duyệt
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => openReject(i.id)}>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => openReject(i.id)}
+                        >
                           <ShieldX className="h-4 w-4 mr-1" /> Từ chối
                         </Button>
                       </div>
                     ) : (
                       <div className="text-right text-sm text-gray-500">
-                        {i.status === "approved" ? "Đã duyệt" : `Đã từ chối: ${i.rejectionReason || ""}`}
+                        {i.status === "approved"
+                          ? "Đã duyệt"
+                          : `Đã từ chối: ${i.rejectionReason || ""}`}
                       </div>
                     )}
                   </TableCell>
@@ -229,26 +258,46 @@ export default function AdminTeacherApproval() {
           </Table>
         </div>
 
-        <Dialog open={rejectDialog.open} onOpenChange={(o) => setRejectDialog((s) => ({ ...s, open: o }))}>
+        <Dialog
+          open={rejectDialog.open}
+          onOpenChange={(o) => setRejectDialog((s) => ({ ...s, open: o }))}
+        >
           <DialogContent className="sm:max-w-[480px]">
             <DialogHeader>
               <DialogTitle>Từ chối hồ sơ giáo viên</DialogTitle>
-              <DialogDescription>Vui lòng nhập lý do từ chối để thông báo cho ứng viên.</DialogDescription>
+              <DialogDescription>
+                Vui lòng nhập lý do từ chối để thông báo cho ứng viên.
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="reason" className="text-right">Lý do</Label>
+                <Label htmlFor="reason" className="text-right">
+                  Lý do
+                </Label>
                 <Input
                   id="reason"
                   value={rejectDialog.reason}
-                  onChange={(e) => setRejectDialog((s) => ({ ...s, reason: e.target.value }))}
+                  onChange={(e) =>
+                    setRejectDialog((s) => ({ ...s, reason: e.target.value }))
+                  }
                   className="col-span-3"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setRejectDialog({ open: false, id: null, reason: "" })}>Hủy</Button>
-              <Button variant="destructive" onClick={reject} disabled={!rejectDialog.reason.trim()}>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  setRejectDialog({ open: false, id: null, reason: "" })
+                }
+              >
+                Hủy
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={reject}
+                disabled={!rejectDialog.reason.trim()}
+              >
                 Từ chối
               </Button>
             </DialogFooter>

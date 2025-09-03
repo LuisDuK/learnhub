@@ -54,7 +54,8 @@ export const listTeacherApplications: RequestHandler = (req, res) => {
 export const approveTeacherApplication: RequestHandler = (req, res) => {
   const id = Number(req.params.id);
   const idx = teacherApplications.findIndex((i) => i.id === id);
-  if (idx === -1) return res.status(404).json({ error: "Không tìm thấy hồ sơ" });
+  if (idx === -1)
+    return res.status(404).json({ error: "Không tìm thấy hồ sơ" });
 
   teacherApplications[idx] = {
     ...teacherApplications[idx],
@@ -72,7 +73,8 @@ export const rejectTeacherApplication: RequestHandler = (req, res) => {
   const id = Number(req.params.id);
   const body = req.body as RejectTeacherRequest;
   const idx = teacherApplications.findIndex((i) => i.id === id);
-  if (idx === -1) return res.status(404).json({ error: "Không tìm thấy hồ sơ" });
+  if (idx === -1)
+    return res.status(404).json({ error: "Không tìm thấy hồ sơ" });
   if (!body?.reason || body.reason.trim().length < 3) {
     return res.status(400).json({ error: "Lý do từ chối không hợp lệ" });
   }
@@ -90,7 +92,8 @@ export const rejectTeacherApplication: RequestHandler = (req, res) => {
 };
 
 export const createTeacherApplication: RequestHandler = (req, res) => {
-  const { fullName, email, subject, experienceYears, portfolioUrl } = req.body as Partial<TeacherApplication>;
+  const { fullName, email, subject, experienceYears, portfolioUrl } =
+    req.body as Partial<TeacherApplication>;
   if (!fullName || !email || !subject || typeof experienceYears !== "number") {
     return res.status(400).json({ error: "Thiếu thông tin bắt buộc" });
   }
