@@ -48,11 +48,6 @@ const menuItems = [
     href: "/admin/reports",
   },
   {
-    title: "Duyệt giáo viên",
-    icon: Users,
-    href: "/admin/teacher-approvals",
-  },
-  {
     title: "Cấu hình AI (Quản trị viên)",
     icon: Settings,
     href: "/admin/ai-config",
