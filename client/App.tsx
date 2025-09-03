@@ -106,7 +106,10 @@ function AppRoutes() {
         <Route path="/admin/exercises" element={<AdminExercises />} />
         <Route path="/admin/reports" element={<AdminReports />} />
         <Route path="/admin/ai-config" element={<AdminAIConfig />} />
-        <Route path="/admin/teacher-approvals" element={<AdminTeacherApproval />} />
+        <Route
+          path="/admin/teacher-approvals"
+          element={<Navigate to="/admin/users?tab=approvals" replace />}
+        />
         <Route path="/admin/settings" element={<AdminSystemSettings />} />
 
         {/* Teacher Routes */}
