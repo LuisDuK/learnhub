@@ -154,7 +154,7 @@ const mockPrompts = [
     id: 3,
     name: "Prompt chatbot hỗ trợ",
     content:
-      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} đ��� trả lời.",
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
     module: "Chatbot",
     variables: [
       {
@@ -322,7 +322,7 @@ const mockAILogs = [
     tokensUsed: 200,
     status: "Thành công",
     cost: "0.004$",
-    details: "Chấm bài tự luận môn Văn lớp 4",
+    details: "Chấm bài tự luận môn Văn l��p 4",
     conversation: null,
   },
 ];
@@ -507,13 +507,6 @@ export default function AdminAIConfig() {
               Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên
               mới có quyền điều chỉnh
             </p>
-            <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                <strong>⚠️ Quan trọng:</strong> Tất cả tính năng AI (chấm bài,
-                tạo lộ trình, sinh bài tập) được điều khiển hoàn toàn bởi quản
-                trị viên thông qua các prompt và cấu hình này.
-              </p>
-            </div>
           </div>
         </div>
 
@@ -1094,7 +1087,7 @@ export default function AdminAIConfig() {
                             AI chấm bài (Quản trị viên)
                           </h3>
                           <p className="text-sm text-gray-600">
-                            Tự động chấm điểm - Cấu hình prompt với biến{" "}
+                            Tự động chấm đi���m - Cấu hình prompt với biến{" "}
                             {`{{student_answer}}`}, {`{{correct_answer}}`},{" "}
                             {`{{criteria}}`}
                           </p>
