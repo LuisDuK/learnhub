@@ -145,7 +145,7 @@ const mockPrompts = [
         type: "number",
         min: 15,
         max: 60,
-        description: "Thời lượng mỗi buổi (phút)",
+        description: "Thời lượng m��i buổi (phút)",
       },
     ],
     createdAt: "2024-01-20",
@@ -1087,7 +1087,7 @@ export default function AdminAIConfig() {
                             AI chấm bài (Quản trị viên)
                           </h3>
                           <p className="text-sm text-gray-600">
-                            Tự động chấm đi���m - Cấu hình prompt với biến{" "}
+                            Tự động chấm điểm - Cấu hình prompt với biến{" "}
                             {`{{student_answer}}`}, {`{{correct_answer}}`},{" "}
                             {`{{criteria}}`}
                           </p>
