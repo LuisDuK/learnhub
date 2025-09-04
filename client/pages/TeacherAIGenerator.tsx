@@ -591,7 +591,7 @@ export default function TeacherAIGenerator() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="customPrompt">Yêu c��u tùy chỉnh</Label>
+                      <Label htmlFor="customPrompt">Yêu cầu tùy chỉnh</Label>
                       <Textarea
                         id="customPrompt"
                         value={formData.customPrompt}
