@@ -95,7 +95,7 @@ const mockExercises = [
     title: "Viết đoạn văn tả cảnh thiên nhiên",
     type: "Tự luận",
     subject: "Văn",
-    creator: "Cô Tr��n Thị Lan",
+    creator: "Cô Trần Thị Lan",
     createdAt: "2024-01-20",
     totalQuestions: 1,
     difficulty: "Trung bình",
