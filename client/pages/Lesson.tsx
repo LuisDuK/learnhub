@@ -42,18 +42,18 @@ const mockLessons = {
     instructor: "Thầy Minh vui vẻ",
     description:
       "Bài học này sẽ giúp các em làm quen với phép cộng và phép trừ trong phạm vi 100 thông qua các ví dụ thú vị và dễ hiểu.",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // placeholder
+    videoUrl: "https://www.youtube.com/embed/5MgBikgcWnY", // lecture example
     objectives: [
       "Hiểu được khái niệm phép cộng và phép trừ",
       "Thực hiện được phép tính trong phạm vi 100",
-      "Áp dụng vào bài toán thực tế",
+      "Áp d���ng vào bài toán thực tế",
     ],
     content: [
       {
         type: "video",
         title: "Video bài giảng chính",
         duration: "15 phút",
-        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        url: "https://www.youtube.com/embed/5MgBikgcWnY",
       },
       {
         type: "example",
