@@ -91,7 +91,7 @@ const mockGeneratedExercises = [
   },
 ];
 
-const subjects = ["Toán", "Tiếng Việt", "Tiếng Anh", "Khoa học", "Lịch sử"];
+const subjects = ["Toán", "Văn", "Anh"];
 const difficulties = ["Dễ", "Trung bình", "Khó", "Nâng cao"];
 const ageGroups = [
   "5-6 tuổi",
