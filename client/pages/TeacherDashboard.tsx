@@ -95,7 +95,7 @@ const recentActivities = [
   {
     id: 4,
     type: "ai_generated",
-    message: "AI đã tạo 5 bài tập mới cho khóa học",
+    message: "AI đã tạo 5 bài tập mới cho môn học",
     time: "1 ngày trước",
     course: "Hình học cơ bản",
   },
