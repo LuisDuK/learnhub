@@ -221,12 +221,22 @@ const mockPendingContent = [
 ];
 
 const subjects = ["Tất cả", "Toán", "Văn", "Anh"];
+const grades = ["Tất cả", "Khối 1", "Khối 2", "Khối 3", "Khối 4", "Khối 5"];
+const getCourseGrade = (course: (typeof mockCourses)[0]) => {
+  const m = course.name.match(/lớp\s*(\d+)/i);
+  if (m) {
+    const num = Math.min(5, Math.max(1, Number(m[1])));
+    return `Khối ${num}`;
+  }
+  return "Tất cả";
+};
 
 export default function AdminCourses() {
   const [courses] = useState(mockCourses);
   const [pendingContent, setPendingContent] = useState(mockPendingContent);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
+  const [gradeFilter, setGradeFilter] = useState("Tất cả");
   const [selectedCourse, setSelectedCourse] = useState<
     (typeof mockCourses)[0] | null
   >(null);
@@ -242,7 +252,8 @@ export default function AdminCourses() {
       course.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSubject =
       subjectFilter === "Tất cả" || course.subject === subjectFilter;
-    return matchesSearch && matchesSubject;
+    const matchesGrade = gradeFilter === "Tất cả" || getCourseGrade(course) === gradeFilter;
+    return matchesSearch && matchesSubject && matchesGrade;
   });
 
   const pendingCounts = {
@@ -394,44 +405,6 @@ export default function AdminCourses() {
                 </DialogHeader>
 
                 <div className="py-4">
-                  {/* Pending Content Statistics */}
-                  <div className="grid grid-cols-4 gap-4 mb-6">
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-600">
-                          {pendingCounts.total}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          Tổng chờ duyệt
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-green-600">
-                          {pendingCounts.courses}
-                        </div>
-                        <div className="text-sm text-gray-600">Môn học</div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-orange-600">
-                          {pendingCounts.lessons}
-                        </div>
-                        <div className="text-sm text-gray-600">Bài giảng</div>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-purple-600">
-                          {pendingCounts.exercises}
-                        </div>
-                        <div className="text-sm text-gray-600">Bài tập</div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
                   {/* Pending Content List */}
                   <div className="space-y-4">
                     {pendingContent.length === 0 ? (
@@ -533,61 +506,6 @@ export default function AdminCourses() {
           </div>
         </div>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium">Tổng môn học</p>
-              <BookOpen className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{courses.length}</div>
-              <p className="text-xs text-muted-foreground">Đã được phê duyệt</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium">Học sinh tham gia</p>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {courses.reduce((acc, course) => acc + course.studentsCount, 0)}
-              </div>
-              <p className="text-xs text-muted-foreground">Tổng số học sinh</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium">Tỷ lệ hoàn thành</p>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {Math.round(
-                  courses.reduce(
-                    (acc, course) => acc + course.completionRate,
-                    0,
-                  ) / courses.length,
-                )}
-                %
-              </div>
-              <p className="text-xs text-muted-foreground">Trung bình</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium">Chờ phê duyệt</p>
-              <AlertCircle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">
-                {pendingCounts.total}
-              </div>
-              <p className="text-xs text-muted-foreground">Nội dung mới</p>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Search and Filter */}
         <div className="flex items-center justify-between gap-4">
@@ -601,9 +519,21 @@ export default function AdminCourses() {
                 className="pl-8"
               />
             </div>
+            <Select value={gradeFilter} onValueChange={setGradeFilter}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Chọn khối" />
+              </SelectTrigger>
+              <SelectContent>
+                {grades.map((g) => (
+                  <SelectItem key={g} value={g}>
+                    {g}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Select value={subjectFilter} onValueChange={setSubjectFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Chọn môn học" />
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder="Chọn môn" />
               </SelectTrigger>
               <SelectContent>
                 {subjects.map((subject) => (
