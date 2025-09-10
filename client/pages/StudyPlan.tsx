@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import {
   Card,
@@ -62,7 +62,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "🔢 Phân số và số thập phân",
+        title: "🔢 Phân số và s�� thập phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
