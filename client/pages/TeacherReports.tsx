@@ -293,7 +293,7 @@ export default function TeacherReports() {
           <div className="flex gap-3">
             <Select value={selectedCourse} onValueChange={setSelectedCourse}>
               <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Chọn khóa học" />
+                <SelectValue placeholder="Chọn môn học" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tất cả khóa học</SelectItem>
