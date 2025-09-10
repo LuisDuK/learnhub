@@ -142,7 +142,7 @@ const mockExercises = [
     isAIGenerated: false,
     tags: ["quan sát", "mô tả"],
     description: "Bài tập quan sát và mô tả các hiện tượng",
-    courseName: null, // Chưa gán vào khóa học nào
+    courseName: null, // Chưa gán vào môn học nào
   },
   {
     id: 5,
@@ -160,7 +160,7 @@ const mockExercises = [
     isAIGenerated: false,
     tags: ["bảng cửu chương", "nhân"],
     description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
-    courseName: null, // Chưa gán vào khóa học nào
+    courseName: null, // Chưa gán vào môn học nào
   },
   {
     id: 6,
