@@ -133,7 +133,7 @@ const studentDetails = [
   },
   {
     id: 2,
-    name: "Trần Thị Bích",
+    name: "Tr���n Thị Bích",
     courseId: 1,
     courseName: "Toán học lớp 3",
     completionRate: 88,
@@ -296,7 +296,7 @@ export default function TeacherReports() {
                 <SelectValue placeholder="Chọn môn học" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả khóa học</SelectItem>
+                <SelectItem value="all">Tất cả môn học</SelectItem>
                 {courseAnalytics.map((course) => (
                   <SelectItem key={course.id} value={course.id.toString()}>
                     {course.name}
