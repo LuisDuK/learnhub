@@ -388,7 +388,7 @@ export default function TeacherDashboard() {
                   onClick={() => navigate("/teacher/subjects")}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm khóa học mới
+                  Thêm môn học mới
                 </Button>
                 <Button
                   variant="outline"
