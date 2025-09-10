@@ -222,7 +222,7 @@ export default function TeacherDashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{totalStudents}</div>
               <p className="text-xs text-muted-foreground">
-                Trên tất cả khóa học
+                Trên tất cả môn học
               </p>
             </CardContent>
           </Card>
