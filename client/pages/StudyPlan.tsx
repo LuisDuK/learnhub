@@ -690,8 +690,8 @@ export default function StudyPlan() {
                               <div className="flex items-center gap-2"><Badge variant="outline" className={`${status.bgColor} border-0`}><StatusIcon className={`h-3 w-3 mr-1 ${status.color}`} />{status.label}</Badge></div>
                             </div>
 
-                            {lesson.status === "in-progress" && (<Button size="sm" className="bg-gradient-to-r from-primary to-accent text-white rounded-lg" onClick={() => openVideo(lesson.videoUrl)}><PlayCircle className="h-4 w-4 mr-1" />Tiếp tục học</Button>)}
-                            {lesson.status === "not-started" && (<Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => openVideo(lesson.videoUrl)}><Circle className="h-4 w-4 mr-1" />Bắt đầu học</Button>)}
+                            {lesson.status === "in-progress" && (<Button size="sm" className="bg-gradient-to-r from-primary to-accent text-white rounded-lg" onClick={() => openLessonPlayer(lesson)}><PlayCircle className="h-4 w-4 mr-1" />Tiếp tục học</Button>)}
+                            {lesson.status === "not-started" && (<Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => openLessonPlayer(lesson)}><Circle className="h-4 w-4 mr-1" />Bắt đầu học</Button>)}
                             {lesson.pdfUrl && (<Button variant="ghost" size="sm" className="ml-2 underline text-sm" onClick={() => openPdf(lesson.pdfUrl)}>📄 Làm bài tập (PDF)</Button>)}
                           </div>
                         </div>
@@ -705,15 +705,74 @@ export default function StudyPlan() {
         </Card>
       </div>
 
-      {/* Video Dialog */}
+      {/* Video / Lesson Player Dialog */}
       <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
-        <DialogContent className="sm:max-w-2xl max-w-full">
+        <DialogContent className="sm:max-w-3xl max-w-full">
           <DialogHeader>
-            <DialogTitle>Video bài học</DialogTitle>
-            <DialogDescription className="text-sm text-muted-foreground">Xem video bài học trong lộ trình</DialogDescription>
+            <DialogTitle>Phát bài học</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">Xem nội dung bài học và hoàn thành các mốc quiz</DialogDescription>
           </DialogHeader>
-          <div className="aspect-video w-full">{videoSrc ? (<iframe src={videoSrc} title="Video bài học" className="w-full h-full" allowFullScreen />) : (<div className="p-8 text-center">Video không khả dụng</div>)}</div>
-          <div className="flex justify-end pt-4"><Button onClick={() => setShowVideoDialog(false)} variant="outline">Đóng</Button></div>
+
+          <div>
+            <div className="w-full bg-black rounded-md overflow-hidden">
+              <video ref={videoRef} src={videoSrc} className="w-full h-64 bg-black" controls onLoadedMetadata={onVideoLoaded} onTimeUpdate={onVideoTimeUpdate} onSeeking={onVideoSeeking} onEnded={onVideoEnded} />
+            </div>
+
+            <div className="mt-2 flex items-center gap-2">
+              <div className="flex-1">
+                <div className="h-2 bg-gray-200 rounded-full relative">
+                  <div className="h-2 bg-primary rounded-full" style={{ width: `${(videoCurrentTime / Math.max(1, videoDuration)) * 100}%` }} />
+                  {/* markers */}
+                  {videoMarkers.map((m, idx) => (
+                    <div key={idx} className="absolute top-0 h-2 w-0.5 bg-red-500" style={{ left: `${(m / Math.max(1, videoDuration)) * 100}%` }} />
+                  ))}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">{Math.floor(videoCurrentTime)}s / {Math.floor(videoDuration)}s</div>
+              </div>
+
+              <div>
+                <Button size="sm" variant="outline" onClick={() => { setShowVideoDialog(false); if (videoRef.current) videoRef.current.pause(); }}>Đóng</Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Quiz Dialog triggered at markers */}
+          <Dialog open={showQuizDialog} onOpenChange={setShowQuizDialog}>
+            <DialogContent className="sm:max-w-lg">
+              <DialogHeader>
+                <DialogTitle className="text-lg font-bold">Câu hỏi kiểm tra</DialogTitle>
+                <DialogDescription>Trả lời để tiếp tục video</DialogDescription>
+              </DialogHeader>
+              <div className="py-2">
+                {currentLesson && (quizBank[currentLesson.id] || [])[currentMarkerIndex as number] ? (
+                  (() => {
+                    const q = (quizBank[currentLesson.id] || [])[currentMarkerIndex as number];
+                    return (
+                      <div>
+                        <div className="font-medium">{q.q}</div>
+                        <div className="mt-2 space-y-2">
+                          {q.choices.map((c, i) => (
+                            <label key={i} className="flex items-center gap-2">
+                              <input type="radio" name="quiz" checked={selectedQuizAnswer === i} onChange={() => setSelectedQuizAnswer(i)} />
+                              <span>{c}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="text-sm text-muted-foreground">Không có câu hỏi ở mốc này. Hệ thống sẽ tiếp tục phát video.</div>
+                )}
+
+                <div className="flex gap-3 pt-4">
+                  <Button variant="outline" onClick={() => { setShowQuizDialog(false); setCurrentMarkerIndex(null); if (videoRef.current) videoRef.current.play(); }}>Bỏ qua</Button>
+                  <Button className="bg-gradient-to-r from-primary to-accent text-white" onClick={submitQuizAnswer}>Nộp</Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
         </DialogContent>
       </Dialog>
 
