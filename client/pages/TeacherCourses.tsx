@@ -65,7 +65,7 @@ const mockTeacherCourses = [
     id: 1,
     name: "Toán học lớp 3",
     description:
-      "Khóa học toán học cơ bản cho học sinh lớp 3, bao gồm các phép tính cơ bản và hình học đơn giản.",
+      "Môn học toán học cơ bản cho học sinh lớp 3, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -130,7 +130,7 @@ const mockTeacherCourses = [
     lastActivity: "2024-03-12",
     totalLessons: 8,
     completedLessons: 8,
-    objectives: "Phát triển tư duy logic và khả năng giải quyết vấn đề",
+    objectives: "Phát triển t�� duy logic và khả năng giải quyết vấn đề",
     prerequisites: "Đã hoàn thành khóa học toán cơ bản",
     lessons: [],
     exercises: [],
@@ -158,7 +158,7 @@ const mockTeacherCourses = [
   },
 ];
 
-const subjects = ["Tất cả", "Toán", "Văn", "Anh", "Khoa học"];
+const subjects = ["Tất cả", "Toán", "Văn", "Anh"];
 const difficulties = ["Cơ bản", "Trung bình", "Nâng cao"];
 const ageGroups = [
   "6-7 tuổi",
@@ -374,7 +374,7 @@ export default function TeacherCourses() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <BookOpen className="h-8 w-8 text-green-600" />
-              Quản lý khóa học
+              Quản lý môn học
             </h1>
             <p className="text-gray-600 mt-1">
               Tạo, chỉnh sửa và quản lý các khóa học của bạn
@@ -385,23 +385,23 @@ export default function TeacherCourses() {
             <DialogTrigger asChild>
               <Button className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white">
                 <Plus className="h-4 w-4 mr-2" />
-                Tạo khóa học mới
+                Tạo môn học mới
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
               <DialogHeader className="pb-4 border-b border-gray-200">
                 <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
                   <Plus className="h-5 w-5 text-green-600" />
-                  Tạo khóa học mới
+                  Tạo môn học mới
                 </DialogTitle>
                 <DialogDescription className="text-gray-600">
-                  Điền thông tin để tạo khóa học mới cho học sinh của bạn
+                  Điền thông tin để tạo môn học mới cho học sinh của bạn
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="courseName" className="text-right">
-                    Tên khóa học *
+                    Tên môn học *
                   </Label>
                   <Input
                     id="courseName"
@@ -429,7 +429,7 @@ export default function TeacherCourses() {
                     }
                     className="col-span-3"
                     rows={3}
-                    placeholder="Mô tả chi tiết về khóa học..."
+                    placeholder="Mô tả chi tiết về môn học..."
                   />
                 </div>
 
@@ -533,7 +533,7 @@ export default function TeacherCourses() {
                     }
                     className="col-span-3"
                     rows={2}
-                    placeholder="Mục tiêu của khóa học..."
+                    placeholder="Mục tiêu của môn học..."
                   />
                 </div>
 
@@ -576,7 +576,7 @@ export default function TeacherCourses() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium">Tổng khóa học</p>
+              <p className="text-sm font-medium">Tổng môn học</p>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -598,7 +598,7 @@ export default function TeacherCourses() {
                 {courses.reduce((sum, course) => sum + course.studentsCount, 0)}
               </div>
               <p className="text-xs text-muted-foreground">
-                Trong tất cả khóa học
+                Trong tất cả môn học
               </p>
             </CardContent>
           </Card>
@@ -642,7 +642,7 @@ export default function TeacherCourses() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Tìm kiếm khóa học..."
+                placeholder="Tìm kiếm môn học..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
@@ -809,17 +809,17 @@ export default function TeacherCourses() {
             <DialogHeader className="pb-4 border-b border-gray-200">
               <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2">
                 <Edit className="h-5 w-5 text-blue-600" />
-                Chỉnh sửa khóa học
+                Chỉnh sửa môn học
               </DialogTitle>
               <DialogDescription className="text-gray-600">
-                Cập nhật thông tin khóa học
+                Cập nhật thông tin môn học
               </DialogDescription>
             </DialogHeader>
             {selectedCourse && (
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="editCourseName" className="text-right">
-                    Tên khóa học *
+                    Tên môn học *
                   </Label>
                   <Input
                     id="editCourseName"
@@ -1274,7 +1274,7 @@ export default function TeacherCourses() {
                           </div>
                           <div className="flex justify-between">
                             <span className="text-sm text-gray-600">
-                              Tuổi khóa học:
+                              Tuổi môn học:
                             </span>
                             <span className="font-medium">
                               {Math.floor(
