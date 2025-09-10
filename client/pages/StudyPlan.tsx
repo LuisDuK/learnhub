@@ -107,7 +107,7 @@ const weeklyPlan = [
       {
         id: 5,
         subject: "literature",
-        title: "✍️ Viết văn tả người",
+        title: "��️ Viết văn tả người",
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -612,7 +612,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">🎯 Thêm mục tiêu học tập</DialogTitle>
-            <DialogDescription>Nhập thông tin mục tiêu học tập để tạo lộ trình phù hợp</DialogDescription>
+            <DialogDescription>Nhập thông tin mục tiêu h���c tập để tạo lộ trình phù hợp</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -694,7 +694,7 @@ export default function StudyPlan() {
             </div>
 
             <div className="space-y-2">
-              <Label>Phạm vi kiến thức trọng tâm (tùy chọn)</Label>
+              <Label>Phạm vi kiến thức trọng t��m (tùy chọn)</Label>
               <Textarea value={createPlanData.scope} onChange={(e) => setCreatePlanData({ ...createPlanData, scope: e.target.value })} placeholder="Ví dụ: Phân số, hình học cơ bản" />
             </div>
 
@@ -772,14 +772,14 @@ export default function StudyPlan() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Input value={ls.duration} onChange={(e) => {
-                          const new = { ...proposedPlan }!;
-                          new.plan.phases[phIdx].lessons[i].duration = e.target.value;
-                          setProposedPlan({ ...new });
+                          const updated = { ...(proposedPlan as PlanVersion) };
+                          updated.plan.phases[phIdx].lessons[i].duration = e.target.value;
+                          setProposedPlan(updated);
                         }} className="w-36" />
                         <Button size="sm" onClick={() => {
-                          const new = { ...proposedPlan }!;
-                          new.plan.phases[phIdx].lessons.splice(i, 1);
-                          setProposedPlan({ ...new });
+                          const updated = { ...(proposedPlan as PlanVersion) };
+                          updated.plan.phases[phIdx].lessons.splice(i, 1);
+                          setProposedPlan(updated);
                         }} variant="outline" className="text-red-600">Xóa</Button>
                       </div>
                     </div>
