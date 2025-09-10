@@ -33,21 +33,6 @@ const menuItems = [
     href: "/admin/subjects",
   },
   {
-    title: "Quản lý lộ trình học",
-    icon: Route,
-    href: "/admin/learning-paths",
-  },
-  {
-    title: "Kho bài tập",
-    icon: PenTool,
-    href: "/admin/exercises",
-  },
-  {
-    title: "Báo cáo & Thống kê",
-    icon: BarChart3,
-    href: "/admin/reports",
-  },
-  {
     title: "Cấu hình AI (Quản trị viên)",
     icon: Settings,
     href: "/admin/ai-config",

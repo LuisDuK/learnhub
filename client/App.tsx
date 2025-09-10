@@ -31,9 +31,6 @@ import NotFound from "./pages/NotFound";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import AdminCourses from "./pages/AdminCourses";
-import AdminLearningPaths from "./pages/AdminLearningPaths";
-import AdminExercises from "./pages/AdminExercises";
-import AdminReports from "./pages/AdminReports";
 import AdminAIConfig from "./pages/AdminAIConfig";
 import AdminSystemSettings from "./pages/AdminSystemSettings";
 import AdminTeacherApproval from "./pages/AdminTeacherApproval";
@@ -108,9 +105,6 @@ function AppRoutes() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/subjects" element={<AdminCourses />} />
-        <Route path="/admin/learning-paths" element={<AdminLearningPaths />} />
-        <Route path="/admin/exercises" element={<AdminExercises />} />
-        <Route path="/admin/reports" element={<AdminReports />} />
         <Route path="/admin/ai-config" element={<AdminAIConfig />} />
         <Route
           path="/admin/teacher-approvals"

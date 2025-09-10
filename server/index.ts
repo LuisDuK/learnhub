@@ -8,6 +8,7 @@ import {
   rejectTeacherApplication,
   createTeacherApplication,
 } from "./routes/teachers";
+import { getLesson, saveLessonProgress, submitQuizAnswer } from "./routes/lessons";
 
 export function createServer() {
   const app = express();
@@ -30,6 +31,11 @@ export function createServer() {
   app.post("/api/teachers/applications", createTeacherApplication);
   app.post("/api/teachers/applications/:id/approve", approveTeacherApplication);
   app.post("/api/teachers/applications/:id/reject", rejectTeacherApplication);
+
+  // Lesson routes (UC-03.1)
+  app.get("/api/lessons/:id", getLesson);
+  app.post("/api/lessons/:id/progress", saveLessonProgress);
+  app.post("/api/lessons/:id/quiz/:qid/answer", submitQuizAnswer);
 
   return app;
 }
