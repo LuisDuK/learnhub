@@ -914,7 +914,7 @@ export default function TeacherProfile() {
                     </span>
                   </div>
                   <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Tổng khóa học:</span>
+                    <span className="text-gray-600">Tổng môn học:</span>
                     <span className="font-medium">
                       {currentData.totalCourses}
                     </span>
