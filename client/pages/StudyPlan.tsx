@@ -544,6 +544,43 @@ export default function StudyPlan() {
         </Card>
       </div>
 
+      {/* Video Dialog */}
+      <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
+        <DialogContent className="sm:max-w-2xl max-w-full">
+          <div className="aspect-video w-full">
+            {videoSrc ? (
+              <iframe
+                src={videoSrc}
+                title="Video bài học"
+                className="w-full h-full"
+                allowFullScreen
+              />
+            ) : (
+              <div className="p-8 text-center">Video không khả dụng</div>
+            )}
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setShowVideoDialog(false)} variant="outline">Đóng</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* PDF Dialog */}
+      <Dialog open={showPdfDialog} onOpenChange={setShowPdfDialog}>
+        <DialogContent className="sm:max-w-4xl max-w-full">
+          <div className="w-full h-[80vh]">
+            {pdfSrc ? (
+              <iframe src={pdfSrc} className="w-full h-full" />
+            ) : (
+              <div className="p-8 text-center">PDF không khả dụng</div>
+            )}
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setShowPdfDialog(false)} variant="outline">Đóng</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Popup nhập mục tiêu học tập */}
       <Dialog open={showGoalDialog} onOpenChange={setShowGoalDialog}>
         <DialogContent className="sm:max-w-lg">
