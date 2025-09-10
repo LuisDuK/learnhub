@@ -93,11 +93,11 @@ export default function MobileLearningPath() {
                         </p>
                       </div>
                       {isCurrent ? (
-                        <Link to="/m/courses">
+                        <Link to="/m/subjects">
                           <Button size="sm">Tiếp tục</Button>
                         </Link>
                       ) : isDone ? (
-                        <Link to="/m/courses">
+                        <Link to="/m/subjects">
                           <Button size="sm" variant="outline">
                             Ôn lại
                           </Button>

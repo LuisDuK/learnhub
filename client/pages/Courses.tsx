@@ -305,18 +305,18 @@ export default function Courses() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
-                  📚 Các khóa học của bé
+                  📚 Các môn học của bé
                   <Sparkles className="h-8 w-8 text-primary animate-pulse" />
                 </h1>
                 <p className="text-gray-600 text-lg">
-                  Chọn khóa học mà bé thích để bắt đầu hành trình học tập! 🚀
+                  Chọn môn học mà bé thích để bắt đầu hành trình học tập! 🚀
                 </p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input
-                    placeholder="🔍 Tìm khóa học..."
+                    placeholder="🔍 Tìm môn học..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 w-80 border-primary/20 focus:border-primary rounded-xl"
@@ -329,7 +329,7 @@ export default function Courses() {
                   <SelectContent>
                     <SelectItem value="recent">⏰ Học gần đây</SelectItem>
                     <SelectItem value="progress">📊 Tiến độ</SelectItem>
-                    <SelectItem value="title">🔤 Tên khóa học</SelectItem>
+                    <SelectItem value="title">🔤 Tên môn học</SelectItem>
                     <SelectItem value="rating">⭐ Đánh giá</SelectItem>
                   </SelectContent>
                 </Select>
@@ -344,7 +344,7 @@ export default function Courses() {
                     <div className="text-3xl">📚</div>
                     <div>
                       <p className="text-sm text-muted-foreground">
-                        Tổng khóa học
+                        Tổng môn học
                       </p>
                       <p className="text-2xl font-bold text-primary">
                         {mockCourses.length}
@@ -548,7 +548,7 @@ export default function Courses() {
             <div className="text-center py-12">
               <div className="text-6xl mb-4">😔</div>
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Không tìm thấy khóa học
+                Không tìm thấy môn học
               </h3>
               <p className="text-gray-600">
                 Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm nhé! 🔍
@@ -561,7 +561,7 @@ export default function Courses() {
         <div className="w-80 border-l border-primary/20 bg-gradient-to-b from-white to-accent/10 p-6 shadow-lg">
           <div className="flex items-center gap-2 mb-6">
             <div className="text-2xl">🎛️</div>
-            <h2 className="text-lg font-bold text-primary">Bộ lọc khóa học</h2>
+            <h2 className="text-lg font-bold text-primary">Bộ lọc môn học</h2>
           </div>
 
           <div className="space-y-6">
@@ -653,7 +653,7 @@ export default function Courses() {
               <p className="text-xs text-muted-foreground">
                 Bé đã học{" "}
                 {mockCourses.filter((c) => c.status === "completed").length}{" "}
-                khóa học rồi đấy! 🎉
+                môn học rồi đấy! 🎉
               </p>
             </div>
           </div>

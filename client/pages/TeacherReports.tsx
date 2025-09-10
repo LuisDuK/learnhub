@@ -178,7 +178,7 @@ const recentActivities = [
   {
     id: 3,
     type: "feedback",
-    message: "Trần Thị Bích đã để lại đánh giá 5 sao cho khóa học",
+    message: "Trần Thị Bích đã để lại đánh giá 5 sao cho môn học",
     course: "Phép tính nâng cao",
     time: "6 giờ trước",
     student: "Trần Thị Bích",
@@ -293,10 +293,10 @@ export default function TeacherReports() {
           <div className="flex gap-3">
             <Select value={selectedCourse} onValueChange={setSelectedCourse}>
               <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Chọn khóa học" />
+                <SelectValue placeholder="Chọn môn học" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả khóa học</SelectItem>
+                <SelectItem value="all">Tất cả môn học</SelectItem>
                 {courseAnalytics.map((course) => (
                   <SelectItem key={course.id} value={course.id.toString()}>
                     {course.name}
@@ -336,7 +336,7 @@ export default function TeacherReports() {
             <CardContent>
               <div className="text-2xl font-bold">{totalStudents}</div>
               <p className="text-xs text-muted-foreground">
-                Trong tất cả khóa học
+                Trong tất cả môn học
               </p>
             </CardContent>
           </Card>
@@ -351,7 +351,7 @@ export default function TeacherReports() {
             <CardContent>
               <div className="text-2xl font-bold">{averageCompletion}%</div>
               <p className="text-xs text-muted-foreground">
-                Trung bình tất cả khóa học
+                Trung bình tất cả môn học
               </p>
             </CardContent>
           </Card>
@@ -391,7 +391,7 @@ export default function TeacherReports() {
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Tổng quan</TabsTrigger>
-            <TabsTrigger value="courses">Chi tiết khóa học</TabsTrigger>
+            <TabsTrigger value="courses">Chi tiết môn học</TabsTrigger>
             <TabsTrigger value="students">Học sinh</TabsTrigger>
             <TabsTrigger value="activities">Hoạt động</TabsTrigger>
           </TabsList>
@@ -402,9 +402,9 @@ export default function TeacherReports() {
               {/* Course Performance Chart */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">Hiệu quả khóa học</CardTitle>
+                  <CardTitle className="text-xl">Hiệu quả môn học</CardTitle>
                   <CardDescription>
-                    Tỷ lệ hoàn thành theo từng khóa học
+                    Tỷ lệ hoàn thành theo từng môn học
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -688,7 +688,7 @@ export default function TeacherReports() {
                   <SelectValue placeholder="Lọc theo hiệu quả" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tất cả học sinh</SelectItem>
+                  <SelectItem value="all">Tất cả h���c sinh</SelectItem>
                   <SelectItem value="excellent">Xuất sắc</SelectItem>
                   <SelectItem value="good">Tốt</SelectItem>
                   <SelectItem value="average">Trung bình</SelectItem>
@@ -784,7 +784,7 @@ export default function TeacherReports() {
               <CardHeader>
                 <CardTitle className="text-xl">Hoạt động gần đây</CardTitle>
                 <CardDescription>
-                  Theo dõi hoạt động của học sinh trong các khóa học
+                  Theo dõi hoạt động của học sinh trong các môn học
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -805,7 +805,7 @@ export default function TeacherReports() {
                           <span className="text-xs text-gray-500">
                             {activity.time}
                           </span>
-                          <span className="text-xs text-gray-300">•</span>
+                          <span className="text-xs text-gray-300">���</span>
                           <span className="text-xs text-blue-600">
                             {activity.course}
                           </span>

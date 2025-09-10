@@ -85,7 +85,7 @@ export default function AdminDashboard() {
           <Card className="border-green-200 hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">
-                Khóa học đang mở
+                Môn học đang mở
               </CardTitle>
               <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
                 <BookOpen className="h-5 w-5 text-green-600" />
@@ -220,9 +220,9 @@ export default function AdminDashboard() {
               </div>
               <div className="p-4 border border-orange-200 rounded-lg hover:bg-orange-50 cursor-pointer transition-colors">
                 <BookOpen className="h-8 w-8 text-orange-600 mb-2" />
-                <h3 className="font-semibold text-orange-700">Tạo khóa học</h3>
+                <h3 className="font-semibold text-orange-700">Tạo môn học</h3>
                 <p className="text-sm text-gray-600">
-                  Thiết lập khóa học mới cho học sinh
+                  Thiết lập môn học mới cho học sinh
                 </p>
               </div>
               <div className="p-4 border border-green-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">

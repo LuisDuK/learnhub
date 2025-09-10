@@ -95,7 +95,7 @@ const mockExercises = [
     title: "Viết đoạn văn tả cảnh thiên nhiên",
     type: "Tự luận",
     subject: "Văn",
-    creator: "Cô Tr��n Thị Lan",
+    creator: "Cô Trần Thị Lan",
     createdAt: "2024-01-20",
     totalQuestions: 1,
     difficulty: "Trung bình",
@@ -142,7 +142,7 @@ const mockExercises = [
     isAIGenerated: false,
     tags: ["quan sát", "mô tả"],
     description: "Bài tập quan sát và mô tả các hiện tượng",
-    courseName: null, // Chưa gán vào khóa học nào
+    courseName: null, // Chưa gán vào môn học nào
   },
   {
     id: 5,
@@ -160,7 +160,7 @@ const mockExercises = [
     isAIGenerated: false,
     tags: ["bảng cửu chương", "nhân"],
     description: "Bài tập cơ bản về bảng cửu chương 2, 3, 4",
-    courseName: null, // Chưa gán vào khóa học nào
+    courseName: null, // Chưa gán vào môn học nào
   },
   {
     id: 6,
@@ -996,7 +996,7 @@ export default function AdminExercises() {
             </h1>
             <p className="text-gray-600 mt-1">
               Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho
-              nhiều khóa học
+              nhiều môn học
             </p>
           </div>
 
@@ -1023,7 +1023,7 @@ export default function AdminExercises() {
                     Kho bài tập - Chọn bài tập để gán
                   </DialogTitle>
                   <DialogDescription>
-                    Duyệt và chọn bài tập từ kho để gán vào khóa học. Có thể
+                    Duyệt và chọn bài tập từ kho để gán vào môn học. Có thể
                     chọn nhiều bài tập cùng lúc.
                   </DialogDescription>
                 </DialogHeader>
@@ -1634,7 +1634,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Môn học</TableHead>
                 <TableHead className="font-semibold">Độ khó</TableHead>
                 <TableHead className="font-semibold">Khối</TableHead>
-                <TableHead className="font-semibold">Khóa học</TableHead>
+                <TableHead className="font-semibold">Môn học</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold text-center">
                   Hành động

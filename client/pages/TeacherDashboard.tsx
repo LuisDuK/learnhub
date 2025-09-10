@@ -34,7 +34,7 @@ const teacherCourses = [
   {
     id: 1,
     name: "Toán học lớp 3",
-    description: "Khóa học toán học cơ bản cho học sinh lớp 3",
+    description: "Môn học toán học cơ bản cho học sinh lớp 3",
     studentsCount: 25,
     completionRate: 78,
     status: "active",
@@ -58,7 +58,7 @@ const teacherCourses = [
   {
     id: 3,
     name: "Hình học cơ bản",
-    description: "Khóa học về hình học cho trẻ em",
+    description: "Môn học về hình học cho trẻ em",
     studentsCount: 18,
     completionRate: 65,
     status: "draft",
@@ -81,7 +81,7 @@ const recentActivities = [
   {
     id: 2,
     type: "completion",
-    message: "Học sinh Nguyễn Văn An đã hoàn thành khóa học",
+    message: "Học sinh Nguyễn Văn An đã hoàn thành môn học",
     time: "4 giờ trước",
     course: "Phép tính nâng cao",
   },
@@ -95,7 +95,7 @@ const recentActivities = [
   {
     id: 4,
     type: "ai_generated",
-    message: "AI đã tạo 5 bài tập mới cho khóa học",
+    message: "AI đã tạo 5 bài tập mới cho môn học",
     time: "1 ngày trước",
     course: "Hình học cơ bản",
   },
@@ -186,11 +186,11 @@ export default function TeacherDashboard() {
               AI sinh bài tập
             </Button>
             <Button
-              onClick={() => navigate("/teacher/courses")}
+              onClick={() => navigate("/teacher/subjects")}
               className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Tạo khóa học mới
+              Tạo môn học mới
             </Button>
           </div>
         </div>
@@ -200,7 +200,7 @@ export default function TeacherDashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Tổng khóa học
+                Tổng môn học
               </CardTitle>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -222,7 +222,7 @@ export default function TeacherDashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{totalStudents}</div>
               <p className="text-xs text-muted-foreground">
-                Trên tất cả khóa học
+                Trên tất cả môn học
               </p>
             </CardContent>
           </Card>
@@ -237,7 +237,7 @@ export default function TeacherDashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{averageCompletion}%</div>
               <p className="text-xs text-muted-foreground">
-                Trung bình tất cả khóa học
+                Trung bình tất cả môn học
               </p>
             </CardContent>
           </Card>
@@ -265,14 +265,14 @@ export default function TeacherDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl">Khóa học của tôi</CardTitle>
+                  <CardTitle className="text-xl">Môn học của tôi</CardTitle>
                   <CardDescription>
-                    Quản lý và theo dõi tiến độ các khóa học
+                    Quản lý và theo dõi tiến độ các môn học
                   </CardDescription>
                 </div>
                 <Button
                   variant="outline"
-                  onClick={() => navigate("/teacher/courses")}
+                  onClick={() => navigate("/teacher/subjects")}
                 >
                   Xem tất cả
                 </Button>
@@ -342,7 +342,7 @@ export default function TeacherDashboard() {
               <CardHeader>
                 <CardTitle className="text-xl">Hoạt động gần đây</CardTitle>
                 <CardDescription>
-                  Cập nhật mới nhất từ khóa học của bạn
+                  Cập nhật mới nhất từ môn học của bạn
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -385,10 +385,10 @@ export default function TeacherDashboard() {
                 <Button
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => navigate("/teacher/courses")}
+                  onClick={() => navigate("/teacher/subjects")}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm khóa học mới
+                  Thêm môn học mới
                 </Button>
                 <Button
                   variant="outline"

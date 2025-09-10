@@ -16,7 +16,7 @@ export default function MobileCourseDetail() {
     <div className="space-y-4 p-4">
       <Card className="border-primary/20">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg">Khóa học: {id}</CardTitle>
+          <CardTitle className="text-lg">Môn học: {id}</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">

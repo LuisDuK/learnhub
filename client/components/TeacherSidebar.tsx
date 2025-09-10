@@ -24,9 +24,9 @@ const menuItems = [
     href: "/teacher",
   },
   {
-    title: "Quản lý khóa học",
+    title: "Quản lý môn học",
     icon: BookOpen,
-    href: "/teacher/courses",
+    href: "/teacher/subjects",
   },
   {
     title: "AI sinh bài tập",
@@ -129,7 +129,7 @@ export function TeacherSidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-green-700 truncate">
-              Giáo viên Nguyễn Thị Lan
+              Gi��o viên Nguyễn Thị Lan
             </p>
             <p className="text-xs text-green-600 truncate">
               Toán học - 5 năm kinh nghiệm

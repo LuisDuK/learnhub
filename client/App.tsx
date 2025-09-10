@@ -91,7 +91,7 @@ function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/email-verification" element={<EmailVerification />} />
         <Route path="/two-factor-auth" element={<TwoFactorAuth />} />
-        <Route path="/courses" element={<Courses />} />
+        <Route path="/subjects" element={<Courses />} />
         <Route path="/study-plan" element={<StudyPlan />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/progress" element={<Progress />} />
@@ -107,7 +107,7 @@ function AppRoutes() {
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<AdminUsers />} />
-        <Route path="/admin/courses" element={<AdminCourses />} />
+        <Route path="/admin/subjects" element={<AdminCourses />} />
         <Route path="/admin/learning-paths" element={<AdminLearningPaths />} />
         <Route path="/admin/exercises" element={<AdminExercises />} />
         <Route path="/admin/reports" element={<AdminReports />} />
@@ -120,7 +120,7 @@ function AppRoutes() {
 
         {/* Teacher Routes */}
         <Route path="/teacher" element={<TeacherDashboard />} />
-        <Route path="/teacher/courses" element={<TeacherCourses />} />
+        <Route path="/teacher/subjects" element={<TeacherCourses />} />
         <Route path="/teacher/ai-generator" element={<TeacherAIGenerator />} />
         <Route path="/teacher/reports" element={<TeacherReports />} />
         <Route path="/teacher/profile" element={<TeacherProfile />} />
@@ -131,7 +131,7 @@ function AppRoutes() {
         <Route path="/m/register" element={<MobileRegister />} />
         <Route path="/m" element={<MobileLayout />}>
           <Route index element={<MobileHome />} />
-          <Route path="courses" element={<MobileCourses />} />
+          <Route path="subjects" element={<MobileCourses />} />
           <Route path="assignments" element={<MobileAssignments />} />
           <Route path="progress" element={<MobileProgress />} />
           <Route path="progress/detail" element={<MobileProgressDetail />} />

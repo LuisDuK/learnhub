@@ -42,7 +42,7 @@ const mockLessons = {
     instructor: "Thầy Minh vui vẻ",
     description:
       "Bài học này sẽ giúp các em làm quen với phép cộng và phép trừ trong phạm vi 100 thông qua các ví dụ thú vị và dễ hiểu.",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // placeholder
+    videoUrl: "https://www.youtube.com/embed/5MgBikgcWnY", // lecture example
     objectives: [
       "Hiểu được khái niệm phép cộng và phép trừ",
       "Thực hiện được phép tính trong phạm vi 100",
@@ -53,7 +53,7 @@ const mockLessons = {
         type: "video",
         title: "Video bài giảng chính",
         duration: "15 phút",
-        url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+        url: "https://www.youtube.com/embed/5MgBikgcWnY",
       },
       {
         type: "example",
@@ -89,9 +89,9 @@ export default function Lesson() {
           <div className="text-center">
             <div className="text-6xl mb-4">😔</div>
             <h2 className="text-2xl font-bold mb-2">Không tìm thấy bài học</h2>
-            <Button onClick={() => navigate("/courses")}>
+            <Button onClick={() => navigate("/subjects")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Quay lại khóa học
+              Quay lại môn học
             </Button>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function Lesson() {
           <div className="flex items-center gap-4">
             <Button
               variant="outline"
-              onClick={() => navigate("/courses")}
+              onClick={() => navigate("/subjects")}
               className="border-primary/20 hover:bg-primary/5"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />

@@ -98,17 +98,7 @@ const mockTeacherData = {
   notificationPush: true,
 };
 
-const subjects = [
-  "Toán học",
-  "Tiếng Việt",
-  "Tiếng Anh",
-  "Khoa học tự nhiên",
-  "Khoa học xã hội",
-  "Thể dục",
-  "Mỹ thuật",
-  "Âm nhạc",
-  "Tin học",
-];
+const subjects = ["Toán", "Văn", "Anh"];
 
 const experiences = [
   { value: "moi", label: "Mới tốt nghiệp" },
@@ -308,7 +298,7 @@ export default function TeacherProfile() {
                     <div className="text-2xl font-bold text-green-600">
                       {currentData.totalCourses}
                     </div>
-                    <div className="text-xs text-gray-600">Khóa học</div>
+                    <div className="text-xs text-gray-600">Môn học</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">
@@ -924,7 +914,7 @@ export default function TeacherProfile() {
                     </span>
                   </div>
                   <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Tổng khóa học:</span>
+                    <span className="text-gray-600">Tổng môn học:</span>
                     <span className="font-medium">
                       {currentData.totalCourses}
                     </span>

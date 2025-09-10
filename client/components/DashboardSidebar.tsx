@@ -22,9 +22,9 @@ const menuItems = [
     href: "/",
   },
   {
-    title: "📚 Các khóa học",
+    title: "📚 Các môn học",
     icon: Gamepad2,
-    href: "/courses",
+    href: "/subjects",
   },
   {
     title: "📅 Kế hoạch học",

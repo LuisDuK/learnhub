@@ -55,7 +55,7 @@ const quick = [
     color: "bg-gradient-to-br from-secondary/10 to-primary/10",
   },
   {
-    to: "/m/courses",
+    to: "/m/subjects",
     title: "Tài liệu",
     desc: "PDF, bài tập",
     icon: FileText,
@@ -100,7 +100,7 @@ export default function MobileHome() {
 
       <Card className="border-primary/20">
         <CardHeader>
-          <CardTitle className="text-base">Khóa học đang tham gia</CardTitle>
+          <CardTitle className="text-base">Môn học đang tham gia</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="no-scrollbar -mx-1 flex snap-x gap-3 overflow-x-auto px-1">

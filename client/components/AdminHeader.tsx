@@ -21,7 +21,7 @@ export function AdminHeader() {
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <Input
-            placeholder="Tìm kiếm học sinh, khóa học, nhóm quản lý..."
+            placeholder="Tìm kiếm học sinh, môn học, nhóm quản lý..."
             className="pl-10 border-blue-200 focus:border-blue-400 focus:ring-blue-400"
           />
         </div>

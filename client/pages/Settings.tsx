@@ -253,7 +253,7 @@ export default function Settings() {
                       className="text-primary font-medium flex items-center gap-1"
                     >
                       <School className="h-4 w-4" />
-                      Lớp/Khóa học
+                      Lớp/Môn học
                     </Label>
                     <Select
                       value={userProfile.grade}
@@ -386,7 +386,7 @@ export default function Settings() {
                     ) : (
                       <>
                         <Key className="h-4 w-4 mr-2" />
-                        Đổi mật khẩu
+                        Đổi m��t khẩu
                       </>
                     )}
                   </Button>

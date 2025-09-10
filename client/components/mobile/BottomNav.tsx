@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 
 const tabs = [
   { to: "/m", label: "Trang chủ", icon: Home },
-  { to: "/m/courses", label: "Khóa học", icon: BookOpen },
-  { to: "/m/assignments", label: "Bài tập", icon: ClipboardList },
+  { to: "/m/subjects", label: "Môn học", icon: BookOpen },
+  { to: "/m/assignments", label: "B��i tập", icon: ClipboardList },
   { to: "/m/progress", label: "Tiến độ", icon: BarChart2 },
   { to: "/m/profile", label: "Cá nhân", icon: User },
 ];
