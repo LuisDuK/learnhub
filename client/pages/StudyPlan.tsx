@@ -228,6 +228,23 @@ export default function StudyPlan() {
     ),
   );
 
+  const [showVideoDialog, setShowVideoDialog] = useState(false);
+  const [videoSrc, setVideoSrc] = useState("");
+  const [showPdfDialog, setShowPdfDialog] = useState(false);
+  const [pdfSrc, setPdfSrc] = useState("");
+
+  const openVideo = (url?: string) => {
+    if (!url) return;
+    setVideoSrc(url);
+    setShowVideoDialog(true);
+  };
+
+  const openPdf = (url?: string) => {
+    if (!url) return;
+    setPdfSrc(url);
+    setShowPdfDialog(true);
+  };
+
   // Check if first time visiting
   useEffect(() => {
     const hasSetGoal = localStorage.getItem("studyGoalSet");
