@@ -62,7 +62,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "🔢 Phân số và s�� thập phân",
+        title: "🔢 Phân số và số thập phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
@@ -315,6 +315,128 @@ export default function StudyPlan() {
     setPdfSrc(url);
     setShowPdfDialog(true);
   };
+
+  // Lesson player state & handlers
+  const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [videoCurrentTime, setVideoCurrentTime] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const [videoMarkers, setVideoMarkers] = useState<number[]>([]);
+  const [maxAllowedTime, setMaxAllowedTime] = useState(0);
+  const [showQuizDialog, setShowQuizDialog] = useState(false);
+  const [currentMarkerIndex, setCurrentMarkerIndex] = useState<number | null>(null);
+  const [selectedQuizAnswer, setSelectedQuizAnswer] = useState<number | null>(null);
+
+  // mock quiz bank per lesson id
+  const quizBank: Record<number, { q: string; choices: string[]; answer: number }[]> = {
+    3: [
+      { q: "What is the third person singular of 'go'?", choices: ["go", "goes", "gone"], answer: 1 },
+    ],
+    4: [
+      { q: "Simplify 1/2 + 1/3", choices: ["5/6", "2/5", "3/4"], answer: 0 },
+    ],
+  };
+
+  const openLessonPlayer = (lesson: Lesson) => {
+    setCurrentLesson(lesson);
+    // derive markers: use lesson.quizMarkers if present, else sample markers based on duration
+    const defaultMarkers = [5, 12];
+    const markers = (lesson as any).quizMarkers || defaultMarkers;
+    setVideoMarkers(markers);
+    setMaxAllowedTime(0);
+    setVideoCurrentTime(0);
+    setVideoDuration(0);
+    setSelectedQuizAnswer(null);
+    setCurrentMarkerIndex(null);
+    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to sample mp4
+    const sampleMp4 = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+    const src = typeof (lesson as any).videoUrl === "string" && (lesson as any).videoUrl.endsWith(".mp4") ? (lesson as any).videoUrl : sampleMp4;
+    setVideoSrc(src);
+    setShowVideoDialog(true);
+    // mark lesson as in-progress if not completed
+    if (lesson.status !== "completed") {
+      setLessonList((prev) => prev.map((l) => (l.id === lesson.id ? { ...l, status: "in-progress" } : l)));
+    }
+  };
+
+  const onVideoLoaded = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    setVideoDuration(v.duration || 0);
+  };
+
+  const onVideoTimeUpdate = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    const t = v.currentTime;
+    setVideoCurrentTime(t);
+    // if current time beyond maxAllowedTime, restrict
+    if (t > maxAllowedTime + 0.5) {
+      // allow while playing forward until next marker; nothing here
+    }
+    // check markers
+    for (let i = 0; i < videoMarkers.length; i++) {
+      const mark = videoMarkers[i];
+      if (t >= mark && (maxAllowedTime < mark)) {
+        // reached a marker that hasn't been cleared
+        v.pause();
+        setCurrentMarkerIndex(i);
+        setShowQuizDialog(true);
+        return;
+      }
+    }
+  };
+
+  const onVideoSeeking = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.currentTime > maxAllowedTime + 0.5) {
+      // prevent seeking beyond allowed
+      v.currentTime = maxAllowedTime;
+    }
+  };
+
+  const submitQuizAnswer = () => {
+    if (currentLesson == null || currentMarkerIndex == null) return;
+    const qSet = quizBank[currentLesson.id] || [];
+    const q = qSet[currentMarkerIndex];
+    const correct = q && selectedQuizAnswer === q.answer;
+    if (correct) {
+      // unlock marker
+      const mark = videoMarkers[currentMarkerIndex];
+      setMaxAllowedTime(Math.max(maxAllowedTime, mark + 1));
+      setShowQuizDialog(false);
+      setSelectedQuizAnswer(null);
+      setCurrentMarkerIndex(null);
+      // continue video
+      setTimeout(() => videoRef.current?.play(), 200);
+    } else {
+      // provide suggestion: let student replay last 10s
+      const backTo = Math.max(0, (videoMarkers[currentMarkerIndex] || 0) - 10);
+      if (videoRef.current) {
+        videoRef.current.currentTime = backTo;
+        setVideoCurrentTime(backTo);
+      }
+      setShowQuizDialog(false);
+      setSelectedQuizAnswer(null);
+      setCurrentMarkerIndex(null);
+      setTimeout(() => videoRef.current?.play(), 200);
+    }
+  };
+
+  // when video ends
+  const onVideoEnded = () => {
+    if (!currentLesson) return;
+    setLessonList((prev) => prev.map((l) => (l.id === currentLesson.id ? { ...l, status: "completed" } : l)));
+    // record completion in localStorage progress (mock)
+    const key = `lessonViewed-${currentLesson.id}`;
+    localStorage.setItem(key, JSON.stringify({ viewedAt: new Date().toISOString(), progress: 100 }));
+    setShowVideoDialog(false);
+    setCurrentLesson(null);
+    setVideoSrc("");
+  };
+
+  // End of lesson player block
 
   // Entrance test validity: valid if within 90 days
   const isEntranceTestValid = () => {
