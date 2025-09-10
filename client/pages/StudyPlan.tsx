@@ -119,6 +119,7 @@ const weeklyPlan = [
         status: "not-started",
         day: "Thứ 4",
         time: "16:00",
+        pdfUrl: "https://cdn.builder.io/o/assets%2F3178c0bbf5d64e32906afe2d8af514ea%2F4d4c87b7bec5493eac83c432e8a64018?alt=media&token=d3b1f7c1-2128-4c68-9b5e-ac04d1cfbf77&apiKey=3178c0bbf5d64e32906afe2d8af514ea",
       },
       {
         id: 7,
@@ -594,7 +595,7 @@ export default function StudyPlan() {
               className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
             >
               <Save className="h-4 w-4 mr-2" />
-              Lưu mục tiêu
+              Lưu m��c tiêu
             </Button>
           </div>
         </DialogContent>
