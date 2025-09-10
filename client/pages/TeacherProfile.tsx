@@ -80,7 +80,7 @@ const mockTeacherData = {
   ],
 
   // Teaching Preferences
-  preferredAgeGroups: ["6-8 tuổi", "8-10 tu��i"],
+  preferredAgeGroups: ["6-8 tuổi", "8-10 tuổi"],
   teachingMethods: ["Trực quan", "Tương tác", "Trò chơi"],
   availableHours: "7:00-17:00",
 
@@ -298,7 +298,7 @@ export default function TeacherProfile() {
                     <div className="text-2xl font-bold text-green-600">
                       {currentData.totalCourses}
                     </div>
-                    <div className="text-xs text-gray-600">Khóa học</div>
+                    <div className="text-xs text-gray-600">Môn học</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl font-bold text-blue-600">
