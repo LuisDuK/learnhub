@@ -214,19 +214,53 @@ const statusConfig = {
   },
 };
 
+type Lesson = {
+  id: number;
+  subject: string;
+  title: string;
+  duration: string;
+  status: string;
+  day?: string;
+  time?: string;
+  week?: string;
+  videoUrl?: string;
+  pdfUrl?: string;
+};
+
+type PlanVersion = {
+  id: string;
+  createdAt: string;
+  version: number;
+  goal: any;
+  plan: { phases: { title: string; lessons: Lesson[]; milestone?: string }[] };
+};
+
 export default function StudyPlan() {
   const [selectedGoal, setSelectedGoal] = useState("midterm");
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showCreatePlanDialog, setShowCreatePlanDialog] = useState(false);
   const [showPracticeDialog, setShowPracticeDialog] = useState(false);
+  const [showEntranceTestDialog, setShowEntranceTestDialog] = useState(false);
+  const [showProposedPlanDialog, setShowProposedPlanDialog] = useState(false);
+
   const [goalData, setGoalData] = useState({
     name: "",
     duration: "",
     startDate: "",
     priority: "medium",
   });
-  const [lessonList, setLessonList] = useState(
+
+  const [createPlanData, setCreatePlanData] = useState({
+    goalId: "midterm",
+    subjects: Object.keys(subjectConfig),
+    startDate: "",
+    desiredResult: "",
+    scope: "",
+    scheduleConstraints: { unavailableDays: [] as string[], maxMinutesPerDay: 60 },
+  });
+
+  const [lessonList, setLessonList] = useState<Lesson[]>(
     weeklyPlan.flatMap((week) =>
       week.lessons.map((lesson) => ({ ...lesson, week: week.week })),
     ),
@@ -249,11 +283,26 @@ export default function StudyPlan() {
   >([]);
   const [practiceSelectedLessonIds, setPracticeSelectedLessonIds] = useState<number[]>([]);
 
-  const [createPlanData, setCreatePlanData] = useState({
-    goalId: "midterm",
-    subjects: Object.keys(subjectConfig),
-    startDate: "",
-  });
+  const [entranceQuestions, setEntranceQuestions] = useState(
+    [
+      { id: 1, q: "2 + 2 = ?", choices: ["3", "4", "5"], answer: 1 },
+      { id: 2, q: "5 * 3 = ?", choices: ["15", "10", "20"], answer: 0 },
+      { id: 3, q: "Present of 'go' is?", choices: ["goes", "go", "gone"], answer: 1 },
+      { id: 4, q: "Từ đồng nghĩa của 'happy'", choices: ["sad", "joyful", "angry"], answer: 1 },
+      { id: 5, q: "What is 10 / 2?", choices: ["2", "5", "10"], answer: 1 },
+    ]
+  );
+  const [entranceAnswers, setEntranceAnswers] = useState<Record<number, number>>({});
+  const [entranceResult, setEntranceResult] = useState<{ score: number; strengths: string[]; weaknesses: string[] } | null>(null);
+
+  const [proposedPlan, setProposedPlan] = useState<PlanVersion | null>(null);
+
+  useEffect(() => {
+    const hasSetGoal = localStorage.getItem("studyGoalSet");
+    if (!hasSetGoal) {
+      setShowGoalDialog(true);
+    }
+  }, []);
 
   const openVideo = (url?: string) => {
     if (!url) return;
@@ -267,39 +316,123 @@ export default function StudyPlan() {
     setShowPdfDialog(true);
   };
 
-  const generateStudyPlan = (goalId: string) => {
-    // Simple generation rules based on goal
-    const map: Record<string, string[]> = {
-      midterm: ["math", "literature", "english"],
-      grammar: ["literature", "english"],
-      exam: ["math", "literature", "english"],
-      vocabulary: ["english"],
-    };
-    const subjects = map[goalId] || ["math", "literature", "english"];
-    const items = weeklyPlan
-      .flatMap((week) => week.lessons.map((l) => ({ ...l, week: week.week })))
-      .filter((l) => subjects.includes(l.subject))
-      .map((l) => ({ ...l, status: l.status === "completed" ? "completed" : "not-started" }));
-    setLessonList(items);
+  // Entrance test validity: valid if within 90 days
+  const isEntranceTestValid = () => {
+    const raw = localStorage.getItem("entranceTest");
+    if (!raw) return false;
+    try {
+      const parsed = JSON.parse(raw);
+      const date = new Date(parsed.date);
+      const diffDays = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+      return diffDays <= 90;
+    } catch (e) {
+      return false;
+    }
   };
 
-  const createPlan = () => {
-    const subjects = createPlanData.subjects;
-    const items = weeklyPlan
-      .flatMap((week) => week.lessons.map((l) => ({ ...l, week: week.week })))
-      .filter((l) => subjects.includes(l.subject));
-    setLessonList(items);
+  const startCreatePlan = () => {
+    // open create dialog; on submit we'll check entrance test
+    setShowCreatePlanDialog(true);
+  };
+
+  const submitCreatePlan = () => {
+    // save createPlanData to goalData briefly
+    setGoalData((prev) => ({ ...prev, name: createPlanData.desiredResult || prev.name }));
+    // Check entrance test
+    if (!isEntranceTestValid()) {
+      setShowCreatePlanDialog(false);
+      setShowEntranceTestDialog(true);
+      return;
+    }
+    // otherwise generate plan
+    const testRaw = localStorage.getItem("entranceTest");
+    const test = testRaw ? JSON.parse(testRaw) : null;
+    const generated = aiGeneratePlan(createPlanData, test);
+    setProposedPlan(generated);
     setShowCreatePlanDialog(false);
+    setShowProposedPlanDialog(true);
   };
 
-  // Practice test generation (mock)
+  const submitEntranceTest = () => {
+    // grade
+    let correct = 0;
+    entranceQuestions.forEach((q) => {
+      if (entranceAnswers[q.id] === q.answer) correct++;
+    });
+    const score = Math.round((correct / entranceQuestions.length) * 100);
+    // mock strengths/weaknesses
+    const strengths = score >= 60 ? ["Reading"] : ["Listening"];
+    const weaknesses = score < 60 ? ["Math basics"] : [];
+    const result = { score, strengths, weaknesses };
+    setEntranceResult(result);
+    localStorage.setItem("entranceTest", JSON.stringify({ ...result, date: new Date().toISOString() }));
+
+    // auto-generate plan after grading
+    const test = { ...result };
+    const generated = aiGeneratePlan(createPlanData, test);
+    setProposedPlan(generated);
+    setShowEntranceTestDialog(false);
+    setShowProposedPlanDialog(true);
+  };
+
+  const aiGeneratePlan = (createData: typeof createPlanData, test: any) => {
+    // Mock AI planner: create phases based on duration and subjects
+    const phases = createData.subjects.map((s, idx) => {
+      const lessons: Lesson[] = [];
+      for (let i = 0; i < 3; i++) {
+        lessons.push({
+          id: Date.now() + idx * 100 + i,
+          subject: s,
+          title: `${subjectConfig[s as keyof typeof subjectConfig].name} - Chủ đề ${i + 1}`,
+          duration: `${30 + i * 15} phút`,
+          status: "not-started",
+          week: `Giai đoạn ${idx + 1}`,
+          day: "Thứ 2",
+          time: "16:00",
+        });
+      }
+      return { title: `${subjectConfig[s as keyof typeof subjectConfig].name} - Giai đoạn ${idx + 1}`, lessons, milestone: `Đánh giá sau giai đoạn ${idx + 1}` };
+    });
+
+    const versionListRaw = localStorage.getItem("studyPlanVersions");
+    const versionList: PlanVersion[] = versionListRaw ? JSON.parse(versionListRaw) : [];
+    const version = (versionList[versionList.length - 1]?.version || 0) + 1;
+    const planVersion: PlanVersion = {
+      id: `plan-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      version,
+      goal: { ...createData },
+      plan: { phases },
+    };
+    return planVersion;
+  };
+
+  const saveProposedPlan = (p: PlanVersion) => {
+    const raw = localStorage.getItem("studyPlanVersions");
+    const list: PlanVersion[] = raw ? JSON.parse(raw) : [];
+    list.push(p);
+    localStorage.setItem("studyPlanVersions", JSON.stringify(list));
+    localStorage.setItem("currentStudyPlan", JSON.stringify(p));
+
+    // create simple reminders (mock): store in localStorage
+    const reminders = p.plan.phases.flatMap((ph, phIdx) =>
+      ph.lessons.map((ls, i) => ({ lessonId: ls.id, title: ls.title, scheduled: new Date(Date.now() + (phIdx * 7 + i) * 24 * 60 * 60 * 1000).toISOString() })),
+    );
+    localStorage.setItem("studyPlanReminders", JSON.stringify(reminders));
+
+    setProposedPlan(null);
+    setShowProposedPlanDialog(false);
+    // refresh lessonList to show plan as current
+    const allLessons = p.plan.phases.flatMap((ph) => ph.lessons.map((l) => ({ ...l })));
+    setLessonList(allLessons as Lesson[]);
+  };
+
   const generatePractice = () => {
     const { subject, topic, numQuestions, difficulty } = practiceForm;
 
     const selectedLessons = lessonList.filter((l) => practiceSelectedLessonIds.includes(l.id));
 
     if (selectedLessons.length > 0) {
-      // distribute questions across selected lessons
       const perLesson = Math.max(1, Math.floor(Number(numQuestions) / selectedLessons.length));
       const questions: { id: number; text: string; difficulty: string }[] = [];
       selectedLessons.forEach((lesson, idx) => {
@@ -332,15 +465,10 @@ export default function StudyPlan() {
   };
 
   const updateQuestion = (id: number, data: Partial<{ text: string; difficulty: string }>) => {
-    setPracticeQuestions(
-      practiceQuestions.map((q) => (q.id === id ? { ...q, ...data } : q)),
-    );
+    setPracticeQuestions(practiceQuestions.map((q) => (q.id === id ? { ...q, ...data } : q)));
   };
 
-  const deleteQuestion = (id: number) => {
-    setPracticeQuestions(practiceQuestions.filter((q) => q.id !== id));
-  };
-
+  const deleteQuestion = (id: number) => setPracticeQuestions(practiceQuestions.filter((q) => q.id !== id));
   const moveQuestion = (index: number, direction: "up" | "down") => {
     const newList = [...practiceQuestions];
     const swapIndex = direction === "up" ? index - 1 : index + 1;
@@ -353,111 +481,22 @@ export default function StudyPlan() {
     setPracticeSelectedLessonIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
-  // Check if first time visiting
-  useEffect(() => {
-    const hasSetGoal = localStorage.getItem("studyGoalSet");
-    if (!hasSetGoal) {
-      setShowGoalDialog(true);
-    }
-  }, []);
-
-  const handleSaveGoal = () => {
-    localStorage.setItem("studyGoalSet", "true");
-    localStorage.setItem("studyGoal", JSON.stringify(goalData));
-    setShowGoalDialog(false);
-  };
-
-  const handleEditRoadmap = () => {
-    setShowEditDialog(true);
-  };
-
-  const handleSaveRoadmap = () => {
-    setShowEditDialog(false);
-    // local state already updated
-  };
-
-  const addNewLesson = () => {
-    const newLesson = {
-      id: Date.now(),
-      subject: "math",
-      title: "Bài học mới",
-      duration: "45 phút",
-      status: "not-started",
-      day: "Thứ 2",
-      time: "14:00",
-      week: "Tuần 1",
-    };
-    setLessonList([...lessonList, newLesson]);
-  };
-
-  const deleteLesson = (id: number) => {
-    setLessonList(lessonList.filter((lesson) => lesson.id !== id));
-  };
-
-  const updateLessonStatus = (id: number, status: string) => {
-    setLessonList(
-      lessonList.map((lesson) =>
-        lesson.id === id ? { ...lesson, status } : lesson,
-      ),
-    );
-  };
-
-  const updateLessonField = (id: number, field: string, value: any) => {
-    setLessonList(
-      lessonList.map((lesson) => (lesson.id === id ? { ...lesson, [field]: value } : lesson)),
-    );
-  };
-
-  // Calculate progress from lessonList state
-  const totalLessons = lessonList.length;
-  const completedLessons = lessonList.filter((l) => l.status === "completed").length;
-  const progressPercentage = totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
-
   return (
     <DashboardLayout>
       <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
-              Lộ trình học tập
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-lg mt-1">Kế hoạch học tập được cá nhân hóa cho bé</p>
           </div>
           <div className="flex gap-3">
-            <Button
-              onClick={() => {
-                localStorage.removeItem("studyGoalSet");
-                localStorage.removeItem("studyGoal");
-                setShowGoalDialog(true);
-              }}
-              variant="outline"
-              className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl"
-            >
-              🔄 Reset lộ trình học
-            </Button>
-            <Button
-              onClick={() => setShowCreatePlanDialog(true)}
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/5 font-bold rounded-xl"
-            >
-              🛠️ Tạo lộ trình
-            </Button>
-            <Button
-              onClick={handleEditRoadmap}
-              className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
-            >
-              <Edit className="h-4 w-4 mr-2" />
-              Chỉnh sửa lộ trình
-            </Button>
-            <Button
-              onClick={() => setShowPracticeDialog(true)}
-              className="bg-gradient-to-r from-secondary to-accent/70 hover:from-secondary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Tạo bài ôn cá nhân hóa
-            </Button>
+            <Button onClick={() => { localStorage.removeItem("studyGoalSet"); localStorage.removeItem("studyGoal"); setShowGoalDialog(true); }} variant="outline" className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl">🔄 Reset lộ trình học</Button>
+            <Button onClick={startCreatePlan} variant="outline" className="border-primary text-primary hover:bg-primary/5 font-bold rounded-xl">🛠️ Tạo lộ trình</Button>
+            <Button onClick={() => setShowEditDialog(true)} className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"><Edit className="h-4 w-4 mr-2" />Chỉnh sửa lộ trình</Button>
+            <Button onClick={() => setShowPracticeDialog(true)} className="bg-gradient-to-r from-secondary to-accent/70 hover:from-secondary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"><Plus className="h-4 w-4 mr-2" />Tạo bài ôn cá nhân hóa</Button>
           </div>
         </div>
 
@@ -465,28 +504,16 @@ export default function StudyPlan() {
         <div className="grid gap-6 lg:grid-cols-3">
           <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                Mục tiêu học tập
-              </CardTitle>
+              <CardTitle className="flex items-center gap-2"><Target className="h-5 w-5 text-primary" />Mục tiêu học tập</CardTitle>
               <CardDescription>Chọn mục tiêu để xem lộ trình phù hợp</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex gap-3 items-center">
                 <Select value={selectedGoal} onValueChange={(v) => { setSelectedGoal(v); generateStudyPlan(v); }}>
-                  <SelectTrigger className="w-full border-primary/20 rounded-xl">
-                    <SelectValue placeholder="Chọn mục tiêu học tập" />
-                  </SelectTrigger>
+                  <SelectTrigger className="w-full border-primary/20 rounded-xl"><SelectValue placeholder="Chọn mục tiêu học tập" /></SelectTrigger>
                   <SelectContent>
                     {studyGoals.map((goal) => (
-                      <SelectItem key={goal.id} value={goal.id}>
-                        <div className="flex items-center justify-between w-full">
-                          <span>{goal.label}</span>
-                          <Badge variant="outline" className="ml-2">
-                            {goal.duration}
-                          </Badge>
-                        </div>
-                      </SelectItem>
+                      <SelectItem key={goal.id} value={goal.id}><div className="flex items-center justify-between w-full"><span>{goal.label}</span><Badge variant="outline" className="ml-2">{goal.duration}</Badge></div></SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -497,20 +524,12 @@ export default function StudyPlan() {
 
           <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-accent" />
-                📊 Tiến độ tổng thể
-              </CardTitle>
+              <CardTitle className="flex items-center gap-2"><Clock className="h-5 w-5 text-accent" />📊 Tiến độ tổng thể</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">{progressPercentage}%</div>
-                <p className="text-sm text-muted-foreground">Hoàn thành</p>
-              </div>
-              <Progress value={progressPercentage} className="h-3" />
-              <div className="text-sm text-muted-foreground text-center">
-                {completedLessons}/{totalLessons} bài học đã hoàn thành
-              </div>
+              <div className="text-center"><div className="text-3xl font-bold text-primary">{Math.round((lessonList.filter((l) => l.status === "completed").length / (lessonList.length || 1)) * 100)}%</div><p className="text-sm text-muted-foreground">Hoàn thành</p></div>
+              <Progress value={Math.round((lessonList.filter((l) => l.status === "completed").length / (lessonList.length || 1)) * 100)} className="h-3" />
+              <div className="text-sm text-muted-foreground text-center">{lessonList.filter((l) => l.status === "completed").length}/{lessonList.length} bài học đã hoàn thành</div>
             </CardContent>
           </Card>
         </div>
@@ -518,121 +537,40 @@ export default function StudyPlan() {
         {/* Timeline */}
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-secondary" />
-              📝 Lịch trình học tập
-            </CardTitle>
+            <CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5 text-secondary" />📝 Lịch trình học tập</CardTitle>
             <CardDescription>Timeline chi tiết các bài học theo tuần</CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
             {[...new Set(lessonList.map((l) => l.week))].map((w, weekIndex) => {
               const weekObj = { week: w, lessons: lessonList.filter((l) => l.week === w) };
-              const wp = weeklyPlan.find((x) => x.week === w);
               return (
                 <div key={weekObj.week} className="relative">
-                  {/* Week Header */}
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white font-bold shadow-lg">
-                      {weekIndex + 1}
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-primary">{weekObj.week}</h3>
-                      <p className="text-sm text-muted-foreground">{wp?.startDate || ""}</p>
-                    </div>
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white font-bold shadow-lg">{weekIndex + 1}</div>
+                    <div><h3 className="text-xl font-bold text-primary">{weekObj.week}</h3></div>
                   </div>
 
-                  {/* Lessons */}
                   <div className="ml-6 border-l-2 border-primary/20 pl-6 space-y-4">
-                    {weekObj.lessons.map((lesson, lessonIndex) => {
-                      const subject =
-                        subjectConfig[
-                          lesson.subject as keyof typeof subjectConfig
-                        ];
-                      const status =
-                        statusConfig[lesson.status as keyof typeof statusConfig];
+                    {weekObj.lessons.map((lesson) => {
+                      const subject = subjectConfig[lesson.subject as keyof typeof subjectConfig];
+                      const status = statusConfig[lesson.status as keyof typeof statusConfig];
                       const SubjectIcon = subject.icon;
                       const StatusIcon = status.icon;
-
                       return (
-                        <div
-                          key={lesson.id}
-                          className="relative flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
-                        >
-                          {/* Timeline dot */}
-                          <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
-                            <div
-                              className={`h-3 w-3 rounded-full ${subject.color}`}
-                            />
-                          </div>
-
-                          {/* Content */}
+                        <div key={lesson.id} className="relative flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow">
+                          <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center"><div className={`h-3 w-3 rounded-full ${subject.color}`} /></div>
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center gap-3">
-                                <div
-                                  className={`p-2 rounded-lg ${subject.bgColor}`}
-                                >
-                                  <SubjectIcon
-                                    className={`h-5 w-5 ${subject.textColor}`}
-                                  />
-                                </div>
-                                <div>
-                                  <h4 className="font-semibold text-lg">{lesson.title}</h4>
-                                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                                    <span>📚 {subject.name}</span>
-                                    <span>📅 {lesson.day}</span>
-                                    <span>⏰ {lesson.time}</span>
-                                    <span>⏱️ {lesson.duration}</span>
-                                  </div>
-                                </div>
+                                <div className={`p-2 rounded-lg ${subject.bgColor}`}><SubjectIcon className={`h-5 w-5 ${subject.textColor}`} /></div>
+                                <div><h4 className="font-semibold text-lg">{lesson.title}</h4><div className="flex items-center gap-4 text-sm text-muted-foreground mt-1"><span>📚 {subject.name}</span><span>📅 {lesson.day}</span><span>⏰ {lesson.time}</span><span>⏱️ {lesson.duration}</span></div></div>
                               </div>
-                              <div className="flex items-center gap-2">
-                                <Badge
-                                  variant="outline"
-                                  className={`${status.bgColor} border-0`}
-                                >
-                                  <StatusIcon
-                                    className={`h-3 w-3 mr-1 ${status.color}`}
-                                  />
-                                  {status.label}
-                                </Badge>
-                              </div>
+                              <div className="flex items-center gap-2"><Badge variant="outline" className={`${status.bgColor} border-0`}><StatusIcon className={`h-3 w-3 mr-1 ${status.color}`} />{status.label}</Badge></div>
                             </div>
 
-                            {lesson.status === "in-progress" && (
-                              <Button
-                                size="sm"
-                                className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
-                                onClick={() => openVideo(lesson.videoUrl)}
-                              >
-                                <PlayCircle className="h-4 w-4 mr-1" />
-                                Tiếp tục học
-                              </Button>
-                            )}
-
-                            {lesson.status === "not-started" && (
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg"
-                                onClick={() => openVideo(lesson.videoUrl)}
-                              >
-                                <Circle className="h-4 w-4 mr-1" />
-                                Bắt đầu học
-                              </Button>
-                            )}
-
-                            {/* PDF assignment button */}
-                            {lesson.pdfUrl && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="ml-2 underline text-sm"
-                                onClick={() => openPdf(lesson.pdfUrl)}
-                              >
-                                📄 Làm bài tập (PDF)
-                              </Button>
-                            )}
+                            {lesson.status === "in-progress" && (<Button size="sm" className="bg-gradient-to-r from-primary to-accent text-white rounded-lg" onClick={() => openVideo(lesson.videoUrl)}><PlayCircle className="h-4 w-4 mr-1" />Tiếp tục học</Button>)}
+                            {lesson.status === "not-started" && (<Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg" onClick={() => openVideo(lesson.videoUrl)}><Circle className="h-4 w-4 mr-1" />Bắt đầu học</Button>)}
+                            {lesson.pdfUrl && (<Button variant="ghost" size="sm" className="ml-2 underline text-sm" onClick={() => openPdf(lesson.pdfUrl)}>📄 Làm bài tập (PDF)</Button>)}
                           </div>
                         </div>
                       );
@@ -652,21 +590,8 @@ export default function StudyPlan() {
             <DialogTitle>Video bài học</DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">Xem video bài học trong lộ trình</DialogDescription>
           </DialogHeader>
-          <div className="aspect-video w-full">
-            {videoSrc ? (
-              <iframe
-                src={videoSrc}
-                title="Video bài học"
-                className="w-full h-full"
-                allowFullScreen
-              />
-            ) : (
-              <div className="p-8 text-center">Video không khả dụng</div>
-            )}
-          </div>
-          <div className="flex justify-end pt-4">
-            <Button onClick={() => setShowVideoDialog(false)} variant="outline">Đóng</Button>
-          </div>
+          <div className="aspect-video w-full">{videoSrc ? (<iframe src={videoSrc} title="Video bài học" className="w-full h-full" allowFullScreen />) : (<div className="p-8 text-center">Video không khả dụng</div>)}</div>
+          <div className="flex justify-end pt-4"><Button onClick={() => setShowVideoDialog(false)} variant="outline">Đóng</Button></div>
         </DialogContent>
       </Dialog>
 
@@ -677,20 +602,12 @@ export default function StudyPlan() {
             <DialogTitle>Tài liệu / Bài tập (PDF)</DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">Xem tài liệu PDF đính kèm với bài học</DialogDescription>
           </DialogHeader>
-          <div className="w-full h-[80vh]">
-            {pdfSrc ? (
-              <iframe src={pdfSrc} className="w-full h-full" />
-            ) : (
-              <div className="p-8 text-center">PDF không khả dụng</div>
-            )}
-          </div>
-          <div className="flex justify-end pt-4">
-            <Button onClick={() => setShowPdfDialog(false)} variant="outline">Đóng</Button>
-          </div>
+          <div className="w-full h-[80vh]">{pdfSrc ? (<iframe src={pdfSrc} className="w-full h-full" />) : (<div className="p-8 text-center">PDF không khả dụng</div>)}</div>
+          <div className="flex justify-end pt-4"><Button onClick={() => setShowPdfDialog(false)} variant="outline">Đóng</Button></div>
         </DialogContent>
       </Dialog>
 
-      {/* Popup nhập m��c tiêu học tập */}
+      {/* Goal Dialog (unchanged) */}
       <Dialog open={showGoalDialog} onOpenChange={setShowGoalDialog}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
@@ -700,28 +617,12 @@ export default function StudyPlan() {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="goalName">Tên mục tiêu</Label>
-              <Input
-                id="goalName"
-                placeholder="Ví dụ: Ôn tập thi giữa kỳ"
-                value={goalData.name}
-                onChange={(e) =>
-                  setGoalData({ ...goalData, name: e.target.value })
-                }
-                className="border-primary/20 focus:border-primary rounded-xl"
-              />
+              <Input id="goalName" placeholder="Ví dụ: ��n tập thi giữa kỳ" value={goalData.name} onChange={(e) => setGoalData({ ...goalData, name: e.target.value })} className="border-primary/20 focus:border-primary rounded-xl" />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="duration">Khoảng thời gian</Label>
-              <Select
-                value={goalData.duration}
-                onValueChange={(value) =>
-                  setGoalData({ ...goalData, duration: value })
-                }
-              >
-                <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
-                  <SelectValue placeholder="Chọn khoảng thời gian" />
-                </SelectTrigger>
+              <Select value={goalData.duration} onValueChange={(value) => setGoalData({ ...goalData, duration: value })}>
+                <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl"><SelectValue placeholder="Chọn khoảng thời gian" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="1-week">1 tuần</SelectItem>
                   <SelectItem value="2-weeks">2 tuần</SelectItem>
@@ -731,31 +632,14 @@ export default function StudyPlan() {
                 </SelectContent>
               </Select>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="startDate">Ngày bắt đầu</Label>
-              <Input
-                id="startDate"
-                type="date"
-                value={goalData.startDate}
-                onChange={(e) =>
-                  setGoalData({ ...goalData, startDate: e.target.value })
-                }
-                className="border-primary/20 focus:border-primary rounded-xl"
-              />
+              <Input id="startDate" type="date" value={goalData.startDate} onChange={(e) => setGoalData({ ...goalData, startDate: e.target.value })} className="border-primary/20 focus:border-primary rounded-xl" />
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="priority">Độ ưu tiên</Label>
-              <Select
-                value={goalData.priority}
-                onValueChange={(value) =>
-                  setGoalData({ ...goalData, priority: value })
-                }
-              >
-                <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl">
-                  <SelectValue />
-                </SelectTrigger>
+              <Select value={goalData.priority} onValueChange={(value) => setGoalData({ ...goalData, priority: value })}>
+                <SelectTrigger className="border-primary/20 focus:border-primary rounded-xl"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="high">🔴 Cao</SelectItem>
                   <SelectItem value="medium">🟠 Trung bình</SelectItem>
@@ -764,27 +648,11 @@ export default function StudyPlan() {
               </Select>
             </div>
           </div>
-
-          <div className="flex gap-3 pt-4">
-            <Button
-              onClick={() => setShowGoalDialog(false)}
-              variant="outline"
-              className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl"
-            >
-              Hủy
-            </Button>
-            <Button
-              onClick={handleSaveGoal}
-              className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
-            >
-              <Save className="h-4 w-4 mr-2" />
-              Lưu mục tiêu
-            </Button>
-          </div>
+          <div className="flex gap-3 pt-4"><Button onClick={() => setShowGoalDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">Hủy</Button><Button onClick={() => { localStorage.setItem("studyGoalSet", "true"); localStorage.setItem("studyGoal", JSON.stringify(goalData)); setShowGoalDialog(false); }} className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"><Save className="h-4 w-4 mr-2" />Lưu mục tiêu</Button></div>
         </DialogContent>
       </Dialog>
 
-      {/* Popup tạo lộ trình (tùy chỉnh) */}
+      {/* Create Plan Dialog */}
       <Dialog open={showCreatePlanDialog} onOpenChange={setShowCreatePlanDialog}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
@@ -796,13 +664,9 @@ export default function StudyPlan() {
             <div className="space-y-2">
               <Label>Chọn mục tiêu</Label>
               <Select value={createPlanData.goalId} onValueChange={(v) => setCreatePlanData({ ...createPlanData, goalId: v })}>
-                <SelectTrigger className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {studyGoals.map((g) => (
-                    <SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>
-                  ))}
+                  {studyGoals.map((g) => (<SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>))}
                 </SelectContent>
               </Select>
             </div>
@@ -812,16 +676,7 @@ export default function StudyPlan() {
               <div className="flex gap-3 flex-wrap">
                 {Object.keys(subjectConfig).map((k) => (
                   <label key={k} className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${createPlanData.subjects.includes(k) ? "bg-primary/10 border-primary text-primary" : "bg-white border-gray-200 text-gray-700"}`}>
-                    <input
-                      type="checkbox"
-                      checked={createPlanData.subjects.includes(k)}
-                      onChange={() => {
-                        setCreatePlanData((prev) => ({
-                          ...prev,
-                          subjects: prev.subjects.includes(k) ? prev.subjects.filter((s) => s !== k) : [...prev.subjects, k],
-                        }));
-                      }}
-                    />
+                    <input type="checkbox" checked={createPlanData.subjects.includes(k)} onChange={() => setCreatePlanData((prev) => ({ ...prev, subjects: prev.subjects.includes(k) ? prev.subjects.filter((s) => s !== k) : [...prev.subjects, k] }))} />
                     <span>{(subjectConfig as any)[k].name}</span>
                   </label>
                 ))}
@@ -832,16 +687,118 @@ export default function StudyPlan() {
               <Label>Ngày bắt đầu (tùy chọn)</Label>
               <Input type="date" value={createPlanData.startDate} onChange={(e) => setCreatePlanData({ ...createPlanData, startDate: e.target.value })} />
             </div>
+
+            <div className="space-y-2">
+              <Label>Kết quả mong muốn</Label>
+              <Input value={createPlanData.desiredResult} onChange={(e) => setCreatePlanData({ ...createPlanData, desiredResult: e.target.value })} placeholder="Ví dụ: Đạt 8 điểm kiểm tra giữa kỳ" />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Phạm vi kiến thức trọng tâm (tùy chọn)</Label>
+              <Textarea value={createPlanData.scope} onChange={(e) => setCreatePlanData({ ...createPlanData, scope: e.target.value })} placeholder="Ví dụ: Phân số, hình học cơ bản" />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Ràng buộc lịch học (tùy chọn)</Label>
+              <div className="flex items-center gap-3">
+                <Input type="number" value={String(createPlanData.scheduleConstraints.maxMinutesPerDay)} onChange={(e) => setCreatePlanData({ ...createPlanData, scheduleConstraints: { ...createPlanData.scheduleConstraints, maxMinutesPerDay: Number(e.target.value) } })} className="w-36" />
+                <span className="text-sm text-muted-foreground">phút/ngày tối đa</span>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-3 pt-4">
             <Button onClick={() => setShowCreatePlanDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">Hủy</Button>
-            <Button onClick={createPlan} className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl">Tạo lộ trình</Button>
+            <Button onClick={submitCreatePlan} className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl">Tiếp tục</Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Popup chỉnh sửa lộ trình */}
+      {/* Entrance Test Dialog */}
+      <Dialog open={showEntranceTestDialog} onOpenChange={setShowEntranceTestDialog}>
+        <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">🧪 Bài kiểm tra đầu vào</DialogTitle>
+            <DialogDescription>Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hiện tại</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {entranceQuestions.map((q) => (
+              <div key={q.id} className="p-3 border border-gray-200 rounded-lg bg-white">
+                <div className="font-medium">{q.q}</div>
+                <div className="mt-2 space-y-2">
+                  {q.choices.map((c: string, idx: number) => (
+                    <label key={idx} className="flex items-center gap-2">
+                      <input type="radio" name={`q-${q.id}`} checked={entranceAnswers[q.id] === idx} onChange={() => setEntranceAnswers((prev) => ({ ...prev, [q.id]: idx }))} />
+                      <span>{c}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div className="flex gap-3 pt-2">
+              <Button onClick={() => setShowEntranceTestDialog(false)} variant="outline" className="flex-1">Hủy</Button>
+              <Button onClick={submitEntranceTest} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">Nộp bài và chấm điểm</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Proposed Plan Dialog */}
+      <Dialog open={showProposedPlanDialog} onOpenChange={setShowProposedPlanDialog}>
+        <DialogContent className="sm:max-w-4xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">📋 Lộ trình đề xuất</DialogTitle>
+            <DialogDescription>AI Planner đã tạo lộ trình; bạn có thể điều chỉnh nhẹ trước khi lưu</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {proposedPlan?.plan.phases.map((ph, phIdx) => (
+              <div key={phIdx} className="p-4 border border-gray-200 rounded-lg bg-white">
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <h4 className="font-semibold">{ph.title}</h4>
+                    <div className="text-sm text-muted-foreground">{ph.milestone}</div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  {ph.lessons.map((ls, i) => (
+                    <div key={ls.id} className="flex items-center gap-3 p-2 border rounded-lg">
+                      <div className="flex-1">
+                        <div className="font-medium">{ls.title}</div>
+                        <div className="text-xs text-muted-foreground">{ls.week} • {ls.day}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Input value={ls.duration} onChange={(e) => {
+                          const new = { ...proposedPlan }!;
+                          new.plan.phases[phIdx].lessons[i].duration = e.target.value;
+                          setProposedPlan({ ...new });
+                        }} className="w-36" />
+                        <Button size="sm" onClick={() => {
+                          const new = { ...proposedPlan }!;
+                          new.plan.phases[phIdx].lessons.splice(i, 1);
+                          setProposedPlan({ ...new });
+                        }} variant="outline" className="text-red-600">Xóa</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div className="text-sm text-muted-foreground">Lưu ý: Đây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày học cho từng bài.</div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button onClick={() => setShowProposedPlanDialog(false)} variant="outline" className="flex-1">Huỷ</Button>
+            <Button onClick={() => { if (proposedPlan) saveProposedPlan(proposedPlan); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">Lưu lộ trình (tạo version mới)</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Roadmap Dialog (existing) */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
@@ -852,98 +809,46 @@ export default function StudyPlan() {
           <div className="space-y-4 py-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">Danh sách bài học</h3>
-              <Button
-                onClick={addNewLesson}
-                size="sm"
-                className="bg-green-600 hover:bg-green-700 text-white rounded-lg"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Thêm bài học
-              </Button>
+              <Button onClick={() => { const newLesson = { id: Date.now(), subject: "math", title: "Bài học mới", duration: "45 phút", status: "not-started", day: "Thứ 2", time: "14:00", week: "Tuần mới" }; setLessonList([...lessonList, newLesson]); }} size="sm" className="bg-green-600 hover:bg-green-700 text-white rounded-lg"><Plus className="h-4 w-4 mr-2" />Thêm bài học</Button>
             </div>
 
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              {lessonList.map((lesson, idx) => (
-                <div
-                  key={lesson.id}
-                  className="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-white"
-                >
+              {lessonList.map((lesson) => (
+                <div key={lesson.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-xl bg-white">
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium text-gray-500">{lesson.week}</span>
-                      <Input
-                        value={lesson.title}
-                        onChange={(e) => updateLessonField(lesson.id, "title", e.target.value)}
-                        className="bg-transparent border-0 p-0 text-base font-semibold"
-                      />
+                      <Input value={lesson.title} onChange={(e) => setLessonList(lessonList.map((ls) => ls.id === lesson.id ? { ...ls, title: e.target.value } : ls))} className="bg-transparent border-0 p-0 text-base font-semibold" />
                       <span className="text-sm text-gray-500">({lesson.duration})</span>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <Input
-                        value={lesson.day}
-                        onChange={(e) => updateLessonField(lesson.id, "day", e.target.value)}
-                        className="w-28 text-sm"
-                      />
-                      <Input
-                        value={lesson.time}
-                        onChange={(e) => updateLessonField(lesson.id, "time", e.target.value)}
-                        className="w-20 text-sm"
-                        type="time"
-                      />
-                      <Select
-                        value={lesson.subject}
-                        onValueChange={(v) => updateLessonField(lesson.id, "subject", v)}
-                        className="w-32"
-                      >
-                        <SelectTrigger className="w-32 text-sm">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.keys(subjectConfig).map((k) => (
-                            <SelectItem key={k} value={k}>{(subjectConfig as any)[k].name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input value={lesson.day} onChange={(e) => setLessonList(lessonList.map((ls) => ls.id === lesson.id ? { ...ls, day: e.target.value } : ls))} className="w-28 text-sm" />
+                      <Input value={lesson.time} onChange={(e) => setLessonList(lessonList.map((ls) => ls.id === lesson.id ? { ...ls, time: e.target.value } : ls))} className="w-20 text-sm" type="time" />
+                      <Select value={lesson.subject} onValueChange={(v) => setLessonList(lessonList.map((ls) => ls.id === lesson.id ? { ...ls, subject: v } : ls))} className="w-32"><SelectTrigger className="w-32 text-sm"><SelectValue /></SelectTrigger><SelectContent>{Object.keys(subjectConfig).map((k) => (<SelectItem key={k} value={k}>{(subjectConfig as any)[k].name}</SelectItem>))}</SelectContent></Select>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <Select
-                      value={lesson.status}
-                      onValueChange={(value) => updateLessonStatus(lesson.id, value)}
-                    >
-                      <SelectTrigger className="w-40 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
+                    <Select value={lesson.status} onValueChange={(v) => setLessonList(lessonList.map((ls) => ls.id === lesson.id ? { ...ls, status: v } : ls))}>
+                      <SelectTrigger className="w-40 text-sm"><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="not-started">Chưa học</SelectItem>
                         <SelectItem value="in-progress">Đang học</SelectItem>
                         <SelectItem value="completed">Hoàn thành</SelectItem>
                       </SelectContent>
                     </Select>
-
-                    <Button onClick={() => deleteLesson(lesson.id)} size="sm" variant="outline" className="text-red-600 border-red-200 hover:bg-red-50">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <Button onClick={() => setLessonList(lessonList.filter((ls) => ls.id !== lesson.id))} size="sm" variant="outline" className="text-red-600 border-red-200 hover:bg-red-50"><Trash2 className="h-4 w-4" /></Button>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4">
-            <Button onClick={() => setShowEditDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">
-              Đóng
-            </Button>
-            <Button onClick={handleSaveRoadmap} className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl">
-              <Save className="h-4 w-4 mr-2" />
-              Lưu thay đổi
-            </Button>
-          </div>
+          <div className="flex gap-3 pt-4"><Button onClick={() => setShowEditDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">Đóng</Button><Button onClick={() => { setShowEditDialog(false); }} className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"><Save className="h-4 w-4 mr-2" />Lưu thay đổi</Button></div>
         </DialogContent>
       </Dialog>
 
-      {/* Popup tạo bài ôn cá nhân hóa */}
+      {/* Practice Dialog (existing + selection) */}
       <Dialog open={showPracticeDialog} onOpenChange={setShowPracticeDialog}>
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
@@ -953,57 +858,11 @@ export default function StudyPlan() {
 
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Chọn môn</Label>
-                <Select value={practiceForm.subject} onValueChange={(v) => setPracticeForm({ ...practiceForm, subject: v })}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.keys(subjectConfig).map((k) => (
-                      <SelectItem key={k} value={k}>{(subjectConfig as any)[k].name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Chủ đề / Kỹ năng</Label>
-                <Input value={practiceForm.topic} onChange={(e) => setPracticeForm({ ...practiceForm, topic: e.target.value })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Số câu hỏi</Label>
-                <Input type="number" value={String(practiceForm.numQuestions)} onChange={(e) => setPracticeForm({ ...practiceForm, numQuestions: Number(e.target.value) })} />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Độ khó</Label>
-                <Select value={practiceForm.difficulty} onValueChange={(v) => setPracticeForm({ ...practiceForm, difficulty: v })}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="easy">Dễ</SelectItem>
-                    <SelectItem value="medium">Trung bình</SelectItem>
-                    <SelectItem value="hard">Khó</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2 col-span-2">
-                <Label>Liên kết với mục tiêu</Label>
-                <Select value={practiceForm.goalId} onValueChange={(v) => setPracticeForm({ ...practiceForm, goalId: v })}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {studyGoals.map((g) => (
-                      <SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <div className="space-y-2"><Label>Chọn môn</Label><Select value={practiceForm.subject} onValueChange={(v) => setPracticeForm({ ...practiceForm, subject: v })}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent>{Object.keys(subjectConfig).map((k) => (<SelectItem key={k} value={k}>{(subjectConfig as any)[k].name}</SelectItem>))}</SelectContent></Select></div>
+              <div className="space-y-2"><Label>Chủ đề / Kỹ năng</Label><Input value={practiceForm.topic} onChange={(e) => setPracticeForm({ ...practiceForm, topic: e.target.value })} /></div>
+              <div className="space-y-2"><Label>Số câu hỏi</Label><Input type="number" value={String(practiceForm.numQuestions)} onChange={(e) => setPracticeForm({ ...practiceForm, numQuestions: Number(e.target.value) })} /></div>
+              <div className="space-y-2"><Label>Độ khó</Label><Select value={practiceForm.difficulty} onValueChange={(v) => setPracticeForm({ ...practiceForm, difficulty: v })}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="easy">Dễ</SelectItem><SelectItem value="medium">Trung bình</SelectItem><SelectItem value="hard">Khó</SelectItem></SelectContent></Select></div>
+              <div className="space-y-2 col-span-2"><Label>Liên kết với mục tiêu</Label><Select value={practiceForm.goalId} onValueChange={(v) => setPracticeForm({ ...practiceForm, goalId: v })}><SelectTrigger className="w-full"><SelectValue /></SelectTrigger><SelectContent>{studyGoals.map((g) => (<SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>))}</SelectContent></Select></div>
             </div>
 
             <div className="border-t pt-4">
@@ -1012,10 +871,7 @@ export default function StudyPlan() {
                 {lessonList.map((l) => (
                   <label key={l.id} className={`flex items-center gap-3 p-2 rounded-lg border ${practiceSelectedLessonIds.includes(l.id) ? "bg-primary/10 border-primary" : "bg-white border-gray-100"}`}>
                     <input type="checkbox" checked={practiceSelectedLessonIds.includes(l.id)} onChange={() => togglePracticeLesson(l.id)} />
-                    <div className="flex-1 text-sm">
-                      <div className="font-medium">{l.title}</div>
-                      <div className="text-xs text-muted-foreground">{l.week} • {l.day} • {l.time}</div>
-                    </div>
+                    <div className="flex-1 text-sm"><div className="font-medium">{l.title}</div><div className="text-xs text-muted-foreground">{l.week} • {l.day} • {l.time}</div></div>
                     <div className="text-xs text-gray-500">{subjectConfig[l.subject as keyof typeof subjectConfig].name}</div>
                   </label>
                 ))}
@@ -1023,59 +879,21 @@ export default function StudyPlan() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <Button onClick={generatePractice} className="bg-gradient-to-r from-primary to-accent text-white">Tạo bài ôn</Button>
-              <Button variant="outline" onClick={() => { setPracticeQuestions([]); setPracticeSelectedLessonIds([]); }}>Xóa kết quả</Button>
-            </div>
+            <div className="flex gap-2"><Button onClick={generatePractice} className="bg-gradient-to-r from-primary to-accent text-white">Tạo bài ôn</Button><Button variant="outline" onClick={() => { setPracticeQuestions([]); setPracticeSelectedLessonIds([]); }}>Xóa kết quả</Button></div>
 
-            {/* Questions preview and edit */}
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold">Danh sách câu hỏi</h4>
-                <div className="flex items-center gap-2">
-                  <Button size="sm" onClick={addQuestion} className="bg-green-600 text-white">Thêm câu hỏi</Button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                {practiceQuestions.length === 0 && <div className="text-sm text-muted-foreground">Chưa có câu hỏi. Nhấn "Tạo bài ôn" để sinh câu hỏi mẫu.</div>}
-
-                {practiceQuestions.map((q, i) => (
-                  <div key={q.id} className="p-3 border border-gray-200 rounded-lg bg-white flex items-start gap-3">
-                    <div className="flex-1">
-                      <Input value={q.text} onChange={(e) => updateQuestion(q.id, { text: e.target.value })} />
-                      <div className="flex items-center gap-2 mt-2">
-                        <Select value={q.difficulty} onValueChange={(v) => updateQuestion(q.id, { difficulty: v })}>
-                          <SelectTrigger className="w-36 text-sm">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="easy">Dễ</SelectItem>
-                            <SelectItem value="medium">Trung bình</SelectItem>
-                            <SelectItem value="hard">Khó</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center gap-2">
-                      <Button size="icon" variant="ghost" onClick={() => moveQuestion(i, "up") }><ArrowUp className="h-4 w-4"/></Button>
-                      <Button size="icon" variant="ghost" onClick={() => moveQuestion(i, "down") }><ArrowDown className="h-4 w-4"/></Button>
-                      <Button size="sm" variant="outline" onClick={() => deleteQuestion(q.id)} className="text-red-600">Xóa</Button>
-                    </div>
-                  </div>
-                ))}
+              <div className="flex items-center justify-between mb-2"><h4 className="font-semibold">Danh sách câu hỏi</h4><div className="flex items-center gap-2"><Button size="sm" onClick={addQuestion} className="bg-green-600 text-white">Thêm câu hỏi</Button></div></div>
+              <div className="space-y-2">{practiceQuestions.length === 0 && <div className="text-sm text-muted-foreground">Chưa có câu hỏi. Nhấn "Tạo bài ôn" để sinh câu hỏi mẫu.</div>}
+                {practiceQuestions.map((q, i) => (<div key={q.id} className="p-3 border border-gray-200 rounded-lg bg-white flex items-start gap-3"><div className="flex-1"><Input value={q.text} onChange={(e) => updateQuestion(q.id, { text: e.target.value })} /><div className="flex items-center gap-2 mt-2"><Select value={q.difficulty} onValueChange={(v) => updateQuestion(q.id, { difficulty: v })}><SelectTrigger className="w-36 text-sm"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="easy">Dễ</SelectItem><SelectItem value="medium">Trung bình</SelectItem><SelectItem value="hard">Khó</SelectItem></SelectContent></Select></div></div><div className="flex flex-col items-center gap-2"><Button size="icon" variant="ghost" onClick={() => moveQuestion(i, "up") }><ArrowUp className="h-4 w-4"/></Button><Button size="icon" variant="ghost" onClick={() => moveQuestion(i, "down") }><ArrowDown className="h-4 w-4"/></Button><Button size="sm" variant="outline" onClick={() => deleteQuestion(q.id)} className="text-red-600">Xóa</Button></div></div>))}
               </div>
             </div>
 
           </div>
 
-          <div className="flex gap-3 pt-4">
-            <Button onClick={() => setShowPracticeDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">Hủy</Button>
-            <Button onClick={() => { /* mock save */ setShowPracticeDialog(false); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white rounded-xl">Lưu bài ôn</Button>
-          </div>
+          <div className="flex gap-3 pt-4"><Button onClick={() => setShowPracticeDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">Hủy</Button><Button onClick={() => { setShowPracticeDialog(false); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white rounded-xl">Lưu bài ôn</Button></div>
         </DialogContent>
       </Dialog>
+
     </DashboardLayout>
   );
 }
