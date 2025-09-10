@@ -28,9 +28,9 @@ const menuItems = [
     href: "/admin/users",
   },
   {
-    title: "Quản lý khóa học",
+    title: "Quản lý môn học",
     icon: BookOpen,
-    href: "/admin/courses",
+    href: "/admin/subjects",
   },
   {
     title: "Quản lý lộ trình học",
