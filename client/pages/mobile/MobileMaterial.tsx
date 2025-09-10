@@ -18,7 +18,7 @@ export default function MobileMaterial() {
             <Button variant="outline">Mở đọc</Button>
           </div>
           <p className="text-sm text-muted-foreground">
-            Tài liệu thuộc khóa: {id}.
+            Tài liệu thuộc môn học: {id}.
           </p>
         </CardContent>
       </Card>
