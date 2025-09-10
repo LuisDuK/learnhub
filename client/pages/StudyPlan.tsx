@@ -648,6 +648,10 @@ export default function StudyPlan() {
       {/* Video Dialog */}
       <Dialog open={showVideoDialog} onOpenChange={setShowVideoDialog}>
         <DialogContent className="sm:max-w-2xl max-w-full">
+          <DialogHeader>
+            <DialogTitle>Video bài học</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">Xem video bài học trong lộ trình</DialogDescription>
+          </DialogHeader>
           <div className="aspect-video w-full">
             {videoSrc ? (
               <iframe
@@ -669,6 +673,10 @@ export default function StudyPlan() {
       {/* PDF Dialog */}
       <Dialog open={showPdfDialog} onOpenChange={setShowPdfDialog}>
         <DialogContent className="sm:max-w-4xl max-w-full">
+          <DialogHeader>
+            <DialogTitle>Tài liệu / Bài tập (PDF)</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">Xem tài liệu PDF đính kèm với bài học</DialogDescription>
+          </DialogHeader>
           <div className="w-full h-[80vh]">
             {pdfSrc ? (
               <iframe src={pdfSrc} className="w-full h-full" />
