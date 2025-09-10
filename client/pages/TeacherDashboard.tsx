@@ -237,7 +237,7 @@ export default function TeacherDashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{averageCompletion}%</div>
               <p className="text-xs text-muted-foreground">
-                Trung bình tất cả khóa học
+                Trung bình tất cả môn học
               </p>
             </CardContent>
           </Card>
