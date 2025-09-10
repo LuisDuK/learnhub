@@ -122,7 +122,7 @@ const mockExercises = [
     department: "Khối mầm non",
     isFromBank: false,
     isAIGenerated: false,
-    tags: ["màu sắc", "số đếm", "t��� vựng"],
+    tags: ["màu sắc", "số đếm", "từ vựng"],
     description: "Học từ vựng về màu sắc và số",
     courseName: "Tiếng Anh cho trẻ em",
   },
@@ -245,7 +245,7 @@ const mockExerciseBank = [
     difficulty: "Dễ",
     usageCount: 234,
     rating: 4.9,
-    department: "Khối mầm non",
+    department: "Khối m��m non",
     tags: ["gia đình", "từ vựng"],
     description: "Học từ vựng về các thành viên trong gia đình",
     thumbnail: "👨‍👩‍👧‍👦",
@@ -1013,7 +1013,7 @@ export default function AdminExercises() {
                   className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 hidden"
                 >
                   <Package className="h-4 w-4 mr-2" />
-                  Kho bài t���p
+                  Kho bài tập
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[1200px] max-h-[90vh] overflow-hidden">
@@ -1023,7 +1023,7 @@ export default function AdminExercises() {
                     Kho bài tập - Chọn bài tập để gán
                   </DialogTitle>
                   <DialogDescription>
-                    Duyệt và chọn bài tập từ kho để gán vào khóa học. Có thể
+                    Duyệt và chọn bài tập từ kho để gán vào môn học. Có thể
                     chọn nhiều bài tập cùng lúc.
                   </DialogDescription>
                 </DialogHeader>
@@ -1204,7 +1204,7 @@ export default function AdminExercises() {
                     className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Gán {selectedExercises.size} bài t���p được chọn
+                    Gán {selectedExercises.size} bài tập được chọn
                   </Button>
                 </DialogFooter>
               </DialogContent>
