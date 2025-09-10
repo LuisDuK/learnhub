@@ -91,7 +91,7 @@ export default function Lesson() {
             <h2 className="text-2xl font-bold mb-2">Không tìm thấy bài học</h2>
             <Button onClick={() => navigate("/subjects")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Quay lại khóa học
+              Quay lại môn học
             </Button>
           </div>
         </div>
