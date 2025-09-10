@@ -94,6 +94,7 @@ const weeklyPlan = [
         status: "not-started",
         day: "Thứ 6",
         time: "14:00",
+        videoUrl: "https://www.youtube.com/embed/5MgBikgcWnY",
       },
     ],
   },
