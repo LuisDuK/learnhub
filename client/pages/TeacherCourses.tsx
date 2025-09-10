@@ -456,7 +456,7 @@ export default function TeacherCourses() {
                   </div>
 
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label className="text-right col-span-2">��ộ khó *</Label>
+                    <Label className="text-right col-span-2">Độ khó *</Label>
                     <Select
                       value={newCourse.difficulty}
                       onValueChange={(value) =>
@@ -464,7 +464,7 @@ export default function TeacherCourses() {
                       }
                     >
                       <SelectTrigger className="col-span-2">
-                        <SelectValue placeholder="Chọn độ khó" />
+                        <SelectValue placeholder="Chọn đ�� khó" />
                       </SelectTrigger>
                       <SelectContent>
                         {difficulties.map((difficulty) => (
@@ -565,7 +565,7 @@ export default function TeacherCourses() {
                 </Button>
                 <Button onClick={handleAddCourse}>
                   <Save className="h-4 w-4 mr-2" />
-                  Tạo khóa học
+                  Tạo môn học
                 </Button>
               </DialogFooter>
             </DialogContent>
