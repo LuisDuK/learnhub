@@ -80,7 +80,7 @@ const mockTeacherData = {
   ],
 
   // Teaching Preferences
-  preferredAgeGroups: ["6-8 tuổi", "8-10 tuổi"],
+  preferredAgeGroups: ["6-8 tuổi", "8-10 tu��i"],
   teachingMethods: ["Trực quan", "Tương tác", "Trò chơi"],
   availableHours: "7:00-17:00",
 
@@ -98,17 +98,7 @@ const mockTeacherData = {
   notificationPush: true,
 };
 
-const subjects = [
-  "Toán học",
-  "Tiếng Việt",
-  "Tiếng Anh",
-  "Khoa học tự nhiên",
-  "Khoa học xã hội",
-  "Thể dục",
-  "Mỹ thuật",
-  "Âm nhạc",
-  "Tin học",
-];
+const subjects = ["Toán", "Văn", "Anh"];
 
 const experiences = [
   { value: "moi", label: "Mới tốt nghiệp" },
