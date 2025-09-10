@@ -310,7 +310,7 @@ export default function StudyPlan() {
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-lg mt-1">
-              Kế hoạch học tập được cá nhân hóa cho bé
+              Kế hoạch học tập được cá nhân hóa cho b��
             </p>
           </div>
           <div className="flex gap-3">
@@ -402,110 +402,128 @@ export default function StudyPlan() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-8">
-            {weeklyPlan.map((week, weekIndex) => (
-              <div key={week.week} className="relative">
-                {/* Week Header */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white font-bold shadow-lg">
-                    {weekIndex + 1}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-primary">
-                      {week.week}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {week.startDate}
-                    </p>
-                  </div>
-                </div>
+            {[...new Set(lessonList.map((l) => l.week))].map((w, weekIndex) => {
+                const weekObj = { week: w, lessons: lessonList.filter((l) => l.week === w) };
+                const wp = weeklyPlan.find((x) => x.week === w);
+                return (
+                  <div key={weekObj.week} className="relative">
+                    {/* Week Header */}
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-white font-bold shadow-lg">
+                        {weekIndex + 1}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-primary">
+                          {weekObj.week}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {wp?.startDate || ""}
+                        </p>
+                      </div>
+                    </div>
 
-                {/* Lessons */}
-                <div className="ml-6 border-l-2 border-primary/20 pl-6 space-y-4">
-                  {week.lessons.map((lesson, lessonIndex) => {
-                    const subject =
-                      subjectConfig[
-                        lesson.subject as keyof typeof subjectConfig
-                      ];
-                    const status =
-                      statusConfig[lesson.status as keyof typeof statusConfig];
-                    const SubjectIcon = subject.icon;
-                    const StatusIcon = status.icon;
+                    {/* Lessons */}
+                    <div className="ml-6 border-l-2 border-primary/20 pl-6 space-y-4">
+                      {weekObj.lessons.map((lesson, lessonIndex) => {
+                        const subject =
+                          subjectConfig[
+                            lesson.subject as keyof typeof subjectConfig
+                          ];
+                        const status =
+                          statusConfig[lesson.status as keyof typeof statusConfig];
+                        const SubjectIcon = subject.icon;
+                        const StatusIcon = status.icon;
 
-                    return (
-                      <div
-                        key={lesson.id}
-                        className="relative flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
-                      >
-                        {/* Timeline dot */}
-                        <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
+                        return (
                           <div
-                            className={`h-3 w-3 rounded-full ${subject.color}`}
-                          />
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex items-center gap-3">
+                            key={lesson.id}
+                            className="relative flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
+                          >
+                            {/* Timeline dot */}
+                            <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
                               <div
-                                className={`p-2 rounded-lg ${subject.bgColor}`}
-                              >
-                                <SubjectIcon
-                                  className={`h-5 w-5 ${subject.textColor}`}
-                                />
-                              </div>
-                              <div>
-                                <h4 className="font-semibold text-lg">
-                                  {lesson.title}
-                                </h4>
-                                <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                                  <span>📚 {subject.name}</span>
-                                  <span>📅 {lesson.day}</span>
-                                  <span>⏰ {lesson.time}</span>
-                                  <span>⏱️ {lesson.duration}</span>
+                                className={`h-3 w-3 rounded-full ${subject.color}`}
+                              />
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1">
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className={`p-2 rounded-lg ${subject.bgColor}`}
+                                  >
+                                    <SubjectIcon
+                                      className={`h-5 w-5 ${subject.textColor}`}
+                                    />
+                                  </div>
+                                  <div>
+                                    <h4 className="font-semibold text-lg">
+                                      {lesson.title}
+                                    </h4>
+                                    <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                                      <span>📚 {subject.name}</span>
+                                      <span>📅 {lesson.day}</span>
+                                      <span>⏰ {lesson.time}</span>
+                                      <span>⏱️ {lesson.duration}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Badge
+                                    variant="outline"
+                                    className={`${status.bgColor} border-0`}
+                                  >
+                                    <StatusIcon
+                                      className={`h-3 w-3 mr-1 ${status.color}`}
+                                    />
+                                    {status.label}
+                                  </Badge>
                                 </div>
                               </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Badge
-                                variant="outline"
-                                className={`${status.bgColor} border-0`}
-                              >
-                                <StatusIcon
-                                  className={`h-3 w-3 mr-1 ${status.color}`}
-                                />
-                                {status.label}
-                              </Badge>
+
+                              {lesson.status === "in-progress" && (
+                                <Button
+                                  size="sm"
+                                  className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
+                                  onClick={() => openVideo(lesson.videoUrl)}
+                                >
+                                  <PlayCircle className="h-4 w-4 mr-1" />
+                                  Tiếp tục học
+                                </Button>
+                              )}
+
+                              {lesson.status === "not-started" && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg"
+                                  onClick={() => openVideo(lesson.videoUrl)}
+                                >
+                                  <Circle className="h-4 w-4 mr-1" />
+                                  Bắt đầu học
+                                </Button>
+                              )}
+
+                              {/* PDF assignment button */}
+                              {lesson.pdfUrl && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="ml-2 underline text-sm"
+                                  onClick={() => openPdf(lesson.pdfUrl)}
+                                >
+                                  📄 Làm bài tập (PDF)
+                                </Button>
+                              )}
                             </div>
                           </div>
-
-                          {lesson.status === "in-progress" && (
-                            <Button
-                              size="sm"
-                              className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
-                            >
-                              <PlayCircle className="h-4 w-4 mr-1" />
-                              Tiếp tục học
-                            </Button>
-                          )}
-
-                          {lesson.status === "not-started" && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg"
-                            >
-                              <Circle className="h-4 w-4 mr-1" />
-                              Bắt đầu học
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
           </CardContent>
         </Card>
       </div>
@@ -582,7 +600,7 @@ export default function StudyPlan() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="high">🔴 Cao</SelectItem>
-                  <SelectItem value="medium">🟡 Trung bình</SelectItem>
+                  <SelectItem value="medium">���� Trung bình</SelectItem>
                   <SelectItem value="low">🟢 Thấp</SelectItem>
                 </SelectContent>
               </Select>
@@ -616,7 +634,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của bạn
+              Quản lý danh sách bài học trong l��� trình của bạn
             </DialogDescription>
           </DialogHeader>
 
