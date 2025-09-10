@@ -21,6 +21,17 @@ const lessonStore: Record<string, Lesson> = {
     durationSec: 30,
     quizCues: [
       {
+        timeSec: 3,
+        question: {
+          id: "q0",
+          type: "multiple_choice",
+          text: "10 + 5 = ?",
+          options: ["15", "16", "14", "13"],
+          correctOptionIndex: 0,
+          required: true,
+        },
+      },
+      {
         timeSec: 5,
         question: {
           id: "q1",
@@ -32,11 +43,51 @@ const lessonStore: Record<string, Lesson> = {
         },
       },
       {
+        timeSec: 7,
+        question: {
+          id: "q1b",
+          type: "short_answer",
+          text: "Viết ngắn gọn một ví dụ cộng hai số có nhớ",
+          required: true,
+        },
+      },
+      {
         timeSec: 12,
         question: {
           id: "q2",
           type: "short_answer",
-          text: "Giải thích ngắn gọn vì sao phép trừ 67 - 39 cần mượn",
+          text: "Giải thích vì sao 67 - 39 cần mượn",
+          required: true,
+        },
+      },
+      {
+        timeSec: 18,
+        question: {
+          id: "q3",
+          type: "multiple_choice",
+          text: "95 - 37 = ?",
+          options: ["58", "59", "57", "56"],
+          correctOptionIndex: 0,
+          required: true,
+        },
+      },
+      {
+        timeSec: 24,
+        question: {
+          id: "q4",
+          type: "multiple_choice",
+          text: "42 + 18 = ?",
+          options: ["58", "60", "62", "59"],
+          correctOptionIndex: 1,
+          required: true,
+        },
+      },
+      {
+        timeSec: 28,
+        question: {
+          id: "q5",
+          type: "short_answer",
+          text: "Một câu hỏi ôn tập nhanh: nêu một tình huống thực tế cần phép trừ",
           required: true,
         },
       },
