@@ -33,11 +33,6 @@ const menuItems = [
     href: "/admin/subjects",
   },
   {
-    title: "Kho bài tập",
-    icon: PenTool,
-    href: "/admin/exercises",
-  },
-  {
     title: "Cấu hình AI (Quản trị viên)",
     icon: Settings,
     href: "/admin/ai-config",
@@ -125,7 +120,7 @@ export function AdminSidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-blue-700 truncate">
-              Admin Nguyễn Đ���c
+              Admin Nguyễn Đức
             </p>
             <p className="text-xs text-blue-600 truncate">
               Quản trị viên hệ thống
