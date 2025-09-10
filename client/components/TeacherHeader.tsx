@@ -39,7 +39,7 @@ export function TeacherHeader() {
             Dashboard Giáo viên
           </h1>
           <p className="text-sm text-gray-600">
-            Quản lý khóa học và theo dõi tiến độ học sinh
+            Quản lý môn học và theo dõi tiến độ học sinh
           </p>
         </div>
       </div>
@@ -51,7 +51,7 @@ export function TeacherHeader() {
           <div className="flex items-center gap-2 px-3 py-1 bg-green-50 rounded-lg">
             <BookOpen className="h-4 w-4 text-green-600" />
             <span className="text-sm font-medium text-green-700">
-              5 khóa học
+              5 môn học
             </span>
           </div>
           <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-lg">

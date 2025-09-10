@@ -64,7 +64,7 @@ const upcomingLessons = [
     date: "Hôm nay",
     duration: "45 phút",
     type: "live",
-    emoji: "��",
+    emoji: "🔢",
   },
   {
     id: 2,
@@ -331,7 +331,7 @@ export function DashboardHome() {
       <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            🎯 Các khóa học đang theo
+            🎯 Các môn học đang theo
             <Zap className="h-5 w-5 text-secondary animate-pulse" />
           </CardTitle>
           <CardDescription>
