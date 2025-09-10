@@ -122,7 +122,7 @@ const mockExercises = [
     department: "Khối mầm non",
     isFromBank: false,
     isAIGenerated: false,
-    tags: ["màu sắc", "số đếm", "từ vựng"],
+    tags: ["màu sắc", "số đếm", "t��� vựng"],
     description: "Học từ vựng về màu sắc và số",
     courseName: "Tiếng Anh cho trẻ em",
   },
@@ -996,7 +996,7 @@ export default function AdminExercises() {
             </h1>
             <p className="text-gray-600 mt-1">
               Kho lưu trữ tất cả bài tập trong hệ thống - có thể tái sử dụng cho
-              nhiều khóa học
+              nhiều môn học
             </p>
           </div>
 
@@ -1013,7 +1013,7 @@ export default function AdminExercises() {
                   className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 hidden"
                 >
                   <Package className="h-4 w-4 mr-2" />
-                  Kho bài tập
+                  Kho bài t���p
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[1200px] max-h-[90vh] overflow-hidden">
@@ -1204,7 +1204,7 @@ export default function AdminExercises() {
                     className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
                   >
                     <Plus className="h-4 w-4 mr-2" />
-                    Gán {selectedExercises.size} bài tập được chọn
+                    Gán {selectedExercises.size} bài t���p được chọn
                   </Button>
                 </DialogFooter>
               </DialogContent>
