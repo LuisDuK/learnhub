@@ -294,20 +294,10 @@ export default function StudyPlan() {
     );
   };
 
-  // Calculate progress
-  const totalLessons = weeklyPlan.reduce(
-    (acc, week) => acc + week.lessons.length,
-    0,
-  );
-  const completedLessons = weeklyPlan.reduce(
-    (acc, week) =>
-      acc +
-      week.lessons.filter((lesson) => lesson.status === "completed").length,
-    0,
-  );
-  const progressPercentage = Math.round(
-    (completedLessons / totalLessons) * 100,
-  );
+  // Calculate progress from lessonList state
+  const totalLessons = lessonList.length;
+  const completedLessons = lessonList.filter((l) => l.status === "completed").length;
+  const progressPercentage = totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
 
   return (
     <DashboardLayout>
