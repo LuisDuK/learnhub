@@ -377,7 +377,7 @@ export default function TeacherCourses() {
               Quản lý môn học
             </h1>
             <p className="text-gray-600 mt-1">
-              Tạo, chỉnh sửa và quản lý các khóa học của bạn
+              Tạo, chỉnh sửa và quản lý các môn học của bạn
             </p>
           </div>
 
@@ -456,7 +456,7 @@ export default function TeacherCourses() {
                   </div>
 
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label className="text-right col-span-2">Độ khó *</Label>
+                    <Label className="text-right col-span-2">��ộ khó *</Label>
                     <Select
                       value={newCourse.difficulty}
                       onValueChange={(value) =>
