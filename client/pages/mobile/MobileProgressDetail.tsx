@@ -22,7 +22,7 @@ export default function MobileProgressDetail() {
     <div className="space-y-4 p-4">
       <Card className="border-primary/20">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Tổng quan theo khóa học</CardTitle>
+          <CardTitle className="text-base">Tổng quan theo môn học</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {courseProgress.map((c) => {
