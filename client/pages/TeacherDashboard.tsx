@@ -190,7 +190,7 @@ export default function TeacherDashboard() {
               className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Tạo khóa học mới
+              Tạo môn học mới
             </Button>
           </div>
         </div>
