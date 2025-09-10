@@ -34,7 +34,7 @@ const teacherCourses = [
   {
     id: 1,
     name: "Toán học lớp 3",
-    description: "Khóa học toán học cơ bản cho học sinh lớp 3",
+    description: "Môn học toán học cơ bản cho học sinh lớp 3",
     studentsCount: 25,
     completionRate: 78,
     status: "active",
@@ -58,7 +58,7 @@ const teacherCourses = [
   {
     id: 3,
     name: "Hình học cơ bản",
-    description: "Khóa học về hình học cho trẻ em",
+    description: "Môn học về hình học cho trẻ em",
     studentsCount: 18,
     completionRate: 65,
     status: "draft",
@@ -265,7 +265,7 @@ export default function TeacherDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl">Khóa học của tôi</CardTitle>
+                  <CardTitle className="text-xl">Môn học của tôi</CardTitle>
                   <CardDescription>
                     Quản lý và theo dõi tiến độ các khóa học
                   </CardDescription>
