@@ -272,7 +272,7 @@ export default function AdminReports() {
                     Môn học hoàn thành
                   </p>
                   <p className="text-2xl font-bold text-orange-600">156</p>
-                  <p className="text-xs text-blue-600 mt-1">18 khóa mới</p>
+                  <p className="text-xs text-blue-600 mt-1">18 môn mới</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-orange-500" />
               </div>
