@@ -13,7 +13,7 @@ export default function MobileLesson() {
         <CardContent className="space-y-3">
           <div className="aspect-video w-full overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10"></div>
           <p className="text-sm text-muted-foreground">
-            Video bài học và ghi chú sẽ hiển thị ở đây. Khóa học: {id}.
+            Video bài học và ghi chú sẽ hiển thị ở đây. Môn học: {id}.
           </p>
         </CardContent>
       </Card>
