@@ -126,7 +126,10 @@ export const saveLessonProgress: RequestHandler = (req, res) => {
   const existing = progressStore[userId][id];
 
   const next: LessonProgress = {
-    positionSec: Math.max(0, Math.min(body.positionSec ?? 0, lesson.durationSec)),
+    positionSec: Math.max(
+      0,
+      Math.min(body.positionSec ?? 0, lesson.durationSec),
+    ),
     completed: Boolean(body.completed) || existing?.completed || false,
     lastUpdatedIso: new Date().toISOString(),
     views: existing ? existing.views : 0,

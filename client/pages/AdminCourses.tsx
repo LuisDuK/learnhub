@@ -252,7 +252,8 @@ export default function AdminCourses() {
       course.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSubject =
       subjectFilter === "Tất cả" || course.subject === subjectFilter;
-    const matchesGrade = gradeFilter === "Tất cả" || getCourseGrade(course) === gradeFilter;
+    const matchesGrade =
+      gradeFilter === "Tất cả" || getCourseGrade(course) === gradeFilter;
     return matchesSearch && matchesSubject && matchesGrade;
   });
 
@@ -505,7 +506,6 @@ export default function AdminCourses() {
             </Dialog>
           </div>
         </div>
-
 
         {/* Search and Filter */}
         <div className="flex items-center justify-between gap-4">
