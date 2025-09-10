@@ -46,7 +46,7 @@ const mockLessons = {
     objectives: [
       "Hiểu được khái niệm phép cộng và phép trừ",
       "Thực hiện được phép tính trong phạm vi 100",
-      "Áp d���ng vào bài toán thực tế",
+      "Áp dụng vào bài toán thực tế",
     ],
     content: [
       {
@@ -89,7 +89,7 @@ export default function Lesson() {
           <div className="text-center">
             <div className="text-6xl mb-4">😔</div>
             <h2 className="text-2xl font-bold mb-2">Không tìm thấy bài học</h2>
-            <Button onClick={() => navigate("/courses")}>
+            <Button onClick={() => navigate("/subjects")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Quay lại khóa học
             </Button>
@@ -112,7 +112,7 @@ export default function Lesson() {
           <div className="flex items-center gap-4">
             <Button
               variant="outline"
-              onClick={() => navigate("/courses")}
+              onClick={() => navigate("/subjects")}
               className="border-primary/20 hover:bg-primary/5"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
