@@ -267,7 +267,7 @@ export default function TeacherDashboard() {
                 <div>
                   <CardTitle className="text-xl">Môn học của tôi</CardTitle>
                   <CardDescription>
-                    Quản lý và theo dõi tiến độ các khóa học
+                    Quản lý và theo dõi tiến độ các môn học
                   </CardDescription>
                 </div>
                 <Button
