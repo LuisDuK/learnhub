@@ -245,7 +245,7 @@ const mockExerciseBank = [
     difficulty: "Dễ",
     usageCount: 234,
     rating: 4.9,
-    department: "Khối m��m non",
+    department: "Khối mầm non",
     tags: ["gia đình", "từ vựng"],
     description: "Học từ vựng về các thành viên trong gia đình",
     thumbnail: "👨‍👩‍👧‍👦",
@@ -1634,7 +1634,7 @@ Q: Viết đoạn văn tả về mùa xuân`}
                 <TableHead className="font-semibold">Môn học</TableHead>
                 <TableHead className="font-semibold">Độ khó</TableHead>
                 <TableHead className="font-semibold">Khối</TableHead>
-                <TableHead className="font-semibold">Khóa học</TableHead>
+                <TableHead className="font-semibold">Môn học</TableHead>
                 <TableHead className="font-semibold">Người tạo</TableHead>
                 <TableHead className="font-semibold text-center">
                   Hành động
