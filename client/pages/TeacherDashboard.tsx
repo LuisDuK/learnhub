@@ -81,7 +81,7 @@ const recentActivities = [
   {
     id: 2,
     type: "completion",
-    message: "Học sinh Nguyễn Văn An đã hoàn thành khóa học",
+    message: "Học sinh Nguyễn Văn An đã hoàn thành môn học",
     time: "4 giờ trước",
     course: "Phép tính nâng cao",
   },
