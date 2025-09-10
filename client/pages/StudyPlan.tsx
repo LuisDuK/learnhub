@@ -198,7 +198,7 @@ const statusConfig = {
     icon: CheckCircle,
     color: "text-green-500",
     bgColor: "bg-green-100",
-    label: "Ho��n thành",
+    label: "Hoàn thành",
   },
   "in-progress": {
     icon: PlayCircle,
@@ -218,6 +218,7 @@ export default function StudyPlan() {
   const [selectedGoal, setSelectedGoal] = useState("midterm");
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showCreatePlanDialog, setShowCreatePlanDialog] = useState(false);
   const [showPracticeDialog, setShowPracticeDialog] = useState(false);
   const [goalData, setGoalData] = useState({
     name: "",
@@ -246,6 +247,13 @@ export default function StudyPlan() {
   const [practiceQuestions, setPracticeQuestions] = useState<
     { id: number; text: string; difficulty: string }[]
   >([]);
+  const [practiceSelectedLessonIds, setPracticeSelectedLessonIds] = useState<number[]>([]);
+
+  const [createPlanData, setCreatePlanData] = useState({
+    goalId: "midterm",
+    subjects: Object.keys(subjectConfig),
+    startDate: "",
+  });
 
   const openVideo = (url?: string) => {
     if (!url) return;
@@ -275,9 +283,39 @@ export default function StudyPlan() {
     setLessonList(items);
   };
 
+  const createPlan = () => {
+    const subjects = createPlanData.subjects;
+    const items = weeklyPlan
+      .flatMap((week) => week.lessons.map((l) => ({ ...l, week: week.week })))
+      .filter((l) => subjects.includes(l.subject));
+    setLessonList(items);
+    setShowCreatePlanDialog(false);
+  };
+
   // Practice test generation (mock)
   const generatePractice = () => {
     const { subject, topic, numQuestions, difficulty } = practiceForm;
+
+    const selectedLessons = lessonList.filter((l) => practiceSelectedLessonIds.includes(l.id));
+
+    if (selectedLessons.length > 0) {
+      // distribute questions across selected lessons
+      const perLesson = Math.max(1, Math.floor(Number(numQuestions) / selectedLessons.length));
+      const questions: { id: number; text: string; difficulty: string }[] = [];
+      selectedLessons.forEach((lesson, idx) => {
+        const count = idx === selectedLessons.length - 1 ? Number(numQuestions) - questions.length : perLesson;
+        for (let i = 0; i < count; i++) {
+          questions.push({
+            id: Date.now() + Math.random() * 100000 + i,
+            text: `${lesson.title} — Ôn tập: ${topic || "Nội dung"} — Câu ${i + 1}`,
+            difficulty,
+          });
+        }
+      });
+      setPracticeQuestions(questions);
+      return;
+    }
+
     const questions = Array.from({ length: Number(numQuestions) }).map((_, i) => ({
       id: Date.now() + i,
       text: `${subjectConfig[subject as keyof typeof subjectConfig].name} - ${topic || "Bài ôn"} - Câu hỏi ${i + 1}`,
@@ -309,6 +347,10 @@ export default function StudyPlan() {
     if (swapIndex < 0 || swapIndex >= newList.length) return;
     [newList[index], newList[swapIndex]] = [newList[swapIndex], newList[index]];
     setPracticeQuestions(newList);
+  };
+
+  const togglePracticeLesson = (id: number) => {
+    setPracticeSelectedLessonIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   // Check if first time visiting
@@ -394,6 +436,13 @@ export default function StudyPlan() {
               className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl"
             >
               🔄 Reset lộ trình học
+            </Button>
+            <Button
+              onClick={() => setShowCreatePlanDialog(true)}
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary/5 font-bold rounded-xl"
+            >
+              🛠️ Tạo lộ trình
             </Button>
             <Button
               onClick={handleEditRoadmap}
@@ -633,7 +682,7 @@ export default function StudyPlan() {
         </DialogContent>
       </Dialog>
 
-      {/* Popup nhập mục tiêu học tập */}
+      {/* Popup nhập m��c tiêu học tập */}
       <Dialog open={showGoalDialog} onOpenChange={setShowGoalDialog}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
@@ -723,6 +772,63 @@ export default function StudyPlan() {
               <Save className="h-4 w-4 mr-2" />
               Lưu mục tiêu
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Popup tạo lộ trình (tùy chỉnh) */}
+      <Dialog open={showCreatePlanDialog} onOpenChange={setShowCreatePlanDialog}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">🛠️ Tạo lộ trình</DialogTitle>
+            <DialogDescription>Tùy chỉnh và tạo lộ trình học mới</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Chọn mục tiêu</Label>
+              <Select value={createPlanData.goalId} onValueChange={(v) => setCreatePlanData({ ...createPlanData, goalId: v })}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {studyGoals.map((g) => (
+                    <SelectItem key={g.id} value={g.id}>{g.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Chọn môn (tùy chọn)</Label>
+              <div className="flex gap-3 flex-wrap">
+                {Object.keys(subjectConfig).map((k) => (
+                  <label key={k} className={`flex items-center gap-2 px-3 py-1 rounded-lg border ${createPlanData.subjects.includes(k) ? "bg-primary/10 border-primary text-primary" : "bg-white border-gray-200 text-gray-700"}`}>
+                    <input
+                      type="checkbox"
+                      checked={createPlanData.subjects.includes(k)}
+                      onChange={() => {
+                        setCreatePlanData((prev) => ({
+                          ...prev,
+                          subjects: prev.subjects.includes(k) ? prev.subjects.filter((s) => s !== k) : [...prev.subjects, k],
+                        }));
+                      }}
+                    />
+                    <span>{(subjectConfig as any)[k].name}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Ngày bắt đầu (tùy chọn)</Label>
+              <Input type="date" value={createPlanData.startDate} onChange={(e) => setCreatePlanData({ ...createPlanData, startDate: e.target.value })} />
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-4">
+            <Button onClick={() => setShowCreatePlanDialog(false)} variant="outline" className="flex-1 border-gray-300 hover:bg-gray-50 rounded-xl">Hủy</Button>
+            <Button onClick={createPlan} className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl">Tạo lộ trình</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -892,9 +998,26 @@ export default function StudyPlan() {
               </div>
             </div>
 
+            <div className="border-t pt-4">
+              <Label className="mb-2">Chọn bài học từ lộ trình</Label>
+              <div className="space-y-2 max-h-40 overflow-y-auto p-2">
+                {lessonList.map((l) => (
+                  <label key={l.id} className={`flex items-center gap-3 p-2 rounded-lg border ${practiceSelectedLessonIds.includes(l.id) ? "bg-primary/10 border-primary" : "bg-white border-gray-100"}`}>
+                    <input type="checkbox" checked={practiceSelectedLessonIds.includes(l.id)} onChange={() => togglePracticeLesson(l.id)} />
+                    <div className="flex-1 text-sm">
+                      <div className="font-medium">{l.title}</div>
+                      <div className="text-xs text-muted-foreground">{l.week} • {l.day} • {l.time}</div>
+                    </div>
+                    <div className="text-xs text-gray-500">{subjectConfig[l.subject as keyof typeof subjectConfig].name}</div>
+                  </label>
+                ))}
+                {lessonList.length === 0 && <div className="text-sm text-muted-foreground">Không có bài học trong lộ trình. Tạo lộ trình trước khi chọn.</div>}
+              </div>
+            </div>
+
             <div className="flex gap-2">
               <Button onClick={generatePractice} className="bg-gradient-to-r from-primary to-accent text-white">Tạo bài ôn</Button>
-              <Button variant="outline" onClick={() => { setPracticeQuestions([]); }}>Xóa kết quả</Button>
+              <Button variant="outline" onClick={() => { setPracticeQuestions([]); setPracticeSelectedLessonIds([]); }}>Xóa kết quả</Button>
             </div>
 
             {/* Questions preview and edit */}
