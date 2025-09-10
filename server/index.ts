@@ -8,6 +8,7 @@ import {
   rejectTeacherApplication,
   createTeacherApplication,
 } from "./routes/teachers";
+import { getLesson, saveLessonProgress, submitQuizAnswer } from "./routes/lessons";
 
 export function createServer() {
   const app = express();
