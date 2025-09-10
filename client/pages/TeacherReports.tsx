@@ -784,7 +784,7 @@ export default function TeacherReports() {
               <CardHeader>
                 <CardTitle className="text-xl">Hoạt động gần đây</CardTitle>
                 <CardDescription>
-                  Theo dõi hoạt động của học sinh trong các khóa học
+                  Theo dõi hoạt động của học sinh trong các môn học
                 </CardDescription>
               </CardHeader>
               <CardContent>
