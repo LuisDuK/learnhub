@@ -83,6 +83,8 @@ const weeklyPlan = [
         status: "in-progress",
         day: "Thứ 4",
         time: "16:00",
+        videoUrl: "https://www.youtube.com/embed/5MgBikgcWnY",
+        pdfUrl: "https://cdn.builder.io/o/assets%2F3178c0bbf5d64e32906afe2d8af514ea%2F4d4c87b7bec5493eac83c432e8a64018?alt=media&token=d3b1f7c1-2128-4c68-9b5e-ac04d1cfbf77&apiKey=3178c0bbf5d64e32906afe2d8af514ea",
       },
       {
         id: 4,
