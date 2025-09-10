@@ -66,7 +66,7 @@ const mockCourses = [
     id: 1,
     name: "Toán học cơ bản",
     description:
-      "Khóa học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
+      "Môn học toán học dành cho học sinh tiểu học, bao gồm các phép tính cơ bản và hình học đơn giản.",
     image: "/placeholder.svg",
     subject: "Toán",
     difficulty: "Cơ bản",
@@ -149,7 +149,7 @@ const mockPendingContent = [
     type: "course",
     action: "create",
     title: "Tiếng Anh cơ bản",
-    description: "Khóa học tiếng Anh cho trẻ em từ 5-7 tuổi",
+    description: "Môn học tiếng Anh cho trẻ em từ 5-7 tuổi",
     subject: "Anh",
     difficulty: "Cơ bản",
     duration: "10 tuần",
@@ -160,7 +160,7 @@ const mockPendingContent = [
     details: {
       name: "Tiếng Anh cơ bản",
       description:
-        "Khóa học tiếng Anh cho trẻ em từ 5-7 tuổi với các hoạt động vui nhộn",
+        "Môn học tiếng Anh cho trẻ em từ 5-7 tuổi với các hoạt động vui nhộn",
       objectives: "Giúp trẻ em làm quen với tiếng Anh cơ bản",
       prerequisites: "Không yêu cầu kiến thức trước",
     },
@@ -170,7 +170,7 @@ const mockPendingContent = [
     type: "lesson",
     action: "create",
     title: "Bài học: Phép trừ đơn giản",
-    description: "Bài học về phép trừ trong khóa học Toán học cơ bản",
+    description: "Bài học về phép trừ trong môn học Toán học cơ bản",
     courseId: 1,
     courseName: "Toán học cơ bản",
     submittedAt: "2024-03-02",
@@ -207,13 +207,13 @@ const mockPendingContent = [
     id: "course_4",
     type: "course",
     action: "delete",
-    title: "Xóa khóa học: Khoa học tự nhiên",
-    description: "Yêu cầu xóa khóa học không còn phù hợp",
+    title: "Xóa môn học: Khoa học tự nhiên",
+    description: "Yêu cầu xóa môn học không còn phù hợp",
     submittedAt: "2024-03-04",
     submittedBy: "Giáo viên Trần Văn Dũng",
     status: "pending",
     details: {
-      reason: "Khóa học không còn phù hợp với chương trình mới",
+      reason: "Môn học không còn phù hợp với chương trình mới",
       affectedStudents: 25,
       alternativeCourse: "Khoa học vui nhộn",
     },
@@ -358,10 +358,10 @@ export default function AdminCourses() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <BookOpen className="h-8 w-8 text-blue-600" />
-              Quản lý khóa học
+              Quản lý môn học
             </h1>
             <p className="text-gray-600 mt-1">
-              Xem và phê duyệt nội dung khóa học, bài giảng và bài tập
+              Xem và phê duyệt nội dung môn học, bài giảng và bài tập
             </p>
           </div>
 
@@ -411,7 +411,7 @@ export default function AdminCourses() {
                         <div className="text-2xl font-bold text-green-600">
                           {pendingCounts.courses}
                         </div>
-                        <div className="text-sm text-gray-600">Khóa học</div>
+                        <div className="text-sm text-gray-600">Môn học</div>
                       </CardContent>
                     </Card>
                     <Card>
@@ -459,7 +459,7 @@ export default function AdminCourses() {
                                     className="capitalize"
                                   >
                                     {item.type === "course"
-                                      ? "Khóa học"
+                                      ? "Môn học"
                                       : item.type === "lesson"
                                         ? "Bài giảng"
                                         : "Bài tập"}
@@ -537,7 +537,7 @@ export default function AdminCourses() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium">Tổng khóa học</p>
+              <p className="text-sm font-medium">Tổng môn học</p>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -595,7 +595,7 @@ export default function AdminCourses() {
             <div className="relative flex-1 max-w-sm">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Tìm kiếm khóa học..."
+                placeholder="Tìm kiếm môn học..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-8"
@@ -720,7 +720,7 @@ export default function AdminCourses() {
                     {selectedCourse.name}
                   </DialogTitle>
                   <DialogDescription className="text-gray-600">
-                    Chi tiết khóa học đã được phê duyệt
+                    Chi tiết môn học đã được phê duyệt
                   </DialogDescription>
                 </DialogHeader>
 
@@ -915,7 +915,7 @@ export default function AdminCourses() {
                       </Label>
                       <p className="text-sm capitalize">
                         {selectedPendingItem.type === "course"
-                          ? "Khóa học"
+                          ? "Môn học"
                           : selectedPendingItem.type === "lesson"
                             ? "Bài giảng"
                             : "Bài tập"}
