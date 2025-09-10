@@ -245,6 +245,22 @@ export default function StudyPlan() {
     setShowPdfDialog(true);
   };
 
+  const generateStudyPlan = (goalId: string) => {
+    // Simple generation rules based on goal
+    const map: Record<string, string[]> = {
+      midterm: ["math", "literature", "english"],
+      grammar: ["literature", "english"],
+      exam: ["math", "literature", "english"],
+      vocabulary: ["english"],
+    };
+    const subjects = map[goalId] || ["math", "literature", "english"];
+    const items = weeklyPlan
+      .flatMap((week) => week.lessons.map((l) => ({ ...l, week: week.week })))
+      .filter((l) => subjects.includes(l.subject))
+      .map((l) => ({ ...l, status: l.status === "completed" ? "completed" : "not-started" }));
+    setLessonList(items);
+  };
+
   // Check if first time visiting
   useEffect(() => {
     const hasSetGoal = localStorage.getItem("studyGoalSet");
