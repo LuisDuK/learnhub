@@ -342,7 +342,7 @@ export default function TeacherDashboard() {
               <CardHeader>
                 <CardTitle className="text-xl">Hoạt động gần đây</CardTitle>
                 <CardDescription>
-                  Cập nhật mới nhất từ khóa học của bạn
+                  Cập nhật mới nhất từ môn học của bạn
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
