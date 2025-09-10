@@ -464,7 +464,7 @@ export default function TeacherCourses() {
                       }
                     >
                       <SelectTrigger className="col-span-2">
-                        <SelectValue placeholder="Chọn đ�� khó" />
+                        <SelectValue placeholder="Chọn độ khó" />
                       </SelectTrigger>
                       <SelectContent>
                         {difficulties.map((difficulty) => (
@@ -1000,7 +1000,7 @@ export default function TeacherCourses() {
                     {selectedCourse.name}
                   </DialogTitle>
                   <DialogDescription className="text-gray-600">
-                    Chi tiết và thống kê khóa học
+                    Chi tiết và thống kê môn học
                   </DialogDescription>
                 </DialogHeader>
 
