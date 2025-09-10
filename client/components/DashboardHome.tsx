@@ -64,7 +64,7 @@ const upcomingLessons = [
     date: "Hôm nay",
     duration: "45 phút",
     type: "live",
-    emoji: "🔢",
+    emoji: "��",
   },
   {
     id: 2,
@@ -197,13 +197,13 @@ export function DashboardHome() {
         <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              📚 Khóa học đang học
+              📚 Môn học đang học
             </CardTitle>
             <div className="text-2xl">🎓</div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-primary">6</div>
-            <p className="text-xs text-muted-foreground">🆕 +2 khóa học mới!</p>
+            <p className="text-xs text-muted-foreground">🆕 +2 môn học mới!</p>
           </CardContent>
         </Card>
         <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
