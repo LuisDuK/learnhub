@@ -404,7 +404,7 @@ export default function TeacherReports() {
                 <CardHeader>
                   <CardTitle className="text-xl">Hiệu quả môn học</CardTitle>
                   <CardDescription>
-                    Tỷ lệ hoàn thành theo từng khóa học
+                    Tỷ lệ hoàn thành theo từng môn học
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
