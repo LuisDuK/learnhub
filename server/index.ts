@@ -31,5 +31,11 @@ export function createServer() {
   app.post("/api/teachers/applications/:id/approve", approveTeacherApplication);
   app.post("/api/teachers/applications/:id/reject", rejectTeacherApplication);
 
+  // Lesson routes (UC-03.1)
+  const lessons = require("./routes/lessons");
+  app.get("/api/lessons/:id", lessons.getLesson);
+  app.post("/api/lessons/:id/progress", lessons.saveLessonProgress);
+  app.post("/api/lessons/:id/quiz/:qid/answer", lessons.submitQuizAnswer);
+
   return app;
 }
