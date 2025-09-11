@@ -50,7 +50,7 @@ import {
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
-  { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
+  { id: "grammar", label: "📚 Ôn t��p ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
@@ -696,7 +696,7 @@ export default function StudyPlan() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
               Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
@@ -1813,7 +1813,7 @@ export default function StudyPlan() {
               <div className="space-y-2">
                 {practiceQuestions.length === 0 && (
                   <div className="text-sm text-muted-foreground">
-                    Chưa có câu hỏi. Nh��n "Tạo bài ôn" để sinh câu hỏi mẫu.
+                    Chưa có câu hỏi. Nhấn "Tạo bài ôn" để sinh câu hỏi mẫu.
                   </div>
                 )}
                 {practiceQuestions.map((q, i) => (
