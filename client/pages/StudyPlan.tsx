@@ -50,7 +50,7 @@ import {
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
-  { id: "grammar", label: "📚 Ôn t��p ngữ pháp", duration: "3 tuần" },
+  { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
@@ -700,8 +700,8 @@ export default function StudyPlan() {
               Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
-            <p className="text-gray-600 text-lg mt-1">
-              Kế hoạch học tập được cá nhân hóa cho bé
+            <p className="text-gray-600 text-base md:text-lg mt-2">
+              Kế hoạch học t���p được cá nhân hóa cho bé
             </p>
           </div>
           <div className="flex gap-3">
@@ -1445,7 +1445,7 @@ export default function StudyPlan() {
             ))}
 
             <div className="text-sm text-muted-foreground">
-              Lưu ý: Đây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
+              Lưu ý: ��ây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
               kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày học cho từng bài.
             </div>
           </div>
@@ -1478,7 +1478,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của b���n
+              Quản lý danh sách bài học trong lộ trình của b����n
             </DialogDescription>
           </DialogHeader>
 
