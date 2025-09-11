@@ -63,7 +63,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "🔢 Phân số và số th���p phân",
+        title: "🔢 Phân số và số thập phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
@@ -1025,7 +1025,7 @@ export default function StudyPlan() {
                     </Button>
                   </div>
                   {quizFeedback === 'correct' && (
-                    <div className="text-sm text-green-600">Đáp án đúng! Nhấn "Tiếp t���c" để tiếp tục phát video.</div>
+                    <div className="text-sm text-green-600">Đáp án đúng! Nhấn "Tiếp tục" để tiếp tục phát video.</div>
                   )}
                   {quizFeedback === 'incorrect' && (
                     <div className="text-sm text-red-600">Chưa đúng. Hệ thống đã tua lại 10s để ôn lại. Bạn có thể thử lại.</div>
