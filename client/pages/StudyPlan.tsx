@@ -748,11 +748,11 @@ export default function StudyPlan() {
         {/* Timeline */}
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-secondary" />
-              📝 Lịch trình học tập
+            <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl font-bold">
+              <Calendar className="h-6 w-6 text-secondary" />
+              <span>📝 Lịch trình học tập</span>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-base md:text-lg text-muted-foreground">
               Timeline chi tiết các bài học theo tuần
             </CardDescription>
           </CardHeader>
@@ -1074,7 +1074,7 @@ export default function StudyPlan() {
               <Label htmlFor="goalName">Tên mục tiêu</Label>
               <Input
                 id="goalName"
-                placeholder="Ví dụ: ��n tập thi giữa kỳ"
+                placeholder="Ví dụ: ���n tập thi giữa kỳ"
                 value={goalData.name}
                 onChange={(e) =>
                   setGoalData({ ...goalData, name: e.target.value })
