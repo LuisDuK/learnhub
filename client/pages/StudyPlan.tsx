@@ -740,6 +740,20 @@ export default function StudyPlan() {
           </div>
         </div>
 
+        <StudyPlanLayout
+          lessonList={lessonList}
+          currentLesson={currentLesson}
+          videoSrc={videoSrc}
+          startCreatePlan={startCreatePlan}
+          setShowGoalDialog={setShowGoalDialog}
+          setShowEditDialog={setShowEditDialog}
+          setShowPracticeDialog={setShowPracticeDialog}
+          openLessonPlayer={openLessonPlayer}
+          setLessonList={setLessonList}
+          setPracticeQuestions={setPracticeQuestions}
+          setPracticeSelectedLessonIds={setPracticeSelectedLessonIds}
+        />
+
         {/* Goal Selection & Progress */}
         <div className="grid gap-6 lg:grid-cols-2">
 
