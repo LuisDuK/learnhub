@@ -769,7 +769,7 @@ export default function StudyPlan() {
                       {weekIndex + 1}
                     </div>
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-bold text-primary">
+                      <h3 className="text-xl md:text-2xl font-semibold text-primary">
                         {weekObj.week}
                       </h3>
                     </div>
@@ -790,7 +790,7 @@ export default function StudyPlan() {
                       return (
                         <div
                           key={lesson.id}
-                          className="relative flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
+                          className="relative flex items-start gap-4 p-4 rounded-2xl border border-gray-200 bg-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
                         >
                           <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
                             <div
@@ -801,17 +801,17 @@ export default function StudyPlan() {
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center gap-3">
                                 <div
-                                  className={`p-2 rounded-lg ${subject.bgColor}`}
+                                  className={`p-3 rounded-2xl ${subject.bgColor}`}
                                 >
                                   <SubjectIcon
-                                    className={`h-5 w-5 ${subject.textColor}`}
+                                    className={`h-6 w-6 ${subject.textColor}`}
                                   />
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-lg md:text-xl">
                                     {lesson.title}
                                   </h4>
-                                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                                  <div className="flex items-center gap-3 text-sm md:text-base text-muted-foreground mt-1">
                                     <span>📚 {subject.name}</span>
                                     <span>���� {lesson.day}</span>
                                     <span>⏰ {lesson.time}</span>
@@ -822,10 +822,10 @@ export default function StudyPlan() {
                               <div className="flex items-center gap-2">
                                 <Badge
                                   variant="outline"
-                                  className={`${status.bgColor} border-0`}
+                                  className={`${status.bgColor} border-0 px-3 py-1 text-sm rounded-full`}
                                 >
                                   <StatusIcon
-                                    className={`h-3 w-3 mr-1 ${status.color}`}
+                                    className={`h-4 w-4 mr-2 ${status.color}`}
                                   />
                                   {status.label}
                                 </Badge>
@@ -838,7 +838,7 @@ export default function StudyPlan() {
                                 className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
                                 onClick={() => openLessonPlayer(lesson)}
                               >
-                                <PlayCircle className="h-4 w-4 mr-1" />
+                                <PlayCircle className="h-5 w-5 mr-2" />
                                 Tiếp tục học
                               </Button>
                             )}
