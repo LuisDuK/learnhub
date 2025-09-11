@@ -46,6 +46,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
