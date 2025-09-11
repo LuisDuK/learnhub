@@ -48,7 +48,7 @@ import {
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
-  { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
+  { id: "midterm", label: "🎯 Ôn tập thi giữa k��", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở rộng từ vựng", duration: "6 tuần" },
@@ -730,7 +730,7 @@ export default function StudyPlan() {
 
         {/* Goal Selection & Progress */}
         <div className="grid gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
+          <Card className="lg:col-span-2 border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5 text-primary" />
@@ -776,7 +776,7 @@ export default function StudyPlan() {
             </CardContent>
           </Card>
 
-          <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
+          <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-accent" />
@@ -956,7 +956,7 @@ export default function StudyPlan() {
               <video
                 ref={videoRef}
                 src={videoSrc}
-                className="w-full h-64 bg-black"
+                className="w-full h-[480px] md:h-[520px] lg:h-[560px] bg-black"
                 controls
                 onLoadedMetadata={onVideoLoaded}
                 onTimeUpdate={onVideoTimeUpdate}
@@ -1328,7 +1328,7 @@ export default function StudyPlan() {
             </div>
 
             <div className="space-y-2">
-              <Label>R��ng buộc lịch học (tùy chọn)</Label>
+              <Label>Ràng buộc lịch học (tùy chọn)</Label>
               <div className="flex items-center gap-3">
                 <Input
                   type="number"
@@ -1541,7 +1541,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              ✏️ Ch���nh sửa lộ trình
+              ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
               Quản lý danh sách bài học trong lộ trình của bạn
