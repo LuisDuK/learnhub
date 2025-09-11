@@ -794,20 +794,11 @@ export default function StudyPlan() {
                           key={lesson.id}
                           className="relative flex items-start gap-4 p-4 rounded-2xl border border-gray-200 bg-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
                         >
-                          <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
-                            <div
-                              className={`h-3 w-3 rounded-full ${subject.color}`}
-                            />
-                          </div>
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center gap-3">
-                                <div
-                                  className={`p-3 rounded-2xl ${subject.bgColor}`}
-                                >
-                                  <SubjectIcon
-                                    className={`h-6 w-6 ${subject.textColor}`}
-                                  />
+                                <div className={`p-2 rounded-2xl flex items-center justify-center`}>
+                                  <div className={`h-6 w-6 rounded-md ${subject.color}`} />
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-lg md:text-xl">
@@ -1322,7 +1313,7 @@ export default function StudyPlan() {
               🧪 Bài kiểm tra đầu vào
             </DialogTitle>
             <DialogDescription>
-              Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hiện tại
+              Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hi���n tại
             </DialogDescription>
           </DialogHeader>
 
@@ -1658,7 +1649,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              📝 Tạo bài ôn cá nhân hóa
+              📝 Tạo bài ôn cá nhân h��a
             </DialogTitle>
             <DialogDescription>
               Tạo nhanh một bài ôn theo yêu cầu của học sinh
