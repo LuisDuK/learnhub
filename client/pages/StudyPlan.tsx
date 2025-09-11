@@ -485,6 +485,12 @@ export default function StudyPlan() {
     setVideoSrc("");
   };
 
+  // helper: remove common emoji characters for cleaner titles
+  const stripEmojis = (s?: string) => {
+    if (!s) return "";
+    return s.replace(/([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u26FF\u2700-\u27BF])/g, "").trim();
+  };
+
   // End of lesson player block
 
   // Entrance test validity: valid if within 90 days
@@ -728,7 +734,7 @@ export default function StudyPlan() {
               className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
             >
               <Edit className="h-4 w-4 mr-2" />
-              Chỉnh sửa lộ trình
+              Chỉnh s��a lộ trình
             </Button>
             <Button
               onClick={() => setShowPracticeDialog(true)}
