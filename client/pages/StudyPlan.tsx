@@ -346,6 +346,7 @@ export default function StudyPlan() {
   const [selectedQuizAnswer, setSelectedQuizAnswer] = useState<number | null>(
     null,
   );
+  const [quizFeedback, setQuizFeedback] = useState<'correct' | 'incorrect' | null>(null);
 
   // mock quiz bank per lesson id
   const quizBank: Record<
@@ -439,22 +440,17 @@ export default function StudyPlan() {
       // unlock marker
       const mark = videoMarkers[currentMarkerIndex];
       setMaxAllowedTime(Math.max(maxAllowedTime, mark + 1));
-      setShowQuizDialog(false);
-      setSelectedQuizAnswer(null);
-      setCurrentMarkerIndex(null);
-      // continue video
-      setTimeout(() => videoRef.current?.play(), 200);
+      setQuizFeedback('correct');
+      // keep dialog open until user explicitly continues
     } else {
-      // provide suggestion: let student replay last 10s
+      // provide suggestion: let student replay last 10s and allow retry
       const backTo = Math.max(0, (videoMarkers[currentMarkerIndex] || 0) - 10);
       if (videoRef.current) {
         videoRef.current.currentTime = backTo;
         setVideoCurrentTime(backTo);
       }
-      setShowQuizDialog(false);
-      setSelectedQuizAnswer(null);
-      setCurrentMarkerIndex(null);
-      setTimeout(() => videoRef.current?.play(), 200);
+      setQuizFeedback('incorrect');
+      // keep dialog open for user to review and try again
     }
   };
 
@@ -1052,23 +1048,51 @@ export default function StudyPlan() {
                   </div>
                 )}
 
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowQuizDialog(false);
-                      setCurrentMarkerIndex(null);
-                      if (videoRef.current) videoRef.current.play();
-                    }}
-                  >
-                    Bỏ qua
-                  </Button>
-                  <Button
-                    className="bg-gradient-to-r from-primary to-accent text-white"
-                    onClick={submitQuizAnswer}
-                  >
-                    Nộp
-                  </Button>
+                <div className="flex flex-col gap-3 pt-4">
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowQuizDialog(false);
+                        setCurrentMarkerIndex(null);
+                        if (videoRef.current) videoRef.current.play();
+                      }}
+                    >
+                      Bỏ qua
+                    </Button>
+                    <Button
+                      className="bg-gradient-to-r from-primary to-accent text-white"
+                      onClick={submitQuizAnswer}
+                    >
+                      Nộp
+                    </Button>
+                    <Button
+                      size="sm"
+                      disabled={!quizFeedback}
+                      onClick={() => {
+                        // only when user explicitly continues do we close the dialog
+                        if (quizFeedback === 'correct') {
+                          setShowQuizDialog(false);
+                          setCurrentMarkerIndex(null);
+                          setSelectedQuizAnswer(null);
+                          setQuizFeedback(null);
+                          setTimeout(() => videoRef.current?.play(), 200);
+                        } else {
+                          // for incorrect, clear selection so user can try again
+                          setSelectedQuizAnswer(null);
+                          setQuizFeedback(null);
+                        }
+                      }}
+                    >
+                      Tiếp tục
+                    </Button>
+                  </div>
+                  {quizFeedback === 'correct' && (
+                    <div className="text-sm text-green-600">Đáp án đúng! Nhấn "Tiếp tục" để tiếp tục phát video.</div>
+                  )}
+                  {quizFeedback === 'incorrect' && (
+                    <div className="text-sm text-red-600">Chưa đúng. Hệ thống đã tua lại 10s để ôn lại. Bạn có thể thử lại.</div>
+                  )}
                 </div>
               </div>
             </DialogContent>
@@ -1304,7 +1328,7 @@ export default function StudyPlan() {
             </div>
 
             <div className="space-y-2">
-              <Label>Ràng buộc lịch học (tùy chọn)</Label>
+              <Label>R��ng buộc lịch học (tùy chọn)</Label>
               <div className="flex items-center gap-3">
                 <Input
                   type="number"
@@ -1517,7 +1541,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              ✏️ Chỉnh sửa lộ trình
+              ✏️ Ch���nh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
               Quản lý danh sách bài học trong lộ trình của bạn
