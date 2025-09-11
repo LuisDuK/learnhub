@@ -46,6 +46,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
@@ -63,7 +64,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "🔢 Phân số và số thập phân",
+        title: "Ôn tập — Phân số và số thập phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
@@ -72,7 +73,7 @@ const weeklyPlan = [
       {
         id: 2,
         subject: "literature",
-        title: "📜 Bài thơ Quê hương",
+        title: "Ôn tập — Bài thơ Quê hương",
         duration: "60 phút",
         status: "completed",
         day: "Thứ 3",
@@ -81,7 +82,7 @@ const weeklyPlan = [
       {
         id: 3,
         subject: "english",
-        title: "🌍 Present Simple Tense",
+        title: "Ôn tập — Present Simple Tense",
         duration: "45 phút",
         status: "in-progress",
         day: "Thứ 4",
@@ -93,7 +94,7 @@ const weeklyPlan = [
       {
         id: 4,
         subject: "math",
-        title: "➕ Phép tính với phân số",
+        title: "Ôn tập — Phép tính với phân số",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -109,7 +110,7 @@ const weeklyPlan = [
       {
         id: 5,
         subject: "literature",
-        title: "��️ Viết văn tả người",
+        title: "Ôn tập — Viết văn tả người",
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -118,7 +119,7 @@ const weeklyPlan = [
       {
         id: 6,
         subject: "english",
-        title: "📝 Writing - My Family",
+        title: "Ôn tập — Writing - My Family",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
@@ -129,7 +130,7 @@ const weeklyPlan = [
       {
         id: 7,
         subject: "math",
-        title: "📊 Biểu đồ và thống kê",
+        title: "Ôn tập — Biểu đồ và thống kê",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -144,7 +145,7 @@ const weeklyPlan = [
       {
         id: 8,
         subject: "english",
-        title: "🗣️ Speaking Practice",
+        title: "Ôn tập — Speaking Practice",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -153,7 +154,7 @@ const weeklyPlan = [
       {
         id: 9,
         subject: "math",
-        title: "🔺 Hình học cơ bản",
+        title: "Ôn tập — Hình học cơ bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
@@ -162,7 +163,7 @@ const weeklyPlan = [
       {
         id: 10,
         subject: "literature",
-        title: "📖 Đọc hiểu v��n bản",
+        title: "Ôn tập — Đọc hiểu văn bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -239,6 +240,7 @@ type PlanVersion = {
 };
 
 export default function StudyPlan() {
+  const navigate = useNavigate();
   const [selectedGoal, setSelectedGoal] = useState("midterm");
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -861,9 +863,9 @@ export default function StudyPlan() {
                                 variant="ghost"
                                 size="sm"
                                 className="ml-2 underline text-sm"
-                                onClick={() => openPdf(lesson.pdfUrl)}
+                                onClick={() => navigate(`/lesson/${lesson.id}/exercise/1`)}
                               >
-                                📄 Làm bài tập (PDF)
+                                Làm bài tập
                               </Button>
                             )}
                           </div>
