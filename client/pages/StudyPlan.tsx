@@ -734,7 +734,7 @@ export default function StudyPlan() {
               className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
             >
               <Edit className="h-4 w-4 mr-2" />
-              Chỉnh s��a lộ trình
+              Chỉnh sửa lộ trình
             </Button>
             <Button
               onClick={() => setShowPracticeDialog(true)}
@@ -808,13 +808,13 @@ export default function StudyPlan() {
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-lg md:text-xl">
-                                    {lesson.title}
+                                    {stripEmojis(lesson.title)}
                                   </h4>
                                   <div className="flex items-center gap-3 text-sm md:text-base text-muted-foreground mt-1">
-                                    <span>📚 {subject.name}</span>
-                                    <span>���� {lesson.day}</span>
-                                    <span>⏰ {lesson.time}</span>
-                                    <span>⏱️ {lesson.duration}</span>
+                                    <span className="font-medium">{subject.name}</span>
+                                    <span>{lesson.day}</span>
+                                    <span className="flex items-center gap-2">⏰ {lesson.time}</span>
+                                    <span>{lesson.duration}</span>
                                   </div>
                                 </div>
                               </div>
@@ -1025,7 +1025,7 @@ export default function StudyPlan() {
                     </Button>
                   </div>
                   {quizFeedback === 'correct' && (
-                    <div className="text-sm text-green-600">Đáp án đúng! Nhấn "Tiếp tục" để tiếp tục phát video.</div>
+                    <div className="text-sm text-green-600">Đáp án đúng! Nhấn "Tiếp t���c" để tiếp tục phát video.</div>
                   )}
                   {quizFeedback === 'incorrect' && (
                     <div className="text-sm text-red-600">Chưa đúng. Hệ thống đã tua lại 10s để ôn lại. Bạn có thể thử lại.</div>
