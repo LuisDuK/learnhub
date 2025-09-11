@@ -51,7 +51,7 @@ import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
-  { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
+  { id: "midterm", label: "🎯 Ôn t���p thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
@@ -274,6 +274,15 @@ export default function StudyPlan() {
       week.lessons.map((lesson) => ({ ...lesson, week: week.week })),
     ),
   );
+
+  // mark every 3rd lesson across the flattened lesson list as review
+  const reviewLessonIds = useMemo(() => {
+    const s = new Set<number>();
+    lessonList.forEach((l, i) => {
+      if ((i + 1) % 3 === 0) s.add(l.id);
+    });
+    return s;
+  }, [lessonList]);
 
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [videoSrc, setVideoSrc] = useState("");
