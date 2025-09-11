@@ -275,12 +275,20 @@ export default function StudyPlan() {
     ),
   );
 
-  // mark every 3rd lesson across the flattened lesson list as review
+  // mark the last lesson of each week as a review session
   const reviewLessonIds = useMemo(() => {
     const s = new Set<number>();
-    lessonList.forEach((l, i) => {
-      if ((i + 1) % 3 === 0) s.add(l.id);
+    const byWeek = new Map<string, Lesson[]>();
+    lessonList.forEach((l) => {
+      const wk = l.week || "";
+      if (!byWeek.has(wk)) byWeek.set(wk, []);
+      byWeek.get(wk)!.push(l);
     });
+    for (const lessons of byWeek.values()) {
+      if (lessons.length === 0) continue;
+      const last = lessons[lessons.length - 1];
+      s.add(last.id);
+    }
     return s;
   }, [lessonList]);
 
@@ -1142,7 +1150,7 @@ export default function StudyPlan() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="high">🔴 Cao</SelectItem>
-                  <SelectItem value="medium">🟠 Trung bình</SelectItem>
+                  <SelectItem value="medium">�� Trung bình</SelectItem>
                   <SelectItem value="low">🟢 Thấp</SelectItem>
                 </SelectContent>
               </Select>
