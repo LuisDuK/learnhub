@@ -741,7 +741,7 @@ export default function StudyPlan() {
 
         {/* Goal Selection & Progress */}
         <div className="grid gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
+          <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="h-5 w-5 text-primary" />
@@ -787,7 +787,7 @@ export default function StudyPlan() {
             </CardContent>
           </Card>
 
-          <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
+          <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-accent" />
