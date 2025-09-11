@@ -50,7 +50,7 @@ import {
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
-  { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
+  { id: "grammar", label: "📚 Ôn t���p ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
@@ -739,20 +739,6 @@ export default function StudyPlan() {
             </Button>
           </div>
         </div>
-
-        <StudyPlanLayout
-          lessonList={lessonList}
-          currentLesson={currentLesson}
-          videoSrc={videoSrc}
-          startCreatePlan={startCreatePlan}
-          setShowGoalDialog={setShowGoalDialog}
-          setShowEditDialog={setShowEditDialog}
-          setShowPracticeDialog={setShowPracticeDialog}
-          openLessonPlayer={openLessonPlayer}
-          setLessonList={setLessonList}
-          setPracticeQuestions={setPracticeQuestions}
-          setPracticeSelectedLessonIds={setPracticeSelectedLessonIds}
-        />
 
         {/* Goal Selection & Progress */}
         <div className="grid gap-6 lg:grid-cols-2">
