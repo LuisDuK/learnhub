@@ -50,7 +50,7 @@ import {
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
-  { id: "grammar", label: "📚 Ôn t���p ngữ pháp", duration: "3 tuần" },
+  { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
@@ -696,7 +696,7 @@ export default function StudyPlan() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
               Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
@@ -743,39 +743,6 @@ export default function StudyPlan() {
         {/* Goal Selection & Progress */}
         <div className="grid gap-6 lg:grid-cols-2">
 
-          <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-accent" />
-                📊 Tiến độ tổng thể
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
-                  {Math.round(
-                    (lessonList.filter((l) => l.status === "completed").length /
-                      (lessonList.length || 1)) *
-                      100,
-                  )}
-                  %
-                </div>
-                <p className="text-sm text-muted-foreground">Hoàn thành</p>
-              </div>
-              <Progress
-                value={Math.round(
-                  (lessonList.filter((l) => l.status === "completed").length /
-                    (lessonList.length || 1)) *
-                    100,
-                )}
-                className="h-3"
-              />
-              <div className="text-sm text-muted-foreground text-center">
-                {lessonList.filter((l) => l.status === "completed").length}/
-                {lessonList.length} bài học đã hoàn thành
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Timeline */}
@@ -802,7 +769,7 @@ export default function StudyPlan() {
                       {weekIndex + 1}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-primary">
+                      <h3 className="text-2xl md:text-3xl font-bold text-primary">
                         {weekObj.week}
                       </h3>
                     </div>
@@ -841,7 +808,7 @@ export default function StudyPlan() {
                                   />
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-lg">
+                                  <h4 className="font-semibold text-lg md:text-xl">
                                     {lesson.title}
                                   </h4>
                                   <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
@@ -1846,7 +1813,7 @@ export default function StudyPlan() {
               <div className="space-y-2">
                 {practiceQuestions.length === 0 && (
                   <div className="text-sm text-muted-foreground">
-                    Chưa có câu hỏi. Nhấn "Tạo bài ôn" để sinh câu hỏi mẫu.
+                    Chưa có câu hỏi. Nh��n "Tạo bài ôn" để sinh câu hỏi mẫu.
                   </div>
                 )}
                 {practiceQuestions.map((q, i) => (
