@@ -51,7 +51,7 @@ import {
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
-  { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tu��n" },
+  { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
 
@@ -162,7 +162,7 @@ const weeklyPlan = [
       {
         id: 10,
         subject: "literature",
-        title: "📖 Đọc hiểu văn bản",
+        title: "📖 Đọc hiểu v��n bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -848,12 +848,16 @@ export default function StudyPlan() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg"
-                                onClick={() => openLessonPlayer(lesson)}
+                                disabled
+                                className="border-primary text-primary opacity-60 cursor-not-allowed rounded-lg"
+                                title="Chưa tới - không thể bắt đầu"
                               >
                                 <Circle className="h-4 w-4 mr-1" />
-                                Bắt đầu học
+                                Chưa tới
                               </Button>
+                            )}
+                            {isReview && (
+                              <span className="ml-3 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ôn tập</span>
                             )}
                             {lesson.pdfUrl && (
                               <Button
@@ -1175,7 +1179,7 @@ export default function StudyPlan() {
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Chọn mục ti��u</Label>
+              <Label>Chọn mục tiêu</Label>
               <Select
                 value={createPlanData.goalId}
                 onValueChange={(v) =>
