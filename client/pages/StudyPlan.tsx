@@ -318,12 +318,7 @@ export default function StudyPlan() {
 
   const [proposedPlan, setProposedPlan] = useState<PlanVersion | null>(null);
 
-  useEffect(() => {
-    const hasSetGoal = localStorage.getItem("studyGoalSet");
-    if (!hasSetGoal) {
-      setShowGoalDialog(true);
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   const openVideo = (url?: string) => {
     if (!url) return;
