@@ -51,7 +51,7 @@ import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
-  { id: "midterm", label: "🎯 Ôn t���p thi giữa kỳ", duration: "2 tuần" },
+  { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
@@ -805,7 +805,7 @@ export default function StudyPlan() {
                         ];
                       const SubjectIcon = subject.icon;
                       const StatusIcon = status.icon;
-                      const isReview = /ôn|Ôn/.test(lesson.title || "");
+                      const isReview = reviewLessonIds.has(lesson.id);
                       const isAvailable = lesson.status === 'in-progress' || lesson.status === 'completed';
                       return (
                         <div
@@ -1081,7 +1081,7 @@ export default function StudyPlan() {
               🎯 Thêm mục tiêu học tập
             </DialogTitle>
             <DialogDescription>
-              Nhập thông tin mục tiêu h���c tập để tạo lộ trình phù hợp
+              Nhập thông tin mục tiêu h����c tập để tạo lộ trình phù hợp
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -1493,7 +1493,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của b����n
+              Quản lý danh sách bài học trong lộ trình của b�����n
             </DialogDescription>
           </DialogHeader>
 
