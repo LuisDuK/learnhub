@@ -51,7 +51,7 @@ import {
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
-  { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
+  { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tu��n" },
   { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
 
@@ -787,10 +787,12 @@ export default function StudyPlan() {
                         ];
                       const SubjectIcon = subject.icon;
                       const StatusIcon = status.icon;
+                      const isReview = /ôn|Ôn/.test(lesson.title || "");
+                      const isAvailable = lesson.status === 'in-progress' || lesson.status === 'completed';
                       return (
                         <div
                           key={lesson.id}
-                          className="relative flex items-start gap-4 p-4 rounded-2xl border border-gray-200 bg-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                          className="relative flex items-start gap-4 p-4 rounded-2xl border border-gray-200 bg-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
                         >
                           <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
                             <div
@@ -1074,7 +1076,7 @@ export default function StudyPlan() {
               <Label htmlFor="goalName">Tên mục tiêu</Label>
               <Input
                 id="goalName"
-                placeholder="Ví dụ: ���n tập thi giữa kỳ"
+                placeholder="Ví dụ: ��n tập thi giữa kỳ"
                 value={goalData.name}
                 onChange={(e) =>
                   setGoalData({ ...goalData, name: e.target.value })
@@ -1173,7 +1175,7 @@ export default function StudyPlan() {
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Chọn mục tiêu</Label>
+              <Label>Chọn mục ti��u</Label>
               <Select
                 value={createPlanData.goalId}
                 onValueChange={(v) =>
