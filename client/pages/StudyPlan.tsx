@@ -48,7 +48,7 @@ import {
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
-  { id: "midterm", label: "🎯 Ôn tập thi giữa k��", duration: "2 tuần" },
+  { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở rộng từ vựng", duration: "6 tuần" },
@@ -365,18 +365,17 @@ export default function StudyPlan() {
 
   const openLessonPlayer = (lesson: Lesson) => {
     setCurrentLesson(lesson);
-    // derive markers: use lesson.quizMarkers if present, else sample markers based on duration
-    const defaultMarkers = [5, 12];
-    const markers = (lesson as any).quizMarkers || defaultMarkers;
+    // derive markers: use lesson.quizMarkers if present, else leave empty and generate after metadata loads
+    const markers: number[] = (lesson as any).quizMarkers || [];
     setVideoMarkers(markers);
     setMaxAllowedTime(0);
     setVideoCurrentTime(0);
     setVideoDuration(0);
     setSelectedQuizAnswer(null);
     setCurrentMarkerIndex(null);
-    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to sample mp4
+    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to a longer sample mp4
     const sampleMp4 =
-      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     const src =
       typeof (lesson as any).videoUrl === "string" &&
       (lesson as any).videoUrl.endsWith(".mp4")
@@ -397,7 +396,19 @@ export default function StudyPlan() {
   const onVideoLoaded = () => {
     const v = videoRef.current;
     if (!v) return;
-    setVideoDuration(v.duration || 0);
+    const dur = v.duration || 0;
+    setVideoDuration(dur);
+    // if no markers provided by lesson, generate markers at 25%, 50%, 75% for sufficiently long videos
+    if ((currentLesson && !(currentLesson as any).quizMarkers) || videoMarkers.length === 0) {
+      if (dur > 30) {
+        const generated = [0.25, 0.5, 0.75].map((p) => Math.floor(dur * p));
+        setVideoMarkers(generated);
+      } else if (dur > 5) {
+        // short video: split into two markers
+        const generated = [Math.floor(dur / 3), Math.floor((2 * dur) / 3)];
+        setVideoMarkers(generated);
+      }
+    }
   };
 
   const onVideoTimeUpdate = () => {
@@ -627,7 +638,7 @@ export default function StudyPlan() {
         for (let i = 0; i < count; i++) {
           questions.push({
             id: Date.now() + Math.random() * 100000 + i,
-            text: `${lesson.title} — Ôn tập: ${topic || "Nội dung"} — Câu ${i + 1}`,
+            text: `${lesson.title} — Ôn tập: ${topic || "N���i dung"} — Câu ${i + 1}`,
             difficulty,
           });
         }
@@ -1164,7 +1175,7 @@ export default function StudyPlan() {
                   <SelectItem value="2-weeks">2 tuần</SelectItem>
                   <SelectItem value="3-weeks">3 tuần</SelectItem>
                   <SelectItem value="1-month">1 tháng</SelectItem>
-                  <SelectItem value="2-months">2 tháng</SelectItem>
+                  <SelectItem value="2-months">2 th��ng</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1544,7 +1555,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của bạn
+              Quản lý danh sách bài học trong lộ trình của b���n
             </DialogDescription>
           </DialogHeader>
 
