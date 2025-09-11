@@ -62,7 +62,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "🔢 Phân số và số thập phân",
+        title: "🔢 Phân số và số th���p phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
@@ -740,52 +740,7 @@ export default function StudyPlan() {
         </div>
 
         {/* Goal Selection & Progress */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                Mục tiêu học tập
-              </CardTitle>
-              <CardDescription>
-                Chọn mục tiêu để xem lộ trình phù hợp
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-3 items-center">
-                <Select
-                  value={selectedGoal}
-                  onValueChange={(v) => {
-                    setSelectedGoal(v);
-                    generateStudyPlan(v);
-                  }}
-                >
-                  <SelectTrigger className="w-full border-primary/20 rounded-xl">
-                    <SelectValue placeholder="Chọn mục tiêu học tập" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {studyGoals.map((goal) => (
-                      <SelectItem key={goal.id} value={goal.id}>
-                        <div className="flex items-center justify-between w-full">
-                          <span>{goal.label}</span>
-                          <Badge variant="outline" className="ml-2">
-                            {goal.duration}
-                          </Badge>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  onClick={() => generateStudyPlan(selectedGoal)}
-                  size="sm"
-                  className="ml-2"
-                >
-                  Tạo lộ trình tự động
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid gap-6 lg:grid-cols-2">
 
           <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
             <CardHeader>
@@ -890,7 +845,7 @@ export default function StudyPlan() {
                                   </h4>
                                   <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                                     <span>📚 {subject.name}</span>
-                                    <span>📅 {lesson.day}</span>
+                                    <span>���� {lesson.day}</span>
                                     <span>⏰ {lesson.time}</span>
                                     <span>⏱️ {lesson.duration}</span>
                                   </div>
@@ -1227,7 +1182,7 @@ export default function StudyPlan() {
               className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
             >
               <Save className="h-4 w-4 mr-2" />
-              Lưu mục tiêu
+              Lưu m���c tiêu
             </Button>
           </div>
         </DialogContent>
