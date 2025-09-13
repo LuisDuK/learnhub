@@ -241,130 +241,93 @@ type CurriculumChapter = { id: string; title: string; lessons: CurriculumLesson[
 type CurriculumSubject = { key: CourseCategory; name: string; emoji: string; chapters: CurriculumChapter[] };
 type CurriculumGrade = { id: string; name: string; subjects: CurriculumSubject[] };
 
-const curriculum: CurriculumGrade[] = [
-  {
-    id: "4",
-    name: "Khối 4",
-    subjects: [
-      {
-        key: "math",
-        name: "Toán học",
-        emoji: "🔢",
-        chapters: [
-          {
-            id: "m4-c1",
-            title: "Số học cơ bản",
-            lessons: [
-              { id: "1", title: "Phép cộng và trừ trong 100", duration: "30p", status: "in-progress" },
-              { id: "2", title: "Phép nhân cơ bản", duration: "25p", status: "not-started" },
-            ],
-          },
-          {
-            id: "m4-c2",
-            title: "Hình học vui",
-            lessons: [
-              { id: "3", title: "Đường thẳng và đoạn thẳng", duration: "20p", status: "not-started" },
-              { id: "4", title: "Chu vi hình chữ nhật", duration: "25p", status: "completed" },
-            ],
-          },
-        ],
-      },
-      {
-        key: "literature",
-        name: "Ngữ văn",
-        emoji: "����",
-        chapters: [
-          {
-            id: "v4-c1",
-            title: "Đọc hiểu",
-            lessons: [
-              { id: "5", title: "Bài thơ: Quê hương", duration: "20p", status: "in-progress" },
-              { id: "6", title: "Truyện: Cậu bé thông minh", duration: "18p", status: "not-started" },
-            ],
-          },
-          {
-            id: "v4-c2",
-            title: "Tập làm văn",
-            lessons: [
-              { id: "7", title: "Viết đoạn văn tả người", duration: "30p", status: "not-started" },
-            ],
-          },
-        ],
-      },
-      {
-        key: "english",
-        name: "Tiếng Anh",
-        emoji: "🌍",
-        chapters: [
-          {
-            id: "e4-c1",
-            title: "Grammar Basics",
-            lessons: [
-              { id: "8", title: "Present Simple", duration: "22p", status: "in-progress" },
-              { id: "9", title: "There is/There are", duration: "20p", status: "not-started" },
-            ],
-          },
-          {
-            id: "e4-c2",
-            title: "Vocabulary",
-            lessons: [
-              { id: "10", title: "My Family", duration: "18p", status: "not-started" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "5",
-    name: "Khối 5",
-    subjects: [
-      {
-        key: "math",
-        name: "Toán học",
-        emoji: "🧮",
-        chapters: [
-          {
-            id: "m5-c1",
-            title: "Phân số & thập phân",
-            lessons: [
-              { id: "11", title: "Giới thiệu phân số", duration: "28p", status: "not-started" },
-              { id: "12", title: "Số thập phân cơ bản", duration: "26p", status: "not-started" },
-            ],
-          },
-        ],
-      },
-      {
-        key: "literature",
-        name: "Ngữ văn",
-        emoji: "📖",
-        chapters: [
-          {
-            id: "v5-c1",
-            title: "Văn miêu tả",
-            lessons: [
-              { id: "13", title: "Tả cảnh sân trường", duration: "24p", status: "not-started" },
-            ],
-          },
-        ],
-      },
-      {
-        key: "english",
-        name: "Tiếng Anh",
-        emoji: "🗣️",
-        chapters: [
-          {
-            id: "e5-c1",
-            title: "Speaking",
-            lessons: [
-              { id: "14", title: "Daily Conversations", duration: "20p", status: "not-started" },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+function buildCurriculum(): CurriculumGrade[] {
+  const grades: CurriculumGrade[] = [];
+  const subjects: Array<{ key: CourseCategory; name: string; emoji: string }> = [
+    { key: "math", name: "Toán học", emoji: "🔢" },
+    { key: "literature", name: "Ngữ văn", emoji: "📚" },
+    { key: "english", name: "Tiếng Anh", emoji: "🌍" },
+  ];
+  for (let g = 1; g <= 9; g++) {
+    const gradeId = String(g);
+    const gradeName = `Khối ${g}`;
+    const subjectsForGrade: CurriculumSubject[] = subjects.map((s) => {
+      const chapters: CurriculumChapter[] = [
+        {
+          id: `${s.key}${g}-c1`,
+          title:
+            s.key === "math"
+              ? `Số học cơ bản Khối ${g}`
+              : s.key === "literature"
+                ? `Đọc hiểu Khối ${g}`
+                : `Grammar Khối ${g}`,
+          lessons: [
+            {
+              id: `${g}-${s.key}-1`,
+              title:
+                s.key === "math"
+                  ? `Phép cộng, trừ Khối ${g}`
+                  : s.key === "literature"
+                    ? `Bài đọc: Chủ điểm gia đình (Khối ${g})`
+                    : `Present Simple (Grade ${g})`,
+              duration: "20p",
+              status: g === 4 && s.key === "math" ? "in-progress" : "not-started",
+            },
+            {
+              id: `${g}-${s.key}-2`,
+              title:
+                s.key === "math"
+                  ? `Phép nhân, chia Khối ${g}`
+                  : s.key === "literature"
+                    ? `Tập làm văn: Tả người (Khối ${g})`
+                    : `There is/There are (Grade ${g})`,
+              duration: "22p",
+              status: "not-started",
+            },
+          ],
+        },
+        {
+          id: `${s.key}${g}-c2`,
+          title:
+            s.key === "math"
+              ? `Hình học Khối ${g}`
+              : s.key === "literature"
+                ? `Từ vựng & ngữ pháp tiếng Việt Khối ${g}`
+                : `Vocabulary Khối ${g}`,
+          lessons: [
+            {
+              id: `${g}-${s.key}-3`,
+              title:
+                s.key === "math"
+                  ? `Đoạn thẳng, góc cơ bản (Khối ${g})`
+                  : s.key === "literature"
+                    ? `Luyện từ và câu: Từ đồng nghĩa (Khối ${g})`
+                    : `My Family (Grade ${g})`,
+              duration: "18p",
+              status: g === 4 && s.key === "math" ? "completed" : "not-started",
+            },
+            {
+              id: `${g}-${s.key}-4`,
+              title:
+                s.key === "math"
+                  ? `Chu vi, diện tích cơ bản (Khối ${g})`
+                  : s.key === "literature"
+                    ? `Tập đọc: Câu chuyện thiếu nhi (Khối ${g})`
+                    : `Daily Conversations (Grade ${g})`,
+              duration: "24p",
+              status: "not-started",
+            },
+          ],
+        },
+      ];
+      return { key: s.key, name: s.name, emoji: s.emoji, chapters };
+    });
+    grades.push({ id: gradeId, name: gradeName, subjects: subjectsForGrade });
+  }
+  return grades;
+}
+
+const curriculum: CurriculumGrade[] = buildCurriculum();
 
 const statusColors = {
   "not-started": "secondary",
@@ -382,7 +345,7 @@ export default function Courses() {
   const [sortBy, setSortBy] = useState<string>("recent");
 
   // Hierarchical selection state
-  const [selectedGradeId, setSelectedGradeId] = useState<string>(curriculum[0]?.id || "4");
+  const [selectedGradeId, setSelectedGradeId] = useState<string>(curriculum[0]?.id || "1");
   const [selectedSubjectKey, setSelectedSubjectKey] = useState<CourseCategory | null>(null);
   const selectedGrade = curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
   const selectedSubject = selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
