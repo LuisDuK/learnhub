@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import {
   Play,
   Clock,
@@ -234,6 +235,137 @@ const categoryLabels = {
   english: "🌍 Tiếng Anh",
 };
 
+// Curriculum structure: Khối -> Môn học -> Chương -> Bài học
+type CurriculumLesson = { id: string; title: string; duration?: string; status?: CourseStatus };
+type CurriculumChapter = { id: string; title: string; lessons: CurriculumLesson[] };
+type CurriculumSubject = { key: CourseCategory; name: string; emoji: string; chapters: CurriculumChapter[] };
+type CurriculumGrade = { id: string; name: string; subjects: CurriculumSubject[] };
+
+const curriculum: CurriculumGrade[] = [
+  {
+    id: "4",
+    name: "Khối 4",
+    subjects: [
+      {
+        key: "math",
+        name: "Toán học",
+        emoji: "🔢",
+        chapters: [
+          {
+            id: "m4-c1",
+            title: "Số học cơ bản",
+            lessons: [
+              { id: "1", title: "Phép cộng và trừ trong 100", duration: "30p", status: "in-progress" },
+              { id: "2", title: "Phép nhân cơ bản", duration: "25p", status: "not-started" },
+            ],
+          },
+          {
+            id: "m4-c2",
+            title: "Hình học vui",
+            lessons: [
+              { id: "3", title: "Đường thẳng và đoạn thẳng", duration: "20p", status: "not-started" },
+              { id: "4", title: "Chu vi hình chữ nhật", duration: "25p", status: "completed" },
+            ],
+          },
+        ],
+      },
+      {
+        key: "literature",
+        name: "Ngữ văn",
+        emoji: "📚",
+        chapters: [
+          {
+            id: "v4-c1",
+            title: "Đọc hiểu",
+            lessons: [
+              { id: "5", title: "Bài thơ: Quê hương", duration: "20p", status: "in-progress" },
+              { id: "6", title: "Truyện: Cậu bé thông minh", duration: "18p", status: "not-started" },
+            ],
+          },
+          {
+            id: "v4-c2",
+            title: "Tập làm văn",
+            lessons: [
+              { id: "7", title: "Viết đoạn văn tả người", duration: "30p", status: "not-started" },
+            ],
+          },
+        ],
+      },
+      {
+        key: "english",
+        name: "Tiếng Anh",
+        emoji: "🌍",
+        chapters: [
+          {
+            id: "e4-c1",
+            title: "Grammar Basics",
+            lessons: [
+              { id: "8", title: "Present Simple", duration: "22p", status: "in-progress" },
+              { id: "9", title: "There is/There are", duration: "20p", status: "not-started" },
+            ],
+          },
+          {
+            id: "e4-c2",
+            title: "Vocabulary",
+            lessons: [
+              { id: "10", title: "My Family", duration: "18p", status: "not-started" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "5",
+    name: "Khối 5",
+    subjects: [
+      {
+        key: "math",
+        name: "Toán học",
+        emoji: "🧮",
+        chapters: [
+          {
+            id: "m5-c1",
+            title: "Phân số & thập phân",
+            lessons: [
+              { id: "11", title: "Giới thiệu phân số", duration: "28p", status: "not-started" },
+              { id: "12", title: "Số thập phân cơ bản", duration: "26p", status: "not-started" },
+            ],
+          },
+        ],
+      },
+      {
+        key: "literature",
+        name: "Ngữ văn",
+        emoji: "📖",
+        chapters: [
+          {
+            id: "v5-c1",
+            title: "Văn miêu tả",
+            lessons: [
+              { id: "13", title: "Tả cảnh sân trường", duration: "24p", status: "not-started" },
+            ],
+          },
+        ],
+      },
+      {
+        key: "english",
+        name: "Tiếng Anh",
+        emoji: "🗣️",
+        chapters: [
+          {
+            id: "e5-c1",
+            title: "Speaking",
+            lessons: [
+              { id: "14", title: "Daily Conversations", duration: "20p", status: "not-started" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 const statusColors = {
   "not-started": "secondary",
   "in-progress": "default",
@@ -248,6 +380,12 @@ export default function Courses() {
   >([]);
   const [selectedStatuses, setSelectedStatuses] = useState<CourseStatus[]>([]);
   const [sortBy, setSortBy] = useState<string>("recent");
+
+  // Hierarchical selection state
+  const [selectedGradeId, setSelectedGradeId] = useState<string>(curriculum[0]?.id || "4");
+  const [selectedSubjectKey, setSelectedSubjectKey] = useState<CourseCategory | null>(null);
+  const selectedGrade = curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
+  const selectedSubject = selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
 
   // Filter courses based on search and filters
   const filteredCourses = mockCourses.filter((course) => {
@@ -408,139 +546,111 @@ export default function Courses() {
             </div>
           </div>
 
-          {/* Course Grid */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {sortedCourses.map((course) => (
-              <Card
-                key={course.id}
-                className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-primary/20 bg-gradient-to-br from-white to-primary/5 overflow-hidden"
-              >
-                <CardContent className="p-0">
-                  {/* Course Image */}
-                  <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 rounded-t-lg flex items-center justify-center relative overflow-hidden">
-                    <div className="text-6xl group-hover:scale-110 transition-transform duration-300">
-                      {course.emoji}
-                    </div>
-                    <div className="absolute top-3 left-3">
-                      <Badge
-                        variant={statusColors[course.status]}
-                        className="text-xs"
-                      >
-                        {statusLabels[course.status]}
-                      </Badge>
-                    </div>
-                    <div className="absolute top-3 right-3">
-                      <Badge variant="outline" className="text-xs bg-white/80">
-                        {course.level}
-                      </Badge>
-                    </div>
+          {/* Chọn Khối */}
+          <div className="space-y-6">
+            <div className="flex flex-wrap gap-2 mb-2">
+              {curriculum.map((g) => (
+                <Button
+                  key={g.id}
+                  variant={g.id === selectedGradeId ? "default" : "outline"}
+                  onClick={() => {
+                    setSelectedGradeId(g.id);
+                    setSelectedSubjectKey(null);
+                  }}
+                  className={g.id === selectedGradeId ? "bg-primary text-white" : "border-primary/30"}
+                >
+                  {g.name}
+                </Button>
+              ))}
+            </div>
 
-                    {/* Hover overlay with sparkles */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/80 to-accent/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <div className="text-white text-center p-4">
-                        <p className="text-sm mb-3 font-medium">
-                          {course.description}
-                        </p>
-                        <div className="flex items-center justify-center gap-4 text-xs">
-                          <span className="flex items-center gap-1">
-                            <Users className="h-3 w-3" />
-                            {course.students} bạn nhỏ
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Star className="h-3 w-3 fill-current text-yellow-300" />
-                            {course.rating}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {course.duration}
-                          </span>
+            {/* Danh sách Môn học của khối đã chọn */}
+            <div>
+              <h2 className="text-xl font-bold mb-3 text-primary">Môn học</h2>
+              <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {selectedGrade?.subjects.map((s) => (
+                  <Card
+                    key={s.key}
+                    className={`cursor-pointer border ${selectedSubjectKey === s.key ? "border-primary bg-primary/5" : "border-primary/20"}`}
+                    onClick={() => setSelectedSubjectKey(s.key)}
+                  >
+                    <CardContent className="p-4 flex items-center justify-between">
+                      <div className="text-2xl mr-2">{s.emoji}</div>
+                      <div className="flex-1">
+                        <div className="font-semibold">{s.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {s.chapters.reduce((sum, c) => sum + c.lessons.length, 0)} bài học
                         </div>
                       </div>
-                      {/* Animated sparkles */}
-                      <div className="absolute top-2 left-2 text-yellow-300 animate-ping">
-                        ✨
-                      </div>
-                      <div
-                        className="absolute bottom-2 right-2 text-yellow-300 animate-ping"
-                        style={{ animationDelay: "0.2s" }}
-                      >
-                        ⭐
-                      </div>
-                      <div
-                        className="absolute top-1/2 right-4 text-yellow-300 animate-ping"
-                        style={{ animationDelay: "0.4s" }}
-                      >
-                        💫
-                      </div>
-                    </div>
-                  </div>
+                      <Badge variant={selectedSubjectKey === s.key ? "default" : "secondary"}>
+                        Chọn
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
 
-                  {/* Course Info */}
-                  <div className="p-4 space-y-3">
-                    <div>
-                      <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
-                        {course.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        👨‍🏫 {course.instructor}
-                      </p>
-                    </div>
-
-                    {/* Progress */}
-                    {course.progress > 0 && (
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>
-                            📖 {course.completedLessons}/{course.totalLessons}{" "}
-                            bài học
-                          </span>
-                          <span className="font-bold text-primary">
-                            {course.progress}%
-                          </span>
-                        </div>
-                        <Progress
-                          value={course.progress}
-                          className="h-3 bg-primary/10"
-                        />
-                      </div>
-                    )}
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1">
-                      {course.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="text-xs bg-accent/20 text-accent-foreground"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* Last accessed (for in-progress courses) */}
-                    {course.status === "in-progress" && course.lastAccessed && (
-                      <p className="text-xs text-muted-foreground flex items-center gap-1">
-                        ⏰ Học lần cuối: {course.lastAccessed}
-                      </p>
-                    )}
-
-                    {/* Action Button */}
-                    <Button
-                      onClick={() => navigate(`/lesson/${course.id}`)}
-                      className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
-                    >
-                      <Play className="h-4 w-4 mr-2" />
-                      {course.status === "not-started"
-                        ? "🚀 Bắt đầu học!"
-                        : course.status === "completed"
-                          ? "🔄 Ôn tập lại!"
-                          : "📖 Tiếp tục học!"}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {/* Chương -> Bài học */}
+            {selectedSubject && (
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-xl font-bold text-primary">
+                    {selectedSubject.emoji} {selectedSubject.name} — Chương
+                  </h2>
+                  <Button variant="outline" onClick={() => setSelectedSubjectKey(null)} className="border-primary/30">
+                    ← Chọn môn khác
+                  </Button>
+                </div>
+                <Accordion type="multiple" className="rounded-xl border border-primary/20 bg-white">
+                  {selectedSubject.chapters.map((ch) => {
+                    const lessons = ch.lessons.filter((l) =>
+                      l.title.toLowerCase().includes(searchTerm.toLowerCase()),
+                    );
+                    return (
+                      <AccordionItem key={ch.id} value={ch.id} className="border-b border-primary/10">
+                        <AccordionTrigger className="px-4">
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="h-4 w-4 text-primary" />
+                            <span className="font-semibold">{ch.title}</span>
+                            <Badge variant="secondary" className="ml-2">
+                              {ch.lessons.length} bài học
+                            </Badge>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="divide-y">
+                            {lessons.map((l) => (
+                              <div key={l.id} className="flex items-center justify-between py-3 px-4 hover:bg-primary/5">
+                                <div>
+                                  <div className="font-medium">{l.title}</div>
+                                  <div className="text-xs text-muted-foreground flex items-center gap-3">
+                                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {l.duration || "--"}</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  {l.status && (
+                                    <Badge variant="outline" className="text-xs">
+                                      {statusLabels[l.status]}
+                                    </Badge>
+                                  )}
+                                  <Button onClick={() => navigate(`/lesson/${l.id}`)} className="bg-gradient-to-r from-primary to-accent text-white">
+                                    <Play className="h-4 w-4 mr-2" /> Học
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                            {lessons.length === 0 && (
+                              <div className="py-4 px-4 text-sm text-muted-foreground">Không có bài học khớp tìm kiếm.</div>
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
+                </Accordion>
+              </div>
+            )}
           </div>
 
           {/* Empty state */}
