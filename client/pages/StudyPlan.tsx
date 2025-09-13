@@ -65,7 +65,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "Ôn tập — Phân số và số thập phân",
+        title: "Phân số và số thập phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
@@ -74,7 +74,7 @@ const weeklyPlan = [
       {
         id: 2,
         subject: "literature",
-        title: "Ôn tập — Bài thơ Quê hương",
+        title: "Bài thơ Quê hương",
         duration: "60 phút",
         status: "completed",
         day: "Thứ 3",
@@ -83,7 +83,7 @@ const weeklyPlan = [
       {
         id: 3,
         subject: "english",
-        title: "Ôn tập — Present Simple Tense",
+        title: "Present Simple Tense",
         duration: "45 phút",
         status: "in-progress",
         day: "Thứ 4",
@@ -95,7 +95,7 @@ const weeklyPlan = [
       {
         id: 4,
         subject: "math",
-        title: "Ôn tập — Phép tính với phân số",
+        title: "Phép tính với phân số",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -111,7 +111,7 @@ const weeklyPlan = [
       {
         id: 5,
         subject: "literature",
-        title: "Ôn tập — Viết văn tả người",
+        title: "Viết văn tả người",
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -120,7 +120,7 @@ const weeklyPlan = [
       {
         id: 6,
         subject: "english",
-        title: "Ôn tập — Writing - My Family",
+        title: "Writing - My Family",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
@@ -131,7 +131,7 @@ const weeklyPlan = [
       {
         id: 7,
         subject: "math",
-        title: "Ôn tập — Biểu đồ và thống kê",
+        title: "Biểu đồ và thống kê",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -146,7 +146,7 @@ const weeklyPlan = [
       {
         id: 8,
         subject: "english",
-        title: "Ôn tập — Speaking Practice",
+        title: "Speaking Practice",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -155,7 +155,7 @@ const weeklyPlan = [
       {
         id: 9,
         subject: "math",
-        title: "Ôn tập — Hình học cơ bản",
+        title: "Hình học cơ bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
@@ -164,7 +164,7 @@ const weeklyPlan = [
       {
         id: 10,
         subject: "literature",
-        title: "Ôn tập — Đọc hiểu văn bản",
+        title: "Đọc hiểu văn bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -275,20 +275,13 @@ export default function StudyPlan() {
     ),
   );
 
-  // mark the last lesson of each week as a review session
+  // mark every Nth lesson overall as a review session (occasional)
+  const REVIEW_INTERVAL = 6;
   const reviewLessonIds = useMemo(() => {
     const s = new Set<number>();
-    const byWeek = new Map<string, Lesson[]>();
-    lessonList.forEach((l) => {
-      const wk = l.week || "";
-      if (!byWeek.has(wk)) byWeek.set(wk, []);
-      byWeek.get(wk)!.push(l);
+    lessonList.forEach((l, idx) => {
+      if ((idx + 1) % REVIEW_INTERVAL === 0) s.add(l.id);
     });
-    for (const lessons of byWeek.values()) {
-      if (lessons.length === 0) continue;
-      const last = lessons[lessons.length - 1];
-      s.add(last.id);
-    }
     return s;
   }, [lessonList]);
 
@@ -1469,7 +1462,7 @@ export default function StudyPlan() {
 
             <div className="text-sm text-muted-foreground">
               Lưu ý: ��ây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
-              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày học cho từng bài.
+              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày h���c cho từng bài.
             </div>
           </div>
 
