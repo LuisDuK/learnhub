@@ -350,19 +350,6 @@ export default function Courses() {
   const selectedGrade = curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
   const selectedSubject = selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
 
-  // Stats derived from selected grade/subject
-  const scopeSubjects = selectedSubject ? [selectedSubject] : (selectedGrade?.subjects || []);
-  const allLessons = scopeSubjects.flatMap((s) => s.chapters.flatMap((c) => c.lessons));
-  const stats = {
-    totalSubjects: scopeSubjects.length,
-    totalLessons: allLessons.length,
-    inProgress: allLessons.filter((l) => l.status === "in-progress").length,
-    completed: allLessons.filter((l) => l.status === "completed").length,
-    notStarted: allLessons.filter((l) => !l.status || l.status === "not-started").length,
-  };
-
-  const totalPrimaryLabel = selectedSubject ? "Tổng bài học" : "Tổng môn học";
-  const totalPrimaryValue = selectedSubject ? stats.totalLessons : stats.totalSubjects;
 
   // Filter courses based on search and filters
   const filteredCourses = mockCourses.filter((course) => {
@@ -451,67 +438,6 @@ export default function Courses() {
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-4 gap-4 mb-6">
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">📚</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        {totalPrimaryLabel}
-                      </p>
-                      <p className="text-2xl font-bold text-primary">
-                        {totalPrimaryValue}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">📚</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Đang học</p>
-                      <p className="text-2xl font-bold text-primary">
-                        {stats.inProgress}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">🏆</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Hoàn thành
-                      </p>
-                      <p className="text-2xl font-bold text-primary">
-                        {stats.completed}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/5 to-accent/10 border-primary/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">🎁</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Chưa bắt đầu
-                      </p>
-                      <p className="text-2xl font-bold text-primary">
-                        {stats.notStarted}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
 
           {/* Chọn Khối */}
