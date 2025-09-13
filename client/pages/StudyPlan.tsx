@@ -360,7 +360,9 @@ export default function StudyPlan() {
   const [selectedQuizAnswer, setSelectedQuizAnswer] = useState<number | null>(
     null,
   );
-  const [quizFeedback, setQuizFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [quizFeedback, setQuizFeedback] = useState<
+    "correct" | "incorrect" | null
+  >(null);
 
   // mock quiz bank per lesson id
   const quizBank: Record<
@@ -413,7 +415,10 @@ export default function StudyPlan() {
     const dur = v.duration || 0;
     setVideoDuration(dur);
     // if no markers provided by lesson, generate markers at 25%, 50%, 75% for sufficiently long videos
-    if ((currentLesson && !(currentLesson as any).quizMarkers) || videoMarkers.length === 0) {
+    if (
+      (currentLesson && !(currentLesson as any).quizMarkers) ||
+      videoMarkers.length === 0
+    ) {
       if (dur > 30) {
         const generated = [0.25, 0.5, 0.75].map((p) => Math.floor(dur * p));
         setVideoMarkers(generated);
@@ -465,7 +470,7 @@ export default function StudyPlan() {
       // unlock marker
       const mark = videoMarkers[currentMarkerIndex];
       setMaxAllowedTime(Math.max(maxAllowedTime, mark + 1));
-      setQuizFeedback('correct');
+      setQuizFeedback("correct");
       // keep dialog open until user explicitly continues
     } else {
       // provide suggestion: let student replay last 10s and allow retry
@@ -474,7 +479,7 @@ export default function StudyPlan() {
         videoRef.current.currentTime = backTo;
         setVideoCurrentTime(backTo);
       }
-      setQuizFeedback('incorrect');
+      setQuizFeedback("incorrect");
       // keep dialog open for user to review and try again
     }
   };
@@ -501,7 +506,12 @@ export default function StudyPlan() {
   // helper: remove common emoji characters for cleaner titles
   const stripEmojis = (s?: string) => {
     if (!s) return "";
-    return s.replace(/([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u26FF\u2700-\u27BF])/g, "").trim();
+    return s
+      .replace(
+        /([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u26FF\u2700-\u27BF])/g,
+        "",
+      )
+      .trim();
   };
 
   // End of lesson player block
@@ -760,9 +770,7 @@ export default function StudyPlan() {
         </div>
 
         {/* Goal Selection & Progress */}
-        <div className="grid gap-6 lg:grid-cols-2">
-
-        </div>
+        <div className="grid gap-6 lg:grid-cols-2"></div>
 
         {/* Timeline */}
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
@@ -807,7 +815,9 @@ export default function StudyPlan() {
                       const SubjectIcon = subject.icon;
                       const StatusIcon = status.icon;
                       const isReview = reviewLessonIds.has(lesson.id);
-                      const isAvailable = lesson.status === 'in-progress' || lesson.status === 'completed';
+                      const isAvailable =
+                        lesson.status === "in-progress" ||
+                        lesson.status === "completed";
                       return (
                         <div
                           key={lesson.id}
@@ -816,17 +826,25 @@ export default function StudyPlan() {
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-2xl flex items-center justify-center`}>
-                                  <div className={`h-6 w-6 rounded-md ${subject.color}`} />
+                                <div
+                                  className={`p-2 rounded-2xl flex items-center justify-center`}
+                                >
+                                  <div
+                                    className={`h-6 w-6 rounded-md ${subject.color}`}
+                                  />
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-lg md:text-xl">
                                     {stripEmojis(lesson.title)}
                                   </h4>
                                   <div className="flex items-center gap-3 text-sm md:text-base text-muted-foreground mt-1">
-                                    <span className="font-medium">{subject.name}</span>
+                                    <span className="font-medium">
+                                      {subject.name}
+                                    </span>
                                     <span>{lesson.day}</span>
-                                    <span className="flex items-center gap-2">⏰ {lesson.time}</span>
+                                    <span className="flex items-center gap-2">
+                                      ⏰ {lesson.time}
+                                    </span>
                                     <span>{lesson.duration}</span>
                                   </div>
                                 </div>
@@ -867,14 +885,18 @@ export default function StudyPlan() {
                               </Button>
                             )}
                             {isReview && (
-                              <span className="ml-3 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ôn tập</span>
+                              <span className="ml-3 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
+                                Ôn tập
+                              </span>
                             )}
                             {lesson.pdfUrl && (
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 className="ml-2 underline text-sm"
-                                onClick={() => navigate(`/lesson/${lesson.id}/exercise/1`)}
+                                onClick={() =>
+                                  navigate(`/lesson/${lesson.id}/exercise/1`)
+                                }
                               >
                                 Làm bài tập
                               </Button>
@@ -1021,7 +1043,7 @@ export default function StudyPlan() {
                       disabled={!quizFeedback}
                       onClick={() => {
                         // only when user explicitly continues do we close the dialog
-                        if (quizFeedback === 'correct') {
+                        if (quizFeedback === "correct") {
                           setShowQuizDialog(false);
                           setCurrentMarkerIndex(null);
                           setSelectedQuizAnswer(null);
@@ -1037,11 +1059,16 @@ export default function StudyPlan() {
                       Tiếp tục
                     </Button>
                   </div>
-                  {quizFeedback === 'correct' && (
-                    <div className="text-sm text-green-600">Đáp án đúng! Nhấn "Tiếp tục" để tiếp tục phát video.</div>
+                  {quizFeedback === "correct" && (
+                    <div className="text-sm text-green-600">
+                      Đáp án đúng! Nhấn "Tiếp tục" để tiếp tục phát video.
+                    </div>
                   )}
-                  {quizFeedback === 'incorrect' && (
-                    <div className="text-sm text-red-600">Chưa đúng. Hệ thống đã tua lại 10s để ôn lại. Bạn có thể thử lại.</div>
+                  {quizFeedback === "incorrect" && (
+                    <div className="text-sm text-red-600">
+                      Chưa đúng. Hệ thống đã tua lại 10s để ôn lại. Bạn có thể
+                      thử lại.
+                    </div>
                   )}
                 </div>
               </div>
@@ -1462,7 +1489,8 @@ export default function StudyPlan() {
 
             <div className="text-sm text-muted-foreground">
               Lưu ý: ��ây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
-              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày h���c cho từng bài.
+              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày h���c cho từng
+              bài.
             </div>
           </div>
 

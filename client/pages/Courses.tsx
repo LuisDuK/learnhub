@@ -22,7 +22,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Play,
   Clock,
@@ -236,18 +241,37 @@ const categoryLabels = {
 };
 
 // Curriculum structure: Khối -> Môn học -> Chương -> Bài học
-type CurriculumLesson = { id: string; title: string; duration?: string; status?: CourseStatus };
-type CurriculumChapter = { id: string; title: string; lessons: CurriculumLesson[] };
-type CurriculumSubject = { key: CourseCategory; name: string; emoji: string; chapters: CurriculumChapter[] };
-type CurriculumGrade = { id: string; name: string; subjects: CurriculumSubject[] };
+type CurriculumLesson = {
+  id: string;
+  title: string;
+  duration?: string;
+  status?: CourseStatus;
+};
+type CurriculumChapter = {
+  id: string;
+  title: string;
+  lessons: CurriculumLesson[];
+};
+type CurriculumSubject = {
+  key: CourseCategory;
+  name: string;
+  emoji: string;
+  chapters: CurriculumChapter[];
+};
+type CurriculumGrade = {
+  id: string;
+  name: string;
+  subjects: CurriculumSubject[];
+};
 
 function buildCurriculum(): CurriculumGrade[] {
   const grades: CurriculumGrade[] = [];
-  const subjects: Array<{ key: CourseCategory; name: string; emoji: string }> = [
-    { key: "math", name: "Toán học", emoji: "🔢" },
-    { key: "literature", name: "Ngữ văn", emoji: "📚" },
-    { key: "english", name: "Tiếng Anh", emoji: "🌍" },
-  ];
+  const subjects: Array<{ key: CourseCategory; name: string; emoji: string }> =
+    [
+      { key: "math", name: "Toán học", emoji: "🔢" },
+      { key: "literature", name: "Ngữ văn", emoji: "📚" },
+      { key: "english", name: "Tiếng Anh", emoji: "🌍" },
+    ];
   for (let g = 1; g <= 9; g++) {
     const gradeId = String(g);
     const gradeName = `Khối ${g}`;
@@ -271,7 +295,8 @@ function buildCurriculum(): CurriculumGrade[] {
                     ? `Bài đọc: Chủ điểm gia đình (Khối ${g})`
                     : `Present Simple (Grade ${g})`,
               duration: "20p",
-              status: g === 4 && s.key === "math" ? "in-progress" : "not-started",
+              status:
+                g === 4 && s.key === "math" ? "in-progress" : "not-started",
             },
             {
               id: `${g}-${s.key}-2`,
@@ -345,11 +370,15 @@ export default function Courses() {
   const [sortBy, setSortBy] = useState<string>("recent");
 
   // Hierarchical selection state
-  const [selectedGradeId, setSelectedGradeId] = useState<string>(curriculum[0]?.id || "1");
-  const [selectedSubjectKey, setSelectedSubjectKey] = useState<CourseCategory | null>(null);
-  const selectedGrade = curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
-  const selectedSubject = selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
-
+  const [selectedGradeId, setSelectedGradeId] = useState<string>(
+    curriculum[0]?.id || "1",
+  );
+  const [selectedSubjectKey, setSelectedSubjectKey] =
+    useState<CourseCategory | null>(null);
+  const selectedGrade =
+    curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
+  const selectedSubject =
+    selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
 
   // Filter courses based on search and filters
   const filteredCourses = mockCourses.filter((course) => {
@@ -437,7 +466,6 @@ export default function Courses() {
                 </Select>
               </div>
             </div>
-
           </div>
 
           {/* Chọn Khối */}
@@ -451,7 +479,11 @@ export default function Courses() {
                     setSelectedGradeId(g.id);
                     setSelectedSubjectKey(null);
                   }}
-                  className={g.id === selectedGradeId ? "bg-primary text-white" : "border-primary/30"}
+                  className={
+                    g.id === selectedGradeId
+                      ? "bg-primary text-white"
+                      : "border-primary/30"
+                  }
                 >
                   {g.name}
                 </Button>
@@ -473,10 +505,18 @@ export default function Courses() {
                       <div className="flex-1">
                         <div className="font-semibold">{s.name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {s.chapters.reduce((sum, c) => sum + c.lessons.length, 0)} bài học
+                          {s.chapters.reduce(
+                            (sum, c) => sum + c.lessons.length,
+                            0,
+                          )}{" "}
+                          bài học
                         </div>
                       </div>
-                      <Badge variant={selectedSubjectKey === s.key ? "default" : "secondary"}>
+                      <Badge
+                        variant={
+                          selectedSubjectKey === s.key ? "default" : "secondary"
+                        }
+                      >
                         Chọn
                       </Badge>
                     </CardContent>
@@ -492,17 +532,28 @@ export default function Courses() {
                   <h2 className="text-xl font-bold text-primary">
                     {selectedSubject.emoji} {selectedSubject.name} — Chương
                   </h2>
-                  <Button variant="outline" onClick={() => setSelectedSubjectKey(null)} className="border-primary/30">
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedSubjectKey(null)}
+                    className="border-primary/30"
+                  >
                     ← Chọn môn khác
                   </Button>
                 </div>
-                <Accordion type="multiple" className="rounded-xl border border-primary/20 bg-white">
+                <Accordion
+                  type="multiple"
+                  className="rounded-xl border border-primary/20 bg-white"
+                >
                   {selectedSubject.chapters.map((ch) => {
                     const lessons = ch.lessons.filter((l) =>
                       l.title.toLowerCase().includes(searchTerm.toLowerCase()),
                     );
                     return (
-                      <AccordionItem key={ch.id} value={ch.id} className="border-b border-primary/10">
+                      <AccordionItem
+                        key={ch.id}
+                        value={ch.id}
+                        className="border-b border-primary/10"
+                      >
                         <AccordionTrigger className="px-4">
                           <div className="flex items-center gap-2">
                             <BookOpen className="h-4 w-4 text-primary" />
@@ -515,27 +566,41 @@ export default function Courses() {
                         <AccordionContent>
                           <div className="divide-y">
                             {lessons.map((l) => (
-                              <div key={l.id} className="flex items-center justify-between py-3 px-4 hover:bg-primary/5">
+                              <div
+                                key={l.id}
+                                className="flex items-center justify-between py-3 px-4 hover:bg-primary/5"
+                              >
                                 <div>
                                   <div className="font-medium">{l.title}</div>
                                   <div className="text-xs text-muted-foreground flex items-center gap-3">
-                                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {l.duration || "--"}</span>
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="h-3 w-3" />{" "}
+                                      {l.duration || "--"}
+                                    </span>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   {l.status && (
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
                                       {statusLabels[l.status]}
                                     </Badge>
                                   )}
-                                  <Button onClick={() => navigate(`/lesson/${l.id}`)} className="bg-gradient-to-r from-primary to-accent text-white">
+                                  <Button
+                                    onClick={() => navigate(`/lesson/${l.id}`)}
+                                    className="bg-gradient-to-r from-primary to-accent text-white"
+                                  >
                                     <Play className="h-4 w-4 mr-2" /> Học
                                   </Button>
                                 </div>
                               </div>
                             ))}
                             {lessons.length === 0 && (
-                              <div className="py-4 px-4 text-sm text-muted-foreground">Không có bài học khớp tìm kiếm.</div>
+                              <div className="py-4 px-4 text-sm text-muted-foreground">
+                                Không có bài học khớp tìm kiếm.
+                              </div>
                             )}
                           </div>
                         </AccordionContent>
@@ -546,7 +611,6 @@ export default function Courses() {
               </div>
             )}
           </div>
-
         </div>
 
         {/* Filter Sidebar */}
@@ -644,8 +708,8 @@ export default function Courses() {
               </p>
               <p className="text-xs text-muted-foreground">
                 Bé đã học{" "}
-                {mockCourses.filter((c) => c.status === "completed").length}{" "}
-                môn học rồi đấy! 🎉
+                {mockCourses.filter((c) => c.status === "completed").length} môn
+                học rồi đấy! 🎉
               </p>
             </div>
           </div>
