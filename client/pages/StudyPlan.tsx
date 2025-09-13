@@ -24,6 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import StudyPlanLayout from "@/components/StudyPlanLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,13 +46,15 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
+import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
-  { id: "vocabulary", label: "📖 Mở rộng từ vựng", duration: "6 tuần" },
+  { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
 ];
 
 const weeklyPlan = [
@@ -62,7 +65,7 @@ const weeklyPlan = [
       {
         id: 1,
         subject: "math",
-        title: "🔢 Phân số và số thập phân",
+        title: "Phân số và số thập phân",
         duration: "45 phút",
         status: "completed",
         day: "Thứ 2",
@@ -71,7 +74,7 @@ const weeklyPlan = [
       {
         id: 2,
         subject: "literature",
-        title: "📜 Bài thơ Quê hương",
+        title: "Bài thơ Quê hương",
         duration: "60 phút",
         status: "completed",
         day: "Thứ 3",
@@ -80,7 +83,7 @@ const weeklyPlan = [
       {
         id: 3,
         subject: "english",
-        title: "🌍 Present Simple Tense",
+        title: "Present Simple Tense",
         duration: "45 phút",
         status: "in-progress",
         day: "Thứ 4",
@@ -92,7 +95,7 @@ const weeklyPlan = [
       {
         id: 4,
         subject: "math",
-        title: "➕ Phép tính với phân số",
+        title: "Phép tính với phân số",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -108,7 +111,7 @@ const weeklyPlan = [
       {
         id: 5,
         subject: "literature",
-        title: "��️ Viết văn tả người",
+        title: "Viết văn tả người",
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -117,7 +120,7 @@ const weeklyPlan = [
       {
         id: 6,
         subject: "english",
-        title: "📝 Writing - My Family",
+        title: "Writing - My Family",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
@@ -128,7 +131,7 @@ const weeklyPlan = [
       {
         id: 7,
         subject: "math",
-        title: "📊 Biểu đồ và thống kê",
+        title: "Biểu đồ và thống kê",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -143,7 +146,7 @@ const weeklyPlan = [
       {
         id: 8,
         subject: "english",
-        title: "🗣️ Speaking Practice",
+        title: "Speaking Practice",
         duration: "45 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -152,7 +155,7 @@ const weeklyPlan = [
       {
         id: 9,
         subject: "math",
-        title: "🔺 Hình học cơ bản",
+        title: "Hình học cơ bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 4",
@@ -161,7 +164,7 @@ const weeklyPlan = [
       {
         id: 10,
         subject: "literature",
-        title: "📖 Đọc hiểu văn bản",
+        title: "Đọc hiểu văn bản",
         duration: "60 phút",
         status: "not-started",
         day: "Thứ 6",
@@ -238,6 +241,7 @@ type PlanVersion = {
 };
 
 export default function StudyPlan() {
+  const navigate = useNavigate();
   const [selectedGoal, setSelectedGoal] = useState("midterm");
   const [showGoalDialog, setShowGoalDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -270,6 +274,16 @@ export default function StudyPlan() {
       week.lessons.map((lesson) => ({ ...lesson, week: week.week })),
     ),
   );
+
+  // mark every Nth lesson overall as a review session (occasional)
+  const REVIEW_INTERVAL = 6;
+  const reviewLessonIds = useMemo(() => {
+    const s = new Set<number>();
+    lessonList.forEach((l, idx) => {
+      if ((idx + 1) % REVIEW_INTERVAL === 0) s.add(l.id);
+    });
+    return s;
+  }, [lessonList]);
 
   const [showVideoDialog, setShowVideoDialog] = useState(false);
   const [videoSrc, setVideoSrc] = useState("");
@@ -318,12 +332,7 @@ export default function StudyPlan() {
 
   const [proposedPlan, setProposedPlan] = useState<PlanVersion | null>(null);
 
-  useEffect(() => {
-    const hasSetGoal = localStorage.getItem("studyGoalSet");
-    if (!hasSetGoal) {
-      setShowGoalDialog(true);
-    }
-  }, []);
+  useEffect(() => {}, []);
 
   const openVideo = (url?: string) => {
     if (!url) return;
@@ -351,6 +360,9 @@ export default function StudyPlan() {
   const [selectedQuizAnswer, setSelectedQuizAnswer] = useState<number | null>(
     null,
   );
+  const [quizFeedback, setQuizFeedback] = useState<
+    "correct" | "incorrect" | null
+  >(null);
 
   // mock quiz bank per lesson id
   const quizBank: Record<
@@ -369,18 +381,17 @@ export default function StudyPlan() {
 
   const openLessonPlayer = (lesson: Lesson) => {
     setCurrentLesson(lesson);
-    // derive markers: use lesson.quizMarkers if present, else sample markers based on duration
-    const defaultMarkers = [5, 12];
-    const markers = (lesson as any).quizMarkers || defaultMarkers;
+    // derive markers: use lesson.quizMarkers if present, else leave empty and generate after metadata loads
+    const markers: number[] = (lesson as any).quizMarkers || [];
     setVideoMarkers(markers);
     setMaxAllowedTime(0);
     setVideoCurrentTime(0);
     setVideoDuration(0);
     setSelectedQuizAnswer(null);
     setCurrentMarkerIndex(null);
-    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to sample mp4
+    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to a longer sample mp4
     const sampleMp4 =
-      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     const src =
       typeof (lesson as any).videoUrl === "string" &&
       (lesson as any).videoUrl.endsWith(".mp4")
@@ -401,7 +412,22 @@ export default function StudyPlan() {
   const onVideoLoaded = () => {
     const v = videoRef.current;
     if (!v) return;
-    setVideoDuration(v.duration || 0);
+    const dur = v.duration || 0;
+    setVideoDuration(dur);
+    // if no markers provided by lesson, generate markers at 25%, 50%, 75% for sufficiently long videos
+    if (
+      (currentLesson && !(currentLesson as any).quizMarkers) ||
+      videoMarkers.length === 0
+    ) {
+      if (dur > 30) {
+        const generated = [0.25, 0.5, 0.75].map((p) => Math.floor(dur * p));
+        setVideoMarkers(generated);
+      } else if (dur > 5) {
+        // short video: split into two markers
+        const generated = [Math.floor(dur / 3), Math.floor((2 * dur) / 3)];
+        setVideoMarkers(generated);
+      }
+    }
   };
 
   const onVideoTimeUpdate = () => {
@@ -444,22 +470,17 @@ export default function StudyPlan() {
       // unlock marker
       const mark = videoMarkers[currentMarkerIndex];
       setMaxAllowedTime(Math.max(maxAllowedTime, mark + 1));
-      setShowQuizDialog(false);
-      setSelectedQuizAnswer(null);
-      setCurrentMarkerIndex(null);
-      // continue video
-      setTimeout(() => videoRef.current?.play(), 200);
+      setQuizFeedback("correct");
+      // keep dialog open until user explicitly continues
     } else {
-      // provide suggestion: let student replay last 10s
+      // provide suggestion: let student replay last 10s and allow retry
       const backTo = Math.max(0, (videoMarkers[currentMarkerIndex] || 0) - 10);
       if (videoRef.current) {
         videoRef.current.currentTime = backTo;
         setVideoCurrentTime(backTo);
       }
-      setShowQuizDialog(false);
-      setSelectedQuizAnswer(null);
-      setCurrentMarkerIndex(null);
-      setTimeout(() => videoRef.current?.play(), 200);
+      setQuizFeedback("incorrect");
+      // keep dialog open for user to review and try again
     }
   };
 
@@ -480,6 +501,17 @@ export default function StudyPlan() {
     setShowVideoDialog(false);
     setCurrentLesson(null);
     setVideoSrc("");
+  };
+
+  // helper: remove common emoji characters for cleaner titles
+  const stripEmojis = (s?: string) => {
+    if (!s) return "";
+    return s
+      .replace(
+        /([\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u26FF\u2700-\u27BF])/g,
+        "",
+      )
+      .trim();
   };
 
   // End of lesson player block
@@ -636,7 +668,7 @@ export default function StudyPlan() {
         for (let i = 0; i < count; i++) {
           questions.push({
             id: Date.now() + Math.random() * 100000 + i,
-            text: `${lesson.title} — Ôn tập: ${topic || "Nội dung"} — Câu ${i + 1}`,
+            text: `${lesson.title} — Ôn tập: ${topic || "N���i dung"} — Câu ${i + 1}`,
             difficulty,
           });
         }
@@ -693,12 +725,12 @@ export default function StudyPlan() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
               Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
-            <p className="text-gray-600 text-lg mt-1">
-              Kế hoạch học tập được cá nhân hóa cho bé
+            <p className="text-gray-600 text-base md:text-lg mt-2">
+              Kế hoạch học t���p được cá nhân hóa cho bé
             </p>
           </div>
           <div className="flex gap-3">
@@ -738,96 +770,16 @@ export default function StudyPlan() {
         </div>
 
         {/* Goal Selection & Progress */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-primary" />
-                Mục tiêu học tập
-              </CardTitle>
-              <CardDescription>
-                Chọn mục tiêu để xem lộ trình phù hợp
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-3 items-center">
-                <Select
-                  value={selectedGoal}
-                  onValueChange={(v) => {
-                    setSelectedGoal(v);
-                    generateStudyPlan(v);
-                  }}
-                >
-                  <SelectTrigger className="w-full border-primary/20 rounded-xl">
-                    <SelectValue placeholder="Chọn mục tiêu học tập" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {studyGoals.map((goal) => (
-                      <SelectItem key={goal.id} value={goal.id}>
-                        <div className="flex items-center justify-between w-full">
-                          <span>{goal.label}</span>
-                          <Badge variant="outline" className="ml-2">
-                            {goal.duration}
-                          </Badge>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  onClick={() => generateStudyPlan(selectedGoal)}
-                  size="sm"
-                  className="ml-2"
-                >
-                  Tạo lộ trình tự động
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-accent" />
-                📊 Tiến độ tổng thể
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
-                  {Math.round(
-                    (lessonList.filter((l) => l.status === "completed").length /
-                      (lessonList.length || 1)) *
-                      100,
-                  )}
-                  %
-                </div>
-                <p className="text-sm text-muted-foreground">Hoàn thành</p>
-              </div>
-              <Progress
-                value={Math.round(
-                  (lessonList.filter((l) => l.status === "completed").length /
-                    (lessonList.length || 1)) *
-                    100,
-                )}
-                className="h-3"
-              />
-              <div className="text-sm text-muted-foreground text-center">
-                {lessonList.filter((l) => l.status === "completed").length}/
-                {lessonList.length} bài học đã hoàn thành
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <div className="grid gap-6 lg:grid-cols-2"></div>
 
         {/* Timeline */}
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-secondary" />
-              📝 Lịch trình học tập
+            <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl font-bold">
+              <Calendar className="h-6 w-6 text-secondary" />
+              <span>📝 Lịch trình học tập</span>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-base md:text-lg text-muted-foreground">
               Timeline chi tiết các bài học theo tuần
             </CardDescription>
           </CardHeader>
@@ -844,7 +796,7 @@ export default function StudyPlan() {
                       {weekIndex + 1}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-primary">
+                      <h3 className="text-xl md:text-2xl font-semibold text-primary">
                         {weekObj.week}
                       </h3>
                     </div>
@@ -862,45 +814,48 @@ export default function StudyPlan() {
                         ];
                       const SubjectIcon = subject.icon;
                       const StatusIcon = status.icon;
+                      const isReview = reviewLessonIds.has(lesson.id);
+                      const isAvailable =
+                        lesson.status === "in-progress" ||
+                        lesson.status === "completed";
                       return (
                         <div
                           key={lesson.id}
-                          className="relative flex items-start gap-4 p-4 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
+                          className="relative flex items-start gap-4 p-4 rounded-2xl border border-gray-200 bg-white hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
                         >
-                          <div className="absolute -left-9 top-6 flex h-4 w-4 items-center justify-center">
-                            <div
-                              className={`h-3 w-3 rounded-full ${subject.color}`}
-                            />
-                          </div>
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center gap-3">
                                 <div
-                                  className={`p-2 rounded-lg ${subject.bgColor}`}
+                                  className={`p-2 rounded-2xl flex items-center justify-center`}
                                 >
-                                  <SubjectIcon
-                                    className={`h-5 w-5 ${subject.textColor}`}
+                                  <div
+                                    className={`h-6 w-6 rounded-md ${subject.color}`}
                                   />
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-lg">
-                                    {lesson.title}
+                                  <h4 className="font-semibold text-lg md:text-xl">
+                                    {stripEmojis(lesson.title)}
                                   </h4>
-                                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                                    <span>📚 {subject.name}</span>
-                                    <span>📅 {lesson.day}</span>
-                                    <span>⏰ {lesson.time}</span>
-                                    <span>⏱️ {lesson.duration}</span>
+                                  <div className="flex items-center gap-3 text-sm md:text-base text-muted-foreground mt-1">
+                                    <span className="font-medium">
+                                      {subject.name}
+                                    </span>
+                                    <span>{lesson.day}</span>
+                                    <span className="flex items-center gap-2">
+                                      ⏰ {lesson.time}
+                                    </span>
+                                    <span>{lesson.duration}</span>
                                   </div>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
                                 <Badge
                                   variant="outline"
-                                  className={`${status.bgColor} border-0`}
+                                  className={`${status.bgColor} border-0 px-3 py-1 text-sm rounded-full`}
                                 >
                                   <StatusIcon
-                                    className={`h-3 w-3 mr-1 ${status.color}`}
+                                    className={`h-4 w-4 mr-2 ${status.color}`}
                                   />
                                   {status.label}
                                 </Badge>
@@ -913,7 +868,7 @@ export default function StudyPlan() {
                                 className="bg-gradient-to-r from-primary to-accent text-white rounded-lg"
                                 onClick={() => openLessonPlayer(lesson)}
                               >
-                                <PlayCircle className="h-4 w-4 mr-1" />
+                                <PlayCircle className="h-5 w-5 mr-2" />
                                 Tiếp tục học
                               </Button>
                             )}
@@ -921,21 +876,29 @@ export default function StudyPlan() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="border-primary text-primary hover:bg-primary hover:text-white rounded-lg"
-                                onClick={() => openLessonPlayer(lesson)}
+                                disabled
+                                className="border-primary text-primary opacity-60 cursor-not-allowed rounded-lg"
+                                title="Chưa tới - không thể bắt đầu"
                               >
                                 <Circle className="h-4 w-4 mr-1" />
-                                Bắt đầu học
+                                Chưa tới
                               </Button>
+                            )}
+                            {isReview && (
+                              <span className="ml-3 inline-flex items-center px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
+                                Ôn tập
+                              </span>
                             )}
                             {lesson.pdfUrl && (
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 className="ml-2 underline text-sm"
-                                onClick={() => openPdf(lesson.pdfUrl)}
+                                onClick={() =>
+                                  navigate(`/lesson/${lesson.id}/exercise/1`)
+                                }
                               >
-                                📄 Làm bài tập (PDF)
+                                Làm bài tập
                               </Button>
                             )}
                           </div>
@@ -965,7 +928,7 @@ export default function StudyPlan() {
               <video
                 ref={videoRef}
                 src={videoSrc}
-                className="w-full h-64 bg-black"
+                className="w-full h-[480px] md:h-[520px] lg:h-[560px] bg-black"
                 controls
                 onLoadedMetadata={onVideoLoaded}
                 onTimeUpdate={onVideoTimeUpdate}
@@ -1057,23 +1020,56 @@ export default function StudyPlan() {
                   </div>
                 )}
 
-                <div className="flex gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowQuizDialog(false);
-                      setCurrentMarkerIndex(null);
-                      if (videoRef.current) videoRef.current.play();
-                    }}
-                  >
-                    Bỏ qua
-                  </Button>
-                  <Button
-                    className="bg-gradient-to-r from-primary to-accent text-white"
-                    onClick={submitQuizAnswer}
-                  >
-                    Nộp
-                  </Button>
+                <div className="flex flex-col gap-3 pt-4">
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowQuizDialog(false);
+                        setCurrentMarkerIndex(null);
+                        if (videoRef.current) videoRef.current.play();
+                      }}
+                    >
+                      Bỏ qua
+                    </Button>
+                    <Button
+                      className="bg-gradient-to-r from-primary to-accent text-white"
+                      onClick={submitQuizAnswer}
+                    >
+                      Nộp
+                    </Button>
+                    <Button
+                      size="sm"
+                      disabled={!quizFeedback}
+                      onClick={() => {
+                        // only when user explicitly continues do we close the dialog
+                        if (quizFeedback === "correct") {
+                          setShowQuizDialog(false);
+                          setCurrentMarkerIndex(null);
+                          setSelectedQuizAnswer(null);
+                          setQuizFeedback(null);
+                          setTimeout(() => videoRef.current?.play(), 200);
+                        } else {
+                          // for incorrect, clear selection so user can try again
+                          setSelectedQuizAnswer(null);
+                          setQuizFeedback(null);
+                        }
+                      }}
+                    >
+                      Tiếp tục
+                    </Button>
+                  </div>
+                  {quizFeedback === "correct" && (
+                    <div className="text-sm text-green-600">
+                      Đáp án đúng! Nhấn "Tiếp tục" để tiếp tục phát video.
+                    </div>
+                  )}
+                  {quizFeedback === "incorrect" && (
+                    <div className="text-sm text-red-600">
+                      Chưa đúng. Hệ thống đã tua lại 10s để ôn lại. Bạn có thể
+                      thử lại.
+                    </div>
+                  )}
                 </div>
               </div>
             </DialogContent>
@@ -1113,7 +1109,7 @@ export default function StudyPlan() {
               🎯 Thêm mục tiêu học tập
             </DialogTitle>
             <DialogDescription>
-              Nhập thông tin mục tiêu h���c tập để tạo lộ trình phù hợp
+              Nhập thông tin mục tiêu h����c tập để tạo lộ trình phù hợp
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -1145,7 +1141,7 @@ export default function StudyPlan() {
                   <SelectItem value="2-weeks">2 tuần</SelectItem>
                   <SelectItem value="3-weeks">3 tuần</SelectItem>
                   <SelectItem value="1-month">1 tháng</SelectItem>
-                  <SelectItem value="2-months">2 tháng</SelectItem>
+                  <SelectItem value="2-months">2 th��ng</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1174,7 +1170,7 @@ export default function StudyPlan() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="high">🔴 Cao</SelectItem>
-                  <SelectItem value="medium">🟠 Trung bình</SelectItem>
+                  <SelectItem value="medium">�� Trung bình</SelectItem>
                   <SelectItem value="low">🟢 Thấp</SelectItem>
                 </SelectContent>
               </Select>
@@ -1197,7 +1193,7 @@ export default function StudyPlan() {
               className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
             >
               <Save className="h-4 w-4 mr-2" />
-              Lưu mục tiêu
+              Lưu m���c tiêu
             </Button>
           </div>
         </DialogContent>
@@ -1363,7 +1359,7 @@ export default function StudyPlan() {
               🧪 Bài kiểm tra đầu vào
             </DialogTitle>
             <DialogDescription>
-              Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hiện tại
+              Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hi���n tại
             </DialogDescription>
           </DialogHeader>
 
@@ -1492,8 +1488,9 @@ export default function StudyPlan() {
             ))}
 
             <div className="text-sm text-muted-foreground">
-              Lưu ý: Đây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
-              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày học cho từng bài.
+              Lưu ý: ��ây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
+              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày h���c cho từng
+              bài.
             </div>
           </div>
 
@@ -1525,7 +1522,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của bạn
+              Quản lý danh sách bài học trong lộ trình của b�����n
             </DialogDescription>
           </DialogHeader>
 
@@ -1699,7 +1696,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              📝 Tạo bài ôn cá nhân hóa
+              📝 Tạo bài ôn cá nhân h��a
             </DialogTitle>
             <DialogDescription>
               Tạo nhanh một bài ôn theo yêu cầu của học sinh

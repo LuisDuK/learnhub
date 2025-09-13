@@ -23,6 +23,12 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Play,
   Clock,
   BookOpen,
@@ -146,7 +152,7 @@ const mockCourses: Course[] = [
     id: 5,
     title: "🌍 Tiếng Anh cơ bản",
     instructor: "Miss Sarah vui vẻ",
-    description: "Học tiếng Anh qua bài hát, trò chơi và câu chuyện thú vị",
+    description: "Học ti��ng Anh qua bài hát, trò chơi và câu chuyện thú vị",
     category: "english",
     status: "in-progress",
     progress: 45,
@@ -234,6 +240,120 @@ const categoryLabels = {
   english: "🌍 Tiếng Anh",
 };
 
+// Curriculum structure: Khối -> Môn học -> Chương -> Bài học
+type CurriculumLesson = {
+  id: string;
+  title: string;
+  duration?: string;
+  status?: CourseStatus;
+};
+type CurriculumChapter = {
+  id: string;
+  title: string;
+  lessons: CurriculumLesson[];
+};
+type CurriculumSubject = {
+  key: CourseCategory;
+  name: string;
+  emoji: string;
+  chapters: CurriculumChapter[];
+};
+type CurriculumGrade = {
+  id: string;
+  name: string;
+  subjects: CurriculumSubject[];
+};
+
+function buildCurriculum(): CurriculumGrade[] {
+  const grades: CurriculumGrade[] = [];
+  const subjects: Array<{ key: CourseCategory; name: string; emoji: string }> =
+    [
+      { key: "math", name: "Toán học", emoji: "🔢" },
+      { key: "literature", name: "Ngữ văn", emoji: "📚" },
+      { key: "english", name: "Tiếng Anh", emoji: "🌍" },
+    ];
+  for (let g = 1; g <= 9; g++) {
+    const gradeId = String(g);
+    const gradeName = `Khối ${g}`;
+    const subjectsForGrade: CurriculumSubject[] = subjects.map((s) => {
+      const chapters: CurriculumChapter[] = [
+        {
+          id: `${s.key}${g}-c1`,
+          title:
+            s.key === "math"
+              ? `Số học cơ bản Khối ${g}`
+              : s.key === "literature"
+                ? `Đọc hiểu Khối ${g}`
+                : `Grammar Khối ${g}`,
+          lessons: [
+            {
+              id: `${g}-${s.key}-1`,
+              title:
+                s.key === "math"
+                  ? `Phép cộng, trừ Khối ${g}`
+                  : s.key === "literature"
+                    ? `Bài đọc: Chủ điểm gia đình (Khối ${g})`
+                    : `Present Simple (Grade ${g})`,
+              duration: "20p",
+              status:
+                g === 4 && s.key === "math" ? "in-progress" : "not-started",
+            },
+            {
+              id: `${g}-${s.key}-2`,
+              title:
+                s.key === "math"
+                  ? `Phép nhân, chia Khối ${g}`
+                  : s.key === "literature"
+                    ? `Tập làm văn: Tả người (Khối ${g})`
+                    : `There is/There are (Grade ${g})`,
+              duration: "22p",
+              status: "not-started",
+            },
+          ],
+        },
+        {
+          id: `${s.key}${g}-c2`,
+          title:
+            s.key === "math"
+              ? `Hình học Khối ${g}`
+              : s.key === "literature"
+                ? `Từ vựng & ngữ pháp tiếng Việt Khối ${g}`
+                : `Vocabulary Khối ${g}`,
+          lessons: [
+            {
+              id: `${g}-${s.key}-3`,
+              title:
+                s.key === "math"
+                  ? `Đoạn thẳng, góc cơ bản (Khối ${g})`
+                  : s.key === "literature"
+                    ? `Luyện từ và câu: Từ đồng nghĩa (Khối ${g})`
+                    : `My Family (Grade ${g})`,
+              duration: "18p",
+              status: g === 4 && s.key === "math" ? "completed" : "not-started",
+            },
+            {
+              id: `${g}-${s.key}-4`,
+              title:
+                s.key === "math"
+                  ? `Chu vi, diện tích cơ bản (Khối ${g})`
+                  : s.key === "literature"
+                    ? `Tập đọc: Câu chuyện thiếu nhi (Khối ${g})`
+                    : `Daily Conversations (Grade ${g})`,
+              duration: "24p",
+              status: "not-started",
+            },
+          ],
+        },
+      ];
+      return { key: s.key, name: s.name, emoji: s.emoji, chapters };
+    });
+    grades.push({ id: gradeId, name: gradeName, subjects: subjectsForGrade });
+  }
+  return grades;
+}
+
+const curriculum: CurriculumGrade[] = buildCurriculum();
+
 const statusColors = {
   "not-started": "secondary",
   "in-progress": "default",
@@ -248,6 +368,17 @@ export default function Courses() {
   >([]);
   const [selectedStatuses, setSelectedStatuses] = useState<CourseStatus[]>([]);
   const [sortBy, setSortBy] = useState<string>("recent");
+
+  // Hierarchical selection state
+  const [selectedGradeId, setSelectedGradeId] = useState<string>(
+    curriculum[0]?.id || "1",
+  );
+  const [selectedSubjectKey, setSelectedSubjectKey] =
+    useState<CourseCategory | null>(null);
+  const selectedGrade =
+    curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
+  const selectedSubject =
+    selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
 
   // Filter courses based on search and filters
   const filteredCourses = mockCourses.filter((course) => {
@@ -335,226 +466,151 @@ export default function Courses() {
                 </Select>
               </div>
             </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-4 gap-4 mb-6">
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">📚</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Tổng môn học
-                      </p>
-                      <p className="text-2xl font-bold text-primary">
-                        {mockCourses.length}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">📚</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Đang học</p>
-                      <p className="text-2xl font-bold text-primary">
-                        {
-                          mockCourses.filter((c) => c.status === "in-progress")
-                            .length
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">🏆</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Hoàn thành
-                      </p>
-                      <p className="text-2xl font-bold text-primary">
-                        {
-                          mockCourses.filter((c) => c.status === "completed")
-                            .length
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/5 to-accent/10 border-primary/20">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="text-3xl">🎁</div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">
-                        Chưa bắt đầu
-                      </p>
-                      <p className="text-2xl font-bold text-primary">
-                        {
-                          mockCourses.filter((c) => c.status === "not-started")
-                            .length
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
 
-          {/* Course Grid */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {sortedCourses.map((course) => (
-              <Card
-                key={course.id}
-                className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-primary/20 bg-gradient-to-br from-white to-primary/5 overflow-hidden"
-              >
-                <CardContent className="p-0">
-                  {/* Course Image */}
-                  <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 rounded-t-lg flex items-center justify-center relative overflow-hidden">
-                    <div className="text-6xl group-hover:scale-110 transition-transform duration-300">
-                      {course.emoji}
-                    </div>
-                    <div className="absolute top-3 left-3">
+          {/* Chọn Khối */}
+          <div className="space-y-6">
+            <div className="flex flex-wrap gap-2 mb-2">
+              {curriculum.map((g) => (
+                <Button
+                  key={g.id}
+                  variant={g.id === selectedGradeId ? "default" : "outline"}
+                  onClick={() => {
+                    setSelectedGradeId(g.id);
+                    setSelectedSubjectKey(null);
+                  }}
+                  className={
+                    g.id === selectedGradeId
+                      ? "bg-primary text-white"
+                      : "border-primary/30"
+                  }
+                >
+                  {g.name}
+                </Button>
+              ))}
+            </div>
+
+            {/* Danh sách Môn học của khối đã chọn */}
+            <div>
+              <h2 className="text-xl font-bold mb-3 text-primary">Môn học</h2>
+              <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {selectedGrade?.subjects.map((s) => (
+                  <Card
+                    key={s.key}
+                    className={`cursor-pointer border ${selectedSubjectKey === s.key ? "border-primary bg-primary/5" : "border-primary/20"}`}
+                    onClick={() => setSelectedSubjectKey(s.key)}
+                  >
+                    <CardContent className="p-4 flex items-center justify-between">
+                      <div className="text-2xl mr-2">{s.emoji}</div>
+                      <div className="flex-1">
+                        <div className="font-semibold">{s.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {s.chapters.reduce(
+                            (sum, c) => sum + c.lessons.length,
+                            0,
+                          )}{" "}
+                          bài học
+                        </div>
+                      </div>
                       <Badge
-                        variant={statusColors[course.status]}
-                        className="text-xs"
+                        variant={
+                          selectedSubjectKey === s.key ? "default" : "secondary"
+                        }
                       >
-                        {statusLabels[course.status]}
+                        Chọn
                       </Badge>
-                    </div>
-                    <div className="absolute top-3 right-3">
-                      <Badge variant="outline" className="text-xs bg-white/80">
-                        {course.level}
-                      </Badge>
-                    </div>
-
-                    {/* Hover overlay with sparkles */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/80 to-accent/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <div className="text-white text-center p-4">
-                        <p className="text-sm mb-3 font-medium">
-                          {course.description}
-                        </p>
-                        <div className="flex items-center justify-center gap-4 text-xs">
-                          <span className="flex items-center gap-1">
-                            <Users className="h-3 w-3" />
-                            {course.students} bạn nhỏ
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Star className="h-3 w-3 fill-current text-yellow-300" />
-                            {course.rating}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {course.duration}
-                          </span>
-                        </div>
-                      </div>
-                      {/* Animated sparkles */}
-                      <div className="absolute top-2 left-2 text-yellow-300 animate-ping">
-                        ✨
-                      </div>
-                      <div
-                        className="absolute bottom-2 right-2 text-yellow-300 animate-ping"
-                        style={{ animationDelay: "0.2s" }}
-                      >
-                        ⭐
-                      </div>
-                      <div
-                        className="absolute top-1/2 right-4 text-yellow-300 animate-ping"
-                        style={{ animationDelay: "0.4s" }}
-                      >
-                        💫
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Course Info */}
-                  <div className="p-4 space-y-3">
-                    <div>
-                      <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
-                        {course.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        👨‍🏫 {course.instructor}
-                      </p>
-                    </div>
-
-                    {/* Progress */}
-                    {course.progress > 0 && (
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>
-                            📖 {course.completedLessons}/{course.totalLessons}{" "}
-                            bài học
-                          </span>
-                          <span className="font-bold text-primary">
-                            {course.progress}%
-                          </span>
-                        </div>
-                        <Progress
-                          value={course.progress}
-                          className="h-3 bg-primary/10"
-                        />
-                      </div>
-                    )}
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1">
-                      {course.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="text-xs bg-accent/20 text-accent-foreground"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {/* Last accessed (for in-progress courses) */}
-                    {course.status === "in-progress" && course.lastAccessed && (
-                      <p className="text-xs text-muted-foreground flex items-center gap-1">
-                        ⏰ Học lần cuối: {course.lastAccessed}
-                      </p>
-                    )}
-
-                    {/* Action Button */}
-                    <Button
-                      onClick={() => navigate(`/lesson/${course.id}`)}
-                      className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
-                    >
-                      <Play className="h-4 w-4 mr-2" />
-                      {course.status === "not-started"
-                        ? "🚀 Bắt đầu học!"
-                        : course.status === "completed"
-                          ? "🔄 Ôn tập lại!"
-                          : "📖 Tiếp tục học!"}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Empty state */}
-          {sortedCourses.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">😔</div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Không tìm thấy môn học
-              </h3>
-              <p className="text-gray-600">
-                Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm nhé! 🔍
-              </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
-          )}
+
+            {/* Chương -> Bài học */}
+            {selectedSubject && (
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-xl font-bold text-primary">
+                    {selectedSubject.emoji} {selectedSubject.name} — Chương
+                  </h2>
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedSubjectKey(null)}
+                    className="border-primary/30"
+                  >
+                    ← Chọn môn khác
+                  </Button>
+                </div>
+                <Accordion
+                  type="multiple"
+                  className="rounded-xl border border-primary/20 bg-white"
+                >
+                  {selectedSubject.chapters.map((ch) => {
+                    const lessons = ch.lessons.filter((l) =>
+                      l.title.toLowerCase().includes(searchTerm.toLowerCase()),
+                    );
+                    return (
+                      <AccordionItem
+                        key={ch.id}
+                        value={ch.id}
+                        className="border-b border-primary/10"
+                      >
+                        <AccordionTrigger className="px-4">
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="h-4 w-4 text-primary" />
+                            <span className="font-semibold">{ch.title}</span>
+                            <Badge variant="secondary" className="ml-2">
+                              {ch.lessons.length} bài học
+                            </Badge>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="divide-y">
+                            {lessons.map((l) => (
+                              <div
+                                key={l.id}
+                                className="flex items-center justify-between py-3 px-4 hover:bg-primary/5"
+                              >
+                                <div>
+                                  <div className="font-medium">{l.title}</div>
+                                  <div className="text-xs text-muted-foreground flex items-center gap-3">
+                                    <span className="flex items-center gap-1">
+                                      <Clock className="h-3 w-3" />{" "}
+                                      {l.duration || "--"}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  {l.status && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      {statusLabels[l.status]}
+                                    </Badge>
+                                  )}
+                                  <Button
+                                    onClick={() => navigate(`/lesson/${l.id}`)}
+                                    className="bg-gradient-to-r from-primary to-accent text-white"
+                                  >
+                                    <Play className="h-4 w-4 mr-2" /> Học
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                            {lessons.length === 0 && (
+                              <div className="py-4 px-4 text-sm text-muted-foreground">
+                                Không có bài học khớp tìm kiếm.
+                              </div>
+                            )}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
+                </Accordion>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Filter Sidebar */}
@@ -652,8 +708,8 @@ export default function Courses() {
               </p>
               <p className="text-xs text-muted-foreground">
                 Bé đã học{" "}
-                {mockCourses.filter((c) => c.status === "completed").length}{" "}
-                môn học rồi đấy! 🎉
+                {mockCourses.filter((c) => c.status === "completed").length} môn
+                học rồi đấy! 🎉
               </p>
             </div>
           </div>
