@@ -350,6 +350,16 @@ export default function Courses() {
   const selectedGrade = curriculum.find((g) => g.id === selectedGradeId) || curriculum[0];
   const selectedSubject = selectedGrade?.subjects.find((s) => s.key === selectedSubjectKey) || null;
 
+  // Stats derived from selected grade/subject
+  const scopeSubjects = selectedSubject ? [selectedSubject] : (selectedGrade?.subjects || []);
+  const allLessons = scopeSubjects.flatMap((s) => s.chapters.flatMap((c) => c.lessons));
+  const stats = {
+    totalSubjects: scopeSubjects.length,
+    inProgress: allLessons.filter((l) => l.status === "in-progress").length,
+    completed: allLessons.filter((l) => l.status === "completed").length,
+    notStarted: allLessons.filter((l) => !l.status || l.status === "not-started").length,
+  };
+
   // Filter courses based on search and filters
   const filteredCourses = mockCourses.filter((course) => {
     const matchesSearch =
@@ -448,7 +458,7 @@ export default function Courses() {
                         Tổng môn học
                       </p>
                       <p className="text-2xl font-bold text-primary">
-                        {mockCourses.length}
+                        {stats.totalSubjects}
                       </p>
                     </div>
                   </div>
@@ -461,10 +471,7 @@ export default function Courses() {
                     <div>
                       <p className="text-sm text-muted-foreground">Đang học</p>
                       <p className="text-2xl font-bold text-primary">
-                        {
-                          mockCourses.filter((c) => c.status === "in-progress")
-                            .length
-                        }
+                        {stats.inProgress}
                       </p>
                     </div>
                   </div>
@@ -479,10 +486,7 @@ export default function Courses() {
                         Hoàn thành
                       </p>
                       <p className="text-2xl font-bold text-primary">
-                        {
-                          mockCourses.filter((c) => c.status === "completed")
-                            .length
-                        }
+                        {stats.completed}
                       </p>
                     </div>
                   </div>
@@ -497,10 +501,7 @@ export default function Courses() {
                         Chưa bắt đầu
                       </p>
                       <p className="text-2xl font-bold text-primary">
-                        {
-                          mockCourses.filter((c) => c.status === "not-started")
-                            .length
-                        }
+                        {stats.notStarted}
                       </p>
                     </div>
                   </div>
