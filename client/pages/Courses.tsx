@@ -355,10 +355,14 @@ export default function Courses() {
   const allLessons = scopeSubjects.flatMap((s) => s.chapters.flatMap((c) => c.lessons));
   const stats = {
     totalSubjects: scopeSubjects.length,
+    totalLessons: allLessons.length,
     inProgress: allLessons.filter((l) => l.status === "in-progress").length,
     completed: allLessons.filter((l) => l.status === "completed").length,
     notStarted: allLessons.filter((l) => !l.status || l.status === "not-started").length,
   };
+
+  const totalPrimaryLabel = selectedSubject ? "Tổng bài học" : "Tổng môn học";
+  const totalPrimaryValue = selectedSubject ? stats.totalLessons : stats.totalSubjects;
 
   // Filter courses based on search and filters
   const filteredCourses = mockCourses.filter((course) => {
@@ -455,10 +459,10 @@ export default function Courses() {
                     <div className="text-3xl">📚</div>
                     <div>
                       <p className="text-sm text-muted-foreground">
-                        Tổng môn học
+                        {totalPrimaryLabel}
                       </p>
                       <p className="text-2xl font-bold text-primary">
-                        {stats.totalSubjects}
+                        {totalPrimaryValue}
                       </p>
                     </div>
                   </div>
