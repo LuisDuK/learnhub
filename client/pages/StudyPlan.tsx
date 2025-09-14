@@ -334,7 +334,12 @@ export default function StudyPlan() {
 
   useEffect(() => {}, []);
 
-  const openVideo = (url?: string, title?: string, description?: string, estimatedMin?: number) => {
+  const openVideo = (
+    url?: string,
+    title?: string,
+    description?: string,
+    estimatedMin?: number,
+  ) => {
     if (!url) return;
     navigate("/learn", {
       state: {
@@ -346,7 +351,12 @@ export default function StudyPlan() {
     });
   };
 
-  const openPdf = (url?: string, title?: string, description?: string, estimatedMin?: number) => {
+  const openPdf = (
+    url?: string,
+    title?: string,
+    description?: string,
+    estimatedMin?: number,
+  ) => {
     if (!url) return;
     navigate("/learn", {
       state: {
@@ -396,16 +406,24 @@ export default function StudyPlan() {
     const sampleMp4 =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     const src =
-      typeof (lesson as any).videoUrl === "string" && (lesson as any).videoUrl.endsWith(".mp4")
+      typeof (lesson as any).videoUrl === "string" &&
+      (lesson as any).videoUrl.endsWith(".mp4")
         ? (lesson as any).videoUrl
         : sampleMp4;
     const subject = subjectConfig[lesson.subject as keyof typeof subjectConfig];
-    const descParts = [subject.name, lesson.duration, lesson.day && `${lesson.day} ${lesson.time}`].filter(Boolean);
+    const descParts = [
+      subject.name,
+      lesson.duration,
+      lesson.day && `${lesson.day} ${lesson.time}`,
+    ].filter(Boolean);
     const conceptTags: string[] = [];
     const lowerTitle = stripEmojis(lesson.title).toLowerCase();
     if (/cộng/.test(lowerTitle)) conceptTags.push("addition");
     if (/trừ/.test(lowerTitle)) conceptTags.push("subtraction");
-    if (subject.name.toLowerCase().includes("toán") && conceptTags.length === 0) {
+    if (
+      subject.name.toLowerCase().includes("toán") &&
+      conceptTags.length === 0
+    ) {
       conceptTags.push("addition");
     }
     navigate("/learn", {
@@ -421,7 +439,9 @@ export default function StudyPlan() {
     });
     if (lesson.status !== "completed") {
       setLessonList((prev) =>
-        prev.map((l) => (l.id === lesson.id ? { ...l, status: "in-progress" } : l)),
+        prev.map((l) =>
+          l.id === lesson.id ? { ...l, status: "in-progress" } : l,
+        ),
       );
     }
   };
@@ -916,7 +936,12 @@ export default function StudyPlan() {
                                     lesson.pdfUrl,
                                     stripEmojis(lesson.title),
                                     `${subject.name} • Tài liệu đính kèm`,
-                                    Number((lesson.duration || "").replace(/[^0-9]/g, "")) || 10,
+                                    Number(
+                                      (lesson.duration || "").replace(
+                                        /[^0-9]/g,
+                                        "",
+                                      ),
+                                    ) || 10,
                                   )
                                 }
                               >
