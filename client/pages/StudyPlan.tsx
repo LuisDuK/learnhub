@@ -334,16 +334,39 @@ export default function StudyPlan() {
 
   useEffect(() => {}, []);
 
-  const openVideo = (url?: string) => {
+  const openVideo = (
+    url?: string,
+    title?: string,
+    description?: string,
+    estimatedMin?: number,
+  ) => {
     if (!url) return;
-    setVideoSrc(url);
-    setShowVideoDialog(true);
+    navigate("/learn", {
+      state: {
+        type: "video",
+        title: title || "Bài học",
+        description,
+        src: url,
+      },
+    });
   };
 
-  const openPdf = (url?: string) => {
+  const openPdf = (
+    url?: string,
+    title?: string,
+    description?: string,
+    estimatedMin?: number,
+  ) => {
     if (!url) return;
-    setPdfSrc(url);
-    setShowPdfDialog(true);
+    navigate("/learn", {
+      state: {
+        type: "document",
+        title: title || "Tài liệu",
+        description,
+        src: url,
+        estimatedDurationSec: (estimatedMin || 10) * 60,
+      },
+    });
   };
 
   // Lesson player state & handlers
@@ -380,16 +403,6 @@ export default function StudyPlan() {
   };
 
   const openLessonPlayer = (lesson: Lesson) => {
-    setCurrentLesson(lesson);
-    // derive markers: use lesson.quizMarkers if present, else leave empty and generate after metadata loads
-    const markers: number[] = (lesson as any).quizMarkers || [];
-    setVideoMarkers(markers);
-    setMaxAllowedTime(0);
-    setVideoCurrentTime(0);
-    setVideoDuration(0);
-    setSelectedQuizAnswer(null);
-    setCurrentMarkerIndex(null);
-    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to a longer sample mp4
     const sampleMp4 =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     const src =
@@ -397,9 +410,33 @@ export default function StudyPlan() {
       (lesson as any).videoUrl.endsWith(".mp4")
         ? (lesson as any).videoUrl
         : sampleMp4;
-    setVideoSrc(src);
-    setShowVideoDialog(true);
-    // mark lesson as in-progress if not completed
+    const subject = subjectConfig[lesson.subject as keyof typeof subjectConfig];
+    const descParts = [
+      subject.name,
+      lesson.duration,
+      lesson.day && `${lesson.day} ${lesson.time}`,
+    ].filter(Boolean);
+    const conceptTags: string[] = [];
+    const lowerTitle = stripEmojis(lesson.title).toLowerCase();
+    if (/cộng/.test(lowerTitle)) conceptTags.push("addition");
+    if (/trừ/.test(lowerTitle)) conceptTags.push("subtraction");
+    if (
+      subject.name.toLowerCase().includes("toán") &&
+      conceptTags.length === 0
+    ) {
+      conceptTags.push("addition");
+    }
+    navigate("/learn", {
+      state: {
+        type: "video",
+        title: stripEmojis(lesson.title),
+        description: descParts.join(" • "),
+        src,
+        lessonId: String(lesson.id),
+        conceptTags,
+        promptTimesSec: [60, 120, 180],
+      },
+    });
     if (lesson.status !== "completed") {
       setLessonList((prev) =>
         prev.map((l) =>
@@ -895,10 +932,20 @@ export default function StudyPlan() {
                                 size="sm"
                                 className="ml-2 underline text-sm"
                                 onClick={() =>
-                                  navigate(`/lesson/${lesson.id}/exercise/1`)
+                                  openPdf(
+                                    lesson.pdfUrl,
+                                    stripEmojis(lesson.title),
+                                    `${subject.name} • Tài liệu đính kèm`,
+                                    Number(
+                                      (lesson.duration || "").replace(
+                                        /[^0-9]/g,
+                                        "",
+                                      ),
+                                    ) || 10,
+                                  )
                                 }
                               >
-                                Làm bài tập
+                                Xem tài liệu
                               </Button>
                             )}
                           </div>

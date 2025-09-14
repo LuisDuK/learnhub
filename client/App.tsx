@@ -23,6 +23,7 @@ import Chatbot from "./pages/Chatbot";
 import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Lesson from "./pages/Lesson";
+import Learn from "./pages/Learn";
 import Exercise from "./pages/Exercise";
 import ExerciseResults from "./pages/ExerciseResults";
 import Quiz from "./pages/Quiz";
@@ -93,6 +94,7 @@ function AppRoutes() {
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/learn" element={<Learn />} />
         <Route path="/lesson/:id" element={<Lesson />} />
         <Route path="/lesson/:lessonId/exercise/:id" element={<Exercise />} />
         <Route

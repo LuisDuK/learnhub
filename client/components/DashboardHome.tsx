@@ -170,11 +170,14 @@ const currentCourses = [
     thumbnail: "/placeholder.svg",
     category: "Anh",
     level: "Trung bình",
-    emoji: "🗣️",
+    emoji: "🗣���",
   },
 ];
 
+import { useNavigate } from "react-router-dom";
+
 export function DashboardHome() {
+  const navigate = useNavigate();
   return (
     <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Greeting Section */}
@@ -402,7 +405,10 @@ export function DashboardHome() {
                     </div>
 
                     {/* Action Button */}
-                    <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105">
+                    <Button
+                      onClick={() => navigate("/study-plan")}
+                      className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105"
+                    >
                       <Play className="h-4 w-4 mr-2" />
                       {course.progress === 0
                         ? "🚀 Bắt đầu học!"
