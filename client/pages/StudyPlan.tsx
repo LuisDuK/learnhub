@@ -334,16 +334,29 @@ export default function StudyPlan() {
 
   useEffect(() => {}, []);
 
-  const openVideo = (url?: string) => {
+  const openVideo = (url?: string, title?: string, description?: string, estimatedMin?: number) => {
     if (!url) return;
-    setVideoSrc(url);
-    setShowVideoDialog(true);
+    navigate("/learn", {
+      state: {
+        type: "video",
+        title: title || "Bài học",
+        description,
+        src: url,
+      },
+    });
   };
 
-  const openPdf = (url?: string) => {
+  const openPdf = (url?: string, title?: string, description?: string, estimatedMin?: number) => {
     if (!url) return;
-    setPdfSrc(url);
-    setShowPdfDialog(true);
+    navigate("/learn", {
+      state: {
+        type: "document",
+        title: title || "Tài liệu",
+        description,
+        src: url,
+        estimatedDurationSec: (estimatedMin || 10) * 60,
+      },
+    });
   };
 
   // Lesson player state & handlers
@@ -380,31 +393,25 @@ export default function StudyPlan() {
   };
 
   const openLessonPlayer = (lesson: Lesson) => {
-    setCurrentLesson(lesson);
-    // derive markers: use lesson.quizMarkers if present, else leave empty and generate after metadata loads
-    const markers: number[] = (lesson as any).quizMarkers || [];
-    setVideoMarkers(markers);
-    setMaxAllowedTime(0);
-    setVideoCurrentTime(0);
-    setVideoDuration(0);
-    setSelectedQuizAnswer(null);
-    setCurrentMarkerIndex(null);
-    // choose a playable source: prefer lesson.videoUrl if it's a direct mp4, else fallback to a longer sample mp4
     const sampleMp4 =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
     const src =
-      typeof (lesson as any).videoUrl === "string" &&
-      (lesson as any).videoUrl.endsWith(".mp4")
+      typeof (lesson as any).videoUrl === "string" && (lesson as any).videoUrl.endsWith(".mp4")
         ? (lesson as any).videoUrl
         : sampleMp4;
-    setVideoSrc(src);
-    setShowVideoDialog(true);
-    // mark lesson as in-progress if not completed
+    const subject = subjectConfig[lesson.subject as keyof typeof subjectConfig];
+    const descParts = [subject.name, lesson.duration, lesson.day && `${lesson.day} ${lesson.time}`].filter(Boolean);
+    navigate("/learn", {
+      state: {
+        type: "video",
+        title: stripEmojis(lesson.title),
+        description: descParts.join(" • "),
+        src,
+      },
+    });
     if (lesson.status !== "completed") {
       setLessonList((prev) =>
-        prev.map((l) =>
-          l.id === lesson.id ? { ...l, status: "in-progress" } : l,
-        ),
+        prev.map((l) => (l.id === lesson.id ? { ...l, status: "in-progress" } : l)),
       );
     }
   };
@@ -895,10 +902,15 @@ export default function StudyPlan() {
                                 size="sm"
                                 className="ml-2 underline text-sm"
                                 onClick={() =>
-                                  navigate(`/lesson/${lesson.id}/exercise/1`)
+                                  openPdf(
+                                    lesson.pdfUrl,
+                                    stripEmojis(lesson.title),
+                                    `${subject.name} • Tài liệu đính kèm`,
+                                    Number((lesson.duration || "").replace(/[^0-9]/g, "")) || 10,
+                                  )
                                 }
                               >
-                                Làm bài tập
+                                Xem tài liệu
                               </Button>
                             )}
                           </div>
@@ -1106,7 +1118,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              🎯 Thêm mục tiêu học tập
+              🎯 Thêm m���c tiêu học tập
             </DialogTitle>
             <DialogDescription>
               Nhập thông tin mục tiêu h����c tập để tạo lộ trình phù hợp
