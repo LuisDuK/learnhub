@@ -123,6 +123,7 @@ export default function Exercise() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(30 * 60); // 30 minutes in seconds
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
 
   const currentQuestion = mockExercise.questions[currentQuestionIndex];
 
@@ -229,27 +230,72 @@ export default function Exercise() {
 
   const goToQuestion = (index: number) => {
     setCurrentQuestionIndex(index);
+    // save on question change
+    saveProgress();
   };
 
   const nextQuestion = () => {
     if (currentQuestionIndex < mockExercise.questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      setCurrentQuestionIndex((i) => i + 1);
+      saveProgress();
     }
   };
 
   const previousQuestion = () => {
     if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+      setCurrentQuestionIndex((i) => i - 1);
+      saveProgress();
     }
   };
 
-  const handleSubmitAll = () => {
+  const normalizeAnswers = () =>
+    answers.map((a) => ({
+      questionId: a.questionId,
+      type: a.type,
+      content: a.type === "essay" ? a.content : undefined,
+      selectedOption: a.type === "multiple_choice" ? a.selectedOption : undefined,
+      hasImage: Boolean(a.imageFile),
+    }));
+
+  const saveProgress = async () => {
+    try {
+      const r = await fetch(`/api/exercises/${id || "1"}/progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          answers: normalizeAnswers(),
+          timeRemainingSec: timeRemaining,
+          currentQuestionIndex,
+        }),
+      });
+      if (r.ok) {
+        const data = (await r.json()) as { ok: boolean; lastSavedIso: string };
+        setLastSaved(data.lastSavedIso);
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    const iv = setInterval(() => {
+      saveProgress();
+    }, 5000);
+    return () => clearInterval(iv);
+  }, [answers, timeRemaining, currentQuestionIndex]);
+
+  const handleSubmitAll = async () => {
     if (answers.length === 0) {
       alert("Vui lòng trả lời ít nhất một câu hỏi!");
       return;
     }
+    try {
+      await saveProgress();
+      await fetch(`/api/exercises/${id || "1"}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers: normalizeAnswers(), timeSpentSec: mockExercise.timeLimit * 60 - timeRemaining }),
+      });
+    } catch {}
 
-    // Navigate to results page
     navigate(`/lesson/${lessonId}/exercise/${id || "1"}/results`, {
       state: { answers, exercise: mockExercise },
     });
@@ -272,7 +318,7 @@ export default function Exercise() {
               className="border-primary/20 hover:bg-primary/5"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Quay l��i
+              Quay lại
             </Button>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
@@ -343,12 +389,13 @@ export default function Exercise() {
               ))}
 
               <div className="mt-4 pt-4 border-t border-border">
-                <div className="text-xs text-muted-foreground mb-1">
-                  Tiến độ
-                </div>
+                <div className="text-xs text-muted-foreground mb-1">Tiến độ</div>
                 <div className="text-sm font-medium">
                   {answers.length}/{mockExercise.questions.length} câu đã làm
                 </div>
+                {lastSaved && (
+                  <div className="text-xs text-muted-foreground mt-1">Lưu lúc {new Date(lastSaved).toLocaleTimeString()}</div>
+                )}
               </div>
             </CardContent>
           </Card>
