@@ -59,26 +59,25 @@ export default function Learn() {
 
   const estimated = learn.estimatedDurationSec || 600; // default 10min for documents
 
-  // Optional access-check + hydrate from server
+  // Optional access-check + hydrate from server (only block on 403)
   useEffect(() => {
     let cancelled = false;
     if (!learn.lessonId) return;
     fetch(`/api/lessons/${learn.lessonId}`)
       .then(async (r) => {
-        if (!r.ok) {
-          if (r.status === 403) throw new Error("Bài học chưa sẵn sàng");
-          throw new Error("Không tải được bài học");
-        }
+        if (r.status === 403) throw new Error("Bài học chưa sẵn sàng");
+        if (!r.ok) return null; // tolerate 404/others for UI demo
         return (await r.json()) as GetLessonResponse;
       })
       .then((res) => {
         if (cancelled) return;
-        if (learn.type === "video") setServerVideo(res.lesson.videoUrl);
+        if (res && learn.type === "video") setServerVideo(res.lesson.videoUrl);
         setAccessError(null);
       })
       .catch((e: any) => {
         if (cancelled) return;
-        setAccessError(e?.message || "Không thể truy cập bài học");
+        if (String(e?.message || "").includes("sẵn sàng")) setAccessError("Bài học chưa sẵn sàng");
+        else setAccessError(null);
       });
     return () => {
       cancelled = true;
@@ -212,7 +211,7 @@ export default function Learn() {
     );
   }
 
-  if (accessError) {
+  if (accessError === "Bài học chưa sẵn sàng") {
     return (
       <DashboardLayout>
         <div className="p-6">
