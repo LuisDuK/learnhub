@@ -271,7 +271,7 @@ export default function Lesson() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6">
           <div className="lg:col-span-2 space-y-6">
             <Card className="border-primary/20 overflow-hidden shadow-lg">
               <CardContent className="p-0">
@@ -360,29 +360,6 @@ export default function Lesson() {
             </div>
           </div>
 
-          <div className="space-y-6">
-            <Card className="border-primary/20 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-lg">📋 Thông tin bài học</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Thời lượng:</span>
-                  <Badge variant="outline">{formatDuration(lesson.durationSec)}</Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-primary/10 to-accent/10 text-center">
-              <CardContent className="p-6">
-                <div className="text-4xl mb-3">🌟</div>
-                <h3 className="font-bold text-primary mb-2">Bé học rất tốt!</h3>
-                <p className="text-sm text-muted-foreground">
-                  Hãy tiếp tục cố gắng để hoàn thành tất cả bài học nhé! 💪
-                </p>
-              </CardContent>
-            </Card>
-          </div>
         </div>
 
         <QuizDialog
