@@ -18,6 +18,8 @@ interface LearnState {
   src: string;
   estimatedDurationSec?: number; // for documents
   lessonId?: string; // optional, to fetch/access-check and sync progress
+  conceptTags?: string[]; // e.g., ['addition','subtraction','fraction']
+  promptTimesSec?: number[]; // e.g., [60,120,180]
 }
 
 function formatTime(sec: number) {
@@ -40,6 +42,10 @@ export default function Learn() {
   const [elapsed, setElapsed] = useState(0);
   const [breakShown, setBreakShown] = useState(false);
   const [milestonesShown, setMilestonesShown] = useState<Record<number, boolean>>({});
+  const [hintsEnabled, setHintsEnabled] = useState(false);
+  const [hintPromptOpen, setHintPromptOpen] = useState(false);
+  const [promptIndex, setPromptIndex] = useState(0);
+  const promptTimes = useMemo(() => (Array.isArray(learn.promptTimesSec) && learn.promptTimesSec.length ? learn.promptTimesSec : [60, 120, 180]), [learn.promptTimesSec]);
 
   const [accessError, setAccessError] = useState<string | null>(null);
   const [serverVideo, setServerVideo] = useState<string | null>(null);
@@ -88,7 +94,7 @@ export default function Learn() {
     return () => clearInterval(iv);
   }, [learn.type]);
 
-  // Motivational toasts (5, 15, 25 minutes)
+  // Motivational toasts (5, 15, 25 minutes) + timed hint opt-in (1/2/3 minutes)
   useEffect(() => {
     const total = learn.type === "video" ? Math.floor(videoPos) : elapsed;
     const marks = [300, 900, 1500];
@@ -102,7 +108,12 @@ export default function Learn() {
       }
     });
     if (total >= 1500 && !breakShown) setBreakShown(true);
-  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast]);
+
+    if (conceptHints.length > 0 && !hintsEnabled && promptIndex < promptTimes.length) {
+      const triggerAt = promptTimes[promptIndex];
+      if (total >= triggerAt && !hintPromptOpen) setHintPromptOpen(true);
+    }
+  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast, conceptHints.length, hintsEnabled, promptIndex, promptTimes, hintPromptOpen]);
 
   // Save progress (server optional)
   useEffect(() => {
@@ -151,8 +162,14 @@ export default function Learn() {
 
   const conceptHints = useMemo(() => {
     const text = `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
+    const tags = new Set<string>();
+    (learn.conceptTags || []).forEach((t) => tags.add(t.toLowerCase()));
+    if (/cộng|add|addition/.test(text)) tags.add("addition");
+    if (/trừ|subtract|subtraction/.test(text)) tags.add("subtraction");
+    if (/phân số|fraction/.test(text)) tags.add("fraction");
+
     const hints: { title: string; story: string; emoji: string }[] = [];
-    if (/cộng|add|addition/.test(text)) {
+    if (tags.has("addition")) {
       hints.push({
         title: "Ghép mảnh để cộng",
         story:
@@ -160,14 +177,14 @@ export default function Learn() {
         emoji: "🧩",
       });
     }
-    if (/trừ|subtract|subtraction/.test(text)) {
+    if (tags.has("subtraction")) {
       hints.push({
         title: "Ăn bánh còn bao nhiêu?",
         story: "Có 9 chiếc bánh, bạn ăn 3 chiếc. Còn lại mấy chiếc để chia cho bạn bè?",
         emoji: "🧁",
       });
     }
-    if (/phân số|fraction/.test(text)) {
+    if (tags.has("fraction")) {
       hints.push({
         title: "Cắt bánh chia phần",
         story: "Một chiếc pizza chia 8 miếng. 3/8 nghĩa là 3 miếng pizza ngon tuyệt!",
@@ -175,7 +192,7 @@ export default function Learn() {
       });
     }
     return hints;
-  }, [learn.title, learn.description]);
+  }, [learn.title, learn.description, learn.conceptTags]);
 
   if (!learn || !learn.src || !learn.type) {
     return (
@@ -263,6 +280,24 @@ export default function Learn() {
               <Button size="sm" variant="outline" onClick={() => setBreakShown(false)}>Đã hiểu</Button>
             </CardContent>
           </Card>
+        )}
+
+        {/* Timed opt-in prompt for hints */}
+        {conceptHints.length > 0 && (
+          <Dialog open={hintPromptOpen} onOpenChange={setHintPromptOpen}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Hiển thị gợi ý minh họa?</DialogTitle>
+                <DialogDescription>
+                  Phát hiện khái niệm quan trọng trong nội dung. Bạn có muốn xem hình ảnh/câu chuyện minh họa không?
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end gap-2">
+                <Button variant="outline" onClick={() => { setHintPromptOpen(false); setPromptIndex((i) => Math.min(i + 1, promptTimes.length)); }}>Để sau</Button>
+                <Button onClick={() => { setHintsEnabled(true); setHintPromptOpen(false); }}>Có, hiển thị</Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
 
         {/* Main content */}
@@ -388,7 +423,7 @@ export default function Learn() {
           </Button>
         </div>
           </div>
-          {conceptHints.length > 0 && (
+          {conceptHints.length > 0 && hintsEnabled && (
             <Card className="border-secondary/20 h-fit">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình ảnh/câu chuyện</CardTitle>
@@ -401,6 +436,9 @@ export default function Learn() {
                     <div className="text-sm text-muted-foreground mt-1">{h.story}</div>
                   </div>
                 ))}
+                <div className="pt-1">
+                  <Button size="sm" variant="ghost" onClick={() => setHintsEnabled(false)}>Ẩn gợi ý</Button>
+                </div>
               </CardContent>
             </Card>
           )}
