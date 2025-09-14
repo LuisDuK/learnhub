@@ -42,10 +42,8 @@ export default function Learn() {
   const [elapsed, setElapsed] = useState(0);
   const [breakShown, setBreakShown] = useState(false);
   const [milestonesShown, setMilestonesShown] = useState<Record<number, boolean>>({});
-  const [hintsEnabled, setHintsEnabled] = useState(false);
-  const [hintPromptOpen, setHintPromptOpen] = useState(false);
-  const [promptIndex, setPromptIndex] = useState(0);
-  const promptTimes = useMemo(() => (Array.isArray(learn.promptTimesSec) && learn.promptTimesSec.length ? learn.promptTimesSec : [60, 120, 180]), [learn.promptTimesSec]);
+  const [hintsEnabled, setHintsEnabled] = useState(true);
+  const markerTimes = useMemo(() => (Array.isArray(learn.promptTimesSec) ? learn.promptTimesSec : []), [learn.promptTimesSec]);
 
   const [accessError, setAccessError] = useState<string | null>(null);
   const [serverVideo, setServerVideo] = useState<string | null>(null);
@@ -102,7 +100,7 @@ export default function Learn() {
     return tagCount > 0 || pattern.test(text);
   }, [learn.title, learn.description, learn.conceptTags]);
 
-  // Motivational toasts (5, 15, 25 minutes) + timed hint opt-in (1/2/3 minutes)
+  // Motivational toasts (5, 15, 25 minutes)
   useEffect(() => {
     const total = learn.type === "video" ? Math.floor(videoPos) : elapsed;
     const marks = [300, 900, 1500];
@@ -116,12 +114,7 @@ export default function Learn() {
       }
     });
     if (total >= 1500 && !breakShown) setBreakShown(true);
-
-    if (hasConcepts && !hintsEnabled && promptIndex < promptTimes.length) {
-      const triggerAt = promptTimes[promptIndex];
-      if (total >= triggerAt && !hintPromptOpen) setHintPromptOpen(true);
-    }
-  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast, hasConcepts, hintsEnabled, promptIndex, promptTimes, hintPromptOpen]);
+  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast]);
 
   // Save progress (server optional)
   useEffect(() => {
@@ -266,7 +259,7 @@ export default function Learn() {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
             {/* Study progress */}
-        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
+        <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5 sticky top-16 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/60">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Tiến độ</span>
@@ -274,6 +267,18 @@ export default function Learn() {
             </div>
             <div className="relative">
               <Progress value={progress} className="h-3" />
+              {markerTimes.map((t, i) => {
+                const total = learn.type === "video" ? Math.max(1, videoDur) : Math.max(1, estimated);
+                const pct = Math.max(0, Math.min(100, (t / total) * 100));
+                return (
+                  <div
+                    key={i}
+                    className="absolute top-[-4px] h-4 w-[2px] bg-accent"
+                    style={{ left: `${pct}%` }}
+                    title={`Mốc: ${formatTime(t)}`}
+                  />
+                );
+              })}
             </div>
           </CardContent>
         </Card>
@@ -289,24 +294,6 @@ export default function Learn() {
               <Button size="sm" variant="outline" onClick={() => setBreakShown(false)}>Đã hiểu</Button>
             </CardContent>
           </Card>
-        )}
-
-        {/* Timed opt-in prompt for hints */}
-        {hasConcepts && (
-          <Dialog open={hintPromptOpen} onOpenChange={setHintPromptOpen}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Hiển thị gợi ý minh họa?</DialogTitle>
-                <DialogDescription>
-                  Phát hiện khái niệm quan trọng trong nội dung. Bạn có muốn xem hình ảnh/câu chuyện minh họa không?
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => { setHintPromptOpen(false); setPromptIndex((i) => Math.min(i + 1, promptTimes.length)); }}>Để sau</Button>
-                <Button onClick={() => { setHintsEnabled(true); setHintPromptOpen(false); }}>Có, hiển thị</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
         )}
 
         {/* Main content */}
@@ -445,7 +432,7 @@ export default function Learn() {
                     <div className="text-sm text-muted-foreground mt-1">{h.story}</div>
                   </div>
                 ))}
-                <div className="pt-1">
+                <div className="pt-1 flex gap-2">
                   <Button size="sm" variant="ghost" onClick={() => setHintsEnabled(false)}>Ẩn gợi ý</Button>
                 </div>
               </CardContent>
