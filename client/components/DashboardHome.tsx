@@ -174,7 +174,10 @@ const currentCourses = [
   },
 ];
 
+import { useNavigate } from "react-router-dom";
+
 export function DashboardHome() {
+  const navigate = useNavigate();
   return (
     <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Greeting Section */}
@@ -225,7 +228,7 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               ⏰ Thời gian học
             </CardTitle>
-            <div className="text-2xl">📖</div>
+            <div className="text-2xl">���</div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-primary">45h</div>
