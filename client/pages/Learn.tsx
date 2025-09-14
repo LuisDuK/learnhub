@@ -94,6 +94,14 @@ export default function Learn() {
     return () => clearInterval(iv);
   }, [learn.type]);
 
+  // Whether there are any concepts detected (safe before conceptHints init)
+  const hasConcepts = useMemo(() => {
+    const text = `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
+    const tagCount = (learn.conceptTags || []).length;
+    const pattern = /(cộng|add|addition|trừ|subtract|subtraction|phân số|fraction)/;
+    return tagCount > 0 || pattern.test(text);
+  }, [learn.title, learn.description, learn.conceptTags]);
+
   // Motivational toasts (5, 15, 25 minutes) + timed hint opt-in (1/2/3 minutes)
   useEffect(() => {
     const total = learn.type === "video" ? Math.floor(videoPos) : elapsed;
@@ -109,11 +117,11 @@ export default function Learn() {
     });
     if (total >= 1500 && !breakShown) setBreakShown(true);
 
-    if (conceptHints.length > 0 && !hintsEnabled && promptIndex < promptTimes.length) {
+    if (hasConcepts && !hintsEnabled && promptIndex < promptTimes.length) {
       const triggerAt = promptTimes[promptIndex];
       if (total >= triggerAt && !hintPromptOpen) setHintPromptOpen(true);
     }
-  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast, conceptHints.length, hintsEnabled, promptIndex, promptTimes, hintPromptOpen]);
+  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast, hasConcepts, hintsEnabled, promptIndex, promptTimes, hintPromptOpen]);
 
   // Save progress (server optional)
   useEffect(() => {
