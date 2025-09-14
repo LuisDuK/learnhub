@@ -926,7 +926,7 @@ export default function StudyPlan() {
                                 Ôn tập
                               </span>
                             )}
-                            {lesson.pdfUrl && (
+                            {false && (
                               <Button
                                 variant="ghost"
                                 size="sm"
