@@ -14,14 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ArrowLeft,
-  ZoomIn,
-  ZoomOut,
-  Clock,
-  Lightbulb,
-  Heart,
-} from "lucide-react";
+import { ArrowLeft, ZoomIn, ZoomOut, Clock, Heart } from "lucide-react";
 import type { GetLessonResponse } from "@shared/api";
 
 interface LearnState {
@@ -65,6 +58,7 @@ export default function Learn() {
 
   const [accessError, setAccessError] = useState<string | null>(null);
   const [serverVideo, setServerVideo] = useState<string | null>(null);
+  const [allowServerSync, setAllowServerSync] = useState(false);
 
   const [showReflection, setShowReflection] = useState(false);
   const [reflectionNote, setReflectionNote] = useState("");
@@ -96,12 +90,14 @@ export default function Learn() {
         if (cancelled) return;
         if (res && learn.type === "video") setServerVideo(res.lesson.videoUrl);
         setAccessError(null);
+        setAllowServerSync(Boolean(res));
       })
       .catch((e: any) => {
         if (cancelled) return;
         if (String(e?.message || "").includes("sẵn sàng"))
           setAccessError("Bài học chưa sẵn sàng");
         else setAccessError(null);
+        setAllowServerSync(false);
       });
     return () => {
       cancelled = true;
@@ -115,15 +111,7 @@ export default function Learn() {
     return () => clearInterval(iv);
   }, [learn.type]);
 
-  // Whether there are any concepts detected (safe before conceptHints init)
-  const hasConcepts = useMemo(() => {
-    const text =
-      `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
-    const tagCount = (learn.conceptTags || []).length;
-    const pattern =
-      /(cộng|add|addition|trừ|subtract|subtraction|phân số|fraction)/;
-    return tagCount > 0 || pattern.test(text);
-  }, [learn.title, learn.description, learn.conceptTags]);
+  const hasConcepts = false;
 
   // Motivational toasts (5, 15, 25 minutes)
   useEffect(() => {
@@ -146,7 +134,7 @@ export default function Learn() {
 
   // Save progress (server optional)
   useEffect(() => {
-    if (!learn.lessonId) return;
+    if (!learn.lessonId || !allowServerSync) return;
     const iv = setInterval(() => {
       const positionSec = learn.type === "video" ? videoPos : elapsed;
       const completed =
@@ -160,7 +148,7 @@ export default function Learn() {
       }).catch(() => {});
     }, 5000);
     return () => clearInterval(iv);
-  }, [learn.lessonId, learn.type, videoPos, videoDur, elapsed, estimated]);
+  }, [learn.lessonId, allowServerSync, learn.type, videoPos, videoDur, elapsed, estimated]);
 
   // Init reflection prompted flag from storage
   useEffect(() => {
@@ -311,7 +299,7 @@ export default function Learn() {
           </Badge>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6">
           <div className="lg:col-span-2 space-y-6">
             {/* Study progress */}
             <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5 sticky top-16 z-10 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -350,7 +338,7 @@ export default function Learn() {
                   <div className="flex items-center gap-2 text-yellow-800">
                     <Heart className="h-5 w-5" />
                     <span>
-                      Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀���
+                      Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀️
                     </span>
                   </div>
                   <Button
@@ -513,36 +501,6 @@ export default function Learn() {
               </Button>
             </div>
           </div>
-          {hasConcepts && hintsEnabled && (
-            <Card className="border-secondary/20 h-fit">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình
-                  ảnh/câu chuyện
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-3">
-                {hintsArr.map((h, i) => (
-                  <div key={i} className="p-3 rounded-xl border bg-white/70">
-                    <div className="text-2xl mb-1">{h.emoji}</div>
-                    <div className="font-semibold">{h.title}</div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {h.story}
-                    </div>
-                  </div>
-                ))}
-                <div className="pt-1 flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setHintsEnabled(false)}
-                  >
-                    Ẩn gợi ý
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
 
