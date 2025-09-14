@@ -494,8 +494,14 @@ export default function Learn() {
               >
                 Tiếp tục bài tiếp theo
               </Button>
-              <Button variant="outline" onClick={() => navigate("/study-plan")}>
-                Quay lại lộ trình
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (learn.lessonId) navigate(`/lesson/${learn.lessonId}/exercise/1`);
+                  else navigate("/study-plan");
+                }}
+              >
+                Làm bài tập
               </Button>
             </div>
           </div>
