@@ -401,12 +401,22 @@ export default function StudyPlan() {
         : sampleMp4;
     const subject = subjectConfig[lesson.subject as keyof typeof subjectConfig];
     const descParts = [subject.name, lesson.duration, lesson.day && `${lesson.day} ${lesson.time}`].filter(Boolean);
+    const conceptTags: string[] = [];
+    const lowerTitle = stripEmojis(lesson.title).toLowerCase();
+    if (/cộng/.test(lowerTitle)) conceptTags.push("addition");
+    if (/trừ/.test(lowerTitle)) conceptTags.push("subtraction");
+    if (subject.name.toLowerCase().includes("toán") && conceptTags.length === 0) {
+      conceptTags.push("addition");
+    }
     navigate("/learn", {
       state: {
         type: "video",
         title: stripEmojis(lesson.title),
         description: descParts.join(" • "),
         src,
+        lessonId: String(lesson.id),
+        conceptTags,
+        promptTimesSec: [60, 120, 180],
       },
     });
     if (lesson.status !== "completed") {
@@ -1118,7 +1128,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              🎯 Thêm m���c tiêu học tập
+              🎯 Thêm mục tiêu học tập
             </DialogTitle>
             <DialogDescription>
               Nhập thông tin mục tiêu h����c tập để tạo lộ trình phù hợp
