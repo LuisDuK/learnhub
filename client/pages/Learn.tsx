@@ -131,6 +131,25 @@ export default function Learn() {
 
   const hasConcepts = false;
 
+  const segments = useMemo(() => {
+    const provided: any[] | undefined = (learn as any).segments;
+    if (Array.isArray(provided) && provided.length) return provided;
+    const times = markerTimes.length ? markerTimes : [60, 180, 300, 420, 540, 660];
+    const title = (learn.title || "").toLowerCase();
+    if (/present simple|hiện tại đơn/.test(title)) {
+      const titles = [
+        "Định nghĩa và cách dùng",
+        "Cấu trúc khẳng định (S + V(s/es))",
+        "Cấu trúc phủ định (S + do/does not + V)",
+        "Câu hỏi (Do/Does + S + V?)",
+        "Trạng từ tần suất (always, usually, often...)",
+        "Lưu ý thêm s/es và ngoại lệ",
+      ];
+      return times.map((t, i) => ({ timeSec: t, title: titles[i] || `Ví dụ minh họa ${i + 1}` }));
+    }
+    return times.map((t, i) => ({ timeSec: t, title: `Mốc ${i + 1}` }));
+  }, [learn, markerTimes]);
+
   // Motivational toasts (5, 15, 25 minutes)
   useEffect(() => {
     const total = learn.type === "video" ? Math.floor(videoPos) : elapsed;
@@ -460,14 +479,9 @@ export default function Learn() {
                 <CardTitle className="text-base">Dàn ý nội dung</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-2">
-                {(Array.isArray((learn as any).segments) && (learn as any).segments.length
-                  ? (learn as any).segments
-                  : markerTimes.map((t, i) => ({ timeSec: t, title: `Mốc ${i + 1}` }))
-                ).map((seg: any, i: number) => {
+                {segments.map((seg: any, i: number) => {
                   const current = learn.type === "video" ? videoPos : elapsed;
-                  const nextTime = Array.isArray((learn as any).segments)
-                    ? (learn as any).segments[i + 1]?.timeSec
-                    : markerTimes[i + 1];
+                  const nextTime = segments[i + 1]?.timeSec;
                   const active = current >= seg.timeSec && (nextTime == null || current < nextTime);
                   return (
                     <div key={i} className={`flex items-center justify-between rounded-lg border p-2 ${active ? "bg-primary/10 border-primary" : "bg-white"}`}>
