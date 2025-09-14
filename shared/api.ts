@@ -93,3 +93,57 @@ export interface SubmitQuizAnswerRequest {
 export interface SubmitQuizAnswerResponse {
   correct: boolean;
 }
+
+// ------- Exercises (UC-04) -------
+export type ExerciseQuestionType = "multiple_choice" | "essay";
+
+export interface ExerciseQuestion {
+  id: number;
+  type: ExerciseQuestionType;
+  question: string;
+  options?: string[];
+  correctAnswer?: number;
+  points: number;
+  hint?: string;
+}
+
+export interface Exercise {
+  id: number;
+  lessonId?: string | number;
+  title: string;
+  description: string;
+  timeLimit: number; // minutes
+  totalPoints: number;
+  questions: ExerciseQuestion[];
+}
+
+export interface ExerciseAnswerDTO {
+  questionId: number;
+  type: ExerciseQuestionType;
+  content?: string;
+  selectedOption?: number;
+  hasImage?: boolean;
+}
+
+export interface SaveExerciseProgressRequest {
+  answers: ExerciseAnswerDTO[];
+  timeRemainingSec: number;
+  currentQuestionIndex: number;
+}
+
+export interface SaveExerciseProgressResponse {
+  ok: boolean;
+  lastSavedIso: string;
+}
+
+export interface SubmitExerciseRequest {
+  answers: ExerciseAnswerDTO[];
+  timeSpentSec: number;
+}
+
+export interface SubmitExerciseResponse {
+  ok: boolean;
+  score: number;
+  maxScore: number;
+  percentage: number;
+}

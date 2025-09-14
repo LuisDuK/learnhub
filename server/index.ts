@@ -8,7 +8,16 @@ import {
   rejectTeacherApplication,
   createTeacherApplication,
 } from "./routes/teachers";
-import { getLesson, saveLessonProgress, submitQuizAnswer } from "./routes/lessons";
+import {
+  getLesson,
+  saveLessonProgress,
+  submitQuizAnswer,
+} from "./routes/lessons";
+import {
+  getExercise,
+  saveExerciseProgress,
+  submitExercise,
+} from "./routes/exercises";
 
 export function createServer() {
   const app = express();
@@ -36,6 +45,11 @@ export function createServer() {
   app.get("/api/lessons/:id", getLesson);
   app.post("/api/lessons/:id/progress", saveLessonProgress);
   app.post("/api/lessons/:id/quiz/:qid/answer", submitQuizAnswer);
+
+  // Exercises routes (UC-04)
+  app.get("/api/exercises/:id", getExercise);
+  app.post("/api/exercises/:id/progress", saveExerciseProgress);
+  app.post("/api/exercises/:id/submit", submitExercise);
 
   return app;
 }

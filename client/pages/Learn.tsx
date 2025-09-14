@@ -14,14 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import {
-  ArrowLeft,
-  ZoomIn,
-  ZoomOut,
-  Clock,
-  Lightbulb,
-  Heart,
-} from "lucide-react";
+import { ArrowLeft, ZoomIn, ZoomOut, Clock, Heart } from "lucide-react";
 import type { GetLessonResponse } from "@shared/api";
 
 interface LearnState {
@@ -65,6 +58,7 @@ export default function Learn() {
 
   const [accessError, setAccessError] = useState<string | null>(null);
   const [serverVideo, setServerVideo] = useState<string | null>(null);
+  const [allowServerSync, setAllowServerSync] = useState(false);
 
   const [showReflection, setShowReflection] = useState(false);
   const [reflectionNote, setReflectionNote] = useState("");
@@ -79,6 +73,8 @@ export default function Learn() {
   >({ 0: null, 1: null });
   const [quickSubmitted, setQuickSubmitted] = useState(false);
   const [understoodOk, setUnderstoodOk] = useState<boolean | null>(null);
+  const [showQuickCheck, setShowQuickCheck] = useState(false);
+  const [askedMarkers, setAskedMarkers] = useState<Record<number, boolean>>({});
 
   const estimated = learn.estimatedDurationSec || 600; // default 10min for documents
 
@@ -96,12 +92,14 @@ export default function Learn() {
         if (cancelled) return;
         if (res && learn.type === "video") setServerVideo(res.lesson.videoUrl);
         setAccessError(null);
+        setAllowServerSync(Boolean(res));
       })
       .catch((e: any) => {
         if (cancelled) return;
         if (String(e?.message || "").includes("sẵn sàng"))
           setAccessError("Bài học chưa sẵn sàng");
         else setAccessError(null);
+        setAllowServerSync(false);
       });
     return () => {
       cancelled = true;
@@ -115,15 +113,62 @@ export default function Learn() {
     return () => clearInterval(iv);
   }, [learn.type]);
 
-  // Whether there are any concepts detected (safe before conceptHints init)
-  const hasConcepts = useMemo(() => {
-    const text =
-      `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
-    const tagCount = (learn.conceptTags || []).length;
-    const pattern =
-      /(cộng|add|addition|trừ|subtract|subtraction|phân số|fraction)/;
-    return tagCount > 0 || pattern.test(text);
-  }, [learn.title, learn.description, learn.conceptTags]);
+  // Trigger quick-check popup at marker times or on completion
+  useEffect(() => {
+    const time = learn.type === "video" ? Math.floor(videoPos) : elapsed;
+    const total = learn.type === "video" ? Math.floor(videoDur) : estimated;
+    if (markerTimes.length) {
+      for (let i = 0; i < markerTimes.length; i++) {
+        const t = Math.floor(markerTimes[i]);
+        if (time >= t && !askedMarkers[i]) {
+          setShowQuickCheck(true);
+          setAskedMarkers((s) => ({ ...s, [i]: true }));
+          break;
+        }
+      }
+    }
+    const done =
+      learn.type === "video"
+        ? videoDur > 0 && videoPos >= videoDur - 0.5
+        : time >= total - 1;
+    if (done && !showQuickCheck && !quickSubmitted) setShowQuickCheck(true);
+  }, [
+    learn.type,
+    videoPos,
+    videoDur,
+    elapsed,
+    estimated,
+    markerTimes,
+    askedMarkers,
+    showQuickCheck,
+    quickSubmitted,
+  ]);
+
+  const hasConcepts = false;
+
+  const segments = useMemo(() => {
+    const provided: any[] | undefined = (learn as any).segments;
+    if (Array.isArray(provided) && provided.length) return provided;
+    const times = markerTimes.length
+      ? markerTimes
+      : [60, 180, 300, 420, 540, 660];
+    const title = (learn.title || "").toLowerCase();
+    if (/present simple|hiện tại đơn/.test(title)) {
+      const titles = [
+        "Định nghĩa và cách dùng",
+        "Cấu trúc khẳng định (S + V(s/es))",
+        "Cấu trúc phủ định (S + do/does not + V)",
+        "Câu hỏi (Do/Does + S + V?)",
+        "Trạng từ tần suất (always, usually, often...)",
+        "Lưu ý thêm s/es và ngoại lệ",
+      ];
+      return times.map((t, i) => ({
+        timeSec: t,
+        title: titles[i] || `Ví dụ minh họa ${i + 1}`,
+      }));
+    }
+    return times.map((t, i) => ({ timeSec: t, title: `Mốc ${i + 1}` }));
+  }, [learn, markerTimes]);
 
   // Motivational toasts (5, 15, 25 minutes)
   useEffect(() => {
@@ -146,7 +191,7 @@ export default function Learn() {
 
   // Save progress (server optional)
   useEffect(() => {
-    if (!learn.lessonId) return;
+    if (!learn.lessonId || !allowServerSync) return;
     const iv = setInterval(() => {
       const positionSec = learn.type === "video" ? videoPos : elapsed;
       const completed =
@@ -160,7 +205,15 @@ export default function Learn() {
       }).catch(() => {});
     }, 5000);
     return () => clearInterval(iv);
-  }, [learn.lessonId, learn.type, videoPos, videoDur, elapsed, estimated]);
+  }, [
+    learn.lessonId,
+    allowServerSync,
+    learn.type,
+    videoPos,
+    videoDur,
+    elapsed,
+    estimated,
+  ]);
 
   // Init reflection prompted flag from storage
   useEffect(() => {
@@ -350,7 +403,7 @@ export default function Learn() {
                   <div className="flex items-center gap-2 text-yellow-800">
                     <Heart className="h-5 w-5" />
                     <span>
-                      Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀���
+                      Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀️
                     </span>
                   </div>
                   <Button
@@ -432,73 +485,6 @@ export default function Learn() {
               </Card>
             )}
 
-            {/* Quick check (simple 2-question quiz) */}
-            <Card className="border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-base">
-                  Kiểm tra nhanh mức độ hiểu bài
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[0, 1].map((idx) => (
-                  <div key={idx} className="p-3 rounded-lg border">
-                    <div className="font-medium">Câu {idx + 1}</div>
-                    <div className="mt-2 space-y-2">
-                      {[0, 1, 2].map((opt) => (
-                        <label
-                          key={opt}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <input
-                            type="radio"
-                            name={`q-${idx}`}
-                            checked={quickAnswers[idx] === opt}
-                            onChange={() =>
-                              setQuickAnswers((s) => ({ ...s, [idx]: opt }))
-                            }
-                          />
-                          <span>Lựa chọn {opt + 1}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-                <div className="flex items-center gap-2">
-                  <Button
-                    onClick={() => {
-                      setQuickSubmitted(true);
-                      const correct =
-                        Number(quickAnswers[0] === 0) +
-                          Number(quickAnswers[1] === 1) >=
-                        2;
-                      setUnderstoodOk(correct);
-                      toast({
-                        title: correct ? "Tuyệt vời!" : "Cần ôn thêm",
-                        description: correct
-                          ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nhé!"
-                          : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
-                        variant: correct ? "default" : "destructive",
-                      });
-                    }}
-                  >
-                    Nộp bài
-                  </Button>
-                  {quickSubmitted && understoodOk === false && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        if (learn.lessonId)
-                          navigate(`/lesson/${learn.lessonId}/exercise/1`);
-                        else navigate("/study-plan");
-                      }}
-                    >
-                      Làm thêm bài tập
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Next actions */}
             <div className="flex items-center gap-3">
               <Button
@@ -513,36 +499,34 @@ export default function Learn() {
               </Button>
             </div>
           </div>
-          {hasConcepts && hintsEnabled && (
+
+          <div className="space-y-6">
             <Card className="border-secondary/20 h-fit">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình
-                  ảnh/câu chuyện
-                </CardTitle>
+                <CardTitle className="text-base">Dàn ý nội dung</CardTitle>
               </CardHeader>
-              <CardContent className="grid gap-3">
-                {hintsArr.map((h, i) => (
-                  <div key={i} className="p-3 rounded-xl border bg-white/70">
-                    <div className="text-2xl mb-1">{h.emoji}</div>
-                    <div className="font-semibold">{h.title}</div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {h.story}
+              <CardContent className="grid gap-2">
+                {segments.map((seg: any, i: number) => {
+                  const current = learn.type === "video" ? videoPos : elapsed;
+                  const nextTime = segments[i + 1]?.timeSec;
+                  const active =
+                    current >= seg.timeSec &&
+                    (nextTime == null || current < nextTime);
+                  return (
+                    <div
+                      key={i}
+                      className={`flex items-center justify-between rounded-lg border p-2 ${active ? "bg-primary/10 border-primary" : "bg-white"}`}
+                    >
+                      <div className="text-sm font-medium">{seg.title}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {formatTime(seg.timeSec)}
+                      </div>
                     </div>
-                  </div>
-                ))}
-                <div className="pt-1 flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setHintsEnabled(false)}
-                  >
-                    Ẩn gợi ý
-                  </Button>
-                </div>
+                  );
+                })}
               </CardContent>
             </Card>
-          )}
+          </div>
         </div>
       </div>
 
@@ -597,6 +581,77 @@ export default function Learn() {
               >
                 Lưu ghi chú
               </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Quick-check popup */}
+      <Dialog open={showQuickCheck} onOpenChange={setShowQuickCheck}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Kiểm tra nhanh mức độ hiểu bài</DialogTitle>
+            <DialogDescription>
+              Trả lời nhanh 2 câu hỏi sau để tiếp tục.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            {[0, 1].map((idx) => (
+              <div key={idx} className="p-3 rounded-lg border">
+                <div className="font-medium">Câu {idx + 1}</div>
+                <div className="mt-2 space-y-2">
+                  {[0, 1, 2].map((opt) => (
+                    <label
+                      key={opt}
+                      className="flex items-center gap-2 text-sm"
+                    >
+                      <input
+                        type="radio"
+                        name={`qc-${idx}`}
+                        checked={quickAnswers[idx] === opt}
+                        onChange={() =>
+                          setQuickAnswers((s) => ({ ...s, [idx]: opt }))
+                        }
+                      />
+                      <span>Lựa chọn {opt + 1}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center gap-2 justify-end">
+              <Button
+                onClick={() => {
+                  setQuickSubmitted(true);
+                  const correct =
+                    Number(quickAnswers[0] === 0) +
+                      Number(quickAnswers[1] === 1) >=
+                    2;
+                  setUnderstoodOk(correct);
+                  setShowQuickCheck(false);
+                  toast({
+                    title: correct ? "Tuyệt vời!" : "Cần ôn thêm",
+                    description: correct
+                      ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nhé!"
+                      : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
+                    variant: correct ? "default" : "destructive",
+                  });
+                }}
+              >
+                Nộp bài
+              </Button>
+              {quickSubmitted && understoodOk === false && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (learn.lessonId)
+                      navigate(`/lesson/${learn.lessonId}/exercise/1`);
+                    else navigate("/study-plan");
+                  }}
+                >
+                  Làm thêm bài tập
+                </Button>
+              )}
             </div>
           </div>
         </DialogContent>

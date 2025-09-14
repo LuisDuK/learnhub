@@ -207,6 +207,40 @@ export default function ExerciseResults() {
     );
   }
 
+  useEffect(() => {
+    if (!isLoading && maxScore > 0) {
+      // Persist results server-side and update lesson progress if passed
+      const persist = async () => {
+        try {
+          await fetch(`/api/exercises/${id || "1"}/submit`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              answers: answers.map((a) => ({
+                questionId: a.questionId,
+                type: a.type,
+                content: a.type === "essay" ? a.content : undefined,
+                selectedOption:
+                  a.type === "multiple_choice" ? a.selectedOption : undefined,
+                hasImage: Boolean(a.imageFile),
+              })),
+              timeSpentSec: exercise.timeLimit * 60,
+            }),
+          });
+          const passed = (totalScore / maxScore) * 100 >= 70;
+          if (passed && lessonId) {
+            await fetch(`/api/lessons/${lessonId}/progress`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ positionSec: 0, completed: true }),
+            });
+          }
+        } catch {}
+      };
+      persist();
+    }
+  }, [isLoading, totalScore, maxScore, id, answers, exercise, lessonId]);
+
   if (isLoading) {
     return (
       <DashboardLayout>
@@ -487,6 +521,15 @@ export default function ExerciseResults() {
             <RotateCcw className="h-5 w-5 mr-2" />
             Làm lại bài
           </Button>
+          {(totalScore / maxScore) * 100 >= 70 && (
+            <Button
+              onClick={() => navigate(`/study-plan`)}
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3"
+            >
+              <CheckCircle className="h-5 w-5 mr-2" />
+              Tiếp tục bài học tiếp theo
+            </Button>
+          )}
           <Button
             onClick={() => navigate(`/lesson/${lessonId}`)}
             className="bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white px-8 py-3"

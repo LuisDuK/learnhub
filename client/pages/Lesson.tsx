@@ -64,7 +64,9 @@ export default function Lesson() {
         if (cancelled) return;
         setLesson(res.lesson);
         const saved = Number(localStorage.getItem(storageKey) || 0);
-        setPosition(isFinite(saved) ? Math.min(saved, res.lesson.durationSec - 0.5) : 0);
+        setPosition(
+          isFinite(saved) ? Math.min(saved, res.lesson.durationSec - 0.5) : 0,
+        );
       })
       .catch((e: any) => {
         if (cancelled) return;
@@ -152,7 +154,10 @@ export default function Lesson() {
       fetch(`/api/lessons/${lesson.id}/progress`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ positionSec: lesson.durationSec, completed: true }),
+        body: JSON.stringify({
+          positionSec: lesson.durationSec,
+          completed: true,
+        }),
       }).catch(() => {});
     }
   };
@@ -191,7 +196,11 @@ export default function Lesson() {
     } catch (e) {
       setActiveCue(null);
       videoRef.current?.play();
-      toast({ title: "Không tải được câu hỏi", description: "Tiếp tục phát video.", variant: "destructive" });
+      toast({
+        title: "Không tải được câu hỏi",
+        description: "Tiếp tục phát video.",
+        variant: "destructive",
+      });
     } finally {
       setSubmittingQuiz(false);
     }
@@ -200,7 +209,9 @@ export default function Lesson() {
   if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center h-full">Đang tải bài học...</div>
+        <div className="flex items-center justify-center h-full">
+          Đang tải bài học...
+        </div>
       </DashboardLayout>
     );
   }
@@ -211,7 +222,9 @@ export default function Lesson() {
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <div className="text-6xl mb-4">😔</div>
-            <h2 className="text-2xl font-bold mb-2">{error || "Không tìm thấy bài học"}</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              {error || "Không tìm thấy bài học"}
+            </h2>
             <Button onClick={() => navigate("/subjects")}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Quay lại môn học
@@ -271,7 +284,7 @@ export default function Lesson() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="space-y-6">
           <div className="lg:col-span-2 space-y-6">
             <Card className="border-primary/20 overflow-hidden shadow-lg">
               <CardContent className="p-0">
@@ -313,7 +326,8 @@ export default function Lesson() {
                   📚 Nội dung bài học
                 </CardTitle>
                 <CardDescription>
-                  Video có chèn câu hỏi bắt buộc tại các mốc thời gian nhằm củng cố kiến thức.
+                  Video có chèn câu hỏi bắt buộc tại các mốc thời gian nhằm củng
+                  cố kiến thức.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -322,7 +336,8 @@ export default function Lesson() {
               <Button
                 onClick={() => {
                   setCompleted(true);
-                  if (videoRef.current) videoRef.current.currentTime = lesson.durationSec - 0.1;
+                  if (videoRef.current)
+                    videoRef.current.currentTime = lesson.durationSec - 0.1;
                 }}
                 disabled={completed}
                 className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-bold py-3 rounded-xl shadow-lg"
@@ -358,30 +373,6 @@ export default function Lesson() {
                 Kiểm tra
               </Button>
             </div>
-          </div>
-
-          <div className="space-y-6">
-            <Card className="border-primary/20 shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-lg">📋 Thông tin bài học</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Thời lượng:</span>
-                  <Badge variant="outline">{formatDuration(lesson.durationSec)}</Badge>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-primary/10 to-accent/10 text-center">
-              <CardContent className="p-6">
-                <div className="text-4xl mb-3">🌟</div>
-                <h3 className="font-bold text-primary mb-2">Bé học rất tốt!</h3>
-                <p className="text-sm text-muted-foreground">
-                  Hãy tiếp tục cố gắng để hoàn thành tất cả bài học nhé! 💪
-                </p>
-              </CardContent>
-            </Card>
           </div>
         </div>
 
