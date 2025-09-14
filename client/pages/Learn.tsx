@@ -174,13 +174,6 @@ export default function Learn() {
         emoji: "🍕",
       });
     }
-    if (!hints.length) {
-      hints.push({
-        title: "Gợi ý minh họa",
-        story: "Khi gặp khái niệm khó, hãy tưởng tượng nó như đồ vật quen thuộc hằng ngày để dễ hình dung hơn.",
-        emoji: "💡",
-      });
-    }
     return hints;
   }, [learn.title, learn.description]);
 
@@ -244,7 +237,9 @@ export default function Learn() {
           </Badge>
         </div>
 
-        {/* Study progress */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-6">
+            {/* Study progress */}
         <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
@@ -324,21 +319,6 @@ export default function Learn() {
           </Card>
         )}
 
-        {/* Concept helper */}
-        <Card className="border-secondary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình ảnh/câu chuyện</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-3 md:grid-cols-3">
-            {conceptHints.map((h, i) => (
-              <div key={i} className="p-3 rounded-xl border bg-white/70">
-                <div className="text-2xl mb-1">{h.emoji}</div>
-                <div className="font-semibold">{h.title}</div>
-                <div className="text-sm text-muted-foreground mt-1">{h.story}</div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
 
         {/* Quick check (simple 2-question quiz) */}
         <Card className="border-primary/20">
@@ -372,7 +352,7 @@ export default function Learn() {
                   setUnderstoodOk(correct);
                   toast({
                     title: correct ? "Tuyệt vời!" : "Cần ôn thêm",
-                    description: correct ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nh��!" : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
+                    description: correct ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nhé!" : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
                     variant: correct ? "default" : "destructive",
                   });
                 }}
@@ -403,7 +383,27 @@ export default function Learn() {
           >
             Tiếp tục bài tiếp theo
           </Button>
-          <Button variant="outline" onClick={() => navigate("/study-plan")}>Quay lại lộ trình</Button>
+          <Button variant="outline" onClick={() => navigate("/study-plan")}>
+            Quay lại lộ trình
+          </Button>
+        </div>
+          </div>
+          {conceptHints.length > 0 && (
+            <Card className="border-secondary/20 h-fit">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình ảnh/câu chuyện</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-3">
+                {conceptHints.map((h, i) => (
+                  <div key={i} className="p-3 rounded-xl border bg-white/70">
+                    <div className="text-2xl mb-1">{h.emoji}</div>
+                    <div className="font-semibold">{h.title}</div>
+                    <div className="text-sm text-muted-foreground mt-1">{h.story}</div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 
