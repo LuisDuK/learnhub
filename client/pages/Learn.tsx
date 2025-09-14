@@ -46,6 +46,8 @@ export default function Learn() {
 
   const [showReflection, setShowReflection] = useState(false);
   const [reflectionNote, setReflectionNote] = useState("");
+  const [reflectionPrompted, setReflectionPrompted] = useState(false);
+  const reflectFlag = useMemo(() => `reflection:prompted:${learn.title}`, [learn.title]);
 
   const [quickAnswers, setQuickAnswers] = useState<Record<number, number | null>>({ 0: null, 1: null });
   const [quickSubmitted, setQuickSubmitted] = useState(false);
@@ -117,15 +119,22 @@ export default function Learn() {
     return () => clearInterval(iv);
   }, [learn.lessonId, learn.type, videoPos, videoDur, elapsed, estimated]);
 
+  // Init reflection prompted flag from storage
+  useEffect(() => {
+    setReflectionPrompted(Boolean(localStorage.getItem(reflectFlag)));
+  }, [reflectFlag]);
+
   // Reflection trigger at 50%
   useEffect(() => {
     const ratio = learn.type === "video" ? (videoDur > 0 ? videoPos / videoDur : 0) : elapsed / Math.max(1, estimated);
-    if (!showReflection && ratio >= 0.5) {
+    if (!showReflection && !reflectionPrompted && ratio >= 0.5) {
       const stored = localStorage.getItem(`reflection:${learn.title}`) || "";
       setReflectionNote(stored);
       setShowReflection(true);
+      setReflectionPrompted(true);
+      localStorage.setItem(reflectFlag, "1");
     }
-  }, [learn.type, videoPos, videoDur, elapsed, estimated, showReflection, learn.title]);
+  }, [learn.type, videoPos, videoDur, elapsed, estimated, showReflection, learn.title, reflectionPrompted, reflectFlag]);
 
   const progress = useMemo(() => {
     if (learn.type === "video") {
@@ -363,7 +372,7 @@ export default function Learn() {
                   setUnderstoodOk(correct);
                   toast({
                     title: correct ? "Tuyệt vời!" : "Cần ôn thêm",
-                    description: correct ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nhé!" : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
+                    description: correct ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nh��!" : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
                     variant: correct ? "default" : "destructive",
                   });
                 }}
@@ -399,7 +408,13 @@ export default function Learn() {
       </div>
 
       {/* Reflection dialog */}
-      <Dialog open={showReflection} onOpenChange={setShowReflection}>
+      <Dialog open={showReflection} onOpenChange={(o) => {
+        setShowReflection(o);
+        if (!o) {
+          setReflectionPrompted(true);
+          localStorage.setItem(reflectFlag, "1");
+        }
+      }}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Tự phản ánh</DialogTitle>
@@ -415,10 +430,12 @@ export default function Learn() {
               placeholder="Điều mình đã hiểu... Điều còn mơ hồ..."
             />
             <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setShowReflection(false)}>Để sau</Button>
+              <Button variant="outline" onClick={() => { setShowReflection(false); setReflectionPrompted(true); localStorage.setItem(reflectFlag, "1"); }}>Để sau</Button>
               <Button
                 onClick={() => {
                   localStorage.setItem(`reflection:${learn.title}`, reflectionNote);
+                  setReflectionPrompted(true);
+                  localStorage.setItem(reflectFlag, "1");
                   setShowReflection(false);
                 }}
                 className="bg-gradient-to-r from-primary to-accent text-white"
