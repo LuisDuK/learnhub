@@ -168,6 +168,40 @@ export default function Learn() {
     return learn.src;
   }, [learn.type, serverVideo, learn.src]);
 
+  // Concept hints derived from title/description/tags
+  const conceptHints = useMemo(() => {
+    const text = `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
+    const tags = new Set<string>();
+    (learn.conceptTags || []).forEach((t) => tags.add(t.toLowerCase()));
+    if (/cộng|add|addition/.test(text)) tags.add("addition");
+    if (/trừ|subtract|subtraction/.test(text)) tags.add("subtraction");
+    if (/phân số|fraction/.test(text)) tags.add("fraction");
+
+    const hints: { title: string; story: string; emoji: string }[] = [];
+    if (tags.has("addition")) {
+      hints.push({
+        title: "Ghép mảnh để cộng",
+        story:
+          "Hãy tưởng tượng 10 khối lego màu xanh và 5 khối lego màu đỏ. Ghép lại, bạn sẽ có 15 khối rực rỡ!",
+        emoji: "🧩",
+      });
+    }
+    if (tags.has("subtraction")) {
+      hints.push({
+        title: "Ăn bánh còn bao nhiêu?",
+        story: "Có 9 chiếc bánh, bạn ăn 3 chiếc. Còn lại mấy chiếc để chia cho bạn bè?",
+        emoji: "🧁",
+      });
+    }
+    if (tags.has("fraction")) {
+      hints.push({
+        title: "Cắt bánh chia phần",
+        story: "Một chiếc pizza chia 8 miếng. 3/8 nghĩa là 3 miếng pizza ngon tuyệt!",
+        emoji: "🍕",
+      });
+    }
+    return hints;
+  }, [learn.title, learn.description, learn.conceptTags]);
 
   if (!learn || !learn.src || !learn.type) {
     return (
@@ -250,7 +284,7 @@ export default function Learn() {
             <CardContent className="p-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-yellow-800">
                 <Heart className="h-5 w-5" />
-                <span>Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀️</span>
+                <span>Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀���</span>
               </div>
               <Button size="sm" variant="outline" onClick={() => setBreakShown(false)}>Đã hiểu</Button>
             </CardContent>
