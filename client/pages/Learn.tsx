@@ -5,7 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ZoomIn, ZoomOut, Clock } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { ArrowLeft, ZoomIn, ZoomOut, Clock, Lightbulb, Heart } from "lucide-react";
+import type { GetLessonResponse } from "@shared/api";
 
 interface LearnState {
   type: "video" | "document";
@@ -13,6 +17,7 @@ interface LearnState {
   description?: string;
   src: string;
   estimatedDurationSec?: number; // for documents
+  lessonId?: string; // optional, to fetch/access-check and sync progress
 }
 
 function formatTime(sec: number) {
@@ -23,6 +28,7 @@ function formatTime(sec: number) {
 
 export default function Learn() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { state } = useLocation();
   const learn = (state || {}) as LearnState;
 
@@ -32,13 +38,94 @@ export default function Learn() {
 
   const [zoom, setZoom] = useState(1);
   const [elapsed, setElapsed] = useState(0);
-  const estimated = learn.estimatedDurationSec || 600; // default 10min
+  const [breakShown, setBreakShown] = useState(false);
+  const [milestonesShown, setMilestonesShown] = useState<Record<number, boolean>>({});
 
+  const [accessError, setAccessError] = useState<string | null>(null);
+  const [serverVideo, setServerVideo] = useState<string | null>(null);
+
+  const [showReflection, setShowReflection] = useState(false);
+  const [reflectionNote, setReflectionNote] = useState("");
+
+  const [quickAnswers, setQuickAnswers] = useState<Record<number, number | null>>({ 0: null, 1: null });
+  const [quickSubmitted, setQuickSubmitted] = useState(false);
+  const [understoodOk, setUnderstoodOk] = useState<boolean | null>(null);
+
+  const estimated = learn.estimatedDurationSec || 600; // default 10min for documents
+
+  // Optional access-check + hydrate from server
+  useEffect(() => {
+    let cancelled = false;
+    if (!learn.lessonId) return;
+    fetch(`/api/lessons/${learn.lessonId}`)
+      .then(async (r) => {
+        if (!r.ok) {
+          if (r.status === 403) throw new Error("Bài học chưa sẵn sàng");
+          throw new Error("Không tải được bài học");
+        }
+        return (await r.json()) as GetLessonResponse;
+      })
+      .then((res) => {
+        if (cancelled) return;
+        if (learn.type === "video") setServerVideo(res.lesson.videoUrl);
+        setAccessError(null);
+      })
+      .catch((e: any) => {
+        if (cancelled) return;
+        setAccessError(e?.message || "Không thể truy cập bài học");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [learn.lessonId, learn.type]);
+
+  // Document ticking
   useEffect(() => {
     if (learn.type !== "document") return;
     const iv = setInterval(() => setElapsed((e) => e + 1), 1000);
     return () => clearInterval(iv);
   }, [learn.type]);
+
+  // Motivational toasts (5, 15, 25 minutes)
+  useEffect(() => {
+    const total = learn.type === "video" ? Math.floor(videoPos) : elapsed;
+    const marks = [300, 900, 1500];
+    marks.forEach((t) => {
+      if (total >= t && !milestonesShown[t]) {
+        setMilestonesShown((s) => ({ ...s, [t]: true }));
+        toast({
+          title: "Cố lên!",
+          description: t === 1500 ? "Bạn sắp chạm mốc 25 phút, chuẩn bị nghỉ ngơi nhé!" : "Bạn đang làm rất tốt!",
+        });
+      }
+    });
+    if (total >= 1500 && !breakShown) setBreakShown(true);
+  }, [learn.type, videoPos, elapsed, milestonesShown, breakShown, toast]);
+
+  // Save progress (server optional)
+  useEffect(() => {
+    if (!learn.lessonId) return;
+    const iv = setInterval(() => {
+      const positionSec = learn.type === "video" ? videoPos : elapsed;
+      const completed = learn.type === "video" ? videoDur > 0 && videoPos >= videoDur - 0.5 : elapsed >= estimated - 1;
+      fetch(`/api/lessons/${learn.lessonId}/progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ positionSec, completed }),
+      }).catch(() => {});
+    }, 5000);
+    return () => clearInterval(iv);
+  }, [learn.lessonId, learn.type, videoPos, videoDur, elapsed, estimated]);
+
+  // Reflection trigger at 50%
+  useEffect(() => {
+    const ratio = learn.type === "video" ? (videoDur > 0 ? videoPos / videoDur : 0) : elapsed / Math.max(1, estimated);
+    if (!showReflection && ratio >= 0.5) {
+      const stored = localStorage.getItem(`reflection:${learn.title}`) || "";
+      setReflectionNote(stored);
+      setShowReflection(true);
+    }
+  }, [learn.type, videoPos, videoDur, elapsed, estimated, showReflection, learn.title]);
 
   const progress = useMemo(() => {
     if (learn.type === "video") {
@@ -47,6 +134,46 @@ export default function Learn() {
     }
     return Math.max(0, Math.min(100, (elapsed / Math.max(1, estimated)) * 100));
   }, [learn.type, videoPos, videoDur, elapsed, estimated]);
+
+  const computedSrc = useMemo(() => {
+    if (learn.type === "video") return serverVideo || learn.src;
+    return learn.src;
+  }, [learn.type, serverVideo, learn.src]);
+
+  const conceptHints = useMemo(() => {
+    const text = `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
+    const hints: { title: string; story: string; emoji: string }[] = [];
+    if (/cộng|add|addition/.test(text)) {
+      hints.push({
+        title: "Ghép mảnh để cộng",
+        story:
+          "Hãy tưởng tượng 10 khối lego màu xanh và 5 khối lego màu đỏ. Ghép lại, bạn sẽ có 15 khối rực rỡ!",
+        emoji: "🧩",
+      });
+    }
+    if (/trừ|subtract|subtraction/.test(text)) {
+      hints.push({
+        title: "Ăn bánh còn bao nhiêu?",
+        story: "Có 9 chiếc bánh, bạn ăn 3 chiếc. Còn lại mấy chiếc để chia cho bạn bè?",
+        emoji: "🧁",
+      });
+    }
+    if (/phân số|fraction/.test(text)) {
+      hints.push({
+        title: "Cắt bánh chia phần",
+        story: "Một chiếc pizza chia 8 miếng. 3/8 nghĩa là 3 miếng pizza ngon tuyệt!",
+        emoji: "🍕",
+      });
+    }
+    if (!hints.length) {
+      hints.push({
+        title: "Gợi ý minh họa",
+        story: "Khi gặp khái niệm khó, hãy tưởng tượng nó như đồ vật quen thuộc hằng ngày để dễ hình dung hơn.",
+        emoji: "💡",
+      });
+    }
+    return hints;
+  }, [learn.title, learn.description]);
 
   if (!learn || !learn.src || !learn.type) {
     return (
@@ -64,9 +191,26 @@ export default function Learn() {
     );
   }
 
+  if (accessError) {
+    return (
+      <DashboardLayout>
+        <div className="p-6">
+          <Card className="border-red-200">
+            <CardContent className="p-6 text-center">
+              <div className="text-5xl mb-2">🔒</div>
+              <div className="font-bold text-red-600 mb-2">{accessError}</div>
+              <Button variant="outline" onClick={() => navigate(-1)}>Quay lại</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout>
       <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
+        {/* Top bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button
@@ -91,6 +235,7 @@ export default function Learn() {
           </Badge>
         </div>
 
+        {/* Study progress */}
         <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
@@ -103,13 +248,27 @@ export default function Learn() {
           </CardContent>
         </Card>
 
+        {/* Break reminder */}
+        {breakShown && (
+          <Card className="border-yellow-200 bg-yellow-50">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-yellow-800">
+                <Heart className="h-5 w-5" />
+                <span>Đã 25 phút rồi! Nghỉ 5 phút cho mắt và não nhé 💆‍♀️</span>
+              </div>
+              <Button size="sm" variant="outline" onClick={() => setBreakShown(false)}>Đã hiểu</Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Main content */}
         {learn.type === "video" ? (
           <Card className="border-primary/20 overflow-hidden shadow-lg">
             <CardContent className="p-0">
               <div className="aspect-video bg-black">
                 <video
                   ref={videoRef}
-                  src={learn.src}
+                  src={computedSrc}
                   controls
                   className="w-full h-full"
                   onLoadedMetadata={() => setVideoDur(videoRef.current?.duration || 0)}
@@ -143,7 +302,7 @@ export default function Learn() {
                   className="w-full h-full"
                   style={{ transform: `scale(${zoom})`, transformOrigin: "top left" }}
                 >
-                  <iframe src={learn.src} className="w-[100%] h-[75vh]" />
+                  <iframe src={computedSrc} className="w-[100%] h-[75vh]" />
                 </div>
               </div>
               <div className="p-4 flex items-center gap-4 text-sm text-muted-foreground">
@@ -155,7 +314,121 @@ export default function Learn() {
             </CardContent>
           </Card>
         )}
+
+        {/* Concept helper */}
+        <Card className="border-secondary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình ảnh/câu chuyện</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-3">
+            {conceptHints.map((h, i) => (
+              <div key={i} className="p-3 rounded-xl border bg-white/70">
+                <div className="text-2xl mb-1">{h.emoji}</div>
+                <div className="font-semibold">{h.title}</div>
+                <div className="text-sm text-muted-foreground mt-1">{h.story}</div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Quick check (simple 2-question quiz) */}
+        <Card className="border-primary/20">
+          <CardHeader>
+            <CardTitle className="text-base">Kiểm tra nhanh mức độ hiểu bài</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {[0, 1].map((idx) => (
+              <div key={idx} className="p-3 rounded-lg border">
+                <div className="font-medium">Câu {idx + 1}</div>
+                <div className="mt-2 space-y-2">
+                  {[0, 1, 2].map((opt) => (
+                    <label key={opt} className="flex items-center gap-2 text-sm">
+                      <input
+                        type="radio"
+                        name={`q-${idx}`}
+                        checked={quickAnswers[idx] === opt}
+                        onChange={() => setQuickAnswers((s) => ({ ...s, [idx]: opt }))}
+                      />
+                      <span>Lựa chọn {opt + 1}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => {
+                  setQuickSubmitted(true);
+                  const correct = (Number(quickAnswers[0] === 0) + Number(quickAnswers[1] === 1)) >= 2;
+                  setUnderstoodOk(correct);
+                  toast({
+                    title: correct ? "Tuyệt vời!" : "Cần ôn thêm",
+                    description: correct ? "Bạn đã hiểu tốt. Tiếp tục bài tiếp theo nhé!" : "Hãy xem lại nội dung hoặc làm thêm bài tập.",
+                    variant: correct ? "default" : "destructive",
+                  });
+                }}
+              >
+                Nộp bài
+              </Button>
+              {quickSubmitted && understoodOk === false && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (learn.lessonId) navigate(`/lesson/${learn.lessonId}/exercise/1`);
+                    else navigate("/study-plan");
+                  }}
+                >
+                  Làm thêm bài tập
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Next actions */}
+        <div className="flex items-center gap-3">
+          <Button
+            disabled={understoodOk !== true}
+            onClick={() => navigate("/study-plan")}
+            className="bg-gradient-to-r from-primary to-accent text-white"
+          >
+            Tiếp tục bài tiếp theo
+          </Button>
+          <Button variant="outline" onClick={() => navigate("/study-plan")}>Quay lại lộ trình</Button>
+        </div>
       </div>
+
+      {/* Reflection dialog */}
+      <Dialog open={showReflection} onOpenChange={setShowReflection}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Tự phản ánh</DialogTitle>
+            <DialogDescription>
+              Hãy dành một phút để nghĩ về điều bạn đã hiểu rõ và điều còn mơ hồ. Ghi lại vài dòng nhé!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Textarea
+              rows={5}
+              value={reflectionNote}
+              onChange={(e) => setReflectionNote(e.target.value)}
+              placeholder="Điều mình đã hiểu... Điều còn mơ hồ..."
+            />
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setShowReflection(false)}>Để sau</Button>
+              <Button
+                onClick={() => {
+                  localStorage.setItem(`reflection:${learn.title}`, reflectionNote);
+                  setShowReflection(false);
+                }}
+                className="bg-gradient-to-r from-primary to-accent text-white"
+              >
+                Lưu ghi chú
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }
