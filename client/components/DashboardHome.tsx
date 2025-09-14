@@ -170,7 +170,7 @@ const currentCourses = [
     thumbnail: "/placeholder.svg",
     category: "Anh",
     level: "Trung bình",
-    emoji: "🗣️",
+    emoji: "🗣���",
   },
 ];
 
@@ -228,7 +228,7 @@ export function DashboardHome() {
             <CardTitle className="text-sm font-medium">
               ⏰ Thời gian học
             </CardTitle>
-            <div className="text-2xl">���</div>
+            <div className="text-2xl">📖</div>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-primary">45h</div>
@@ -405,7 +405,7 @@ export function DashboardHome() {
                     </div>
 
                     {/* Action Button */}
-                    <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105">
+                    <Button onClick={() => navigate("/study-plan")} className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white font-medium rounded-xl transition-all duration-300 hover:scale-105">
                       <Play className="h-4 w-4 mr-2" />
                       {course.progress === 0
                         ? "🚀 Bắt đầu học!"
