@@ -8,8 +8,16 @@ import {
   rejectTeacherApplication,
   createTeacherApplication,
 } from "./routes/teachers";
-import { getLesson, saveLessonProgress, submitQuizAnswer } from "./routes/lessons";
-import { getExercise, saveExerciseProgress, submitExercise } from "./routes/exercises";
+import {
+  getLesson,
+  saveLessonProgress,
+  submitQuizAnswer,
+} from "./routes/lessons";
+import {
+  getExercise,
+  saveExerciseProgress,
+  submitExercise,
+} from "./routes/exercises";
 
 export function createServer() {
   const app = express();

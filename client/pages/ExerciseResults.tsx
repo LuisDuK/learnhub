@@ -220,13 +220,14 @@ export default function ExerciseResults() {
                 questionId: a.questionId,
                 type: a.type,
                 content: a.type === "essay" ? a.content : undefined,
-                selectedOption: a.type === "multiple_choice" ? a.selectedOption : undefined,
+                selectedOption:
+                  a.type === "multiple_choice" ? a.selectedOption : undefined,
                 hasImage: Boolean(a.imageFile),
               })),
               timeSpentSec: exercise.timeLimit * 60,
             }),
           });
-          const passed = ((totalScore / maxScore) * 100) >= 70;
+          const passed = (totalScore / maxScore) * 100 >= 70;
           if (passed && lessonId) {
             await fetch(`/api/lessons/${lessonId}/progress`, {
               method: "POST",
@@ -247,12 +248,22 @@ export default function ExerciseResults() {
           <Card className="w-full max-w-2xl text-center border-primary/20 shadow-2xl">
             <CardContent className="p-12">
               <div className="text-8xl mb-6 animate-bounce">🤖</div>
-              <h1 className="text-3xl font-bold text-primary mb-4">Đang chấm bài...</h1>
-              <p className="text-lg text-muted-foreground mb-6">AI đang phân tích và đánh giá bài làm của bé. Vui lòng chờ trong giây lát!</p>
+              <h1 className="text-3xl font-bold text-primary mb-4">
+                Đang chấm bài...
+              </h1>
+              <p className="text-lg text-muted-foreground mb-6">
+                AI đang phân tích và đánh giá bài làm của bé. Vui lòng chờ trong
+                giây lát!
+              </p>
               <div className="w-full bg-gray-200 rounded-full h-4 mb-4">
-                <div className="bg-gradient-to-r from-primary to-accent h-4 rounded-full animate-pulse" style={{ width: "60%" }}></div>
+                <div
+                  className="bg-gradient-to-r from-primary to-accent h-4 rounded-full animate-pulse"
+                  style={{ width: "60%" }}
+                ></div>
               </div>
-              <p className="text-sm text-muted-foreground">Đang xử lý kết quả...</p>
+              <p className="text-sm text-muted-foreground">
+                Đang xử lý kết quả...
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -510,7 +521,7 @@ export default function ExerciseResults() {
             <RotateCcw className="h-5 w-5 mr-2" />
             Làm lại bài
           </Button>
-          {((totalScore / maxScore) * 100) >= 70 && (
+          {(totalScore / maxScore) * 100 >= 70 && (
             <Button
               onClick={() => navigate(`/study-plan`)}
               className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-3"

@@ -68,7 +68,9 @@ export default function Learn() {
     [learn.title],
   );
 
-  const [quickAnswers, setQuickAnswers] = useState<Record<number, number | null>>({ 0: null, 1: null });
+  const [quickAnswers, setQuickAnswers] = useState<
+    Record<number, number | null>
+  >({ 0: null, 1: null });
   const [quickSubmitted, setQuickSubmitted] = useState(false);
   const [understoodOk, setUnderstoodOk] = useState<boolean | null>(null);
   const [showQuickCheck, setShowQuickCheck] = useState(false);
@@ -125,16 +127,31 @@ export default function Learn() {
         }
       }
     }
-    const done = learn.type === "video" ? videoDur > 0 && videoPos >= videoDur - 0.5 : time >= total - 1;
+    const done =
+      learn.type === "video"
+        ? videoDur > 0 && videoPos >= videoDur - 0.5
+        : time >= total - 1;
     if (done && !showQuickCheck && !quickSubmitted) setShowQuickCheck(true);
-  }, [learn.type, videoPos, videoDur, elapsed, estimated, markerTimes, askedMarkers, showQuickCheck, quickSubmitted]);
+  }, [
+    learn.type,
+    videoPos,
+    videoDur,
+    elapsed,
+    estimated,
+    markerTimes,
+    askedMarkers,
+    showQuickCheck,
+    quickSubmitted,
+  ]);
 
   const hasConcepts = false;
 
   const segments = useMemo(() => {
     const provided: any[] | undefined = (learn as any).segments;
     if (Array.isArray(provided) && provided.length) return provided;
-    const times = markerTimes.length ? markerTimes : [60, 180, 300, 420, 540, 660];
+    const times = markerTimes.length
+      ? markerTimes
+      : [60, 180, 300, 420, 540, 660];
     const title = (learn.title || "").toLowerCase();
     if (/present simple|hiện tại đơn/.test(title)) {
       const titles = [
@@ -145,7 +162,10 @@ export default function Learn() {
         "Trạng từ tần suất (always, usually, often...)",
         "Lưu ý thêm s/es và ngoại lệ",
       ];
-      return times.map((t, i) => ({ timeSec: t, title: titles[i] || `Ví dụ minh họa ${i + 1}` }));
+      return times.map((t, i) => ({
+        timeSec: t,
+        title: titles[i] || `Ví dụ minh họa ${i + 1}`,
+      }));
     }
     return times.map((t, i) => ({ timeSec: t, title: `Mốc ${i + 1}` }));
   }, [learn, markerTimes]);
@@ -185,7 +205,15 @@ export default function Learn() {
       }).catch(() => {});
     }, 5000);
     return () => clearInterval(iv);
-  }, [learn.lessonId, allowServerSync, learn.type, videoPos, videoDur, elapsed, estimated]);
+  }, [
+    learn.lessonId,
+    allowServerSync,
+    learn.type,
+    videoPos,
+    videoDur,
+    elapsed,
+    estimated,
+  ]);
 
   // Init reflection prompted flag from storage
   useEffect(() => {
@@ -457,7 +485,6 @@ export default function Learn() {
               </Card>
             )}
 
-
             {/* Next actions */}
             <div className="flex items-center gap-3">
               <Button
@@ -482,11 +509,18 @@ export default function Learn() {
                 {segments.map((seg: any, i: number) => {
                   const current = learn.type === "video" ? videoPos : elapsed;
                   const nextTime = segments[i + 1]?.timeSec;
-                  const active = current >= seg.timeSec && (nextTime == null || current < nextTime);
+                  const active =
+                    current >= seg.timeSec &&
+                    (nextTime == null || current < nextTime);
                   return (
-                    <div key={i} className={`flex items-center justify-between rounded-lg border p-2 ${active ? "bg-primary/10 border-primary" : "bg-white"}`}>
+                    <div
+                      key={i}
+                      className={`flex items-center justify-between rounded-lg border p-2 ${active ? "bg-primary/10 border-primary" : "bg-white"}`}
+                    >
                       <div className="text-sm font-medium">{seg.title}</div>
-                      <div className="text-xs text-muted-foreground">{formatTime(seg.timeSec)}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {formatTime(seg.timeSec)}
+                      </div>
                     </div>
                   );
                 })}
@@ -557,7 +591,9 @@ export default function Learn() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Kiểm tra nhanh mức độ hiểu bài</DialogTitle>
-            <DialogDescription>Trả lời nhanh 2 câu hỏi sau để tiếp tục.</DialogDescription>
+            <DialogDescription>
+              Trả lời nhanh 2 câu hỏi sau để tiếp tục.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             {[0, 1].map((idx) => (
@@ -565,12 +601,17 @@ export default function Learn() {
                 <div className="font-medium">Câu {idx + 1}</div>
                 <div className="mt-2 space-y-2">
                   {[0, 1, 2].map((opt) => (
-                    <label key={opt} className="flex items-center gap-2 text-sm">
+                    <label
+                      key={opt}
+                      className="flex items-center gap-2 text-sm"
+                    >
                       <input
                         type="radio"
                         name={`qc-${idx}`}
                         checked={quickAnswers[idx] === opt}
-                        onChange={() => setQuickAnswers((s) => ({ ...s, [idx]: opt }))}
+                        onChange={() =>
+                          setQuickAnswers((s) => ({ ...s, [idx]: opt }))
+                        }
                       />
                       <span>Lựa chọn {opt + 1}</span>
                     </label>
@@ -582,7 +623,10 @@ export default function Learn() {
               <Button
                 onClick={() => {
                   setQuickSubmitted(true);
-                  const correct = Number(quickAnswers[0] === 0) + Number(quickAnswers[1] === 1) >= 2;
+                  const correct =
+                    Number(quickAnswers[0] === 0) +
+                      Number(quickAnswers[1] === 1) >=
+                    2;
                   setUnderstoodOk(correct);
                   setShowQuickCheck(false);
                   toast({
@@ -600,7 +644,8 @@ export default function Learn() {
                 <Button
                   variant="outline"
                   onClick={() => {
-                    if (learn.lessonId) navigate(`/lesson/${learn.lessonId}/exercise/1`);
+                    if (learn.lessonId)
+                      navigate(`/lesson/${learn.lessonId}/exercise/1`);
                     else navigate("/study-plan");
                   }}
                 >

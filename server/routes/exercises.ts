@@ -22,13 +22,62 @@ const exerciseStore: Record<string, Exercise> = {
     timeLimit: 30,
     totalPoints: 100,
     questions: [
-      { id: 1, type: "multiple_choice", question: "25 + 34 = ?", options: ["59", "69", "58", "61"], correctAnswer: 0, points: 10 },
-      { id: 2, type: "multiple_choice", question: "78 - 29 = ?", options: ["49", "51", "48", "50"], correctAnswer: 0, points: 10 },
-      { id: 3, type: "multiple_choice", question: "42 + 18 = ?", options: ["58", "60", "62", "59"], correctAnswer: 1, points: 10 },
-      { id: 4, type: "multiple_choice", question: "95 - 37 = ?", options: ["58", "59", "57", "56"], correctAnswer: 0, points: 10 },
-      { id: 5, type: "multiple_choice", question: "Lan có 56 viên kẹo, cho bạn 18 viên. Hỏi Lan còn lại bao nhiêu viên?", options: ["38 viên", "36 viên", "40 viên", "42 viên"], correctAnswer: 0, points: 15 },
-      { id: 6, type: "essay", question: "Giải thích cách tính 45 + 23 theo từng bước", points: 20, hint: "Hãy viết từng bước một cách chi tiết" },
-      { id: 7, type: "essay", question: "Tính 67 - 39 và giải thích tại sao phải mượn khi thực hiện phép trừ này", points: 15, hint: "Chú ý đến việc mượn từ hàng chục" },
+      {
+        id: 1,
+        type: "multiple_choice",
+        question: "25 + 34 = ?",
+        options: ["59", "69", "58", "61"],
+        correctAnswer: 0,
+        points: 10,
+      },
+      {
+        id: 2,
+        type: "multiple_choice",
+        question: "78 - 29 = ?",
+        options: ["49", "51", "48", "50"],
+        correctAnswer: 0,
+        points: 10,
+      },
+      {
+        id: 3,
+        type: "multiple_choice",
+        question: "42 + 18 = ?",
+        options: ["58", "60", "62", "59"],
+        correctAnswer: 1,
+        points: 10,
+      },
+      {
+        id: 4,
+        type: "multiple_choice",
+        question: "95 - 37 = ?",
+        options: ["58", "59", "57", "56"],
+        correctAnswer: 0,
+        points: 10,
+      },
+      {
+        id: 5,
+        type: "multiple_choice",
+        question:
+          "Lan có 56 viên kẹo, cho bạn 18 viên. Hỏi Lan còn lại bao nhiêu viên?",
+        options: ["38 viên", "36 viên", "40 viên", "42 viên"],
+        correctAnswer: 0,
+        points: 15,
+      },
+      {
+        id: 6,
+        type: "essay",
+        question: "Giải thích cách tính 45 + 23 theo từng bước",
+        points: 20,
+        hint: "Hãy viết từng bước một cách chi tiết",
+      },
+      {
+        id: 7,
+        type: "essay",
+        question:
+          "Tính 67 - 39 và giải thích tại sao phải mượn khi thực hiện phép trừ này",
+        points: 15,
+        hint: "Chú ý đến việc mượn từ hàng chục",
+      },
     ],
   },
 };
@@ -65,8 +114,14 @@ export const saveExerciseProgress: RequestHandler = (req, res) => {
   const now = new Date().toISOString();
   progressStore[userId][id] = {
     answers: Array.isArray(body.answers) ? body.answers : [],
-    timeRemainingSec: Math.max(0, Math.min(body.timeRemainingSec ?? ex.timeLimit * 60, ex.timeLimit * 60)),
-    currentQuestionIndex: Math.max(0, Math.min(body.currentQuestionIndex ?? 0, ex.questions.length - 1)),
+    timeRemainingSec: Math.max(
+      0,
+      Math.min(body.timeRemainingSec ?? ex.timeLimit * 60, ex.timeLimit * 60),
+    ),
+    currentQuestionIndex: Math.max(
+      0,
+      Math.min(body.currentQuestionIndex ?? 0, ex.questions.length - 1),
+    ),
     lastSavedIso: now,
     submitted: progressStore[userId][id]?.submitted || false,
     score: progressStore[userId][id]?.score,
@@ -74,7 +129,10 @@ export const saveExerciseProgress: RequestHandler = (req, res) => {
     percentage: progressStore[userId][id]?.percentage,
   };
 
-  const response: SaveExerciseProgressResponse = { ok: true, lastSavedIso: now };
+  const response: SaveExerciseProgressResponse = {
+    ok: true,
+    lastSavedIso: now,
+  };
   res.json(response);
 };
 
@@ -108,7 +166,10 @@ export const submitExercise: RequestHandler = (req, res) => {
   const now = new Date().toISOString();
   progressStore[userId][id] = {
     answers: Array.isArray(body.answers) ? body.answers : [],
-    timeRemainingSec: Math.max(0, progressStore[userId][id]?.timeRemainingSec ?? ex.timeLimit * 60),
+    timeRemainingSec: Math.max(
+      0,
+      progressStore[userId][id]?.timeRemainingSec ?? ex.timeLimit * 60,
+    ),
     currentQuestionIndex: progressStore[userId][id]?.currentQuestionIndex ?? 0,
     lastSavedIso: now,
     submitted: true,
@@ -117,6 +178,11 @@ export const submitExercise: RequestHandler = (req, res) => {
     percentage,
   };
 
-  const response: SubmitExerciseResponse = { ok: true, score, maxScore, percentage };
+  const response: SubmitExerciseResponse = {
+    ok: true,
+    score,
+    maxScore,
+    percentage,
+  };
   res.json(response);
 };

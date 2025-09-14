@@ -253,7 +253,8 @@ export default function Exercise() {
       questionId: a.questionId,
       type: a.type,
       content: a.type === "essay" ? a.content : undefined,
-      selectedOption: a.type === "multiple_choice" ? a.selectedOption : undefined,
+      selectedOption:
+        a.type === "multiple_choice" ? a.selectedOption : undefined,
       hasImage: Boolean(a.imageFile),
     }));
 
@@ -292,7 +293,10 @@ export default function Exercise() {
       await fetch(`/api/exercises/${id || "1"}/submit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers: normalizeAnswers(), timeSpentSec: mockExercise.timeLimit * 60 - timeRemaining }),
+        body: JSON.stringify({
+          answers: normalizeAnswers(),
+          timeSpentSec: mockExercise.timeLimit * 60 - timeRemaining,
+        }),
       });
     } catch {}
 
@@ -389,12 +393,16 @@ export default function Exercise() {
               ))}
 
               <div className="mt-4 pt-4 border-t border-border">
-                <div className="text-xs text-muted-foreground mb-1">Tiến độ</div>
+                <div className="text-xs text-muted-foreground mb-1">
+                  Tiến độ
+                </div>
                 <div className="text-sm font-medium">
                   {answers.length}/{mockExercise.questions.length} câu đã làm
                 </div>
                 {lastSaved && (
-                  <div className="text-xs text-muted-foreground mt-1">Lưu lúc {new Date(lastSaved).toLocaleTimeString()}</div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    Lưu lúc {new Date(lastSaved).toLocaleTimeString()}
+                  </div>
                 )}
               </div>
             </CardContent>
