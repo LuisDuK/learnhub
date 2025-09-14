@@ -169,7 +169,7 @@ export default function Learn() {
   }, [learn.type, serverVideo, learn.src]);
 
   // Concept hints derived from title/description/tags
-  const conceptHints = useMemo(() => {
+  const hintsArr = useMemo(() => {
     const text = `${learn.title || ""} ${learn.description || ""}`.toLowerCase();
     const tags = new Set<string>();
     (learn.conceptTags || []).forEach((t) => tags.add(t.toLowerCase()));
@@ -292,7 +292,7 @@ export default function Learn() {
         )}
 
         {/* Timed opt-in prompt for hints */}
-        {conceptHints.length > 0 && (
+        {hasConcepts && (
           <Dialog open={hintPromptOpen} onOpenChange={setHintPromptOpen}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
@@ -432,13 +432,13 @@ export default function Learn() {
           </Button>
         </div>
           </div>
-          {conceptHints.length > 0 && hintsEnabled && (
+          {hasConcepts && hintsEnabled && (
             <Card className="border-secondary/20 h-fit">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base"><Lightbulb className="h-4 w-4 text-secondary" /> Gợi ý hình ảnh/câu chuyện</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-3">
-                {conceptHints.map((h, i) => (
+                {hintsArr.map((h, i) => (
                   <div key={i} className="p-3 rounded-xl border bg-white/70">
                     <div className="text-2xl mb-1">{h.emoji}</div>
                     <div className="font-semibold">{h.title}</div>
