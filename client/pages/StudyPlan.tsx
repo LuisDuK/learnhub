@@ -1573,7 +1573,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của b�����n
+              Quản lý danh sách bài học trong lộ trình của bạn
             </DialogDescription>
           </DialogHeader>
 
