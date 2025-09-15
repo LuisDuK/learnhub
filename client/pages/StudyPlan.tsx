@@ -24,6 +24,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import StudyPlanLayout from "@/components/StudyPlanLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -1246,20 +1253,17 @@ export default function StudyPlan() {
         </DialogContent>
       </Dialog>
 
-      {/* Create Plan Dialog */}
-      <Dialog
-        open={showCreatePlanDialog}
-        onOpenChange={setShowCreatePlanDialog}
-      >
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-primary">
+      {/* Create Plan Panel */}
+      <Sheet open={showCreatePlanDialog} onOpenChange={setShowCreatePlanDialog}>
+        <SheetContent side="right" className="sm:max-w-lg w-full">
+          <SheetHeader>
+            <SheetTitle className="text-2xl font-bold text-primary">
               🛠️ Tạo lộ trình
-            </DialogTitle>
-            <DialogDescription>
+            </SheetTitle>
+            <SheetDescription>
               Tùy chỉnh và tạo lộ trình học mới
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -1392,8 +1396,8 @@ export default function StudyPlan() {
               Tiếp tục
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
 
       {/* Entrance Test Dialog */}
       <Dialog
@@ -1536,7 +1540,7 @@ export default function StudyPlan() {
 
             <div className="text-sm text-muted-foreground">
               Lưu ý: ��ây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
-              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày h���c cho từng
+              kiểm tra. Bạn có thể đi���u chỉnh thời lượng/ngày h���c cho từng
               bài.
             </div>
           </div>
