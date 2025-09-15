@@ -4,7 +4,6 @@ import {
   Sparkles,
   Gamepad2,
   Calendar,
-  Bot,
   Trophy,
   Heart,
   Home,
@@ -30,11 +29,6 @@ const menuItems = [
     title: "📅 Kế hoạch học",
     icon: Calendar,
     href: "/study-plan",
-  },
-  {
-    title: "🤖 Trợ lý thông minh",
-    icon: Bot,
-    href: "/chatbot",
   },
   {
     title: "🏆 Thành tích của bé",
