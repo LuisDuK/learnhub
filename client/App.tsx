@@ -9,7 +9,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useLocation,
   Navigate,
 } from "react-router-dom";
 import Index from "./pages/Index";
