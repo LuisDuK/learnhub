@@ -774,7 +774,7 @@ export default function StudyPlan() {
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-base md:text-lg mt-2">
-              Kế hoạch học t���p được cá nhân hóa cho bé
+              Kế hoạch học tập được cá nhân hóa cho bé
             </p>
           </div>
           <div className="flex gap-3">
@@ -1540,7 +1540,7 @@ export default function StudyPlan() {
 
             <div className="text-sm text-muted-foreground">
               Lưu ý: ��ây là lộ trình đề xuất dựa trên mục tiêu và kết quả bài
-              kiểm tra. Bạn có thể đi���u chỉnh thời lượng/ngày h���c cho từng
+              kiểm tra. Bạn có thể điều chỉnh thời lượng/ngày h���c cho từng
               bài.
             </div>
           </div>
