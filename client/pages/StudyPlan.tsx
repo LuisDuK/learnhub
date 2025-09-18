@@ -880,12 +880,12 @@ export default function StudyPlan() {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 rounded-lg border bg-white">
-                <div className="text-xs text-muted-foreground">Thời gian đã học</div>
-                <div className="text-lg font-bold">{formatMinutes(timeSpentMin)}</div>
+                <div className="text-xs text-muted-foreground">Số bài đã học</div>
+                <div className="text-lg font-bold">{completedLessons} bài</div>
               </div>
               <div className="p-3 rounded-lg border bg-white">
-                <div className="text-xs text-muted-foreground">Tổng thời gian lộ trình</div>
-                <div className="text-lg font-bold">{formatMinutes(totalPlannedMin)}</div>
+                <div className="text-xs text-muted-foreground">Tổng số bài (lộ trình)</div>
+                <div className="text-lg font-bold">{totalLessons} bài</div>
               </div>
               <div className="p-3 rounded-lg border bg-white">
                 <div className="text-xs text-muted-foreground">Bài trễ hạn</div>
@@ -991,9 +991,7 @@ export default function StudyPlan() {
                                 {isLate && (
                                   <Badge variant="destructive" className="ml-2">Trễ hạn</Badge>
                                 )}
-                                {score != null && (
-                                  <Badge variant="secondary" className="ml-2">Điểm: {score}%</Badge>
-                                )}
+                                <Badge variant="secondary" className="ml-2">Điểm: {score != null ? `${score}%` : "—"}</Badge>
                               </div>
                             </div>
 
@@ -1670,7 +1668,7 @@ export default function StudyPlan() {
 
           <div className="space-y-4 py-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Danh sách bài học</h3>
+              <h3 className="text-lg font-semibold">Danh s��ch bài học</h3>
               <Button
                 onClick={() => {
                   const newLesson = {
