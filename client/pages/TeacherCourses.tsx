@@ -178,6 +178,7 @@ export default function TeacherCourses() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isAddLessonOpen, setIsAddLessonOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<
     (typeof mockTeacherCourses)[0] | null
   >(null);
@@ -436,7 +437,7 @@ export default function TeacherCourses() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label className="text-right col-span-2">Môn h���c *</Label>
+                    <Label className="text-right col-span-2">Môn học *</Label>
                     <Select
                       value={newCourse.subject}
                       onValueChange={(value) =>
