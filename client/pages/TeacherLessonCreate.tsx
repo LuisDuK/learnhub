@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { BookOpen, Link2, Plus, Trash2, Clock } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 
 interface MediaItem {
   type: "video" | "audio" | "image" | "pdf";
