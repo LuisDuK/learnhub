@@ -192,6 +192,14 @@ export default function TeacherDashboard() {
               <Plus className="h-4 w-4 mr-2" />
               Tạo môn học mới
             </Button>
+            <Button
+              onClick={() => navigate("/teacher/lessons/new")}
+              variant="outline"
+              className="border-green-300 text-green-700 hover:bg-green-50"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Tạo bài học mới
+            </Button>
           </div>
         </div>
 
