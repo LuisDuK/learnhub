@@ -47,11 +47,7 @@ import {
   AlertCircle,
   FileText,
   Clock,
-  Users,
-  BookOpen,
   Star,
-  Eye,
-  EyeOff,
 } from "lucide-react";
 
 // Mock teacher data
@@ -64,9 +60,9 @@ const mockTeacherData = {
 
   // Professional Information
   school: "Trường Tiểu học Chu Văn An",
-  subject: "Toán học",
+  subject: "Toán",
   experience: "5-10",
-  qualification: "Thạc sĩ",
+  qualification: "thac-si",
   position: "Giáo viên chính",
   teachingLevel: "Tiểu học",
 
@@ -132,6 +128,11 @@ const mockTeacherData = {
   allowMessages: true,
   notificationEmail: true,
   notificationPush: true,
+
+  // Security (for UI only)
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
 };
 
 const subjects = ["Toán", "Văn", "Anh"];
@@ -172,32 +173,62 @@ export default function TeacherProfile() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("personal");
   const [openDocId, setOpenDocId] = useState<number | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [documentForm, setDocumentForm] = useState({
+    name: "",
+    type: "certificate",
+    issuedBy: "",
+    issueDate: "",
+    url: "",
+  });
 
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedData({ ...teacherData });
+    setEditedData({ ...teacherData, currentPassword: "", newPassword: "", confirmPassword: "" });
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setEditedData({ ...teacherData });
+    setEditedData({ ...teacherData, currentPassword: "", newPassword: "", confirmPassword: "" });
     setSaveSuccess(false);
+    setPasswordError(null);
   };
 
   const handleSave = async () => {
+    setPasswordError(null);
+    // Password validation if any field filled
+    const cp = (editedData as any).currentPassword as string;
+    const np = (editedData as any).newPassword as string;
+    const rp = (editedData as any).confirmPassword as string;
+    if (cp || np || rp) {
+      if (!cp) {
+        setPasswordError("Vui lòng nhập mật khẩu hiện tại");
+        return;
+      }
+      if (!np || np.length < 8) {
+        setPasswordError("Mật khẩu mới tối thiểu 8 ký tự");
+        return;
+      }
+      if (np !== rp) {
+        setPasswordError("Xác nhận mật khẩu không khớp");
+        return;
+      }
+    }
+
     setIsSaving(true);
-    // Simulate API call
     setTimeout(() => {
-      setTeacherData({ ...editedData });
+      const { currentPassword, newPassword, confirmPassword, ...rest } = editedData as any;
+      setTeacherData({ ...rest, currentPassword: "", newPassword: "", confirmPassword: "" });
+      setEditedData({ ...rest, currentPassword: "", newPassword: "", confirmPassword: "" });
       setIsEditing(false);
       setIsSaving(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
-    }, 1000);
+    }, 800);
   };
 
   const handleInputChange = (field: string, value: any) => {
-    setEditedData({ ...editedData, [field]: value });
+    setEditedData({ ...editedData, [field]: value } as any);
   };
 
   const handleArrayChange = (
@@ -207,16 +238,34 @@ export default function TeacherProfile() {
   ) => {
     const currentArray = (editedData as any)[field] || [];
     if (action === "add" && value && !currentArray.includes(value)) {
-      setEditedData({ ...editedData, [field]: [...currentArray, value] });
+      setEditedData({ ...editedData, [field]: [...currentArray, value] } as any);
     } else if (action === "remove") {
       setEditedData({
         ...editedData,
         [field]: currentArray.filter((item: string) => item !== value),
-      });
+      } as any);
     }
   };
 
-  const currentData = isEditing ? editedData : teacherData;
+  const handleAddDocument = () => {
+    if (!documentForm.name || !documentForm.issuedBy || !documentForm.issueDate || !documentForm.url) return;
+    const nextId = Math.max(0, ...((editedData.documents || []).map((d: any) => d.id))) + 1;
+    const newDoc = { id: nextId, ...documentForm } as any;
+    setEditedData({
+      ...editedData,
+      documents: [...(editedData.documents || []), newDoc],
+    } as any);
+    setDocumentForm({ name: "", type: "certificate", issuedBy: "", issueDate: "", url: "" });
+  };
+
+  const handleRemoveDocument = (id: number) => {
+    setEditedData({
+      ...editedData,
+      documents: (editedData.documents || []).filter((d: any) => d.id !== id),
+    } as any);
+  };
+
+  const currentData: any = isEditing ? editedData : teacherData;
 
   return (
     <TeacherLayout>
@@ -228,35 +277,28 @@ export default function TeacherProfile() {
               <User className="h-8 w-8 text-green-600" />
               Thông tin cá nhân
             </h1>
-            <p className="text-gray-600 mt-1">
-              Quản lý hồ sơ và thông tin giảng dạy của bạn
-            </p>
+            <p className="text-gray-600 mt-1">Quản lý hồ sơ và thông tin giảng dạy của bạn</p>
           </div>
 
           <div className="flex gap-3">
             {isEditing ? (
               <>
-                <Button variant="outline" onClick={handleCancel}>
-                  Hủy
-                </Button>
+                <Button variant="outline" onClick={handleCancel}>Hủy</Button>
                 <Button onClick={handleSave} disabled={isSaving}>
                   {isSaving ? (
                     <>
-                      <Clock className="h-4 w-4 mr-2 animate-spin" />
-                      Đang lưu...
+                      <Clock className="h-4 w-4 mr-2 animate-spin" />Đang lưu...
                     </>
                   ) : (
                     <>
-                      <Save className="h-4 w-4 mr-2" />
-                      Lưu thay đổi
+                      <Save className="h-4 w-4 mr-2" />Lưu thay đổi
                     </>
                   )}
                 </Button>
               </>
             ) : (
               <Button onClick={handleEdit}>
-                <Edit className="h-4 w-4 mr-2" />
-                Chỉnh sửa
+                <Edit className="h-4 w-4 mr-2" />Ch���nh sửa
               </Button>
             )}
           </div>
@@ -272,87 +314,60 @@ export default function TeacherProfile() {
           </Alert>
         )}
 
+        {/* Error Alert */}
+        {passwordError && (
+          <Alert className="border-red-200 bg-red-50">
+            <AlertCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-800">{passwordError}</AlertDescription>
+          </Alert>
+        )}
+
         {/* Profile Overview Card */}
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center gap-6">
               <div className="relative">
                 <Avatar className="h-24 w-24">
-                  <AvatarImage
-                    src={currentData.avatar}
-                    alt={currentData.fullName}
-                  />
+                  <AvatarImage src={currentData.avatar} alt={currentData.fullName} />
                   <AvatarFallback className="text-2xl">
-                    {currentData.fullName
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
+                    {currentData.fullName.split(" ").map((n: string) => n[0]).join("")}
                   </AvatarFallback>
                 </Avatar>
                 {isEditing && (
-                  <Button
-                    size="sm"
-                    className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0"
-                  >
+                  <Button size="sm" className="absolute -bottom-2 -right-2 rounded-full h-8 w-8 p-0">
                     <Camera className="h-4 w-4" />
                   </Button>
                 )}
               </div>
 
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {currentData.fullName}
-                </h2>
-                <p className="text-gray-600">
-                  {currentData.position} - {currentData.subject}
-                </p>
+                <h2 className="text-2xl font-bold text-gray-900">{currentData.fullName}</h2>
+                <p className="text-gray-600">{currentData.position} - {currentData.subject}</p>
                 <p className="text-sm text-gray-500">{currentData.school}</p>
 
                 <div className="flex items-center gap-4 mt-3">
-                  <Badge className="bg-green-100 text-green-800">
-                    {
-                      experiences.find(
-                        (e) => e.value === currentData.experience,
-                      )?.label
-                    }
-                  </Badge>
-                  <Badge className="bg-blue-100 text-blue-800">
-                    {
-                      qualifications.find(
-                        (q) => q.value === currentData.qualification,
-                      )?.label
-                    }
-                  </Badge>
-                  <Badge className="bg-purple-100 text-purple-800">
-                    {currentData.teachingLevel}
-                  </Badge>
+                  <Badge className="bg-green-100 text-green-800">{(experiences.find((e) => e.value === currentData.experience) || {}).label}</Badge>
+                  <Badge className="bg-blue-100 text-blue-800">{(qualifications.find((q) => q.value === currentData.qualification) || {}).label}</Badge>
+                  <Badge className="bg-purple-100 text-purple-800">{currentData.teachingLevel}</Badge>
                 </div>
               </div>
 
               <div className="text-right">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-green-600">
-                      {currentData.totalCourses}
-                    </div>
+                    <div className="text-2xl font-bold text-green-600">{currentData.totalCourses}</div>
                     <div className="text-xs text-gray-600">Môn học</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">
-                      {currentData.totalStudents}
-                    </div>
+                    <div className="text-2xl font-bold text-blue-600">{currentData.totalStudents}</div>
                     <div className="text-xs text-gray-600">Học sinh</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-yellow-600">
-                      {currentData.averageRating}
-                    </div>
+                    <div className="text-2xl font-bold text-yellow-600">{currentData.averageRating}</div>
                     <div className="text-xs text-gray-600">Đánh giá</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">
-                      {currentData.totalLessons}
-                    </div>
+                    <div className="text-2xl font-bold text-purple-600">{currentData.totalLessons}</div>
                     <div className="text-xs text-gray-600">Bài học</div>
                   </div>
                 </div>
@@ -362,16 +377,10 @@ export default function TeacherProfile() {
         </Card>
 
         {/* Main Content Tabs */}
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="space-y-6"
-        >
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="personal">Thông tin cá nhân</TabsTrigger>
-            <TabsTrigger value="professional">
-              Thông tin nghề nghiệp
-            </TabsTrigger>
+            <TabsTrigger value="professional">Thông tin nghề nghiệp</TabsTrigger>
             <TabsTrigger value="bio">Giới thiệu</TabsTrigger>
             <TabsTrigger value="achievements">Thành tích</TabsTrigger>
             <TabsTrigger value="settings">Cài đặt</TabsTrigger>
@@ -382,198 +391,88 @@ export default function TeacherProfile() {
           <TabsContent value="personal" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="h-5 w-5" />
-                  Thông tin cơ bản
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><User className="h-5 w-5" />Thông tin cơ bản</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Họ và tên *</Label>
                     {isEditing ? (
-                      <Input
-                        id="fullName"
-                        value={currentData.fullName}
-                        onChange={(e) =>
-                          handleInputChange("fullName", e.target.value)
-                        }
-                      />
+                      <Input id="fullName" value={currentData.fullName} onChange={(e) => handleInputChange("fullName", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.fullName}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.fullName}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="dateOfBirth">Ngày sinh</Label>
                     {isEditing ? (
-                      <Input
-                        id="dateOfBirth"
-                        type="date"
-                        value={currentData.dateOfBirth}
-                        onChange={(e) =>
-                          handleInputChange("dateOfBirth", e.target.value)
-                        }
-                      />
+                      <Input id="dateOfBirth" type="date" value={currentData.dateOfBirth} onChange={(e) => handleInputChange("dateOfBirth", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {new Date(currentData.dateOfBirth).toLocaleDateString(
-                          "vi-VN",
-                        )}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{new Date(currentData.dateOfBirth).toLocaleDateString("vi-VN")}</div>
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="gender">Giới tính</Label>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="avatar">Ảnh đại diện (URL)</Label>
                     {isEditing ? (
-                      <Select
-                        value={currentData.gender}
-                        onValueChange={(value) =>
-                          handleInputChange("gender", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {genders.map((gender) => (
-                            <SelectItem key={gender.value} value={gender.value}>
-                              {gender.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input id="avatar" value={currentData.avatar} onChange={(e) => handleInputChange("avatar", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {
-                          genders.find((g) => g.value === currentData.gender)
-                            ?.label
-                        }
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded break-all">{currentData.avatar}</div>
                     )}
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="idNumber">CCCD/CMND</Label>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="address">Địa chỉ</Label>
                     {isEditing ? (
-                      <Input
-                        id="idNumber"
-                        value={currentData.idNumber}
-                        onChange={(e) =>
-                          handleInputChange("idNumber", e.target.value)
-                        }
-                      />
+                      <Textarea id="address" value={currentData.address} onChange={(e) => handleInputChange("address", e.target.value)} rows={2} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.idNumber}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.address}</div>
                     )}
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="address">Địa chỉ</Label>
-                  {isEditing ? (
-                    <Textarea
-                      id="address"
-                      value={currentData.address}
-                      onChange={(e) =>
-                        handleInputChange("address", e.target.value)
-                      }
-                      rows={2}
-                    />
-                  ) : (
-                    <div className="p-2 bg-gray-50 rounded">
-                      {currentData.address}
-                    </div>
-                  )}
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="h-5 w-5" />
-                  Thông tin liên hệ
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><Phone className="h-5 w-5" />Thông tin liên hệ</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email *</Label>
                     {isEditing ? (
-                      <Input
-                        id="email"
-                        type="email"
-                        value={currentData.email}
-                        onChange={(e) =>
-                          handleInputChange("email", e.target.value)
-                        }
-                      />
+                      <Input id="email" type="email" value={currentData.email} onChange={(e) => handleInputChange("email", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.email}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.email}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="phone">Số điện thoại *</Label>
                     {isEditing ? (
-                      <Input
-                        id="phone"
-                        value={currentData.phone}
-                        onChange={(e) =>
-                          handleInputChange("phone", e.target.value)
-                        }
-                      />
+                      <Input id="phone" value={currentData.phone} onChange={(e) => handleInputChange("phone", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.phone}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.phone}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="emergencyContactName">
-                      Người liên hệ khẩn cấp
-                    </Label>
+                    <Label htmlFor="emergencyContactName">Người liên hệ khẩn cấp</Label>
                     {isEditing ? (
-                      <Input
-                        id="emergencyContactName"
-                        value={currentData.emergencyContactName}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "emergencyContactName",
-                            e.target.value,
-                          )
-                        }
-                      />
+                      <Input id="emergencyContactName" value={currentData.emergencyContactName} onChange={(e) => handleInputChange("emergencyContactName", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.emergencyContactName}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.emergencyContactName}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="emergencyContact">SĐT khẩn cấp</Label>
                     {isEditing ? (
-                      <Input
-                        id="emergencyContact"
-                        value={currentData.emergencyContact}
-                        onChange={(e) =>
-                          handleInputChange("emergencyContact", e.target.value)
-                        }
-                      />
+                      <Input id="emergencyContact" value={currentData.emergencyContact} onChange={(e) => handleInputChange("emergencyContact", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.emergencyContact}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.emergencyContact}</div>
                     )}
                   </div>
                 </div>
@@ -585,160 +484,89 @@ export default function TeacherProfile() {
           <TabsContent value="professional" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building2 className="h-5 w-5" />
-                  Thông tin công việc
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><Building2 className="h-5 w-5" />Thông tin công việc</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="school">Trường học hiện tại *</Label>
                     {isEditing ? (
-                      <Input
-                        id="school"
-                        value={currentData.school}
-                        onChange={(e) =>
-                          handleInputChange("school", e.target.value)
-                        }
-                      />
+                      <Input id="school" value={currentData.school} onChange={(e) => handleInputChange("school", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.school}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.school}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="position">Chức vụ</Label>
                     {isEditing ? (
-                      <Input
-                        id="position"
-                        value={currentData.position}
-                        onChange={(e) =>
-                          handleInputChange("position", e.target.value)
-                        }
-                      />
+                      <Input id="position" value={currentData.position} onChange={(e) => handleInputChange("position", e.target.value)} />
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.position}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.position}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="subject">Môn học chuyên môn *</Label>
                     {isEditing ? (
-                      <Select
-                        value={currentData.subject}
-                        onValueChange={(value) =>
-                          handleInputChange("subject", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                      <Select value={currentData.subject} onValueChange={(value) => handleInputChange("subject", value)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
                           {subjects.map((subject) => (
-                            <SelectItem key={subject} value={subject}>
-                              {subject}
-                            </SelectItem>
+                            <SelectItem key={subject} value={subject}>{subject}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.subject}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.subject}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="teachingLevel">Cấp học giảng dạy</Label>
                     {isEditing ? (
-                      <Select
-                        value={currentData.teachingLevel}
-                        onValueChange={(value) =>
-                          handleInputChange("teachingLevel", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                      <Select value={currentData.teachingLevel} onValueChange={(value) => handleInputChange("teachingLevel", value)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
                           {teachingLevels.map((level) => (
-                            <SelectItem key={level} value={level}>
-                              {level}
-                            </SelectItem>
+                            <SelectItem key={level} value={level}>{level}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {currentData.teachingLevel}
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{currentData.teachingLevel}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="experience">Số năm kinh nghiệm *</Label>
                     {isEditing ? (
-                      <Select
-                        value={currentData.experience}
-                        onValueChange={(value) =>
-                          handleInputChange("experience", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                      <Select value={currentData.experience} onValueChange={(value) => handleInputChange("experience", value)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
                           {experiences.map((exp) => (
-                            <SelectItem key={exp.value} value={exp.value}>
-                              {exp.label}
-                            </SelectItem>
+                            <SelectItem key={exp.value} value={exp.value}>{exp.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {
-                          experiences.find(
-                            (e) => e.value === currentData.experience,
-                          )?.label
-                        }
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{(experiences.find((e) => e.value === currentData.experience) || {}).label}</div>
                     )}
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="qualification">Trình độ học vấn *</Label>
                     {isEditing ? (
-                      <Select
-                        value={currentData.qualification}
-                        onValueChange={(value) =>
-                          handleInputChange("qualification", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
+                      <Select value={currentData.qualification} onValueChange={(value) => handleInputChange("qualification", value)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>
                           {qualifications.map((qual) => (
-                            <SelectItem key={qual.value} value={qual.value}>
-                              {qual.label}
-                            </SelectItem>
+                            <SelectItem key={qual.value} value={qual.value}>{qual.label}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
                     ) : (
-                      <div className="p-2 bg-gray-50 rounded">
-                        {
-                          qualifications.find(
-                            (q) => q.value === currentData.qualification,
-                          )?.label
-                        }
-                      </div>
+                      <div className="p-2 bg-gray-50 rounded">{(qualifications.find((q) => q.value === currentData.qualification) || {}).label}</div>
                     )}
                   </div>
                 </div>
@@ -746,18 +574,9 @@ export default function TeacherProfile() {
                 <div className="space-y-2">
                   <Label htmlFor="availableHours">Giờ giảng dạy</Label>
                   {isEditing ? (
-                    <Input
-                      id="availableHours"
-                      value={currentData.availableHours}
-                      onChange={(e) =>
-                        handleInputChange("availableHours", e.target.value)
-                      }
-                      placeholder="VD: 7:00-17:00"
-                    />
+                    <Input id="availableHours" value={currentData.availableHours} onChange={(e) => handleInputChange("availableHours", e.target.value)} placeholder="VD: 7:00-17:00" />
                   ) : (
-                    <div className="p-2 bg-gray-50 rounded">
-                      {currentData.availableHours}
-                    </div>
+                    <div className="p-2 bg-gray-50 rounded">{currentData.availableHours}</div>
                   )}
                 </div>
               </CardContent>
@@ -765,35 +584,17 @@ export default function TeacherProfile() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <GraduationCap className="h-5 w-5" />
-                  Chuyên môn và sở thích
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><GraduationCap className="h-5 w-5" />Chuyên môn và sở thích</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label>Chuyên môn</Label>
                   <div className="flex flex-wrap gap-2">
-                    {currentData.specializations.map((spec, index) => (
-                      <Badge
-                        key={index}
-                        variant="secondary"
-                        className="flex items-center gap-1"
-                      >
+                    {currentData.specializations.map((spec: string, index: number) => (
+                      <Badge key={index} variant="secondary" className="flex items-center gap-1">
                         {spec}
                         {isEditing && (
-                          <button
-                            onClick={() =>
-                              handleArrayChange(
-                                "specializations",
-                                spec,
-                                "remove",
-                              )
-                            }
-                            className="ml-1 text-red-500 hover:text-red-700"
-                          >
-                            ×
-                          </button>
+                          <button onClick={() => handleArrayChange("specializations", spec, "remove")} className="ml-1 text-red-500 hover:text-red-700">×</button>
                         )}
                       </Badge>
                     ))}
@@ -803,26 +604,11 @@ export default function TeacherProfile() {
                 <div className="space-y-2">
                   <Label>Nhóm tuổi ưa thích</Label>
                   <div className="flex flex-wrap gap-2">
-                    {currentData.preferredAgeGroups.map((age, index) => (
-                      <Badge
-                        key={index}
-                        variant="outline"
-                        className="flex items-center gap-1"
-                      >
+                    {currentData.preferredAgeGroups.map((age: string, index: number) => (
+                      <Badge key={index} variant="outline" className="flex items-center gap-1">
                         {age}
                         {isEditing && (
-                          <button
-                            onClick={() =>
-                              handleArrayChange(
-                                "preferredAgeGroups",
-                                age,
-                                "remove",
-                              )
-                            }
-                            className="ml-1 text-red-500 hover:text-red-700"
-                          >
-                            ×
-                          </button>
+                          <button onClick={() => handleArrayChange("preferredAgeGroups", age, "remove")} className="ml-1 text-red-500 hover:text-red-700">×</button>
                         )}
                       </Badge>
                     ))}
@@ -832,26 +618,11 @@ export default function TeacherProfile() {
                 <div className="space-y-2">
                   <Label>Phương pháp giảng dạy</Label>
                   <div className="flex flex-wrap gap-2">
-                    {currentData.teachingMethods.map((method, index) => (
-                      <Badge
-                        key={index}
-                        variant="outline"
-                        className="flex items-center gap-1"
-                      >
+                    {currentData.teachingMethods.map((method: string, index: number) => (
+                      <Badge key={index} variant="outline" className="flex items-center gap-1">
                         {method}
                         {isEditing && (
-                          <button
-                            onClick={() =>
-                              handleArrayChange(
-                                "teachingMethods",
-                                method,
-                                "remove",
-                              )
-                            }
-                            className="ml-1 text-red-500 hover:text-red-700"
-                          >
-                            ×
-                          </button>
+                          <button onClick={() => handleArrayChange("teachingMethods", method, "remove")} className="ml-1 text-red-500 hover:text-red-700">×</button>
                         )}
                       </Badge>
                     ))}
@@ -865,29 +636,16 @@ export default function TeacherProfile() {
           <TabsContent value="bio" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Giới thiệu bản thân
-                </CardTitle>
-                <CardDescription>
-                  Chia sẻ về phong cách giảng dạy và kinh nghiệm của bạn
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Giới thiệu bản thân</CardTitle>
+                <CardDescription>Chia sẻ về phong cách giảng dạy và kinh nghiệm của bạn</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="bio">Mô tả ngắn về bản thân</Label>
                   {isEditing ? (
-                    <Textarea
-                      id="bio"
-                      value={currentData.bio}
-                      onChange={(e) => handleInputChange("bio", e.target.value)}
-                      rows={6}
-                      placeholder="Chia sẻ về phương pháp giảng dạy, kinh nghiệm và đam mê của bạn..."
-                    />
+                    <Textarea id="bio" value={currentData.bio} onChange={(e) => handleInputChange("bio", e.target.value)} rows={6} placeholder="Chia sẻ về phương pháp giảng dạy, kinh nghiệm và đam mê của bạn..." />
                   ) : (
-                    <div className="p-4 bg-gray-50 rounded-lg whitespace-pre-line">
-                      {currentData.bio}
-                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg whitespace-pre-line">{currentData.bio}</div>
                   )}
                 </div>
               </CardContent>
@@ -898,35 +656,16 @@ export default function TeacherProfile() {
           <TabsContent value="achievements" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5" />
-                  Thành tích và giải thưởng
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><Award className="h-5 w-5" />Thành tích và giải thưởng</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  {currentData.achievements.map((achievement, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-3 p-3 border rounded-lg"
-                    >
+                  {currentData.achievements.map((achievement: string, index: number) => (
+                    <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
                       <Award className="h-5 w-5 text-yellow-500" />
                       <span className="flex-1">{achievement}</span>
                       {isEditing && (
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() =>
-                            handleArrayChange(
-                              "achievements",
-                              achievement,
-                              "remove",
-                            )
-                          }
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          ×
-                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => handleArrayChange("achievements", achievement, "remove")} className="text-red-500 hover:text-red-700">×</Button>
                       )}
                     </div>
                   ))}
@@ -936,42 +675,14 @@ export default function TeacherProfile() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Thông tin tài khoản
-                </CardTitle>
+                <CardTitle className="flex items-center gap-2"><Calendar className="h-5 w-5" />Thông tin tài khoản</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Ngày tham gia:</span>
-                    <span className="font-medium">
-                      {new Date(currentData.joinDate).toLocaleDateString(
-                        "vi-VN",
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Tổng môn học:</span>
-                    <span className="font-medium">
-                      {currentData.totalCourses}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Tổng học sinh:</span>
-                    <span className="font-medium">
-                      {currentData.totalStudents}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Đánh giá trung bình:</span>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">
-                        {currentData.averageRating}
-                      </span>
-                    </div>
-                  </div>
+                  <div className="flex justify-between py-2"><span className="text-gray-600">Ngày tham gia:</span><span className="font-medium">{new Date(currentData.joinDate).toLocaleDateString("vi-VN")}</span></div>
+                  <div className="flex justify-between py-2"><span className="text-gray-600">Tổng môn học:</span><span className="font-medium">{currentData.totalCourses}</span></div>
+                  <div className="flex justify-between py-2"><span className="text-gray-600">Tổng học sinh:</span><span className="font-medium">{currentData.totalStudents}</span></div>
+                  <div className="flex justify-between py-2"><span className="text-gray-600">Đánh giá trung bình:</span><span className="font-medium">{currentData.averageRating}</span></div>
                 </div>
               </CardContent>
             </Card>
@@ -982,44 +693,23 @@ export default function TeacherProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Cài đặt quyền riêng tư</CardTitle>
-                <CardDescription>
-                  Quản lý ai có thể xem hồ sơ và liên hệ với bạn
-                </CardDescription>
+                <CardDescription>Quản lý ai có thể xem hồ sơ và liên hệ với bạn</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Hiển thị hồ sơ công khai</Label>
-                    <p className="text-sm text-gray-600">
-                      Cho phép học sinh xem hồ sơ của bạn
-                    </p>
+                    <p className="text-sm text-gray-600">Cho phép học sinh xem hồ sơ của bạn</p>
                   </div>
-                  <Switch
-                    checked={currentData.profileVisibility === "public"}
-                    onCheckedChange={(checked) =>
-                      handleInputChange(
-                        "profileVisibility",
-                        checked ? "public" : "private",
-                      )
-                    }
-                    disabled={!isEditing}
-                  />
+                  <Switch checked={currentData.profileVisibility === "public"} onCheckedChange={(checked) => handleInputChange("profileVisibility", checked ? "public" : "private")} disabled={!isEditing} />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Cho phép nhận tin nhắn</Label>
-                    <p className="text-sm text-gray-600">
-                      Học sinh có thể gửi tin nhắn cho bạn
-                    </p>
+                    <p className="text-sm text-gray-600">Học sinh có thể gửi tin nhắn cho bạn</p>
                   </div>
-                  <Switch
-                    checked={currentData.allowMessages}
-                    onCheckedChange={(checked) =>
-                      handleInputChange("allowMessages", checked)
-                    }
-                    disabled={!isEditing}
-                  />
+                  <Switch checked={currentData.allowMessages} onCheckedChange={(checked) => handleInputChange("allowMessages", checked)} disabled={!isEditing} />
                 </div>
               </CardContent>
             </Card>
@@ -1027,114 +717,111 @@ export default function TeacherProfile() {
             <Card>
               <CardHeader>
                 <CardTitle>Cài đặt thông báo</CardTitle>
-                <CardDescription>
-                  Chọn cách bạn muốn nhận thông báo
-                </CardDescription>
+                <CardDescription>Chọn cách bạn muốn nhận thông báo</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Thông báo qua email</Label>
-                    <p className="text-sm text-gray-600">
-                      Nhận thông báo về hoạt động của học sinh qua email
-                    </p>
+                    <p className="text-sm text-gray-600">Nhận thông báo về hoạt động của học sinh qua email</p>
                   </div>
-                  <Switch
-                    checked={currentData.notificationEmail}
-                    onCheckedChange={(checked) =>
-                      handleInputChange("notificationEmail", checked)
-                    }
-                    disabled={!isEditing}
-                  />
+                  <Switch checked={currentData.notificationEmail} onCheckedChange={(checked) => handleInputChange("notificationEmail", checked)} disabled={!isEditing} />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label>Thông báo đẩy</Label>
-                    <p className="text-sm text-gray-600">
-                      Nhận thông báo đẩy trên trình duyệt
-                    </p>
+                    <p className="text-sm text-gray-600">Nhận thông báo đẩy trên trình duyệt</p>
                   </div>
-                  <Switch
-                    checked={currentData.notificationPush}
-                    onCheckedChange={(checked) =>
-                      handleInputChange("notificationPush", checked)
-                    }
-                    disabled={!isEditing}
-                  />
+                  <Switch checked={currentData.notificationPush} onCheckedChange={(checked) => handleInputChange("notificationPush", checked)} disabled={!isEditing} />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Bảo mật</CardTitle>
+                <CardDescription>Đổi mật khẩu tài khoản</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="currentPassword">Mật khẩu hiện tại</Label>
+                    <Input id="currentPassword" type="password" value={currentData.currentPassword} onChange={(e) => handleInputChange("currentPassword", e.target.value)} disabled={!isEditing} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="newPassword">Mật khẩu mới</Label>
+                    <Input id="newPassword" type="password" value={currentData.newPassword} onChange={(e) => handleInputChange("newPassword", e.target.value)} disabled={!isEditing} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới</Label>
+                    <Input id="confirmPassword" type="password" value={currentData.confirmPassword} onChange={(e) => handleInputChange("confirmPassword", e.target.value)} disabled={!isEditing} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
+
           {/* Documents / Certificates Tab */}
           <TabsContent value="documents" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" /> Tài liệu chứng chỉ
-                </CardTitle>
-                <CardDescription>
-                  Danh sách văn bằng, chứng chỉ và tài liệu nghề nghiệp
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" /> Tài liệu chứng chỉ</CardTitle>
+                <CardDescription>Danh sách văn bằng, chứng chỉ và tài liệu nghề nghiệp</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                {currentData.documents?.map((doc: any) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-card/50"
-                  >
+                {isEditing && (
+                  <div className="space-y-3 border rounded-lg p-3">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                      <Input placeholder="Tên tài liệu" value={documentForm.name} onChange={(e) => setDocumentForm({ ...documentForm, name: e.target.value })} />
+                      <Select value={documentForm.type} onValueChange={(v) => setDocumentForm({ ...documentForm, type: v })}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="certificate">certificate</SelectItem>
+                          <SelectItem value="diploma">diploma</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input placeholder="Nơi cấp" value={documentForm.issuedBy} onChange={(e) => setDocumentForm({ ...documentForm, issuedBy: e.target.value })} />
+                      <Input type="date" placeholder="Ngày cấp" value={documentForm.issueDate} onChange={(e) => setDocumentForm({ ...documentForm, issueDate: e.target.value })} />
+                      <Input placeholder="URL hình ảnh" value={documentForm.url} onChange={(e) => setDocumentForm({ ...documentForm, url: e.target.value })} />
+                    </div>
+                    <div className="text-right">
+                      <Button size="sm" onClick={handleAddDocument}>Thêm</Button>
+                    </div>
+                  </div>
+                )}
+
+                {(currentData.documents || []).map((doc: any) => (
+                  <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
                     <div>
                       <div className="font-medium">{doc.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {doc.issuedBy} •{" "}
-                        {new Date(doc.issueDate).toLocaleDateString("vi-VN")}
-                      </div>
+                      <div className="text-xs text-muted-foreground">{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString("vi-VN")}</div>
                     </div>
-                    <Dialog
-                      open={openDocId === doc.id}
-                      onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}
-                    >
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
-                          Xem chi tiết
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>{doc.name}</DialogTitle>
-                          <DialogDescription>
-                            {doc.issuedBy} •{" "}
-                            {new Date(doc.issueDate).toLocaleDateString(
-                              "vi-VN",
-                            )}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-2 text-sm">
-                          <div>
-                            Loại:{" "}
-                            <span className="font-medium uppercase">
-                              {doc.type}
-                            </span>
+                    <div className="flex items-center gap-2">
+                      <Dialog open={openDocId === doc.id} onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm">Xem chi tiết</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>{doc.name}</DialogTitle>
+                            <DialogDescription>{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString("vi-VN")}</DialogDescription>
+                          </DialogHeader>
+                          <div className="space-y-2 text-sm">
+                            <div>Loại: <span className="font-medium uppercase">{doc.type}</span></div>
+                            <div className="rounded-lg border p-3 bg-muted/30">
+                              <img src={doc.url} alt={doc.name} className="w-full h-auto rounded" />
+                            </div>
+                            <div className="flex gap-2">
+                              <a href={doc.url} download className="underline text-primary">Tải xuống</a>
+                            </div>
                           </div>
-                          <div className="rounded-lg border p-3 bg-muted/30">
-                            <img
-                              src={doc.url}
-                              alt={doc.name}
-                              className="w-full h-auto rounded"
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <a
-                              href={doc.url}
-                              download
-                              className="underline text-primary"
-                            >
-                              Tải xuống
-                            </a>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogContent>
+                      </Dialog>
+                      {isEditing && (
+                        <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleRemoveDocument(doc.id)}>Xóa</Button>
+                      )}
+                    </div>
                   </div>
                 ))}
               </CardContent>
