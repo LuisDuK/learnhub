@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -79,6 +80,34 @@ const mockTeacherData = {
     "Chứng chỉ Intel Teach 2021",
   ],
 
+  // Certificates / Documents
+  documents: [
+    {
+      id: 1,
+      name: "Chứng chỉ Sư phạm Toán - Bộ GDĐT",
+      type: "certificate",
+      issuedBy: "Bộ Giáo dục và Đào tạo",
+      issueDate: "2020-09-01",
+      url: "/placeholder.svg",
+    },
+    {
+      id: 2,
+      name: "IELTS Academic 7.0",
+      type: "certificate",
+      issuedBy: "British Council",
+      issueDate: "2021-06-15",
+      url: "/placeholder.svg",
+    },
+    {
+      id: 3,
+      name: "Bằng Thạc sĩ Sư phạm Toán",
+      type: "diploma",
+      issuedBy: "ĐH Sư phạm TP.HCM",
+      issueDate: "2018-08-20",
+      url: "/placeholder.svg",
+    },
+  ],
+
   // Teaching Preferences
   preferredAgeGroups: ["6-8 tuổi", "8-10 tuổi"],
   teachingMethods: ["Trực quan", "Tương tác", "Trò chơi"],
@@ -135,6 +164,7 @@ export default function TeacherProfile() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("personal");
+  const [openDocId, setOpenDocId] = useState<number | null>(null);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -330,7 +360,7 @@ export default function TeacherProfile() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="personal">Thông tin cá nhân</TabsTrigger>
             <TabsTrigger value="professional">
               Thông tin nghề nghiệp
@@ -338,6 +368,7 @@ export default function TeacherProfile() {
             <TabsTrigger value="bio">Giới thiệu</TabsTrigger>
             <TabsTrigger value="achievements">Thành tích</TabsTrigger>
             <TabsTrigger value="settings">Cài đặt</TabsTrigger>
+            <TabsTrigger value="documents">Tài liệu chứng chỉ</TabsTrigger>
           </TabsList>
 
           {/* Personal Information Tab */}
@@ -1025,6 +1056,47 @@ export default function TeacherProfile() {
                     disabled={!isEditing}
                   />
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          {/* Documents / Certificates Tab */}
+          <TabsContent value="documents" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" /> Tài liệu chứng chỉ
+                </CardTitle>
+                <CardDescription>Danh sách văn bằng, chứng chỉ và tài liệu nghề nghiệp</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {currentData.documents?.map((doc: any) => (
+                  <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
+                    <div>
+                      <div className="font-medium">{doc.name}</div>
+                      <div className="text-xs text-muted-foreground">{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString("vi-VN")}</div>
+                    </div>
+                    <Dialog open={openDocId === doc.id} onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}>
+                      <DialogTrigger asChild>
+                        <Button variant="outline" size="sm">Xem chi tiết</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{doc.name}</DialogTitle>
+                          <DialogDescription>{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString("vi-VN")}</DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-2 text-sm">
+                          <div>Loại: <span className="font-medium uppercase">{doc.type}</span></div>
+                          <div className="rounded-lg border p-3 bg-muted/30">
+                            <img src={doc.url} alt={doc.name} className="w-full h-auto rounded" />
+                          </div>
+                          <div className="flex gap-2">
+                            <a href={doc.url} download className="underline text-primary">Tải xuống</a>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                ))}
               </CardContent>
             </Card>
           </TabsContent>
