@@ -9,17 +9,14 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  useLocation,
   Navigate,
 } from "react-router-dom";
-import { FloatingChatbot } from "@/components/FloatingChatbot";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import EmailVerification from "./pages/EmailVerification";
 import TwoFactorAuth from "./pages/TwoFactorAuth";
 import Courses from "./pages/Courses";
 import StudyPlan from "./pages/StudyPlan";
-import Chatbot from "./pages/Chatbot";
 import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Lesson from "./pages/Lesson";
@@ -71,15 +68,6 @@ function AppProviders({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ChatbotMount() {
-  const location = useLocation();
-  const hide =
-    location.pathname.startsWith("/admin") ||
-    location.pathname.startsWith("/teacher") ||
-    location.pathname.startsWith("/m");
-  if (hide) return null;
-  return <FloatingChatbot />;
-}
 
 function AppRoutes() {
   return (
@@ -91,7 +79,6 @@ function AppRoutes() {
         <Route path="/two-factor-auth" element={<TwoFactorAuth />} />
         <Route path="/subjects" element={<Courses />} />
         <Route path="/study-plan" element={<StudyPlan />} />
-        <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/learn" element={<Learn />} />
@@ -150,7 +137,6 @@ function AppRoutes() {
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <ChatbotMount />
     </BrowserRouter>
   );
 }

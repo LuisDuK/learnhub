@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import {
   Card,
@@ -24,6 +23,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import StudyPlanLayout from "@/components/StudyPlanLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,7 +52,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
@@ -111,7 +117,7 @@ const weeklyPlan = [
       {
         id: 5,
         subject: "literature",
-        title: "Viết văn tả người",
+        title: "Viết văn tả ng��ời",
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -331,8 +337,6 @@ export default function StudyPlan() {
   } | null>(null);
 
   const [proposedPlan, setProposedPlan] = useState<PlanVersion | null>(null);
-
-  useEffect(() => {}, []);
 
   const openVideo = (
     url?: string,
@@ -756,6 +760,84 @@ export default function StudyPlan() {
     );
   };
 
+  // Helpers for stats
+  const parseMinutes = (d?: string) => {
+    if (!d) return 0;
+    const n = Number(String(d).replace(/[^0-9]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  };
+  const getLessonScore = (id: number): number | null => {
+    const raw = localStorage.getItem(`lessonScore-${id}`);
+    const n = raw ? Number(raw) : NaN;
+    return Number.isFinite(n) ? n : null;
+  };
+  const isLessonLate = (id: number, status: string) => {
+    try {
+      const raw = localStorage.getItem("studyPlanReminders");
+      if (!raw) return false;
+      const list = JSON.parse(raw) as { lessonId: number; scheduled: string }[];
+      const item = list.find((r) => r.lessonId === id);
+      if (!item) return false;
+      const when = new Date(item.scheduled).getTime();
+      return when < Date.now() && status !== "completed";
+    } catch {
+      return false;
+    }
+  };
+  const totalLessons = lessonList.length;
+  const completedLessons = lessonList.filter(
+    (l) => l.status === "completed",
+  ).length;
+  const remainingLessons = totalLessons - completedLessons;
+  const completionRate = totalLessons
+    ? Math.round((completedLessons / totalLessons) * 100)
+    : 0;
+  const totalPlannedMin = lessonList.reduce(
+    (s, l) => s + parseMinutes(l.duration),
+    0,
+  );
+  const timeSpentMin = lessonList.reduce((s, l) => {
+    const dur = parseMinutes(l.duration);
+    if (l.status === "completed") return s + dur;
+    if (l.status === "in-progress") return s + Math.floor(dur * 0.5);
+    return s;
+  }, 0);
+  const scores = lessonList
+    .map((l) => getLessonScore(l.id))
+    .filter((n): n is number => n != null);
+  const averageScore = scores.length
+    ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+    : null;
+  const lateLessons = lessonList.filter((l) =>
+    isLessonLate(l.id, l.status),
+  ).length;
+  const formatMinutes = (m: number) => {
+    if (m < 60) return `${m} phút`;
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    return r ? `${h}g ${r}p` : `${h}g`;
+  };
+
+  // Seed demo scores for completed/in-progress lessons if missing
+  const seededScore = (id: number, status: string) => {
+    const base = (id * 37) % 21; // 0..20
+    const min = status === "completed" ? 80 : 60;
+    return Math.min(100, min + base);
+  };
+  useEffect(() => {
+    lessonList.forEach((l) => {
+      if (
+        (l.status === "completed" || l.status === "in-progress") &&
+        getLessonScore(l.id) == null
+      ) {
+        localStorage.setItem(
+          `lessonScore-${l.id}`,
+          String(seededScore(l.id, l.status)),
+        );
+      }
+    });
+  }, [lessonList]);
+
   return (
     <DashboardLayout>
       <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
@@ -767,7 +849,7 @@ export default function StudyPlan() {
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-base md:text-lg mt-2">
-              Kế hoạch học t���p được cá nhân hóa cho bé
+              Kế hoạch học tập được cá nhân hóa cho bé
             </p>
           </div>
           <div className="flex gap-3">
@@ -806,8 +888,57 @@ export default function StudyPlan() {
           </div>
         </div>
 
-        {/* Goal Selection & Progress */}
-        <div className="grid gap-6 lg:grid-cols-2"></div>
+        {/* Tổng quan tiến độ */}
+        <Card className="border-primary/20 shadow-md">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">
+              📊 Tổng quan tiến độ
+            </CardTitle>
+            <CardDescription>
+              Tỷ lệ hoàn thành lộ trình, thời gian học, điểm số và các bài trễ
+              hạn
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2 text-sm">
+                <span>Hoàn thành</span>
+                <span className="font-semibold">{completionRate}%</span>
+              </div>
+              <Progress value={completionRate} />
+              <div className="mt-2 text-xs text-muted-foreground">
+                {completedLessons}/{totalLessons} bài học đã hoàn thành — còn{" "}
+                {remainingLessons}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">
+                  Số bài đã học
+                </div>
+                <div className="text-lg font-bold">{completedLessons} bài</div>
+              </div>
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">
+                  Tổng số bài (lộ trình)
+                </div>
+                <div className="text-lg font-bold">{totalLessons} bài</div>
+              </div>
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">Bài trễ hạn</div>
+                <div className="text-lg font-bold">{lateLessons}</div>
+              </div>
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">
+                  Điểm trung bình
+                </div>
+                <div className="text-lg font-bold">
+                  {averageScore != null ? `${averageScore}%` : "—"}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Timeline */}
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
@@ -855,6 +986,8 @@ export default function StudyPlan() {
                       const isAvailable =
                         lesson.status === "in-progress" ||
                         lesson.status === "completed";
+                      const score = getLessonScore(lesson.id);
+                      const isLate = isLessonLate(lesson.id, lesson.status);
                       return (
                         <div
                           key={lesson.id}
@@ -896,6 +1029,14 @@ export default function StudyPlan() {
                                   />
                                   {status.label}
                                 </Badge>
+                                {isLate && (
+                                  <Badge variant="destructive" className="ml-2">
+                                    Trễ hạn
+                                  </Badge>
+                                )}
+                                <Badge variant="secondary" className="ml-2">
+                                  Điểm: {score != null ? `${score}%` : "—"}
+                                </Badge>
                               </div>
                             </div>
 
@@ -926,7 +1067,7 @@ export default function StudyPlan() {
                                 Ôn tập
                               </span>
                             )}
-                            {lesson.pdfUrl && (
+                            {false && (
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -1031,7 +1172,9 @@ export default function StudyPlan() {
                 <DialogTitle className="text-lg font-bold">
                   Câu hỏi kiểm tra
                 </DialogTitle>
-                <DialogDescription>Trả lời để tiếp tục video</DialogDescription>
+                <DialogDescription>
+                  Trả lời để ti���p tục video
+                </DialogDescription>
               </DialogHeader>
               <div className="py-2">
                 {currentLesson &&
@@ -1188,7 +1331,7 @@ export default function StudyPlan() {
                   <SelectItem value="2-weeks">2 tuần</SelectItem>
                   <SelectItem value="3-weeks">3 tuần</SelectItem>
                   <SelectItem value="1-month">1 tháng</SelectItem>
-                  <SelectItem value="2-months">2 th��ng</SelectItem>
+                  <SelectItem value="2-months">2 th���ng</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1246,20 +1389,17 @@ export default function StudyPlan() {
         </DialogContent>
       </Dialog>
 
-      {/* Create Plan Dialog */}
-      <Dialog
-        open={showCreatePlanDialog}
-        onOpenChange={setShowCreatePlanDialog}
-      >
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-primary">
+      {/* Create Plan Panel */}
+      <Sheet open={showCreatePlanDialog} onOpenChange={setShowCreatePlanDialog}>
+        <SheetContent side="right" className="sm:max-w-lg w-full">
+          <SheetHeader>
+            <SheetTitle className="text-2xl font-bold text-primary">
               🛠️ Tạo lộ trình
-            </DialogTitle>
-            <DialogDescription>
+            </SheetTitle>
+            <SheetDescription>
               Tùy chỉnh và tạo lộ trình học mới
-            </DialogDescription>
-          </DialogHeader>
+            </SheetDescription>
+          </SheetHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -1392,8 +1532,8 @@ export default function StudyPlan() {
               Tiếp tục
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        </SheetContent>
+      </Sheet>
 
       {/* Entrance Test Dialog */}
       <Dialog
@@ -1569,7 +1709,7 @@ export default function StudyPlan() {
               ✏️ Chỉnh sửa lộ trình
             </DialogTitle>
             <DialogDescription>
-              Quản lý danh sách bài học trong lộ trình của b�����n
+              Quản lý danh sách bài học trong lộ trình của bạn
             </DialogDescription>
           </DialogHeader>
 
@@ -1863,7 +2003,7 @@ export default function StudyPlan() {
                 ))}
                 {lessonList.length === 0 && (
                   <div className="text-sm text-muted-foreground">
-                    Không có bài học trong lộ trình. Tạo lộ trình trước khi
+                    Không có bài học trong lộ trình. Tạo l�� trình trước khi
                     chọn.
                   </div>
                 )}

@@ -2,9 +2,8 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import {
   Sparkles,
-  Gamepad2,
+  BookOpen,
   Calendar,
-  Bot,
   Trophy,
   Heart,
   Home,
@@ -23,18 +22,13 @@ const menuItems = [
   },
   {
     title: "📚 Các môn học",
-    icon: Gamepad2,
+    icon: BookOpen,
     href: "/subjects",
   },
   {
     title: "📅 Kế hoạch học",
     icon: Calendar,
     href: "/study-plan",
-  },
-  {
-    title: "🤖 Trợ lý thông minh",
-    icon: Bot,
-    href: "/chatbot",
   },
   {
     title: "🏆 Thành tích của bé",
