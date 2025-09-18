@@ -204,47 +204,44 @@ export default function TeacherLessons() {
           </div>
         </div>
 
-        {/* Lessons Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Lessons List */}
+        <div className="space-y-4">
           {filteredLessons.map((lesson) => (
             <Card key={lesson.id} className="hover:shadow-lg transition-shadow">
-              <div className="relative">
-                <div className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <BookOpen className="h-5 w-5 text-primary" />
-                      <div>
-                        <h3 className="font-semibold">{lesson.title}</h3>
-                        <p className="text-sm text-muted-foreground">{lesson.chapter} • {lesson.subject}</p>
-                      </div>
-                    </div>
-                    <Badge variant={lesson.status === "published" ? undefined : "secondary"}>
-                      {lesson.status === "published" ? "Đã xuất bản" : "Bản nháp"}
-                    </Badge>
+              <div className="p-4 flex items-center justify-between gap-4">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="flex-shrink-0 h-12 w-12 rounded-md bg-muted flex items-center justify-center">
+                    <BookOpen className="h-6 w-6 text-primary" />
                   </div>
 
-                  <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{lesson.shortDescription}</p>
-
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span className="px-2 py-1 rounded-md bg-muted text-xs">#{lesson.order}</span>
-                      <span>{lesson.duration}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-lg truncate">{lesson.title}</h3>
+                      <Badge variant={lesson.status === "published" ? undefined : "secondary"}>
+                        {lesson.status === "published" ? "Đã xuất bản" : "Bản nháp"}
+                      </Badge>
                     </div>
+                    <p className="text-sm text-muted-foreground truncate">{lesson.chapter} • {lesson.subject}</p>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{lesson.shortDescription}</p>
+                  </div>
+                </div>
 
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/lessons/new?edit=${lesson.id}`)}>
-                        <Edit className="h-4 w-4 mr-2" /> Chỉnh sửa
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        <Trash2 className="h-4 w-4 mr-2" /> Xóa
-                      </Button>
-                    </div>
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:flex flex-col items-end text-sm text-muted-foreground">
+                    <span className="font-medium">#{lesson.order}</span>
+                    <span>{lesson.duration}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/lessons/new?edit=${lesson.id}`)}>
+                      <Edit className="h-4 w-4 mr-2" /> Chỉnh sửa
+                    </Button>
+                    <Button variant="destructive" size="sm">
+                      <Trash2 className="h-4 w-4 mr-2" /> Xóa
+                    </Button>
                   </div>
                 </div>
               </div>
-              <CardFooter className="text-xs text-muted-foreground">
-                Tạo mẫu giao diện — không lưu backend
-              </CardFooter>
             </Card>
           ))}
         </div>
