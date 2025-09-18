@@ -1128,6 +1128,31 @@ export default function TeacherCourses() {
                   </TabsContent>
 
                   <TabsContent value="lessons" className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-gray-600">
+                        Quản lý bài học cho môn: <span className="font-medium">{selectedCourse.name}</span>
+                      </div>
+                      <Button onClick={() => {
+                        setLessonStep(1);
+                        setNewLesson({
+                          subject: selectedCourse.subject,
+                          chapter: "",
+                          title: "",
+                          description: "",
+                          textbookLink: "",
+                          includeText: true,
+                          includeMedia: false,
+                          includeQuiz: false,
+                          textContent: "",
+                          mediaUrl: "",
+                          quiz: [],
+                          exercises: [],
+                        });
+                        setIsAddLessonOpen(true);
+                      }}>
+                        <Plus className="h-4 w-4 mr-2" /> Thêm bài học
+                      </Button>
+                    </div>
                     {selectedCourse.lessons &&
                     selectedCourse.lessons.length > 0 ? (
                       <div className="space-y-3">
