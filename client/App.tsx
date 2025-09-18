@@ -39,6 +39,7 @@ import TeacherReports from "./pages/TeacherReports";
 import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAIGenerator from "./pages/TeacherAIGenerator";
 import TeacherSecurity from "./pages/TeacherSecurity";
+import StudentProfile from "./pages/StudentProfile";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 // Mobile layout & pages
 import MobileLayout from "@/components/mobile/MobileLayout";
@@ -81,6 +82,7 @@ function AppRoutes() {
         <Route path="/study-plan" element={<StudyPlan />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/profile" element={<StudentProfile />} />
         <Route path="/learn" element={<Learn />} />
         <Route path="/lesson/:id" element={<Lesson />} />
         <Route path="/lesson/:lessonId/exercise/:id" element={<Exercise />} />
