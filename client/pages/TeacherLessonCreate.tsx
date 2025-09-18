@@ -68,8 +68,9 @@ export default function TeacherLessonCreate() {
   const [includeQuiz, setIncludeQuiz] = useState(true);
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
 
-  const [scheduleAt, setScheduleAt] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
+  // Exercises (practice questions) - client side only
+  const [exercises, setExercises] = useState<{ id: string; question: string; answer: string }[]>([]);
+  const [exerciseDraft, setExerciseDraft] = useState<{ question: string; answer: string }>({ question: "", answer: "" });
 
   const canSubmit = subject && title && chapter;
 
@@ -140,8 +141,8 @@ export default function TeacherLessonCreate() {
             <TabsList className="mb-4">
               <TabsTrigger value="info">1. Thông tin</TabsTrigger>
               <TabsTrigger value="materials">2. Tài liệu học tập</TabsTrigger>
-              <TabsTrigger value="quiz">3. Quiz & Bài tập</TabsTrigger>
-              <TabsTrigger value="schedule">4. Lịch/Thời gian</TabsTrigger>
+              <TabsTrigger value="quiz">3. Quiz (gắn thời gian hiển thị)</TabsTrigger>
+              <TabsTrigger value="exercises">4. Bài tập</TabsTrigger>
             </TabsList>
 
             <TabsContent value="info" className="space-y-4">
@@ -281,7 +282,7 @@ export default function TeacherLessonCreate() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h3 className="font-semibold">Câu hỏi Quiz</h3>
-                  <p className="text-sm text-muted-foreground">Nhập câu hỏi kèm đáp án, có thể gắn mốc thời gian hoặc vị trí</p>
+                  <p className="text-sm text-muted-foreground">Nhập câu hỏi kèm đáp án và gắn thời điểm/ mốc thời gian sẽ hiển thị câu hỏi trong bài học (ví dụ 01:23)</p>
                 </div>
                 <Button variant="outline" size="sm" onClick={addQuestion}>
                   <Plus className="h-4 w-4 mr-1" /> Thêm câu hỏi
@@ -315,12 +316,13 @@ export default function TeacherLessonCreate() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="space-y-2">
-                        <Label className="flex items-center gap-2"><Clock className="h-4 w-4" /> Mốc thời gian/Vị trí (tùy chọn)</Label>
+                        <Label className="flex items-center gap-2"><Clock className="h-4 w-4" /> Thời điểm hiển thị câu hỏi (ví dụ 01:23)</Label>
                         <Input
-                          placeholder="Ví dụ: 01:23 hoặc Trang 12"
+                          placeholder="Ví dụ: 01:23 or Trang 12"
                           value={q.marker || ""}
                           onChange={(e) => updateQuestion(q.id, { marker: e.target.value })}
                         />
+                        <p className="text-xs text-muted-foreground">Thời điểm này sẽ được dùng khi phát lại bài học để hiển thị câu hỏi tương ứng.</p>
                       </div>
                       <div className="flex items-end justify-end">
                         <Button variant="destructive" size="sm" onClick={() => removeQuestion(q.id)}>
@@ -334,20 +336,50 @@ export default function TeacherLessonCreate() {
 
               <div className="flex justify-between">
                 <Button variant="outline" onClick={() => setTab("materials")}>Quay lại</Button>
-                <Button onClick={() => setTab("schedule")}>Tiếp tục</Button>
+                <Button onClick={() => setTab("exercises")}>Tiếp tục</Button>
               </div>
             </TabsContent>
 
-            <TabsContent value="schedule" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TabsContent value="exercises" className="space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold">Bài tập ôn tập</h3>
+                    <p className="text-sm text-muted-foreground">Thêm các câu hỏi ôn tập và đáp án để người học luyện tập sau bài giảng</p>
+                  </div>
+                </div>
+
                 <div className="space-y-2">
-                  <Label>Thời gian dự kiến</Label>
-                  <Input type="datetime-local" value={scheduleAt} onChange={(e) => setScheduleAt(e.target.value)} />
+                  <Label>Câu hỏi ôn tập</Label>
+                  <Textarea rows={2} placeholder="Nhập câu hỏi" value={exerciseDraft.question} onChange={(e) => setExerciseDraft({ ...exerciseDraft, question: e.target.value })} />
                 </div>
                 <div className="space-y-2">
-                  <Label>Vị trí/Lớp</Label>
-                  <Input placeholder="Ví dụ: Lớp 3A - Phòng 201" value={location} onChange={(e) => setLocation(e.target.value)} />
+                  <Label>Đáp án</Label>
+                  <Textarea rows={2} placeholder="Nhập đáp án/ gợi ý" value={exerciseDraft.answer} onChange={(e) => setExerciseDraft({ ...exerciseDraft, answer: e.target.value })} />
                 </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setExerciseDraft({ question: "", answer: "" })}>Xoá</Button>
+                  <Button onClick={() => {
+                    if (!exerciseDraft.question) return;
+                    setExercises((ex) => [...ex, { id: crypto.randomUUID(), question: exerciseDraft.question, answer: exerciseDraft.answer }]);
+                    setExerciseDraft({ question: "", answer: "" });
+                  }}>Thêm câu hỏi ôn tập</Button>
+                </div>
+
+                {exercises.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <h4 className="font-medium">Danh sách bài tập</h4>
+                    {exercises.map((ex) => (
+                      <div key={ex.id} className="p-3 border rounded-md flex items-start justify-between">
+                        <div className="min-w-0">
+                          <div className="font-medium truncate">{ex.question}</div>
+                          <div className="text-sm text-muted-foreground truncate">{ex.answer}</div>
+                        </div>
+                        <Button variant="destructive" size="sm" onClick={() => setExercises((s) => s.filter((e) => e.id !== ex.id))}>Xoá</Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-between">
