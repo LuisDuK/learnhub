@@ -338,8 +338,6 @@ export default function StudyPlan() {
 
   const [proposedPlan, setProposedPlan] = useState<PlanVersion | null>(null);
 
-
-
   const openVideo = (
     url?: string,
     title?: string,
@@ -787,10 +785,17 @@ export default function StudyPlan() {
     }
   };
   const totalLessons = lessonList.length;
-  const completedLessons = lessonList.filter((l) => l.status === "completed").length;
+  const completedLessons = lessonList.filter(
+    (l) => l.status === "completed",
+  ).length;
   const remainingLessons = totalLessons - completedLessons;
-  const completionRate = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
-  const totalPlannedMin = lessonList.reduce((s, l) => s + parseMinutes(l.duration), 0);
+  const completionRate = totalLessons
+    ? Math.round((completedLessons / totalLessons) * 100)
+    : 0;
+  const totalPlannedMin = lessonList.reduce(
+    (s, l) => s + parseMinutes(l.duration),
+    0,
+  );
   const timeSpentMin = lessonList.reduce((s, l) => {
     const dur = parseMinutes(l.duration);
     if (l.status === "completed") return s + dur;
@@ -800,8 +805,12 @@ export default function StudyPlan() {
   const scores = lessonList
     .map((l) => getLessonScore(l.id))
     .filter((n): n is number => n != null);
-  const averageScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
-  const lateLessons = lessonList.filter((l) => isLessonLate(l.id, l.status)).length;
+  const averageScore = scores.length
+    ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
+    : null;
+  const lateLessons = lessonList.filter((l) =>
+    isLessonLate(l.id, l.status),
+  ).length;
   const formatMinutes = (m: number) => {
     if (m < 60) return `${m} phút`;
     const h = Math.floor(m / 60);
@@ -817,8 +826,14 @@ export default function StudyPlan() {
   };
   useEffect(() => {
     lessonList.forEach((l) => {
-      if ((l.status === "completed" || l.status === "in-progress") && getLessonScore(l.id) == null) {
-        localStorage.setItem(`lessonScore-${l.id}`, String(seededScore(l.id, l.status)));
+      if (
+        (l.status === "completed" || l.status === "in-progress") &&
+        getLessonScore(l.id) == null
+      ) {
+        localStorage.setItem(
+          `lessonScore-${l.id}`,
+          String(seededScore(l.id, l.status)),
+        );
       }
     });
   }, [lessonList]);
@@ -876,9 +891,12 @@ export default function StudyPlan() {
         {/* Tổng quan tiến độ */}
         <Card className="border-primary/20 shadow-md">
           <CardHeader>
-            <CardTitle className="text-xl font-bold">📊 Tổng quan tiến độ</CardTitle>
+            <CardTitle className="text-xl font-bold">
+              📊 Tổng quan tiến độ
+            </CardTitle>
             <CardDescription>
-              Tỷ lệ hoàn thành lộ trình, thời gian học, điểm số và các bài trễ hạn
+              Tỷ lệ hoàn thành lộ trình, thời gian học, điểm số và các bài trễ
+              hạn
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -889,16 +907,21 @@ export default function StudyPlan() {
               </div>
               <Progress value={completionRate} />
               <div className="mt-2 text-xs text-muted-foreground">
-                {completedLessons}/{totalLessons} bài học đã hoàn thành — còn {remainingLessons}
+                {completedLessons}/{totalLessons} bài học đã hoàn thành — còn{" "}
+                {remainingLessons}
               </div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 rounded-lg border bg-white">
-                <div className="text-xs text-muted-foreground">Số bài đã học</div>
+                <div className="text-xs text-muted-foreground">
+                  Số bài đã học
+                </div>
                 <div className="text-lg font-bold">{completedLessons} bài</div>
               </div>
               <div className="p-3 rounded-lg border bg-white">
-                <div className="text-xs text-muted-foreground">Tổng số bài (lộ trình)</div>
+                <div className="text-xs text-muted-foreground">
+                  Tổng số bài (lộ trình)
+                </div>
                 <div className="text-lg font-bold">{totalLessons} bài</div>
               </div>
               <div className="p-3 rounded-lg border bg-white">
@@ -906,8 +929,12 @@ export default function StudyPlan() {
                 <div className="text-lg font-bold">{lateLessons}</div>
               </div>
               <div className="p-3 rounded-lg border bg-white">
-                <div className="text-xs text-muted-foreground">Điểm trung bình</div>
-                <div className="text-lg font-bold">{averageScore != null ? `${averageScore}%` : "—"}</div>
+                <div className="text-xs text-muted-foreground">
+                  Điểm trung bình
+                </div>
+                <div className="text-lg font-bold">
+                  {averageScore != null ? `${averageScore}%` : "—"}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -1003,9 +1030,13 @@ export default function StudyPlan() {
                                   {status.label}
                                 </Badge>
                                 {isLate && (
-                                  <Badge variant="destructive" className="ml-2">Trễ hạn</Badge>
+                                  <Badge variant="destructive" className="ml-2">
+                                    Trễ hạn
+                                  </Badge>
                                 )}
-                                <Badge variant="secondary" className="ml-2">Điểm: {score != null ? `${score}%` : "—"}</Badge>
+                                <Badge variant="secondary" className="ml-2">
+                                  Điểm: {score != null ? `${score}%` : "—"}
+                                </Badge>
                               </div>
                             </div>
 
@@ -1141,7 +1172,9 @@ export default function StudyPlan() {
                 <DialogTitle className="text-lg font-bold">
                   Câu hỏi kiểm tra
                 </DialogTitle>
-                <DialogDescription>Trả lời để ti���p tục video</DialogDescription>
+                <DialogDescription>
+                  Trả lời để ti���p tục video
+                </DialogDescription>
               </DialogHeader>
               <div className="py-2">
                 {currentLesson &&
