@@ -1203,7 +1203,24 @@ export default function TeacherCourses() {
                       <div className="text-center py-8 text-gray-500">
                         <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>Chưa có bài học nào</p>
-                        <Button className="mt-4">
+                        <Button className="mt-4" onClick={() => {
+                          setLessonStep(1);
+                          setNewLesson({
+                            subject: selectedCourse.subject,
+                            chapter: "",
+                            title: "",
+                            description: "",
+                            textbookLink: "",
+                            includeText: true,
+                            includeMedia: false,
+                            includeQuiz: false,
+                            textContent: "",
+                            mediaUrl: "",
+                            quiz: [],
+                            exercises: [],
+                          });
+                          setIsAddLessonOpen(true);
+                        }}>
                           <Plus className="h-4 w-4 mr-2" />
                           Thêm bài học đầu tiên
                         </Button>
