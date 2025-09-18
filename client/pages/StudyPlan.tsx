@@ -53,7 +53,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
@@ -763,6 +763,53 @@ export default function StudyPlan() {
     );
   };
 
+  // Helpers for stats
+  const parseMinutes = (d?: string) => {
+    if (!d) return 0;
+    const n = Number(String(d).replace(/[^0-9]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  };
+  const getLessonScore = (id: number): number | null => {
+    const raw = localStorage.getItem(`lessonScore-${id}`);
+    const n = raw ? Number(raw) : NaN;
+    return Number.isFinite(n) ? n : null;
+  };
+  const isLessonLate = (id: number, status: string) => {
+    try {
+      const raw = localStorage.getItem("studyPlanReminders");
+      if (!raw) return false;
+      const list = JSON.parse(raw) as { lessonId: number; scheduled: string }[];
+      const item = list.find((r) => r.lessonId === id);
+      if (!item) return false;
+      const when = new Date(item.scheduled).getTime();
+      return when < Date.now() && status !== "completed";
+    } catch {
+      return false;
+    }
+  };
+  const totalLessons = lessonList.length;
+  const completedLessons = lessonList.filter((l) => l.status === "completed").length;
+  const remainingLessons = totalLessons - completedLessons;
+  const completionRate = totalLessons ? Math.round((completedLessons / totalLessons) * 100) : 0;
+  const totalPlannedMin = lessonList.reduce((s, l) => s + parseMinutes(l.duration), 0);
+  const timeSpentMin = lessonList.reduce((s, l) => {
+    const dur = parseMinutes(l.duration);
+    if (l.status === "completed") return s + dur;
+    if (l.status === "in-progress") return s + Math.floor(dur * 0.5);
+    return s;
+  }, 0);
+  const scores = lessonList
+    .map((l) => getLessonScore(l.id))
+    .filter((n): n is number => n != null);
+  const averageScore = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+  const lateLessons = lessonList.filter((l) => isLessonLate(l.id, l.status)).length;
+  const formatMinutes = (m: number) => {
+    if (m < 60) return `${m} phút`;
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    return r ? `${h}g ${r}p` : `${h}g`;
+  };
+
   return (
     <DashboardLayout>
       <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
@@ -813,8 +860,45 @@ export default function StudyPlan() {
           </div>
         </div>
 
-        {/* Goal Selection & Progress */}
-        <div className="grid gap-6 lg:grid-cols-2"></div>
+        {/* Tổng quan tiến độ */}
+        <Card className="border-primary/20 shadow-md">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold">📊 Tổng quan tiến độ</CardTitle>
+            <CardDescription>
+              Tỷ lệ hoàn thành lộ trình, thời gian học, điểm số và các bài trễ hạn
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2 text-sm">
+                <span>Hoàn thành</span>
+                <span className="font-semibold">{completionRate}%</span>
+              </div>
+              <Progress value={completionRate} />
+              <div className="mt-2 text-xs text-muted-foreground">
+                {completedLessons}/{totalLessons} bài học đã hoàn thành — còn {remainingLessons}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">Thời gian đã học</div>
+                <div className="text-lg font-bold">{formatMinutes(timeSpentMin)}</div>
+              </div>
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">Tổng thời gian lộ trình</div>
+                <div className="text-lg font-bold">{formatMinutes(totalPlannedMin)}</div>
+              </div>
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">Bài trễ hạn</div>
+                <div className="text-lg font-bold">{lateLessons}</div>
+              </div>
+              <div className="p-3 rounded-lg border bg-white">
+                <div className="text-xs text-muted-foreground">Điểm trung bình</div>
+                <div className="text-lg font-bold">{averageScore != null ? `${averageScore}%` : "—"}</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Timeline */}
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
@@ -862,6 +946,8 @@ export default function StudyPlan() {
                       const isAvailable =
                         lesson.status === "in-progress" ||
                         lesson.status === "completed";
+                      const score = getLessonScore(lesson.id);
+                      const isLate = isLessonLate(lesson.id, lesson.status);
                       return (
                         <div
                           key={lesson.id}
@@ -903,6 +989,12 @@ export default function StudyPlan() {
                                   />
                                   {status.label}
                                 </Badge>
+                                {isLate && (
+                                  <Badge variant="destructive" className="ml-2">Trễ hạn</Badge>
+                                )}
+                                {score != null && (
+                                  <Badge variant="secondary" className="ml-2">Điểm: {score}%</Badge>
+                                )}
                               </div>
                             </div>
 
