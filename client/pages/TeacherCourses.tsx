@@ -59,6 +59,7 @@ import {
   Save,
   X,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock course data for teacher
 const mockTeacherCourses = [
@@ -463,7 +464,7 @@ export default function TeacherCourses() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label className="text-right col-span-2">Môn học *</Label>
+                    <Label className="text-right col-span-2">M��n học *</Label>
                     <Select
                       value={newCourse.subject}
                       onValueChange={(value) =>
@@ -1082,7 +1083,7 @@ export default function TeacherCourses() {
                       </div>
                       <div>
                         <Label className="text-sm font-medium text-gray-500">
-                          Trạng thái
+                          Trạng th��i
                         </Label>
                         <Badge
                           className={getStatusColor(selectedCourse.status)}
@@ -1133,22 +1134,8 @@ export default function TeacherCourses() {
                         Quản lý bài học cho môn: <span className="font-medium">{selectedCourse.name}</span>
                       </div>
                       <Button onClick={() => {
-                        setLessonStep(1);
-                        setNewLesson({
-                          subject: selectedCourse.subject,
-                          chapter: "",
-                          title: "",
-                          description: "",
-                          textbookLink: "",
-                          includeText: true,
-                          includeMedia: false,
-                          includeQuiz: false,
-                          textContent: "",
-                          mediaUrl: "",
-                          quiz: [],
-                          exercises: [],
-                        });
-                        setIsAddLessonOpen(true);
+                        // Open full page create for lesson, prefill subject
+                        navigate(`/teacher/lessons/new?subject=${encodeURIComponent(selectedCourse?.subject || "")}`);
                       }}>
                         <Plus className="h-4 w-4 mr-2" /> Thêm bài học
                       </Button>
@@ -1204,22 +1191,7 @@ export default function TeacherCourses() {
                         <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />
                         <p>Chưa có bài học nào</p>
                         <Button className="mt-4" onClick={() => {
-                          setLessonStep(1);
-                          setNewLesson({
-                            subject: selectedCourse.subject,
-                            chapter: "",
-                            title: "",
-                            description: "",
-                            textbookLink: "",
-                            includeText: true,
-                            includeMedia: false,
-                            includeQuiz: false,
-                            textContent: "",
-                            mediaUrl: "",
-                            quiz: [],
-                            exercises: [],
-                          });
-                          setIsAddLessonOpen(true);
+                          navigate(`/teacher/lessons/new?subject=${encodeURIComponent(selectedCourse?.subject || "")}`);
                         }}>
                           <Plus className="h-4 w-4 mr-2" />
                           Thêm bài học đầu tiên
