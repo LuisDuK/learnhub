@@ -241,6 +241,10 @@ function getScheduleStatus(lesson: UpcomingLesson) {
 
 export function DashboardHome() {
   const navigate = useNavigate();
+  const lateCount = upcomingLessons.reduce(
+    (acc, l) => (getScheduleStatus(l).late ? acc + 1 : acc),
+    0
+  );
   return (
     <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Greeting Section */}
@@ -259,7 +263,7 @@ export function DashboardHome() {
       </div>
 
       {/* Header Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -269,7 +273,7 @@ export function DashboardHome() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-primary">6</div>
-            <p className="text-xs text-muted-foreground">🆕 +2 môn học mới!</p>
+            <p className="text-xs text-muted-foreground">🆕 +2 môn h��c mới!</p>
           </CardContent>
         </Card>
         <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
@@ -308,6 +312,18 @@ export function DashboardHome() {
           <CardContent>
             <div className="text-3xl font-bold text-primary">2</div>
             <p className="text-xs text-muted-foreground">🚀 Buổi học thú vị!</p>
+          </CardContent>
+        </Card>
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">⛔ Trễ lịch</CardTitle>
+            <div className="text-2xl">⚠️</div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-destructive">{lateCount}</div>
+            <p className="text-xs text-muted-foreground">
+              {lateCount > 0 ? "Cần xem lại ngay!" : "Không có buổi trễ"}
+            </p>
           </CardContent>
         </Card>
       </div>
