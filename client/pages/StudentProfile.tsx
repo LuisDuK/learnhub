@@ -1,4 +1,3 @@
-import { DashboardLayout } from "@/components/DashboardLayout";
 import {
   Card,
   CardContent,
@@ -21,27 +20,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import {
-  Calendar,
-  Phone,
-  User,
-  School,
-  Target,
-  Users,
-  Info,
-  Key,
-  Mail,
-  MapPin,
-} from "lucide-react";
+import { Calendar, User, School, Target, Info, Key, MapPin } from "lucide-react";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-
-interface ParentInfo {
-  fatherName?: string;
-  motherName?: string;
-  phone: string;
-  email?: string;
-}
+import DashboardLayout from "@/components/DashboardLayout";
 
 interface StudentProfileData {
   fullName: string;
@@ -51,7 +33,6 @@ interface StudentProfileData {
   address: string;
   avatar: string;
   studyGoals: string[];
-  parent: ParentInfo;
 }
 
 const mockStudent: StudentProfileData = {
@@ -66,18 +47,11 @@ const mockStudent: StudentProfileData = {
     "Đọc hiểu tốt các đoạn văn ngắn",
     "Giao tiếp tiếng Anh cơ bản",
   ],
-  parent: {
-    fatherName: "Nguyễn Văn An",
-    motherName: "Trần Thị Hoa",
-    phone: "0901 234 567",
-    email: "phuhuynh.duc@example.com",
-  },
 };
 
 export default function StudentProfile() {
   const [data, setData] = useState<StudentProfileData>(mockStudent);
   const [openGoalIdx, setOpenGoalIdx] = useState<number | null>(null);
-  const [openContact, setOpenContact] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
     ...mockStudent,
@@ -95,8 +69,6 @@ export default function StudentProfile() {
     if (!form.dateOfBirth) return "Vui lòng chọn ngày sinh";
     if (!form.className.trim()) return "Vui lòng nhập lớp";
     if (!form.school.trim()) return "Vui lòng nhập trường";
-    const digits = form.parent.phone.replace(/\D/g, "");
-    if (digits.length < 9) return "Số điện thoại phụ huynh không hợp lệ";
     const np = (form as any).newPassword as string;
     const cp = (form as any).confirmPassword as string;
     if (np || cp) {
@@ -113,11 +85,7 @@ export default function StudentProfile() {
       return;
     }
     setTimeout(() => {
-      const {
-        newPassword: _np,
-        confirmPassword: _cp,
-        ...payload
-      } = form as any;
+      const { newPassword: _np, confirmPassword: _cp, ...payload } = form as any;
       setData(payload);
       setIsEditing(false);
       toast({
@@ -135,7 +103,7 @@ export default function StudentProfile() {
             <User className="h-7 w-7 text-primary" /> Hồ sơ học sinh
           </h1>
           <p className="text-muted-foreground mt-1">
-            Xem và chỉnh sửa thông tin, mục tiêu học tập và liên hệ phụ huynh
+            Xem và chỉnh sửa thông tin, mục tiêu học tập
           </p>
         </div>
 
@@ -174,9 +142,7 @@ export default function StudentProfile() {
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-primary">1</div>
-                <div className="text-xs text-muted-foreground">
-                  Liên hệ phụ huynh
-                </div>
+                <div className="text-xs text-muted-foreground">Thông tin trường</div>
               </div>
             </div>
             <div className="ml-auto">
@@ -209,9 +175,7 @@ export default function StudentProfile() {
           <Card>
             <CardHeader>
               <CardTitle>Chỉnh sửa hồ sơ</CardTitle>
-              <CardDescription>
-                Cập nhật thông tin cá nhân và phụ huynh
-              </CardDescription>
+              <CardDescription>Cập nhật thông tin cá nhân</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
@@ -222,9 +186,7 @@ export default function StudentProfile() {
                   <Input
                     id="fullName"
                     value={form.fullName}
-                    onChange={(e) =>
-                      setForm({ ...form, fullName: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, fullName: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -235,9 +197,7 @@ export default function StudentProfile() {
                     id="dob"
                     type="date"
                     value={form.dateOfBirth}
-                    onChange={(e) =>
-                      setForm({ ...form, dateOfBirth: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -247,24 +207,17 @@ export default function StudentProfile() {
                   <Input
                     id="address"
                     value={(form as any).address || ""}
-                    onChange={(e) =>
-                      setForm({ ...form, address: e.target.value } as any)
-                    }
+                    onChange={(e) => setForm({ ...form, address: e.target.value } as any)}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="className"
-                    className="flex items-center gap-1"
-                  >
+                  <Label htmlFor="className" className="flex items-center gap-1">
                     <Info className="h-4 w-4" /> Lớp
                   </Label>
                   <Input
                     id="className"
                     value={form.className}
-                    onChange={(e) =>
-                      setForm({ ...form, className: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, className: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -274,9 +227,7 @@ export default function StudentProfile() {
                   <Input
                     id="school"
                     value={form.school}
-                    onChange={(e) =>
-                      setForm({ ...form, school: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, school: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -286,77 +237,7 @@ export default function StudentProfile() {
                   <Input
                     id="avatar"
                     value={form.avatar}
-                    onChange={(e) =>
-                      setForm({ ...form, avatar: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="fatherName">Tên cha</Label>
-                  <Input
-                    id="fatherName"
-                    value={form.parent.fatherName || ""}
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        parent: { ...form.parent, fatherName: e.target.value },
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="motherName">Tên mẹ</Label>
-                  <Input
-                    id="motherName"
-                    value={form.parent.motherName || ""}
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        parent: { ...form.parent, motherName: e.target.value },
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="parentPhone"
-                    className="flex items-center gap-1"
-                  >
-                    <Phone className="h-4 w-4" /> Số điện thoại phụ huynh
-                  </Label>
-                  <Input
-                    id="parentPhone"
-                    value={form.parent.phone}
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        parent: { ...form.parent, phone: e.target.value },
-                      })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="parentEmail"
-                    className="flex items-center gap-1"
-                  >
-                    <Mail className="h-4 w-4" /> Email phụ huynh
-                  </Label>
-                  <Input
-                    id="parentEmail"
-                    type="email"
-                    value={form.parent.email || ""}
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        parent: { ...form.parent, email: e.target.value },
-                      })
-                    }
+                    onChange={(e) => setForm({ ...form, avatar: e.target.value })}
                   />
                 </div>
               </div>
@@ -365,19 +246,14 @@ export default function StudentProfile() {
 
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
-                  <Label
-                    htmlFor="newPassword"
-                    className="flex items-center gap-1"
-                  >
+                  <Label htmlFor="newPassword" className="flex items-center gap-1">
                     <Key className="h-4 w-4" /> Mật khẩu mới
                   </Label>
                   <Input
                     id="newPassword"
                     type="password"
                     value={(form as any).newPassword}
-                    onChange={(e) =>
-                      setForm({ ...(form as any), newPassword: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...(form as any), newPassword: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -387,10 +263,7 @@ export default function StudentProfile() {
                     type="password"
                     value={(form as any).confirmPassword}
                     onChange={(e) =>
-                      setForm({
-                        ...(form as any),
-                        confirmPassword: e.target.value,
-                      })
+                      setForm({ ...(form as any), confirmPassword: e.target.value })
                     }
                   />
                 </div>
@@ -418,15 +291,12 @@ export default function StudentProfile() {
 
         {/* Tabs */}
         <Tabs defaultValue="goals" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="goals" className="flex items-center gap-2">
               <Target className="h-4 w-4" /> Mục tiêu học tập
             </TabsTrigger>
-            <TabsTrigger value="parent" className="flex items-center gap-2">
-              <Users className="h-4 w-4" /> Thông tin phụ huynh
-            </TabsTrigger>
             <TabsTrigger value="contact" className="flex items-center gap-2">
-              <Phone className="h-4 w-4" /> Liên hệ
+              Thông tin liên hệ
             </TabsTrigger>
           </TabsList>
 
@@ -448,9 +318,7 @@ export default function StudentProfile() {
                     className="flex items-center justify-between p-3 rounded-lg border bg-card/50"
                   >
                     <div className="flex items-center gap-2">
-                      <Badge className="bg-primary/10 text-primary">
-                        #{idx + 1}
-                      </Badge>
+                      <Badge className="bg-primary/10 text-primary">#{idx + 1}</Badge>
                       <span>{g}</span>
                     </div>
                     <Dialog
@@ -464,9 +332,7 @@ export default function StudentProfile() {
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
-                          <DialogTitle>
-                            Chi tiết mục tiêu #{idx + 1}
-                          </DialogTitle>
+                          <DialogTitle>Chi tiết mục tiêu #{idx + 1}</DialogTitle>
                           <DialogDescription>
                             Mục tiêu cụ thể và gợi ý thực hiện
                           </DialogDescription>
@@ -487,81 +353,16 @@ export default function StudentProfile() {
             </Card>
           </TabsContent>
 
-          {/* Parent */}
-          <TabsContent value="parent">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" /> Thông tin phụ huynh
-                </CardTitle>
-                <CardDescription>
-                  Thông tin liên hệ và người giám hộ
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {data.parent.fatherName && (
-                  <div className="flex items-center justify-between p-3 rounded-lg border">
-                    <span>
-                      Cha:{" "}
-                      <span className="font-medium">
-                        {data.parent.fatherName}
-                      </span>
-                    </span>
-                    <Badge variant="outline">Giám hộ</Badge>
-                  </div>
-                )}
-                {data.parent.motherName && (
-                  <div className="flex items-center justify-between p-3 rounded-lg border">
-                    <span>
-                      Mẹ:{" "}
-                      <span className="font-medium">
-                        {data.parent.motherName}
-                      </span>
-                    </span>
-                    <Badge variant="secondary">Phụ huynh</Badge>
-                  </div>
-                )}
-                <div className="flex items-center justify-between p-3 rounded-lg border">
-                  <span>
-                    Số điện thoại:{" "}
-                    <span className="font-medium">{data.parent.phone}</span>
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setOpenContact(true)}
-                  >
-                    Xem chi tiết
-                  </Button>
-                </div>
-                {data.parent.email && (
-                  <div className="p-3 rounded-lg border text-sm text-muted-foreground">
-                    Email: {data.parent.email}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
           {/* Contact */}
           <TabsContent value="contact">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Phone className="h-5 w-5" /> Thông tin liên hệ
+                  Thông tin liên hệ
                 </CardTitle>
-                <CardDescription>
-                  Thông tin liên hệ của phụ huynh và nhà trường
-                </CardDescription>
+                <CardDescription>Thông tin liên hệ của nhà trường</CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <div className="p-3 rounded-lg border">
-                  <div className="font-medium">Phụ huynh</div>
-                  <div className="text-sm text-muted-foreground">
-                    {data.parent.phone}{" "}
-                    {data.parent.email ? `• ${data.parent.email}` : ""}
-                  </div>
-                </div>
                 <div className="p-3 rounded-lg border">
                   <div className="font-medium">Trường</div>
                   <div className="text-sm text-muted-foreground">
@@ -572,42 +373,6 @@ export default function StudentProfile() {
             </Card>
           </TabsContent>
         </Tabs>
-
-        {/* Contact Dialog */}
-        <Dialog open={openContact} onOpenChange={setOpenContact}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Chi tiết liên hệ phụ huynh</DialogTitle>
-              <DialogDescription>
-                Thông tin liên hệ để nhà trường/giáo viên tiện trao đổi
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-2 text-sm">
-              {data.parent.fatherName && (
-                <p>
-                  Cha:{" "}
-                  <span className="font-medium">{data.parent.fatherName}</span>
-                </p>
-              )}
-              {data.parent.motherName && (
-                <p>
-                  Mẹ:{" "}
-                  <span className="font-medium">{data.parent.motherName}</span>
-                </p>
-              )}
-              <p>
-                Điện thoại:{" "}
-                <span className="font-medium">{data.parent.phone}</span>
-              </p>
-              {data.parent.email && (
-                <p>
-                  Email:{" "}
-                  <span className="font-medium">{data.parent.email}</span>
-                </p>
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
       </div>
     </DashboardLayout>
   );
