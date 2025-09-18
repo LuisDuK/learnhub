@@ -29,7 +29,6 @@ import AdminSystemSettings from "./pages/AdminSystemSettings";
 import AdminTeacherApproval from "./pages/AdminTeacherApproval";
 // Teacher pages
 import TeacherDashboard from "./pages/TeacherDashboard";
-import TeacherCourses from "./pages/TeacherCourses";
 import TeacherReports from "./pages/TeacherReports";
 import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAIGenerator from "./pages/TeacherAIGenerator";
@@ -101,7 +100,6 @@ function AppRoutes() {
 
         {/* Teacher Routes */}
         <Route path="/teacher" element={<TeacherDashboard />} />
-        <Route path="/teacher/subjects" element={<TeacherCourses />} />
         <Route path="/teacher/ai-generator" element={<TeacherAIGenerator />} />
         <Route path="/teacher/reports" element={<TeacherReports />} />
         <Route path="/teacher/profile" element={<TeacherProfile />} />

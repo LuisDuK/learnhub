@@ -24,11 +24,6 @@ const menuItems = [
     href: "/teacher",
   },
   {
-    title: "Quản lý môn học",
-    icon: BookOpen,
-    href: "/teacher/subjects",
-  },
-  {
     title: "Quản lý bài học",
     icon: PenTool,
     href: "/teacher/lessons",
