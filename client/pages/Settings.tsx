@@ -118,8 +118,8 @@ export default function Settings() {
           </TabsList>
 
           {/* Hidden legacy tabs removed for simplified reminders-only settings */}
-          {/* Reminders Tab */}
-          <TabsContent value="reminders" className="space-y-6">
+          {/* Legacy content hidden in reminders-only mode */}
+          <TabsContent value="legacy" className="hidden">
             <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -418,7 +418,7 @@ export default function Settings() {
 
                 <div className="bg-green-50 p-4 rounded-xl border border-green-200">
                   <h4 className="font-bold text-green-700 mb-2">
-                    ✨ Lợi ích của xác thực 2 bước:
+                    �� Lợi ích của xác thực 2 bước:
                   </h4>
                   <ul className="text-sm text-green-600 space-y-1">
                     <li>• Bảo vệ tài khoản khỏi truy cập trái phép</li>
