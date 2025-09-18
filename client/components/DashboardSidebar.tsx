@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Zap,
   LogOut,
+  User,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -36,7 +37,12 @@ const menuItems = [
     href: "/progress",
   },
   {
-    title: "⚙️ Cài đặt",
+    title: "👤 Hồ sơ học sinh",
+    icon: User,
+    href: "/profile",
+  },
+  {
+    title: "🔔 Cài đặt nhắc nhở",
     icon: Heart,
     href: "/settings",
   },

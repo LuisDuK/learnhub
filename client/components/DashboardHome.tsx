@@ -108,7 +108,7 @@ const currentCourses = [
     totalLessons: 20,
     completedLessons: 15,
     thumbnail: "/placeholder.svg",
-    category: "Toán",
+    category: "To��n",
     level: "Dễ",
     emoji: "🔢",
   },
@@ -176,8 +176,75 @@ const currentCourses = [
 
 import { useNavigate } from "react-router-dom";
 
+// Helpers to compute schedule status (late/ongoing) for upcoming lessons
+type UpcomingLesson = (typeof upcomingLessons)[number];
+
+const VI_DAY_TO_INDEX: Record<string, number> = {
+  "Chủ nhật": 0,
+  "Thứ 2": 1,
+  "Thứ 3": 2,
+  "Thứ 4": 3,
+  "Thứ 5": 4,
+  "Thứ 6": 5,
+  "Thứ 7": 6,
+};
+
+function parseTimeToDate(base: Date, time: string): Date {
+  const [h, m] = time.split(":").map((v) => parseInt(v, 10));
+  const d = new Date(base);
+  d.setHours(isNaN(h) ? 0 : h, isNaN(m) ? 0 : m, 0, 0);
+  return d;
+}
+
+function parseVietnameseDate(label: string, time: string): Date {
+  const now = new Date();
+  if (label === "Hôm nay") {
+    return parseTimeToDate(now, time);
+  }
+  if (label === "Mai") {
+    const tmr = new Date(now);
+    tmr.setDate(now.getDate() + 1);
+    return parseTimeToDate(tmr, time);
+  }
+  // Match labels like "Thứ 2".."Thứ 7" or "Chủ nhật"
+  const dayIdx = VI_DAY_TO_INDEX[label as keyof typeof VI_DAY_TO_INDEX];
+  if (typeof dayIdx === "number") {
+    const todayIdx = now.getDay();
+    let diff = (dayIdx - todayIdx + 7) % 7;
+    let candidate = new Date(now);
+    candidate.setDate(now.getDate() + diff);
+    candidate = parseTimeToDate(candidate, time);
+    // If same day but time already passed, schedule for next week
+    if (diff === 0 && candidate.getTime() <= now.getTime()) {
+      candidate.setDate(candidate.getDate() + 7);
+    }
+    return candidate;
+  }
+  // Fallback: treat as today
+  return parseTimeToDate(now, time);
+}
+
+function parseDurationMinutes(duration: string): number {
+  const num = parseInt(duration.replace(/[^0-9]/g, ""), 10);
+  return isNaN(num) ? 0 : num;
+}
+
+function getScheduleStatus(lesson: UpcomingLesson) {
+  const start = parseVietnameseDate(lesson.date, lesson.time);
+  const minutes = parseDurationMinutes(lesson.duration);
+  const end = new Date(start.getTime() + minutes * 60 * 1000);
+  const now = new Date();
+  const ongoing = now >= start && now <= end;
+  const late = now > end;
+  return { start, end, ongoing, late };
+}
+
 export function DashboardHome() {
   const navigate = useNavigate();
+  const lateCount = upcomingLessons.reduce(
+    (acc, l) => (getScheduleStatus(l).late ? acc + 1 : acc),
+    0,
+  );
   return (
     <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
       {/* Greeting Section */}
@@ -196,7 +263,7 @@ export function DashboardHome() {
       </div>
 
       {/* Header Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -223,7 +290,7 @@ export function DashboardHome() {
             </p>
           </CardContent>
         </Card>
-        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/40 to-secondary/20 border-secondary/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               ⏰ Thời gian học
@@ -245,6 +312,20 @@ export function DashboardHome() {
           <CardContent>
             <div className="text-3xl font-bold text-primary">2</div>
             <p className="text-xs text-muted-foreground">🚀 Buổi học thú vị!</p>
+          </CardContent>
+        </Card>
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-destructive/10 to-destructive/5 border-destructive/20">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">⛔ Trễ lịch</CardTitle>
+            <div className="text-2xl">⚠️</div>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-destructive">
+              {lateCount}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {lateCount > 0 ? "Cần xem lại ngay!" : "Không có buổi tr��"}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -291,41 +372,55 @@ export function DashboardHome() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {upcomingLessons.map((lesson) => (
-              <div
-                key={lesson.id}
-                className="flex items-start gap-3 p-3 rounded-xl border border-primary/10 bg-gradient-to-r from-primary/5 to-accent/5 hover:scale-105 transition-transform duration-200"
-              >
-                <div className="flex flex-col items-center min-w-0">
-                  <div className="text-2xl">{lesson.emoji}</div>
-                  <div className="text-xs font-medium text-muted-foreground">
-                    {lesson.date}
+            {upcomingLessons.map((lesson) => {
+              const status = getScheduleStatus(lesson);
+              return (
+                <div
+                  key={lesson.id}
+                  className="flex items-start gap-3 p-3 rounded-xl border border-primary/10 bg-gradient-to-r from-primary/5 to-accent/5 hover:scale-105 transition-transform duration-200"
+                >
+                  <div className="flex flex-col items-center min-w-0">
+                    <div className="text-2xl">{lesson.emoji}</div>
+                    <div className="text-xs font-medium text-muted-foreground">
+                      {lesson.date}
+                    </div>
+                    <div className="text-sm font-semibold text-primary">
+                      {lesson.time}
+                    </div>
                   </div>
-                  <div className="text-sm font-semibold text-primary">
-                    {lesson.time}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-medium truncate">
+                      {lesson.title}
+                    </h4>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {lesson.course}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge
+                        variant={
+                          lesson.type === "live" ? "default" : "secondary"
+                        }
+                        className="text-xs"
+                      >
+                        {lesson.type === "live" ? "🔴 Trực tiếp" : "📹 Video"}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        ⏱️ {lesson.duration}
+                      </span>
+                      {status.late ? (
+                        <Badge variant="destructive" className="text-xs">
+                          ⛔ Trễ lịch
+                        </Badge>
+                      ) : status.ongoing ? (
+                        <Badge variant="outline" className="text-xs">
+                          🟢 Đang diễn ra
+                        </Badge>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-medium truncate">
-                    {lesson.title}
-                  </h4>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {lesson.course}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Badge
-                      variant={lesson.type === "live" ? "default" : "secondary"}
-                      className="text-xs"
-                    >
-                      {lesson.type === "live" ? "🔴 Trực tiếp" : "📹 Video"}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      ⏱️ {lesson.duration}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </CardContent>
         </Card>
       </div>
