@@ -273,7 +273,7 @@ export function DashboardHome() {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-primary">6</div>
-            <p className="text-xs text-muted-foreground">🆕 +2 môn h��c mới!</p>
+            <p className="text-xs text-muted-foreground">🆕 +2 môn học mới!</p>
           </CardContent>
         </Card>
         <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20">
@@ -290,7 +290,7 @@ export function DashboardHome() {
             </p>
           </CardContent>
         </Card>
-        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/10 to-secondary/5 border-secondary/20">
+        <Card className="hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-secondary/40 to-secondary/20 border-secondary/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               ⏰ Thời gian học
@@ -322,7 +322,7 @@ export function DashboardHome() {
           <CardContent>
             <div className="text-3xl font-bold text-destructive">{lateCount}</div>
             <p className="text-xs text-muted-foreground">
-              {lateCount > 0 ? "Cần xem lại ngay!" : "Không có buổi trễ"}
+              {lateCount > 0 ? "Cần xem lại ngay!" : "Không có buổi tr��"}
             </p>
           </CardContent>
         </Card>
