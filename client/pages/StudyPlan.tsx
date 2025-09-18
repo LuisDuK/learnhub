@@ -117,7 +117,7 @@ const weeklyPlan = [
       {
         id: 5,
         subject: "literature",
-        title: "Viết văn tả người",
+        title: "Viết văn tả ng��ời",
         duration: "90 phút",
         status: "not-started",
         day: "Thứ 2",
@@ -338,7 +338,7 @@ export default function StudyPlan() {
 
   const [proposedPlan, setProposedPlan] = useState<PlanVersion | null>(null);
 
-  useEffect(() => {}, []);
+
 
   const openVideo = (
     url?: string,
@@ -809,6 +809,20 @@ export default function StudyPlan() {
     return r ? `${h}g ${r}p` : `${h}g`;
   };
 
+  // Seed demo scores for completed/in-progress lessons if missing
+  const seededScore = (id: number, status: string) => {
+    const base = (id * 37) % 21; // 0..20
+    const min = status === "completed" ? 80 : 60;
+    return Math.min(100, min + base);
+  };
+  useEffect(() => {
+    lessonList.forEach((l) => {
+      if ((l.status === "completed" || l.status === "in-progress") && getLessonScore(l.id) == null) {
+        localStorage.setItem(`lessonScore-${l.id}`, String(seededScore(l.id, l.status)));
+      }
+    });
+  }, [lessonList]);
+
   return (
     <DashboardLayout>
       <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
@@ -1127,7 +1141,7 @@ export default function StudyPlan() {
                 <DialogTitle className="text-lg font-bold">
                   Câu hỏi kiểm tra
                 </DialogTitle>
-                <DialogDescription>Trả lời để tiếp tục video</DialogDescription>
+                <DialogDescription>Trả lời để ti���p tục video</DialogDescription>
               </DialogHeader>
               <div className="py-2">
                 {currentLesson &&
@@ -1284,7 +1298,7 @@ export default function StudyPlan() {
                   <SelectItem value="2-weeks">2 tuần</SelectItem>
                   <SelectItem value="3-weeks">3 tuần</SelectItem>
                   <SelectItem value="1-month">1 tháng</SelectItem>
-                  <SelectItem value="2-months">2 th��ng</SelectItem>
+                  <SelectItem value="2-months">2 th���ng</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1668,7 +1682,7 @@ export default function StudyPlan() {
 
           <div className="space-y-4 py-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Danh s��ch bài học</h3>
+              <h3 className="text-lg font-semibold">Danh sách bài học</h3>
               <Button
                 onClick={() => {
                   const newLesson = {
@@ -1956,7 +1970,7 @@ export default function StudyPlan() {
                 ))}
                 {lessonList.length === 0 && (
                   <div className="text-sm text-muted-foreground">
-                    Không có bài học trong lộ trình. Tạo lộ trình trước khi
+                    Không có bài học trong lộ trình. Tạo l�� trình trước khi
                     chọn.
                   </div>
                 )}
