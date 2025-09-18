@@ -991,7 +991,7 @@ export default function TeacherProfile() {
                   <div className="space-y-0.5">
                     <Label>Hiển thị hồ sơ công khai</Label>
                     <p className="text-sm text-gray-600">
-                      Cho phép học sinh và phụ huynh xem hồ sơ của bạn
+                      Cho phép học sinh xem hồ sơ của bạn
                     </p>
                   </div>
                   <Switch
@@ -1010,7 +1010,7 @@ export default function TeacherProfile() {
                   <div className="space-y-0.5">
                     <Label>Cho phép nhận tin nhắn</Label>
                     <p className="text-sm text-gray-600">
-                      Học sinh và phụ huynh có thể gửi tin nhắn cho bạn
+                      Học sinh có thể gửi tin nhắn cho bạn
                     </p>
                   </div>
                   <Switch
