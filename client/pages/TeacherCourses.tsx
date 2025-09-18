@@ -142,7 +142,7 @@ const mockTeacherCourses = [
     name: "Hình học cơ bản",
     description: "Môn học về hình học cho trẻ em",
     image: "/placeholder.svg",
-    subject: "Toán",
+    subject: "To��n",
     difficulty: "Trung bình",
     duration: "5 tuần",
     ageGroup: "7-9 tuổi",
@@ -172,6 +172,7 @@ const ageGroups = [
 const durations = ["4 tuần", "6 tuần", "8 tuần", "10 tuần", "12 tuần"];
 
 export default function TeacherCourses() {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState(mockTeacherCourses);
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
@@ -403,7 +404,7 @@ export default function TeacherCourses() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <BookOpen className="h-8 w-8 text-green-600" />
-              Quản lý môn học
+              Quản lý môn h���c
             </h1>
             <p className="text-gray-600 mt-1">
               Tạo, chỉnh sửa và quản lý các môn học của bạn
@@ -464,7 +465,7 @@ export default function TeacherCourses() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label className="text-right col-span-2">M��n học *</Label>
+                    <Label className="text-right col-span-2">Môn học *</Label>
                     <Select
                       value={newCourse.subject}
                       onValueChange={(value) =>
@@ -1083,7 +1084,7 @@ export default function TeacherCourses() {
                       </div>
                       <div>
                         <Label className="text-sm font-medium text-gray-500">
-                          Trạng th��i
+                          Trạng thái
                         </Label>
                         <Badge
                           className={getStatusColor(selectedCourse.status)}
