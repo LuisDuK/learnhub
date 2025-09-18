@@ -1375,6 +1375,246 @@ export default function TeacherCourses() {
             )}
           </DialogContent>
         </Dialog>
+
+        {/* Add Lesson Dialog */}
+        <Dialog open={isAddLessonOpen} onOpenChange={(o) => {
+          setIsAddLessonOpen(o);
+          if (!o) {
+            setLessonStep(1);
+            setNewLesson({
+              subject: "",
+              chapter: "",
+              title: "",
+              description: "",
+              textbookLink: "",
+              includeText: true,
+              includeMedia: false,
+              includeQuiz: false,
+              textContent: "",
+              mediaUrl: "",
+              quiz: [],
+              exercises: [],
+            });
+            setQuizDraft({ timeSeconds: "", position: "", question: "", options: ["", "", "", ""], correctIndex: 0 });
+            setExerciseDraft({ question: "", answer: "" });
+          }
+        }}>
+          <DialogContent className="sm:max-w-[800px] max-h-[85vh] overflow-y-auto">
+            <DialogHeader className="pb-2 border-b border-gray-200">
+              <DialogTitle className="text-xl font-bold">{lessonStep === 1 ? "Thêm bài học" : lessonStep === 2 ? "Thêm câu hỏi Quiz" : "Thêm bài tập ôn tập"}</DialogTitle>
+              <DialogDescription>
+                {lessonStep === 1 ? "Nhập thông tin bài học và tài liệu học tập" : lessonStep === 2 ? "Nhập câu hỏi kèm đáp án, có thể gắn mốc thời gian hoặc vị trí" : "Nhập các câu hỏi ôn tập và đáp án"}
+              </DialogDescription>
+            </DialogHeader>
+
+            {lessonStep === 1 && (
+              <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Môn học</Label>
+                    <Select value={newLesson.subject} onValueChange={(v) => setNewLesson({ ...newLesson, subject: v })}>
+                      <SelectTrigger><SelectValue placeholder="Chọn môn học" /></SelectTrigger>
+                      <SelectContent>
+                        {subjects.slice(1).map((s) => (
+                          <SelectItem key={s} value={s}>{s}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Chương</Label>
+                    <Input value={newLesson.chapter} onChange={(e) => setNewLesson({ ...newLesson, chapter: e.target.value })} placeholder="VD: Chương 1 - Số học" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Tiêu đề</Label>
+                    <Input value={newLesson.title} onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })} placeholder="VD: Phép cộng trong phạm vi 20" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Liên kết chương SGK</Label>
+                    <Input value={newLesson.textbookLink} onChange={(e) => setNewLesson({ ...newLesson, textbookLink: e.target.value })} placeholder="URL đến chương trong SGK" />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Mô tả ngắn</Label>
+                  <Textarea value={newLesson.description} onChange={(e) => setNewLesson({ ...newLesson, description: e.target.value })} rows={3} />
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label>Tài liệu văn bản</Label>
+                    <div className="flex items-center gap-2">
+                      <Switch checked={newLesson.includeText} onCheckedChange={(c) => setNewLesson({ ...newLesson, includeText: c })} />
+                      <span className="text-sm text-gray-600">Kèm nội dung text</span>
+                    </div>
+                    {newLesson.includeText && (
+                      <Textarea value={newLesson.textContent} onChange={(e) => setNewLesson({ ...newLesson, textContent: e.target.value })} placeholder="Nội dung văn bản bài học" rows={4} />
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tài liệu media</Label>
+                    <div className="flex items-center gap-2">
+                      <Switch checked={newLesson.includeMedia} onCheckedChange={(c) => setNewLesson({ ...newLesson, includeMedia: c })} />
+                      <span className="text-sm text-gray-600">Video/Audio URL</span>
+                    </div>
+                    {newLesson.includeMedia && (
+                      <Input value={newLesson.mediaUrl} onChange={(e) => setNewLesson({ ...newLesson, mediaUrl: e.target.value })} placeholder="https://..." />
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Bài kiểm tra (Quiz)</Label>
+                    <div className="flex items-center gap-2">
+                      <Switch checked={newLesson.includeQuiz} onCheckedChange={(c) => setNewLesson({ ...newLesson, includeQuiz: c })} />
+                      <span className="text-sm text-gray-600">Thêm quiz cho bài học</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setIsAddLessonOpen(false)}>Hủy</Button>
+                  <Button onClick={() => setLessonStep(newLesson.includeQuiz ? 2 : 3)}>Tiếp tục</Button>
+                </div>
+              </div>
+            )}
+
+            {lessonStep === 2 && (
+              <div className="space-y-4 py-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Mốc thời gian (giây)</Label>
+                    <Input type="number" value={quizDraft.timeSeconds} onChange={(e) => setQuizDraft({ ...quizDraft, timeSeconds: e.target.value })} placeholder="VD: 120" />
+                    <p className="text-xs text-gray-500">Hoặc điền vị trí bên cạnh</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Vị trí</Label>
+                    <Input value={quizDraft.position} onChange={(e) => setQuizDraft({ ...quizDraft, position: e.target.value })} placeholder="VD: Sau đoạn 2" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label>Câu hỏi</Label>
+                  <Textarea value={quizDraft.question} onChange={(e) => setQuizDraft({ ...quizDraft, question: e.target.value })} rows={2} />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {quizDraft.options.map((opt: string, idx: number) => (
+                    <div className="space-y-2" key={idx}>
+                      <Label>Đáp án {String.fromCharCode(65 + idx)}</Label>
+                      <Input value={opt} onChange={(e) => {
+                        const next = [...quizDraft.options];
+                        next[idx] = e.target.value;
+                        setQuizDraft({ ...quizDraft, options: next });
+                      }} />
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2">
+                  <Label>Đáp án đúng</Label>
+                  <Select value={String(quizDraft.correctIndex)} onValueChange={(v) => setQuizDraft({ ...quizDraft, correctIndex: Number(v) })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {[0,1,2,3].map((i) => (
+                        <SelectItem key={i} value={String(i)}>Đáp án {String.fromCharCode(65+i)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex justify-between pt-2">
+                  <Button variant="outline" onClick={() => setLessonStep(1)}>Quay lại</Button>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => {
+                      if (!quizDraft.question) return;
+                      setNewLesson({ ...newLesson, quiz: [...newLesson.quiz, quizDraft] });
+                      setQuizDraft({ timeSeconds: "", position: "", question: "", options: ["", "", "", ""], correctIndex: 0 });
+                    }}>Thêm câu hỏi</Button>
+                    <Button onClick={() => setLessonStep(3)}>Tiếp tục</Button>
+                  </div>
+                </div>
+                {newLesson.quiz.length > 0 && (
+                  <div className="pt-2 text-sm text-gray-600">Đã thêm {newLesson.quiz.length} câu hỏi.</div>
+                )}
+              </div>
+            )}
+
+            {lessonStep === 3 && (
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label>Câu hỏi ôn tập</Label>
+                  <Textarea value={exerciseDraft.question} onChange={(e) => setExerciseDraft({ ...exerciseDraft, question: e.target.value })} rows={2} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Đáp án</Label>
+                  <Textarea value={exerciseDraft.answer} onChange={(e) => setExerciseDraft({ ...exerciseDraft, answer: e.target.value })} rows={2} />
+                </div>
+                <div className="flex justify-between pt-2">
+                  <Button variant="outline" onClick={() => setLessonStep(newLesson.includeQuiz ? 2 : 1)}>Quay lại</Button>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => {
+                      if (!exerciseDraft.question) return;
+                      setNewLesson({ ...newLesson, exercises: [...newLesson.exercises, exerciseDraft] });
+                      setExerciseDraft({ question: "", answer: "" });
+                    }}>Thêm câu hỏi ôn tập</Button>
+                    <Button onClick={() => {
+                      if (!selectedCourse) return;
+                      const updatedCourses = courses.map((c) => {
+                        if (c.id !== selectedCourse.id) return c;
+                        const nextLessons = [...(c.lessons || [])];
+                        const newId = Math.max(0, ...nextLessons.map((l: any) => l.id || 0)) + 1;
+                        const lessonPayload: any = {
+                          id: newId,
+                          title: newLesson.title,
+                          description: newLesson.description,
+                          type: newLesson.includeMedia ? "video" : newLesson.includeText ? "reading" : (newLesson.includeQuiz ? "interactive" : "reading"),
+                          duration: "",
+                          order: (nextLessons.length || 0) + 1,
+                          completed: false,
+                          chapter: newLesson.chapter,
+                          subject: newLesson.subject,
+                          textbookLink: newLesson.textbookLink,
+                          materials: {
+                            text: newLesson.includeText ? newLesson.textContent : undefined,
+                            mediaUrl: newLesson.includeMedia ? newLesson.mediaUrl : undefined,
+                            quiz: newLesson.quiz,
+                          },
+                        };
+                        const nextExercises = [...(c.exercises || [])];
+                        if (newLesson.exercises.length > 0) {
+                          nextExercises.push({
+                            id: Math.max(0, ...nextExercises.map((e: any) => e.id || 0)) + 1,
+                            title: `Ôn tập: ${newLesson.title}`,
+                            description: `Bài tập ôn tập cho bài học ${newLesson.title}`,
+                            type: "practice",
+                            difficulty: "Cơ bản",
+                            points: newLesson.exercises.length * 5,
+                            completed: 0,
+                            total: 0,
+                            questions: newLesson.exercises,
+                          });
+                        }
+                        return {
+                          ...c,
+                          lessons: [...nextLessons, lessonPayload],
+                          totalLessons: (c.totalLessons || 0) + 1,
+                          exercises: nextExercises,
+                          lastActivity: new Date().toISOString().split("T")[0],
+                        };
+                      });
+                      setCourses(updatedCourses);
+                      const updated = updatedCourses.find((cc) => cc.id === selectedCourse.id)!;
+                      setSelectedCourse(updated);
+                      setIsAddLessonOpen(false);
+                      setLessonStep(1);
+                    }}>Hoàn tất</Button>
+                  </div>
+                </div>
+                {newLesson.exercises.length > 0 && (
+                  <div className="pt-2 text-sm text-gray-600">Đã thêm {newLesson.exercises.length} câu ôn tập.</div>
+                )}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </TeacherLayout>
   );
