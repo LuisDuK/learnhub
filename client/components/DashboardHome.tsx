@@ -243,7 +243,7 @@ export function DashboardHome() {
   const navigate = useNavigate();
   const lateCount = upcomingLessons.reduce(
     (acc, l) => (getScheduleStatus(l).late ? acc + 1 : acc),
-    0
+    0,
   );
   return (
     <div className="flex-1 space-y-6 p-6 bg-gradient-to-br from-background via-accent/5 to-primary/5">
@@ -320,7 +320,9 @@ export function DashboardHome() {
             <div className="text-2xl">⚠️</div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-destructive">{lateCount}</div>
+            <div className="text-3xl font-bold text-destructive">
+              {lateCount}
+            </div>
             <p className="text-xs text-muted-foreground">
               {lateCount > 0 ? "Cần xem lại ngay!" : "Không có buổi tr��"}
             </p>
@@ -395,7 +397,9 @@ export function DashboardHome() {
                     </p>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge
-                        variant={lesson.type === "live" ? "default" : "secondary"}
+                        variant={
+                          lesson.type === "live" ? "default" : "secondary"
+                        }
                         className="text-xs"
                       >
                         {lesson.type === "live" ? "🔴 Trực tiếp" : "📹 Video"}
@@ -404,9 +408,13 @@ export function DashboardHome() {
                         ⏱️ {lesson.duration}
                       </span>
                       {status.late ? (
-                        <Badge variant="destructive" className="text-xs">⛔ Trễ lịch</Badge>
+                        <Badge variant="destructive" className="text-xs">
+                          ⛔ Trễ lịch
+                        </Badge>
                       ) : status.ongoing ? (
-                        <Badge variant="outline" className="text-xs">🟢 Đang diễn ra</Badge>
+                        <Badge variant="outline" className="text-xs">
+                          🟢 Đang diễn ra
+                        </Badge>
                       ) : null}
                     </div>
                   </div>

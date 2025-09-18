@@ -20,7 +20,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -1066,31 +1073,64 @@ export default function TeacherProfile() {
                 <CardTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5" /> Tài liệu chứng chỉ
                 </CardTitle>
-                <CardDescription>Danh sách văn bằng, chứng chỉ và tài liệu nghề nghiệp</CardDescription>
+                <CardDescription>
+                  Danh sách văn bằng, chứng chỉ và tài liệu nghề nghiệp
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
                 {currentData.documents?.map((doc: any) => (
-                  <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
+                  <div
+                    key={doc.id}
+                    className="flex items-center justify-between p-3 rounded-lg border bg-card/50"
+                  >
                     <div>
                       <div className="font-medium">{doc.name}</div>
-                      <div className="text-xs text-muted-foreground">{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString("vi-VN")}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {doc.issuedBy} •{" "}
+                        {new Date(doc.issueDate).toLocaleDateString("vi-VN")}
+                      </div>
                     </div>
-                    <Dialog open={openDocId === doc.id} onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}>
+                    <Dialog
+                      open={openDocId === doc.id}
+                      onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}
+                    >
                       <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">Xem chi tiết</Button>
+                        <Button variant="outline" size="sm">
+                          Xem chi tiết
+                        </Button>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
                           <DialogTitle>{doc.name}</DialogTitle>
-                          <DialogDescription>{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString("vi-VN")}</DialogDescription>
+                          <DialogDescription>
+                            {doc.issuedBy} •{" "}
+                            {new Date(doc.issueDate).toLocaleDateString(
+                              "vi-VN",
+                            )}
+                          </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-2 text-sm">
-                          <div>Loại: <span className="font-medium uppercase">{doc.type}</span></div>
+                          <div>
+                            Loại:{" "}
+                            <span className="font-medium uppercase">
+                              {doc.type}
+                            </span>
+                          </div>
                           <div className="rounded-lg border p-3 bg-muted/30">
-                            <img src={doc.url} alt={doc.name} className="w-full h-auto rounded" />
+                            <img
+                              src={doc.url}
+                              alt={doc.name}
+                              className="w-full h-auto rounded"
+                            />
                           </div>
                           <div className="flex gap-2">
-                            <a href={doc.url} download className="underline text-primary">Tải xuống</a>
+                            <a
+                              href={doc.url}
+                              download
+                              className="underline text-primary"
+                            >
+                              Tải xuống
+                            </a>
                           </div>
                         </div>
                       </DialogContent>
