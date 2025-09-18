@@ -185,6 +185,32 @@ export default function TeacherCourses() {
   const [activeTab, setActiveTab] = useState<
     "info" | "lessons" | "exercises" | "analytics"
   >("info");
+  const [lessonStep, setLessonStep] = useState<1 | 2 | 3>(1);
+  const [newLesson, setNewLesson] = useState<any>({
+    subject: "",
+    chapter: "",
+    title: "",
+    description: "",
+    textbookLink: "",
+    includeText: true,
+    includeMedia: false,
+    includeQuiz: false,
+    textContent: "",
+    mediaUrl: "",
+    quiz: [] as any[],
+    exercises: [] as any[],
+  });
+  const [quizDraft, setQuizDraft] = useState<any>({
+    timeSeconds: "",
+    position: "",
+    question: "",
+    options: ["", "", "", ""],
+    correctIndex: 0,
+  });
+  const [exerciseDraft, setExerciseDraft] = useState<any>({
+    question: "",
+    answer: "",
+  });
 
   const [newCourse, setNewCourse] = useState({
     name: "",
