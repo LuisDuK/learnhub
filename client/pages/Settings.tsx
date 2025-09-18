@@ -44,7 +44,7 @@ import {
 export default function Settings() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState("reminders");
 
   // Mock user data
   const [userProfile, setUserProfile] = useState({
@@ -93,7 +93,7 @@ export default function Settings() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-2">
-            ⚙️ Cài đặt cá nhân
+            🔔 Cài đặt nhắc nhở
             <Sparkles className="h-8 w-8 text-primary animate-pulse" />
           </h1>
           <p className="text-gray-600 text-lg mt-1">
@@ -107,32 +107,19 @@ export default function Settings() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3 bg-primary/10">
+          <TabsList className="grid w-full grid-cols-1 bg-primary/10">
             <TabsTrigger
-              value="profile"
+              value="reminders"
               className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
             >
-              <User className="h-4 w-4" />
-              Thông tin cá nhân
-            </TabsTrigger>
-            <TabsTrigger
-              value="security"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
-            >
-              <Shield className="h-4 w-4" />
-              Bảo mật
-            </TabsTrigger>
-            <TabsTrigger
-              value="study"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
-            >
-              <SettingsIcon className="h-4 w-4" />
-              Cài đặt học tập
+              <Bell className="h-4 w-4" />
+              Nhắc nhở
             </TabsTrigger>
           </TabsList>
 
-          {/* Profile Tab */}
-          <TabsContent value="profile" className="space-y-6">
+          {/* Hidden legacy tabs removed for simplified reminders-only settings */}
+          {/* Reminders Tab */}
+          <TabsContent value="reminders" className="space-y-6">
             <Card className="border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -297,8 +284,9 @@ export default function Settings() {
             </Card>
           </TabsContent>
 
-          {/* Security Tab */}
-          <TabsContent value="security" className="space-y-6">
+          {/* Security Tab removed in reminders-only mode */}
+          {/* Placeholder to keep layout compatible */}
+          <TabsContent value="security" className="hidden">
             <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -460,16 +448,16 @@ export default function Settings() {
             </Card>
           </TabsContent>
 
-          {/* Study Settings Tab */}
-          <TabsContent value="study" className="space-y-6">
+          {/* Map study settings content into reminders tab for this simplified mode */}
+          <TabsContent value="reminders" className="space-y-6">
             <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <SettingsIcon className="h-5 w-5 text-secondary" />
-                  Cài đặt học tập
+                  Cài đặt nhắc nhở
                 </CardTitle>
                 <CardDescription>
-                  Tùy chỉnh trải nghiệm học tập và nhắc nhở
+                  Tùy chỉnh thông báo và thời gian nhắc nhở học tập
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
