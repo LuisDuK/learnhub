@@ -63,6 +63,72 @@ export default function TeacherLessonCreate() {
   const [selectedBookId, setSelectedBookId] = useState<string>("");
   const [selectedBookLessonId, setSelectedBookLessonId] = useState<string>("");
 
+  // Mock lessons for edit prefilling
+  const mockLessons = [
+    {
+      id: 1,
+      subject: "Toán học",
+      chapter: "Phép cộng trong phạm vi 100",
+      title: "Cộng hai số có nhớ",
+      shortDescription: "Học cách cộng hai số có nhớ với ví dụ minh họa",
+      textBlocks: ["Giới thiệu cách thực hiện phép cộng có nhớ"],
+      media: [],
+      questions: [
+        { id: "q1", text: "1+9=?", options: ["9","10","11","12"], correctIndex: 1, marker: "00:15" },
+      ],
+      exercises: [{ id: "e1", question: "Tính 12+9", answer: "21" }],
+    },
+    {
+      id: 2,
+      subject: "Ngữ văn",
+      chapter: "Kể chuyện",
+      title: "Kể chuyện theo tranh",
+      shortDescription: "Rèn luyện kỹ năng kể chuyện theo tranh",
+      textBlocks: ["Hướng dẫn cách miêu tả nhân vật và cốt truyện"],
+      media: [],
+      questions: [],
+      exercises: [],
+    },
+  ];
+
+  const [loadedEdit, setLoadedEdit] = useState(false);
+
+  useEffect(() => {
+    const editId = params.get("edit");
+    if (!editId || loadedEdit) return;
+    const idNum = Number(editId);
+    const lesson = mockLessons.find((l) => l.id === idNum);
+    if (!lesson) return;
+
+    // map subject text to select value keys used in the form
+    const subjectMap: Record<string, string> = {
+      "Toán học": "math",
+      "Ngữ văn": "literature",
+      "Tiếng Anh": "english",
+      "Khoa học": "science",
+    };
+
+    setSubject(subjectMap[lesson.subject] || "");
+    setChapter(lesson.chapter || "");
+    setTitle(lesson.title || "");
+    setShortDesc(lesson.shortDescription || "");
+    setTextBlocks(lesson.textBlocks || [lesson.shortDescription || ""]);
+
+    // try to find a matching book + lesson
+    const matchingBook = mockBooks.find((b) => b.lessons.some((ls) => ls.title === lesson.title));
+    if (matchingBook) {
+      setSelectedBookId(matchingBook.id);
+      const bl = matchingBook.lessons.find((ls) => ls.title === lesson.title);
+      if (bl) setSelectedBookLessonId(bl.id);
+    }
+
+    // populate questions and exercises
+    setQuestions((lesson.questions || []).map((q: any) => ({ ...q })));
+    setExercises((lesson.exercises || []).map((ex: any) => ({ ...ex })));
+
+    setLoadedEdit(true);
+  }, [params, loadedEdit]);
+
   const [textBlocks, setTextBlocks] = useState<string[]>([""]);
   const [media, setMedia] = useState<MediaItem[]>([]);
 
