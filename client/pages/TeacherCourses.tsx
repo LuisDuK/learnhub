@@ -30,6 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -435,7 +436,7 @@ export default function TeacherCourses() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid grid-cols-4 items-center gap-4 col-span-1">
-                    <Label className="text-right col-span-2">Môn học *</Label>
+                    <Label className="text-right col-span-2">Môn h���c *</Label>
                     <Select
                       value={newCourse.subject}
                       onValueChange={(value) =>
