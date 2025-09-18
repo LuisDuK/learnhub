@@ -38,7 +38,29 @@ export default function TeacherLessonCreate() {
   const [chapter, setChapter] = useState("");
   const [title, setTitle] = useState("");
   const [shortDesc, setShortDesc] = useState("");
-  const [textbookLink, setTextbookLink] = useState("");
+
+  // Mock books (client-side only) and selection state
+  const mockBooks = [
+    {
+      id: "b1",
+      title: "SGK Toán lớp 3",
+      lessons: [
+        { id: "b1-l1", title: "Phép cộng trong phạm vi 20" },
+        { id: "b1-l2", title: "Phép cộng trong phạm vi 100" },
+      ],
+    },
+    {
+      id: "b2",
+      title: "SGK Ngữ văn lớp 3",
+      lessons: [
+        { id: "b2-l1", title: "Kể chuyện theo tranh" },
+        { id: "b2-l2", title: "Tập làm văn" },
+      ],
+    },
+  ];
+
+  const [selectedBookId, setSelectedBookId] = useState<string>("");
+  const [selectedBookLessonId, setSelectedBookLessonId] = useState<string>("");
 
   const [textBlocks, setTextBlocks] = useState<string[]>([""]);
   const [media, setMedia] = useState<MediaItem[]>([]);
@@ -150,9 +172,34 @@ export default function TeacherLessonCreate() {
                   <Label>Mô tả ngắn</Label>
                   <Textarea rows={3} placeholder="Tóm tắt nội dung bài học" value={shortDesc} onChange={(e) => setShortDesc(e.target.value)} />
                 </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label className="flex items-center gap-2"><Link2 className="h-4 w-4" /> Liên kết chương trong SGK</Label>
-                  <Input type="url" placeholder="https://..." value={textbookLink} onChange={(e) => setTextbookLink(e.target.value)} />
+                <div className="space-y-2 md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-2"><Link2 className="h-4 w-4" /> Liên kết với sách</Label>
+                    <Select value={selectedBookId} onValueChange={(v) => { setSelectedBookId(v); setSelectedBookLessonId(""); }}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn sách" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {mockBooks.map((b) => (
+                          <SelectItem key={b.id} value={b.id}>{b.title}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Liên kết tới bài học trong sách</Label>
+                    <Select value={selectedBookLessonId} onValueChange={setSelectedBookLessonId}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn bài trong sách" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(mockBooks.find((b) => b.id === selectedBookId)?.lessons || []).map((l) => (
+                          <SelectItem key={l.id} value={l.id}>{l.title}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </div>
               <div className="flex justify-end">
