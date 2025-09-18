@@ -23,7 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import { Calendar, User, School, Target, Info, Key, MapPin } from "lucide-react";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import DashboardLayout from "@/components/DashboardLayout";
+import { DashboardLayout } from "@/components/DashboardLayout";
 
 interface StudentProfileData {
   fullName: string;
