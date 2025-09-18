@@ -29,6 +29,11 @@ const menuItems = [
     href: "/teacher/subjects",
   },
   {
+    title: "Quản lý bài học",
+    icon: PenTool,
+    href: "/teacher/lessons",
+  },
+  {
     title: "AI sinh bài tập",
     icon: Bot,
     href: "/teacher/ai-generator",
