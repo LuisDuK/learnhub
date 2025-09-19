@@ -83,7 +83,7 @@ const mockGeneratedExercises = [
     maxWords: 150,
     keywords: ["không xác định", "quy tắc", "ví dụ"],
     explanation:
-      "Câu hỏi này giúp học sinh hiểu được khái niệm cơ bản về phép chia và tại sao chia cho 0 là không được phép.",
+      "Câu hỏi này giúp học sinh hiểu ��ược khái niệm cơ bản về phép chia và tại sao chia cho 0 là không được phép.",
     difficulty: "Nâng cao",
     subject: "Toán",
     ageGroup: "10-12 tuổi",
@@ -477,7 +477,7 @@ export default function TeacherAIGenerator() {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
-            <TabsTrigger value="create">Tạo b��i tập</TabsTrigger>
+            <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
             </TabsTrigger>
@@ -717,18 +717,6 @@ export default function TeacherAIGenerator() {
                       </div>
                     )}
 
-                    <div className="space-y-2">
-                      <Label htmlFor="customPrompt">Yêu cầu tùy chỉnh</Label>
-                      <Textarea
-                        id="customPrompt"
-                        value={formData.customPrompt}
-                        onChange={(e) =>
-                          handleInputChange("customPrompt", e.target.value)
-                        }
-                        placeholder="Thêm yêu cầu đặc biệt cho AI..."
-                        rows={3}
-                      />
-                    </div>
 
                     <div className="flex gap-2">
                       <Button
