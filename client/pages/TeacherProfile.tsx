@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TeacherLayout } from "@/components/TeacherLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,23 +8,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { User, Phone, FileText, Clock, Edit, Save, Camera, CheckCircle, AlertCircle } from "lucide-react";
+import { User, FileText, Clock, Edit, Save, Camera, CheckCircle, AlertCircle } from "lucide-react";
 
-// Minimal mock data for teacher and student following user's requested fields only
+// Teacher-specific mock data (only the fields requested)
 const mockTeacherData = {
   id: 1,
   fullName: "Nguyễn Thị Lan",
@@ -46,24 +38,8 @@ const mockTeacherData = {
   confirmPassword: "",
 };
 
-const mockStudentData = {
-  id: 2,
-  fullName: "Trần Văn An",
-  dateOfBirth: "2010-03-12",
-  className: "Lớp 5A",
-  school: "Trường Tiểu học Nguyễn Trãi",
-  learningGoals: ["Nâng cao kỹ năng tính toán"],
-  avatar: "/placeholder.svg",
-  parentName: "Trần Thị B",
-  parentPhone: "0912345678",
-};
-
 export default function TeacherProfile() {
-  const [role, setRole] = useState<'teacher' | 'student'>('teacher');
-
   const [teacherData, setTeacherData] = useState(mockTeacherData);
-  const [studentData, setStudentData] = useState(mockStudentData);
-
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState<any>(mockTeacherData);
   const [isSaving, setIsSaving] = useState(false);
@@ -73,29 +49,19 @@ export default function TeacherProfile() {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [documentForm, setDocumentForm] = useState({ name: "", issuedBy: "", issueDate: "", url: "" });
 
-  useEffect(() => {
-    setIsEditing(false);
-    setEditedData(role === 'teacher' ? teacherData : studentData);
-    setActiveTab('personal');
-    setPasswordError(null);
-  }, [role]);
-
   const handleEdit = () => {
-    if (role !== 'teacher') return;
     setIsEditing(true);
-    setEditedData({ ...(role === 'teacher' ? teacherData : studentData), currentPassword: "", newPassword: "", confirmPassword: "" });
+    setEditedData({ ...teacherData, currentPassword: "", newPassword: "", confirmPassword: "" });
   };
 
   const handleCancel = () => {
     setIsEditing(false);
-    setEditedData(role === 'teacher' ? teacherData : studentData);
+    setEditedData(teacherData);
     setSaveSuccess(false);
     setPasswordError(null);
   };
 
   const handleSave = () => {
-    if (role !== 'teacher') return;
-
     setPasswordError(null);
     const cp = (editedData as any).currentPassword as string;
     const np = (editedData as any).newPassword as string;
@@ -135,35 +101,22 @@ export default function TeacherProfile() {
     setEditedData({ ...editedData, documents: (editedData.documents || []).filter((d: any) => d.id !== id) });
   };
 
-  const currentData: any = isEditing ? editedData : (role === 'teacher' ? teacherData : studentData);
+  const currentData: any = isEditing ? editedData : teacherData;
 
   return (
     <TeacherLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-sm text-gray-600">Chế độ hiển thị:</div>
-            <Select value={role} onValueChange={(v) => setRole(v as 'teacher' | 'student')}>
-              <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="teacher">Giáo viên</SelectItem>
-                <SelectItem value="student">Học sinh</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
+        <div className="flex items-center justify-end">
           <div className="flex gap-3">
-            {role === 'teacher' && (
-              isEditing ? (
-                <>
-                  <Button variant="outline" onClick={handleCancel}>Hủy</Button>
-                  <Button onClick={handleSave} disabled={isSaving}>
-                    {isSaving ? (<><Clock className="h-4 w-4 mr-2 animate-spin" />Đang lưu...</>) : (<><Save className="h-4 w-4 mr-2" />Lưu thay đ��i</>)}
-                  </Button>
-                </>
-              ) : (
-                <Button onClick={handleEdit}><Edit className="h-4 w-4 mr-2" />Chỉnh sửa</Button>
-              )
+            {isEditing ? (
+              <>
+                <Button variant="outline" onClick={handleCancel}>Hủy</Button>
+                <Button onClick={handleSave} disabled={isSaving}>
+                  {isSaving ? (<><Clock className="h-4 w-4 mr-2 animate-spin" />Đang lưu...</>) : (<><Save className="h-4 w-4 mr-2" />Lưu thay đổi</>)}
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleEdit}><Edit className="h-4 w-4 mr-2" />Chỉnh sửa</Button>
             )}
           </div>
         </div>
@@ -188,7 +141,7 @@ export default function TeacherProfile() {
 
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-gray-900">{currentData.fullName}</h2>
-                <p className="text-gray-600">{role === 'teacher' ? currentData.subject : currentData.className}</p>
+                <p className="text-gray-600">{currentData.subject}</p>
                 <p className="text-sm text-gray-500">{currentData.school}</p>
               </div>
             </div>
@@ -196,19 +149,10 @@ export default function TeacherProfile() {
         </Card>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="personal">Thông tin cá nhân</TabsTrigger>
-            {role === 'teacher' ? (
-              <>
-                <TabsTrigger value="documents">Tài liệu chứng chỉ</TabsTrigger>
-                <TabsTrigger value="security">Bảo mật</TabsTrigger>
-              </>
-            ) : (
-              <>
-                <TabsTrigger value="learningGoals">Mục tiêu học tập</TabsTrigger>
-                <TabsTrigger value="parent">Thông tin phụ huynh</TabsTrigger>
-              </>
-            )}
+            <TabsTrigger value="documents">Tài liệu chứng chỉ</TabsTrigger>
+            <TabsTrigger value="security">Bảo mật</TabsTrigger>
           </TabsList>
 
           <TabsContent value="personal" className="space-y-6">
@@ -241,152 +185,98 @@ export default function TeacherProfile() {
                     {isEditing ? <Textarea value={currentData.address} onChange={(e) => handleInputChange('address', e.target.value)} rows={2} /> : <div className="p-2 bg-gray-50 rounded">{currentData.address}</div>}
                   </div>
 
-                  {role === 'teacher' ? (
-                    <>
-                      <div className="space-y-2">
-                        <Label>Email</Label>
-                        {isEditing ? <Input type="email" value={currentData.email} onChange={(e) => handleInputChange('email', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.email}</div>}
-                      </div>
+                  <div className="space-y-2">
+                    <Label>Email</Label>
+                    {isEditing ? <Input type="email" value={currentData.email} onChange={(e) => handleInputChange('email', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.email}</div>}
+                  </div>
 
-                      <div className="space-y-2">
-                        <Label>Số điện thoại</Label>
-                        {isEditing ? <Input value={currentData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.phone}</div>}
-                      </div>
+                  <div className="space-y-2">
+                    <Label>Số điện thoại</Label>
+                    {isEditing ? <Input value={currentData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.phone}</div>}
+                  </div>
 
-                      <div className="space-y-2">
-                        <Label>Môn dạy</Label>
-                        {isEditing ? <Input value={currentData.subject} onChange={(e) => handleInputChange('subject', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.subject}</div>}
-                      </div>
+                  <div className="space-y-2">
+                    <Label>Môn dạy</Label>
+                    {isEditing ? <Input value={currentData.subject} onChange={(e) => handleInputChange('subject', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.subject}</div>}
+                  </div>
 
-                      <div className="space-y-2">
-                        <Label>Kinh nghiệm</Label>
-                        {isEditing ? <Input value={currentData.experience} onChange={(e) => handleInputChange('experience', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.experience}</div>}
-                      </div>
+                  <div className="space-y-2">
+                    <Label>Kinh nghiệm</Label>
+                    {isEditing ? <Input value={currentData.experience} onChange={(e) => handleInputChange('experience', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.experience}</div>}
+                  </div>
 
-                      <div className="space-y-2 md:col-span-2">
-                        <Label>Mô tả ngắn</Label>
-                        {isEditing ? <Textarea value={currentData.bio} onChange={(e) => handleInputChange('bio', e.target.value)} rows={4} /> : <div className="p-2 bg-gray-50 rounded whitespace-pre-line">{currentData.bio}</div>}
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="space-y-2">
-                        <Label>Lớp</Label>
-                        {isEditing ? <Input value={currentData.className} onChange={(e) => handleInputChange('className', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.className}</div>}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label>Trường</Label>
-                        <div className="p-2 bg-gray-50 rounded">{currentData.school}</div>
-                      </div>
-                    </>
-                  )}
+                  <div className="space-y-2 md:col-span-2">
+                    <Label>Mô tả ngắn</Label>
+                    {isEditing ? <Textarea value={currentData.bio} onChange={(e) => handleInputChange('bio', e.target.value)} rows={4} /> : <div className="p-2 bg-gray-50 rounded whitespace-pre-line">{currentData.bio}</div>}
+                  </div>
                 </div>
               </CardContent>
             </Card>
-
-            {/* Contact info for student: parent info */}
-            {role === 'student' && (
-              <Card>
-                <CardHeader><CardTitle className="flex items-center gap-2"><Phone className="h-5 w-5" />Thông tin phụ huynh</CardTitle></CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Tên phụ huynh</Label>
-                      {isEditing ? <Input value={currentData.parentName} onChange={(e) => handleInputChange('parentName', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.parentName}</div>}
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Số điện thoại phụ huynh</Label>
-                      {isEditing ? <Input value={currentData.parentPhone} onChange={(e) => handleInputChange('parentPhone', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{currentData.parentPhone}</div>}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
           </TabsContent>
 
-          {role === 'student' && (
-            <TabsContent value="learningGoals">
-              <Card>
-                <CardHeader><CardTitle>Mục tiêu học tập</CardTitle></CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {(currentData.learningGoals || []).map((g: string, i: number) => (
-                      <div key={i} className="p-3 border rounded">{g}</div>
-                    ))}
+          <TabsContent value="documents" className="space-y-6">
+            <Card>
+              <CardHeader><CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Tài liệu chứng chỉ</CardTitle></CardHeader>
+              <CardContent className="space-y-3">
+                {isEditing && (
+                  <div className="space-y-3 border rounded-lg p-3">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                      <Input placeholder="Tên tài liệu" value={documentForm.name} onChange={(e) => setDocumentForm({ ...documentForm, name: e.target.value })} />
+                      <Input placeholder="Nơi cấp" value={documentForm.issuedBy} onChange={(e) => setDocumentForm({ ...documentForm, issuedBy: e.target.value })} />
+                      <Input type="date" value={documentForm.issueDate} onChange={(e) => setDocumentForm({ ...documentForm, issueDate: e.target.value })} />
+                      <Input placeholder="URL hình ảnh" value={documentForm.url} onChange={(e) => setDocumentForm({ ...documentForm, url: e.target.value })} />
+                    </div>
+                    <div className="text-right"><Button size="sm" onClick={handleAddDocument}>Thêm</Button></div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
+                )}
 
-          {role === 'teacher' && (
-            <TabsContent value="documents" className="space-y-6">
-              <Card>
-                <CardHeader><CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Tài liệu chứng chỉ</CardTitle></CardHeader>
-                <CardContent className="space-y-3">
-                  {isEditing && (
-                    <div className="space-y-3 border rounded-lg p-3">
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                        <Input placeholder="Tên tài liệu" value={documentForm.name} onChange={(e) => setDocumentForm({ ...documentForm, name: e.target.value })} />
-                        <Input placeholder="Nơi cấp" value={documentForm.issuedBy} onChange={(e) => setDocumentForm({ ...documentForm, issuedBy: e.target.value })} />
-                        <Input type="date" value={documentForm.issueDate} onChange={(e) => setDocumentForm({ ...documentForm, issueDate: e.target.value })} />
-                        <Input placeholder="URL hình ảnh" value={documentForm.url} onChange={(e) => setDocumentForm({ ...documentForm, url: e.target.value })} />
-                      </div>
-                      <div className="text-right"><Button size="sm" onClick={handleAddDocument}>Thêm</Button></div>
-                    </div>
-                  )}
+                {(currentData.documents || []).length === 0 && <div className="text-sm text-gray-600">Không có tài liệu nào.</div>}
 
-                  {(currentData.documents || []).length === 0 && <div className="text-sm text-gray-600">Không có tài liệu nào.</div>}
-
-                  {(currentData.documents || []).map((doc: any) => (
-                    <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
-                      <div>
-                        <div className="font-medium">{doc.name}</div>
-                        <div className="text-xs text-muted-foreground">{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString('vi-VN')}</div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Dialog open={openDocId === doc.id} onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}>
-                          <DialogTrigger asChild><Button variant="outline" size="sm">Xem chi tiết</Button></DialogTrigger>
-                          <DialogContent>
-                            <DialogHeader><DialogTitle>{doc.name}</DialogTitle></DialogHeader>
-                            <div className="p-3">
-                              <img src={doc.url} alt={doc.name} className="w-full h-auto rounded" />
-                            </div>
-                          </DialogContent>
-                        </Dialog>
-                        {isEditing && <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleRemoveDocument(doc.id)}>Xóa</Button>}
-                      </div>
+                {(currentData.documents || []).map((doc: any) => (
+                  <div key={doc.id} className="flex items-center justify-between p-3 rounded-lg border bg-card/50">
+                    <div>
+                      <div className="font-medium">{doc.name}</div>
+                      <div className="text-xs text-muted-foreground">{doc.issuedBy} • {new Date(doc.issueDate).toLocaleDateString('vi-VN')}</div>
                     </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
-
-          {role === 'teacher' && (
-            <TabsContent value="security">
-              <Card>
-                <CardHeader><CardTitle>Bảo mật</CardTitle></CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label>Mật khẩu hiện tại</Label>
-                      <Input type="password" value={currentData.currentPassword || ''} onChange={(e) => handleInputChange('currentPassword', e.target.value)} disabled={!isEditing} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Mật khẩu mới</Label>
-                      <Input type="password" value={currentData.newPassword || ''} onChange={(e) => handleInputChange('newPassword', e.target.value)} disabled={!isEditing} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Xác nhận mật khẩu mới</Label>
-                      <Input type="password" value={currentData.confirmPassword || ''} onChange={(e) => handleInputChange('confirmPassword', e.target.value)} disabled={!isEditing} />
+                    <div className="flex items-center gap-2">
+                      <Dialog open={openDocId === doc.id} onOpenChange={(o) => setOpenDocId(o ? doc.id : null)}>
+                        <DialogTrigger asChild><Button variant="outline" size="sm">Xem chi tiết</Button></DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader><DialogTitle>{doc.name}</DialogTitle></DialogHeader>
+                          <div className="p-3">
+                            <img src={doc.url} alt={doc.name} className="w-full h-auto rounded" />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      {isEditing && <Button variant="ghost" size="sm" className="text-red-600" onClick={() => handleRemoveDocument(doc.id)}>Xóa</Button>}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          )}
+                ))}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="security">
+            <Card>
+              <CardHeader><CardTitle>Bảo mật</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label>Mật khẩu hiện tại</Label>
+                    <Input type="password" value={currentData.currentPassword || ''} onChange={(e) => handleInputChange('currentPassword', e.target.value)} disabled={!isEditing} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Mật khẩu mới</Label>
+                    <Input type="password" value={currentData.newPassword || ''} onChange={(e) => handleInputChange('newPassword', e.target.value)} disabled={!isEditing} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Xác nhận mật khẩu mới</Label>
+                    <Input type="password" value={currentData.confirmPassword || ''} onChange={(e) => handleInputChange('confirmPassword', e.target.value)} disabled={!isEditing} />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
     </TeacherLayout>
