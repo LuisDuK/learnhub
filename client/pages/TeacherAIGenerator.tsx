@@ -278,7 +278,7 @@ export default function TeacherAIGenerator() {
       published: true,
     };
     setGenerationHistory((h) => [item, ...h]);
-    toast({ title: "Đã xuất bản", description: "Bài ôn đã được xuất bản (giả lập)." });
+    toast({ title: "Đã xuất bản", description: "Bài ôn đ�� được xuất bản (giả lập)." });
   };
 
   const handleSaveAll = () => {
@@ -386,7 +386,7 @@ export default function TeacherAIGenerator() {
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => {
                     navigator.clipboard?.writeText(JSON.stringify(exercise, null, 2));
-                    toast({ title: "Đã sao chép", description: "Câu hỏi đã được sao chép vào clipboard." });
+                    toast({ title: "Đã sao ch��p", description: "Câu hỏi đã được sao chép vào clipboard." });
                   }}>
                     <Copy className="h-4 w-4" />
                   </Button>
@@ -803,6 +803,10 @@ export default function TeacherAIGenerator() {
                         Bài tập được tạo ({generatedContent.length})
                       </h3>
                       <div className="flex gap-2">
+                        <Button size="sm" variant="outline" onClick={() => addManualQuestion()}>
+                          <Plus className="h-4 w-4 mr-1" />
+                          Thêm câu
+                        </Button>
                         <Button size="sm" variant="outline" onClick={() => handleGenerate()}>
                           <RefreshCw className="h-4 w-4 mr-1" />
                           Tạo lại
