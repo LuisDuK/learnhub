@@ -272,13 +272,7 @@ export default function TeacherProfile() {
       <div className="space-y-6">
         {/* Page Header */}
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-              <User className="h-8 w-8 text-green-600" />
-              Thông tin cá nhân
-            </h1>
-            <p className="text-gray-600 mt-1">Quản lý hồ sơ và thông tin giảng dạy của bạn</p>
-          </div>
+          <div />
 
           <div className="flex gap-3">
             {isEditing ? (
@@ -298,7 +292,7 @@ export default function TeacherProfile() {
               </>
             ) : (
               <Button onClick={handleEdit}>
-                <Edit className="h-4 w-4 mr-2" />Ch���nh sửa
+                <Edit className="h-4 w-4 mr-2" />Chỉnh sửa
               </Button>
             )}
           </div>
