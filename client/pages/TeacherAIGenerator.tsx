@@ -63,7 +63,7 @@ const mockGeneratedExercises = [
   {
     id: 2,
     type: "short_answer",
-    question: "Hãy tính kết quả của phép tính: 6 × 8 = ?",
+    question: "Hãy tính kết quả của phép tính: 6 �� 8 = ?",
     correctAnswer: "48",
     keywords: ["48", "bốn mươi tám"],
     explanation:
@@ -260,7 +260,7 @@ export default function TeacherAIGenerator() {
       published: false,
     };
     setGenerationHistory((h) => [item, ...h]);
-    toast({ title: "Đã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
+    toast({ title: "��ã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
   };
 
   const handleExportAll = () => {
@@ -480,7 +480,7 @@ export default function TeacherAIGenerator() {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
-            <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
+            <TabsTrigger value="create">Tạo b��i tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
             </TabsTrigger>
@@ -884,40 +884,6 @@ export default function TeacherAIGenerator() {
             )}
           </TabsContent>
 
-          {/* Templates Tab */}
-          <TabsContent value="templates" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {aiPromptTemplates.map((template) => (
-                <Card
-                  key={template.name}
-                  className="cursor-pointer hover:shadow-lg transition-shadow border-purple-200"
-                >
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <FileText className="h-5 w-5 text-purple-600" />
-                      {template.name}
-                    </CardTitle>
-                    <CardDescription>{template.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 mb-4">
-                      {template.template}
-                    </p>
-                    <Button
-                      className="w-full"
-                      onClick={() => {
-                        handleTemplateSelect(template);
-                        setActiveTab("create");
-                      }}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Sử dụng mẫu này
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
         </Tabs>
       </div>
     </TeacherLayout>
