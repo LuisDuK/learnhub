@@ -79,7 +79,7 @@ const mockGeneratedExercises = [
     question:
       "Em hãy giải thích tại sao 0 chia cho bất kỳ số nào cũng bằng 0, nhưng không thể chia một số cho 0?",
     rubric:
-      "Học sinh cần giải thích được: 1) 0 chia cho số khác 0 luôn bằng 0, 2) Chia cho 0 là không xác định, 3) Đưa ra ví dụ minh họa",
+      "Học sinh cần giải thích được: 1) 0 chia cho số khác 0 luôn bằng 0, 2) Chia cho 0 là không xác định, 3) Đưa ra ví d�� minh họa",
     maxWords: 150,
     keywords: ["không xác định", "quy tắc", "ví dụ"],
     explanation:
@@ -103,7 +103,7 @@ const ageGroups = [
 ];
 const exerciseTypes = [
   { value: "multiple_choice", label: "Trắc nghiệm" },
-  { value: "short_answer", label: "Tr�� lời ngắn" },
+  { value: "short_answer", label: "Trả lời ngắn" },
   { value: "essay", label: "Tự luận" },
   { value: "true_false", label: "Đúng/Sai" },
   { value: "fill_blank", label: "Điền từ" },
@@ -121,7 +121,7 @@ const aiPromptTemplates = [
     name: "Đề kiểm tra",
     description: "Tạo đề kiểm tra hoàn chỉnh",
     template:
-      "Tạo đề kiểm tra {duration} phút về {topic} cho học sinh {ageGroup}, gồm {count} câu hỏi đa dạng từ dễ đến khó.",
+      "Tạo đề kiểm tra {duration} phút về {topic} cho h��c sinh {ageGroup}, gồm {count} câu hỏi đa dạng từ dễ đến khó.",
   },
   {
     name: "Bài tập thực hành",
@@ -492,7 +492,7 @@ export default function TeacherAIGenerator() {
               AI Sinh bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Sử dụng AI để tạo bài tập và đề kiểm tra chất lượng cao
+              Sử dụng AI để tạo bài tập v�� đề kiểm tra chất lượng cao
             </p>
           </div>
 
@@ -594,121 +594,129 @@ export default function TeacherAIGenerator() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    {formData.inputMode === "description" && (
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="ageGroup">Độ tuổi *</Label>
+                          <Select
+                            value={formData.ageGroup}
+                            onValueChange={(value) =>
+                              handleInputChange("ageGroup", value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn độ tuổi" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ageGroups.map((age) => (
+                                <SelectItem key={age} value={age}>
+                                  {age}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="difficulty">Độ khó</Label>
+                          <Select
+                            value={formData.difficulty}
+                            onValueChange={(value) =>
+                              handleInputChange("difficulty", value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn độ khó" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {difficulties.map((difficulty) => (
+                                <SelectItem key={difficulty} value={difficulty}>
+                                  {difficulty}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    )}
+
+                    {formData.inputMode === "description" && (
                       <div className="space-y-2">
-                        <Label htmlFor="ageGroup">Độ tuổi *</Label>
+                        <Label htmlFor="exerciseType">Loại câu hỏi</Label>
                         <Select
-                          value={formData.ageGroup}
+                          value={formData.exerciseType}
                           onValueChange={(value) =>
-                            handleInputChange("ageGroup", value)
+                            handleInputChange("exerciseType", value)
                           }
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Chọn độ tuổi" />
+                            <SelectValue placeholder="Chọn loại câu hỏi" />
                           </SelectTrigger>
                           <SelectContent>
-                            {ageGroups.map((age) => (
-                              <SelectItem key={age} value={age}>
-                                {age}
+                            {exerciseTypes.map((type) => (
+                              <SelectItem key={type.value} value={type.value}>
+                                {type.label}
                               </SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
+                    )}
 
+                    {formData.inputMode === "description" && (
                       <div className="space-y-2">
-                        <Label htmlFor="difficulty">Độ khó</Label>
-                        <Select
-                          value={formData.difficulty}
+                        <Label htmlFor="count">
+                          Số câu hỏi: {formData.count}
+                        </Label>
+                        <Slider
+                          value={[formData.count]}
                           onValueChange={(value) =>
-                            handleInputChange("difficulty", value)
+                            handleInputChange("count", value[0])
                           }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn độ khó" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {difficulties.map((difficulty) => (
-                              <SelectItem key={difficulty} value={difficulty}>
-                                {difficulty}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="exerciseType">Loại câu hỏi</Label>
-                      <Select
-                        value={formData.exerciseType}
-                        onValueChange={(value) =>
-                          handleInputChange("exerciseType", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Chọn loại câu hỏi" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {exerciseTypes.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
-                              {type.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="count">
-                        Số câu hỏi: {formData.count}
-                      </Label>
-                      <Slider
-                        value={[formData.count]}
-                        onValueChange={(value) =>
-                          handleInputChange("count", value[0])
-                        }
-                        max={20}
-                        min={1}
-                        step={1}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>1</span>
-                        <span>20</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3 pt-2 border-t">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="includeExplanations"
-                          checked={formData.includeExplanations}
-                          onCheckedChange={(checked) =>
-                            handleInputChange("includeExplanations", checked)
-                          }
+                          max={20}
+                          min={1}
+                          step={1}
+                          className="w-full"
                         />
-                        <Label
-                          htmlFor="includeExplanations"
-                          className="text-sm"
-                        >
-                          Bao gồm giải thích đáp án
-                        </Label>
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>1</span>
+                          <span>20</span>
+                        </div>
                       </div>
+                    )}
 
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="includeImages"
-                          checked={formData.includeImages}
-                          onCheckedChange={(checked) =>
-                            handleInputChange("includeImages", checked)
-                          }
-                        />
-                        <Label htmlFor="includeImages" className="text-sm">
-                          Tạo hình ảnh minh họa (nếu có thể)
-                        </Label>
+                    {formData.inputMode === "description" && (
+                      <div className="space-y-3 pt-2 border-t">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="includeExplanations"
+                            checked={formData.includeExplanations}
+                            onCheckedChange={(checked) =>
+                              handleInputChange("includeExplanations", checked)
+                            }
+                          />
+                          <Label
+                            htmlFor="includeExplanations"
+                            className="text-sm"
+                          >
+                            Bao gồm giải thích đáp án
+                          </Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          <Checkbox
+                            id="includeImages"
+                            checked={formData.includeImages}
+                            onCheckedChange={(checked) =>
+                              handleInputChange("includeImages", checked)
+                            }
+                          />
+                          <Label htmlFor="includeImages" className="text-sm">
+                            Tạo hình ảnh minh họa (nếu có thể)
+                          </Label>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="inputMode">Nguồn yêu cầu</Label>
