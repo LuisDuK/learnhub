@@ -472,7 +472,7 @@ export default function TeacherAIGenerator() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
+          <TabsList className="grid w-full grid-cols-2 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1 gap-2">
             <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
@@ -524,7 +524,7 @@ export default function TeacherAIGenerator() {
                         onChange={(e) =>
                           handleInputChange("topic", e.target.value)
                         }
-                        placeholder="VD: Phép cộng trong ph���m vi 20"
+                        placeholder="VD: Phép cộng trong phạm vi 20"
                       />
                     </div>
 
