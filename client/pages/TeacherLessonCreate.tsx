@@ -46,7 +46,7 @@ export default function TeacherLessonCreate() {
       title: "SGK Toán lớp 3",
       lessons: [
         { id: "b1-l1", title: "Phép cộng trong phạm vi 20" },
-        { id: "b1-l2", title: "Phép cộng trong phạm vi 100" },
+        { id: "b1-l2", title: "Phép cộng trong ph��m vi 100" },
       ],
     },
     {
@@ -373,9 +373,14 @@ export default function TeacherLessonCreate() {
                   <h3 className="font-semibold">Câu hỏi Quiz</h3>
                   <p className="text-sm text-muted-foreground">Nhập câu hỏi kèm đáp án và gắn thời điểm/ mốc thời gian sẽ hiển thị câu hỏi trong bài học (ví dụ 01:23)</p>
                 </div>
-                <Button variant="outline" size="sm" onClick={addQuestion}>
-                  <Plus className="h-4 w-4 mr-1" /> Thêm câu hỏi
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={addQuestion}>
+                    <Plus className="h-4 w-4 mr-1" /> Thêm câu hỏi
+                  </Button>
+                  <Button variant="secondary" size="sm" onClick={() => generateAIQuestions(3)}>
+                    🤖 AI sinh 3 câu
+                  </Button>
+                </div>
               </div>
 
               {questions.map((q) => (
@@ -433,7 +438,7 @@ export default function TeacherLessonCreate() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold">Bài tập ôn t���p</h3>
+                    <h3 className="font-semibold">Bài tập ôn tập</h3>
                     <p className="text-sm text-muted-foreground">Thêm các câu hỏi ôn tập và đáp án để người học luyện tập sau bài giảng</p>
                   </div>
                 </div>
