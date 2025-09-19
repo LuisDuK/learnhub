@@ -232,6 +232,7 @@ export default function TeacherLessonCreate() {
               <TabsTrigger value="materials">2. Tài liệu học tập</TabsTrigger>
               <TabsTrigger value="quiz">3. Quiz</TabsTrigger>
               <TabsTrigger value="exercises">4. Bài tập</TabsTrigger>
+              <TabsTrigger value="ai">5. AI</TabsTrigger>
             </TabsList>
 
             <TabsContent value="info" className="space-y-4">
@@ -243,7 +244,7 @@ export default function TeacherLessonCreate() {
                       <SelectValue placeholder="Chọn môn học" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="math">Toán học</SelectItem>
+                      <SelectItem value="math">Toán h���c</SelectItem>
                       <SelectItem value="literature">Ngữ văn</SelectItem>
                       <SelectItem value="english">Tiếng Anh</SelectItem>
                       <SelectItem value="science">Khoa học</SelectItem>
