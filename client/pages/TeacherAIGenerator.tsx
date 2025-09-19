@@ -142,7 +142,6 @@ export default function TeacherAIGenerator() {
     exerciseType: "",
     count: 5,
     duration: 30,
-    customPrompt: "",
     language: "vietnamese",
     format: "standard",
     objective: "",
@@ -478,7 +477,7 @@ export default function TeacherAIGenerator() {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
-            <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
+            <TabsTrigger value="create">Tạo b��i tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
             </TabsTrigger>
