@@ -48,10 +48,6 @@ export function TeacherHeader() {
         <div className="h-9 w-9 rounded-md bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center">
           <GraduationCap className="h-5 w-5 text-white" />
         </div>
-        <div className="flex flex-col -ml-1">
-          <div className="text-sm font-semibold">KidsLearn Teacher</div>
-          {pageTitle && <div className="text-xs text-gray-600">{pageTitle}</div>}
-        </div>
       </div>
 
       <div className="flex-1 flex justify-center">
