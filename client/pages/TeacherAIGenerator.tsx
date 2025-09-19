@@ -205,7 +205,7 @@ export default function TeacherAIGenerator() {
     const steps = [
       "Phân tích yêu cầu...",
       "Tạo nội dung câu hỏi...",
-      "Tạo đ��p án và giải thích...",
+      "Tạo đáp án và giải thích...",
       "Kiểm tra chất lượng...",
       "Hoàn thiện bài tập...",
     ];
@@ -262,6 +262,20 @@ export default function TeacherAIGenerator() {
     };
     setGenerationHistory((h) => [item, ...h]);
     toast({ title: "Đã xuất bản", description: "Bài ôn đã được xuất bản (giả lập)." });
+  };
+
+  const handleSaveAll = () => {
+    const item = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      subject: formData.subject,
+      topic: formData.topic,
+      count: generatedContent.length,
+      exercises: generatedContent,
+      published: false,
+    };
+    setGenerationHistory((h) => [item, ...h]);
+    toast({ title: "Đã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
   };
 
   const handleExportAll = () => {
