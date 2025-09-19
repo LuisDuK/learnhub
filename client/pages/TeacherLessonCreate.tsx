@@ -46,7 +46,7 @@ export default function TeacherLessonCreate() {
       title: "SGK Toán lớp 3",
       lessons: [
         { id: "b1-l1", title: "Phép cộng trong phạm vi 20" },
-        { id: "b1-l2", title: "Phép cộng trong ph��m vi 100" },
+        { id: "b1-l2", title: "Phép cộng trong phạm vi 100" },
       ],
     },
     {
@@ -438,7 +438,7 @@ export default function TeacherLessonCreate() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold">Bài tập ôn tập</h3>
+                    <h3 className="font-semibold">Bài t��p ôn tập</h3>
                     <p className="text-sm text-muted-foreground">Thêm các câu hỏi ôn tập và đáp án để người học luyện tập sau bài giảng</p>
                   </div>
                 </div>
@@ -458,6 +458,7 @@ export default function TeacherLessonCreate() {
                     setExercises((ex) => [...ex, { id: crypto.randomUUID(), question: exerciseDraft.question, answer: exerciseDraft.answer }]);
                     setExerciseDraft({ question: "", answer: "" });
                   }}>Thêm câu hỏi ôn tập</Button>
+                  <Button variant="secondary" onClick={() => generateAIExercises(3)}>🤖 AI sinh 3 bài tập</Button>
                 </div>
 
                 {exercises.length > 0 && (
