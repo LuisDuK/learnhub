@@ -205,7 +205,7 @@ export default function TeacherAIGenerator() {
     const steps = [
       "Phân tích yêu cầu...",
       "Tạo nội dung câu hỏi...",
-      "Tạo đáp án và giải thích...",
+      "Tạo đ��p án và giải thích...",
       "Kiểm tra chất lượng...",
       "Hoàn thiện bài tập...",
     ];
@@ -767,18 +767,22 @@ export default function TeacherAIGenerator() {
               <div className="lg:col-span-2">
                 {generatedContent.length > 0 ? (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">
                         Bài tập được tạo ({generatedContent.length})
                       </h3>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
+                        <Button size="sm" variant="outline" onClick={() => handleGenerate()}>
                           <RefreshCw className="h-4 w-4 mr-1" />
                           Tạo lại
                         </Button>
-                        <Button size="sm">
+                        <Button size="sm" onClick={() => handleSaveAll()}>
                           <Save className="h-4 w-4 mr-1" />
                           Lưu tất cả
+                        </Button>
+                        <Button size="sm" className="bg-green-600 text-white" onClick={() => handlePublishAll()}>
+                          <CheckCircle className="h-4 w-4 mr-1" />
+                          Xuất bản
                         </Button>
                       </div>
                     </div>
@@ -803,7 +807,7 @@ export default function TeacherAIGenerator() {
                       <Alert className="border-blue-200 bg-blue-50 text-left">
                         <Lightbulb className="h-4 w-4 text-blue-600" />
                         <AlertDescription className="text-blue-800">
-                          <strong>Mẹo:</strong> Hãy mô tả cụ thể ch�� đề và yêu
+                          <strong>Mẹo:</strong> Hãy mô tả cụ thể chủ đề và yêu
                           cầu để AI tạo ra bài tập chất lượng tốt nhất!
                         </AlertDescription>
                       </Alert>
