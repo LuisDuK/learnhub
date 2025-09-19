@@ -207,7 +207,7 @@ export default function TeacherLessonCreate() {
             <TabsList className="mb-4">
               <TabsTrigger value="info">1. Thông tin</TabsTrigger>
               <TabsTrigger value="materials">2. Tài liệu học tập</TabsTrigger>
-              <TabsTrigger value="quiz">3. Quiz (gắn thời gian hiển thị)</TabsTrigger>
+              <TabsTrigger value="quiz">3. Quiz</TabsTrigger>
               <TabsTrigger value="exercises">4. Bài tập</TabsTrigger>
             </TabsList>
 
