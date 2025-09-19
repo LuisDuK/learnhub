@@ -131,13 +131,27 @@ const aiPromptTemplates = [
   },
 ];
 
+import { useToast } from "@/hooks/use-toast";
+
 export default function TeacherAIGenerator() {
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("create");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [generatedContent, setGeneratedContent] = useState<any[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [generationHistory, setGenerationHistory] = useState<any[]>([]);
+
+  // Local edit state
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [draggingId, setDraggingId] = useState<number | null>(null);
+
+  // Mock learning path lessons
+  const mockPathLessons = [
+    { id: "l1", title: "Phép cộng cơ bản" },
+    { id: "l2", title: "Phép cộng có nhớ" },
+    { id: "l3", title: "Phép trừ cơ bản" },
+  ];
 
   // Form state
   const [formData, setFormData] = useState({
@@ -153,6 +167,8 @@ export default function TeacherAIGenerator() {
     includeImages: false,
     language: "vietnamese",
     format: "standard",
+    objective: "",
+    selectedLessons: [] as string[],
   });
 
   const handleInputChange = (field: string, value: any) => {
