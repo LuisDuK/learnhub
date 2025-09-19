@@ -92,7 +92,7 @@ const mockGeneratedExercises = [
 ];
 
 const subjects = ["Toán", "Văn", "Anh"];
-const difficulties = ["D���", "Trung bình", "Khó", "Nâng cao"];
+const difficulties = ["Dễ", "Trung bình", "Khó", "Nâng cao"];
 const ageGroups = [
   "5-6 tuổi",
   "6-7 tuổi",
@@ -245,7 +245,23 @@ export default function TeacherAIGenerator() {
 
   const handleSaveExercise = (exercise: any) => {
     // Mock save to course
+    toast({ title: "Đã lưu câu hỏi", description: "Câu hỏi được lưu vào kho bài tập (giả lập)." });
     console.log("Saving exercise:", exercise);
+  };
+
+  const handlePublishAll = () => {
+    // Mock publish: add to history as published
+    const item = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      subject: formData.subject,
+      topic: formData.topic,
+      count: generatedContent.length,
+      exercises: generatedContent,
+      published: true,
+    };
+    setGenerationHistory((h) => [item, ...h]);
+    toast({ title: "Đã xuất bản", description: "Bài ôn đã được xuất bản (giả lập)." });
   };
 
   const handleExportAll = () => {
@@ -787,8 +803,8 @@ export default function TeacherAIGenerator() {
                       <Alert className="border-blue-200 bg-blue-50 text-left">
                         <Lightbulb className="h-4 w-4 text-blue-600" />
                         <AlertDescription className="text-blue-800">
-                          <strong>Mẹo:</strong> Hãy mô tả cụ thể chủ đề và yêu
-                          cầu để AI tạo ra bài tập chất lư��ng tốt nhất!
+                          <strong>Mẹo:</strong> Hãy mô tả cụ thể ch�� đề và yêu
+                          cầu để AI tạo ra bài tập chất lượng tốt nhất!
                         </AlertDescription>
                       </Alert>
                     </CardContent>
