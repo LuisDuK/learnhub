@@ -149,9 +149,8 @@ export default function TeacherProfile() {
         </Card>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="personal">Thông tin cá nhân</TabsTrigger>
-            <TabsTrigger value="documents">Tài liệu chứng chỉ</TabsTrigger>
             <TabsTrigger value="security">Bảo mật</TabsTrigger>
           </TabsList>
 
@@ -212,9 +211,7 @@ export default function TeacherProfile() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
 
-          <TabsContent value="documents" className="space-y-6">
             <Card>
               <CardHeader><CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Tài liệu chứng chỉ</CardTitle></CardHeader>
               <CardContent className="space-y-3">
