@@ -484,7 +484,6 @@ export default function TeacherAIGenerator() {
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
             </TabsTrigger>
-            <TabsTrigger value="templates">Mẫu có sẵn</TabsTrigger>
           </TabsList>
 
           {/* Create Tab */}
