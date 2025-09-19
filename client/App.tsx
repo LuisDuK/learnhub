@@ -29,11 +29,11 @@ import AdminSystemSettings from "./pages/AdminSystemSettings";
 import AdminTeacherApproval from "./pages/AdminTeacherApproval";
 // Teacher pages
 import TeacherDashboard from "./pages/TeacherDashboard";
-import TeacherCourses from "./pages/TeacherCourses";
-import TeacherReports from "./pages/TeacherReports";
 import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAIGenerator from "./pages/TeacherAIGenerator";
 import TeacherSecurity from "./pages/TeacherSecurity";
+import TeacherLessons from "./pages/TeacherLessons";
+import TeacherLessonCreate from "./pages/TeacherLessonCreate";
 import StudentProfile from "./pages/StudentProfile";
 import { PlaceholderPage } from "./components/PlaceholderPage";
 // Mobile layout & pages
@@ -99,11 +99,11 @@ function AppRoutes() {
 
         {/* Teacher Routes */}
         <Route path="/teacher" element={<TeacherDashboard />} />
-        <Route path="/teacher/subjects" element={<TeacherCourses />} />
         <Route path="/teacher/ai-generator" element={<TeacherAIGenerator />} />
-        <Route path="/teacher/reports" element={<TeacherReports />} />
         <Route path="/teacher/profile" element={<TeacherProfile />} />
         <Route path="/teacher/security" element={<TeacherSecurity />} />
+        <Route path="/teacher/lessons" element={<TeacherLessons />} />
+        <Route path="/teacher/lessons/new" element={<TeacherLessonCreate />} />
 
         {/* Mobile App Routes */}
         <Route path="/m/login" element={<MobileLogin />} />

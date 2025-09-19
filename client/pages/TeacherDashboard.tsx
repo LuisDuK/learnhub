@@ -186,11 +186,12 @@ export default function TeacherDashboard() {
               AI sinh bài tập
             </Button>
             <Button
-              onClick={() => navigate("/teacher/subjects")}
-              className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white"
+              onClick={() => navigate("/teacher/lessons/new")}
+              variant="outline"
+              className="border-green-300 text-green-700 hover:bg-green-50"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Tạo môn học mới
+              Tạo bài học mới
             </Button>
           </div>
         </div>
@@ -272,9 +273,9 @@ export default function TeacherDashboard() {
                 </div>
                 <Button
                   variant="outline"
-                  onClick={() => navigate("/teacher/subjects")}
+                  onClick={() => navigate("/teacher/lessons")}
                 >
-                  Xem tất cả
+                  Xem tất cả bài học
                 </Button>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -385,10 +386,10 @@ export default function TeacherDashboard() {
                 <Button
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => navigate("/teacher/subjects")}
+                  onClick={() => navigate("/teacher/lessons/new")}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Thêm môn học mới
+                  Thêm bài học mới
                 </Button>
                 <Button
                   variant="outline"

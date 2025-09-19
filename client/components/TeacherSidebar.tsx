@@ -12,7 +12,6 @@ import {
   GraduationCap,
   Bot,
   User,
-  Shield,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -24,9 +23,9 @@ const menuItems = [
     href: "/teacher",
   },
   {
-    title: "Quản lý môn học",
-    icon: BookOpen,
-    href: "/teacher/subjects",
+    title: "Quản lý bài học",
+    icon: PenTool,
+    href: "/teacher/lessons",
   },
   {
     title: "AI sinh bài tập",
@@ -34,19 +33,9 @@ const menuItems = [
     href: "/teacher/ai-generator",
   },
   {
-    title: "Báo cáo & Thống kê",
-    icon: BarChart3,
-    href: "/teacher/reports",
-  },
-  {
     title: "Thông tin cá nhân",
     icon: User,
     href: "/teacher/profile",
-  },
-  {
-    title: "Bảo mật",
-    icon: Shield,
-    href: "/teacher/security",
   },
 ];
 
@@ -129,23 +118,13 @@ export function TeacherSidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-green-700 truncate">
-              Gi��o viên Nguyễn Thị Lan
+              Giáo viên Nguyễn Thị Lan
             </p>
             <p className="text-xs text-green-600 truncate">
               Toán học - 5 năm kinh nghiệm
             </p>
           </div>
         </div>
-
-        {/* Back to Student View */}
-        <Button
-          onClick={handleBackToStudent}
-          variant="outline"
-          className="w-full border-green-200 text-green-600 hover:bg-green-50 hover:text-green-700 hover:border-green-300 transition-all duration-300 rounded-xl"
-        >
-          <Home className="h-4 w-4 mr-2" />
-          Chế độ học sinh
-        </Button>
 
         {/* Logout Button */}
         <Button

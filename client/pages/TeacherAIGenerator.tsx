@@ -79,11 +79,11 @@ const mockGeneratedExercises = [
     question:
       "Em hãy giải thích tại sao 0 chia cho bất kỳ số nào cũng bằng 0, nhưng không thể chia một số cho 0?",
     rubric:
-      "Học sinh cần giải thích được: 1) 0 chia cho số khác 0 luôn bằng 0, 2) Chia cho 0 là không xác định, 3) Đưa ra ví dụ minh họa",
+      "Học sinh cần giải thích được: 1) 0 chia cho số khác 0 luôn bằng 0, 2) Chia cho 0 là không xác định, 3) Đưa ra ví d�� minh họa",
     maxWords: 150,
     keywords: ["không xác định", "quy tắc", "ví dụ"],
     explanation:
-      "Câu hỏi này giúp học sinh hiểu được khái niệm cơ bản về phép chia và tại sao chia cho 0 là không được phép.",
+      "Câu hỏi này giúp học sinh hiểu ��ược khái niệm cơ bản về phép chia và tại sao chia cho 0 là không được phép.",
     difficulty: "Nâng cao",
     subject: "Toán",
     ageGroup: "10-12 tuổi",
@@ -110,34 +110,28 @@ const exerciseTypes = [
   { value: "matching", label: "Nối từ" },
 ];
 
-const aiPromptTemplates = [
-  {
-    name: "Bài tập cơ bản",
-    description: "Tạo bài tập ôn luyện kiến thức cơ bản",
-    template:
-      "Tạo {count} câu hỏi {type} về {topic} cho học sinh {ageGroup}, độ khó {difficulty}. Bao gồm đáp án và giải thích chi tiết.",
-  },
-  {
-    name: "Đề kiểm tra",
-    description: "Tạo đề kiểm tra hoàn chỉnh",
-    template:
-      "Tạo đề kiểm tra {duration} phút về {topic} cho học sinh {ageGroup}, gồm {count} câu hỏi đa dạng từ dễ đến khó.",
-  },
-  {
-    name: "Bài tập thực hành",
-    description: "Tạo bài tập áp dụng thực tế",
-    template:
-      "Tạo {count} bài tập thực hành về {topic} cho học sinh {ageGroup}, tập trung vào ứng dụng kiến thức vào tình huống thực tế.",
-  },
-];
+
+import { useToast } from "@/hooks/use-toast";
 
 export default function TeacherAIGenerator() {
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("create");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [generatedContent, setGeneratedContent] = useState<any[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [generationHistory, setGenerationHistory] = useState<any[]>([]);
+
+  // Local edit state
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [draggingId, setDraggingId] = useState<number | null>(null);
+
+  // Mock learning path lessons
+  const mockPathLessons = [
+    { id: "l1", title: "Phép cộng cơ bản" },
+    { id: "l2", title: "Phép cộng có nhớ" },
+    { id: "l3", title: "Phép trừ cơ bản" },
+  ];
 
   // Form state
   const [formData, setFormData] = useState({
@@ -148,32 +142,19 @@ export default function TeacherAIGenerator() {
     exerciseType: "",
     count: 5,
     duration: 30,
-    customPrompt: "",
-    includeExplanations: true,
-    includeImages: false,
     language: "vietnamese",
     format: "standard",
+    objective: "",
+    selectedLessons: [] as string[],
+    // inputMode: 'description' (normal) or 'reference' (upload doc)
+    inputMode: "description",
+    // uploaded files (client-side only)
+    objectiveImage: null as File | null,
+    referenceDoc: null as File | null,
   });
 
   const handleInputChange = (field: string, value: any) => {
     setFormData({ ...formData, [field]: value });
-  };
-
-  const handleTemplateSelect = (template: any) => {
-    setSelectedTemplate(template.name);
-    const prompt = template.template
-      .replace("{count}", formData.count.toString())
-      .replace(
-        "{type}",
-        exerciseTypes.find((t) => t.value === formData.exerciseType)?.label ||
-          "câu hỏi",
-      )
-      .replace("{topic}", formData.topic || "chủ đề")
-      .replace("{ageGroup}", formData.ageGroup || "học sinh")
-      .replace("{difficulty}", formData.difficulty || "phù hợp")
-      .replace("{duration}", formData.duration.toString());
-
-    setFormData({ ...formData, customPrompt: prompt });
   };
 
   const handleGenerate = async () => {
@@ -227,9 +208,56 @@ export default function TeacherAIGenerator() {
     setGenerationProgress(100);
   };
 
+  const addManualQuestion = () => {
+    const newQ = {
+      id: Date.now(),
+      type: formData.exerciseType || "multiple_choice",
+      question: `Câu hỏi thủ công: ${formData.topic || "(chủ đề)"}`,
+      options: ["A","B","C","D"],
+      correctAnswer: "A",
+      explanation: "",
+      difficulty: formData.difficulty || "Trung bình",
+      subject: formData.subject || "",
+      ageGroup: formData.ageGroup || "",
+      estimatedTime: "2 phút",
+    };
+    setGeneratedContent((g) => [...g, newQ]);
+    toast({ title: "Thêm câu", description: "Đã thêm câu hỏi thủ công vào cuối danh sách." });
+  };
+
   const handleSaveExercise = (exercise: any) => {
     // Mock save to course
+    toast({ title: "Đã lưu câu hỏi", description: "Câu hỏi được lưu vào kho bài tập (giả lập)." });
     console.log("Saving exercise:", exercise);
+  };
+
+  const handlePublishAll = () => {
+    // Mock publish: add to history as published
+    const item = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      subject: formData.subject,
+      topic: formData.topic,
+      count: generatedContent.length,
+      exercises: generatedContent,
+      published: true,
+    };
+    setGenerationHistory((h) => [item, ...h]);
+    toast({ title: "Đã xuất bản", description: "Bài ôn đ�� được xuất bản (giả lập)." });
+  };
+
+  const handleSaveAll = () => {
+    const item = {
+      id: Date.now(),
+      timestamp: new Date().toISOString(),
+      subject: formData.subject,
+      topic: formData.topic,
+      count: generatedContent.length,
+      exercises: generatedContent,
+      published: false,
+    };
+    setGenerationHistory((h) => [item, ...h]);
+    toast({ title: "Đã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
   };
 
   const handleExportAll = () => {
@@ -254,9 +282,42 @@ export default function TeacherAIGenerator() {
     a.click();
   };
 
+  const moveItem = (fromId: number, toId: number) => {
+    const fromIndex = generatedContent.findIndex((c) => c.id === fromId);
+    const toIndex = generatedContent.findIndex((c) => c.id === toId);
+    if (fromIndex === -1 || toIndex === -1) return;
+    const next = [...generatedContent];
+    const [item] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, item);
+    setGeneratedContent(next);
+  };
+
+  const startEdit = (id: number) => {
+    setEditingId(id);
+  };
+
+  const saveEdit = (id: number, patch: any) => {
+    setGeneratedContent((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+    setEditingId(null);
+    toast({ title: "Đã lưu", description: "Câu hỏi đã được cập nhật." });
+  };
+
   const renderExercise = (exercise: any, index: number) => {
+    const isEditing = editingId === exercise.id;
     return (
-      <Card key={exercise.id} className="border border-purple-200">
+      <Card
+        key={exercise.id}
+        className="border border-purple-200"
+        draggable
+        onDragStart={() => setDraggingId(exercise.id)}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={() => {
+          if (draggingId != null && draggingId !== exercise.id) {
+            moveItem(draggingId, exercise.id);
+          }
+          setDraggingId(null);
+        }}
+      >
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -264,119 +325,117 @@ export default function TeacherAIGenerator() {
               <Badge className="bg-purple-100 text-purple-800">
                 {exerciseTypes.find((t) => t.value === exercise.type)?.label}
               </Badge>
-              <Badge variant="secondary">{exercise.difficulty}</Badge>
+              {!isEditing ? (
+                <Badge variant="secondary">{exercise.difficulty}</Badge>
+              ) : (
+                <Select
+                  value={exercise.difficulty}
+                  onValueChange={(v) => saveEdit(exercise.id, { difficulty: v })}
+                >
+                  <SelectTrigger className="w-[120px]"></SelectTrigger>
+                  <SelectContent>
+                    {difficulties.map((d) => (
+                      <SelectItem key={d} value={d}>
+                        {d}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline">
-                <Edit className="h-4 w-4" />
-              </Button>
-              <Button size="sm" variant="outline">
-                <Copy className="h-4 w-4" />
-              </Button>
-              <Button size="sm" onClick={() => handleSaveExercise(exercise)}>
-                <Save className="h-4 w-4" />
-              </Button>
+              {!isEditing ? (
+                <>
+                  <Button size="sm" variant="outline" onClick={() => startEdit(exercise.id)}>
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => {
+                    navigator.clipboard?.writeText(JSON.stringify(exercise, null, 2));
+                    toast({ title: "Đã sao ch��p", description: "Câu hỏi đã được sao chép vào clipboard." });
+                  }}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" onClick={() => handleSaveExercise(exercise)}>
+                    <Save className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => setGeneratedContent((s) => s.filter((x) => x.id !== exercise.id))}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="sm" variant="outline" onClick={() => saveEdit(exercise.id, { ...exercise })}>
+                    Lưu
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => setEditingId(null)}>
+                    Huỷ
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <Label className="text-sm font-medium text-gray-700">
-              Câu hỏi:
-            </Label>
-            <p className="mt-1 text-gray-900">{exercise.question}</p>
-          </div>
-
-          {exercise.type === "multiple_choice" && (
-            <div>
-              <Label className="text-sm font-medium text-gray-700">
-                Các lựa chọn:
-              </Label>
-              <div className="mt-2 space-y-1">
-                {exercise.options.map((option: string, optionIndex: number) => (
-                  <div key={optionIndex} className="flex items-center gap-2">
-                    <span className="font-medium text-sm w-6">
-                      {String.fromCharCode(65 + optionIndex)}.
-                    </span>
-                    <span
-                      className={
-                        String.fromCharCode(65 + optionIndex) ===
-                        exercise.correctAnswer
-                          ? "text-green-600 font-medium"
-                          : "text-gray-700"
-                      }
-                    >
-                      {option}
-                    </span>
-                    {String.fromCharCode(65 + optionIndex) ===
-                      exercise.correctAnswer && (
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                    )}
-                  </div>
-                ))}
+          {!isEditing ? (
+            <>
+              <div>
+                <Label className="text-sm font-medium text-gray-700">Câu hỏi:</Label>
+                <p className="mt-1 text-gray-900">{exercise.question}</p>
               </div>
-            </div>
-          )}
 
-          {exercise.type === "short_answer" && (
-            <div>
-              <Label className="text-sm font-medium text-gray-700">
-                Đáp án:
-              </Label>
-              <p className="mt-1 text-green-600 font-medium">
-                {exercise.correctAnswer}
-              </p>
-              {exercise.keywords && (
-                <div className="mt-2">
-                  <Label className="text-sm font-medium text-gray-700">
-                    Từ khóa chấp nhận:
-                  </Label>
-                  <div className="flex gap-1 mt-1">
-                    {exercise.keywords.map((keyword: string, i: number) => (
-                      <Badge key={i} variant="outline" className="text-xs">
-                        {keyword}
-                      </Badge>
+              {exercise.type === "multiple_choice" && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Các lựa chọn:</Label>
+                  <div className="mt-2 space-y-1">
+                    {exercise.options.map((option: string, optionIndex: number) => (
+                      <div key={optionIndex} className="flex items-center gap-2">
+                        <span className="font-medium text-sm w-6">{String.fromCharCode(65 + optionIndex)}.</span>
+                        <span className={String.fromCharCode(65 + optionIndex) === exercise.correctAnswer ? "text-green-600 font-medium" : "text-gray-700"}>{option}</span>
+                        {String.fromCharCode(65 + optionIndex) === exercise.correctAnswer && <CheckCircle className="h-4 w-4 text-green-600" />}
+                      </div>
                     ))}
                   </div>
                 </div>
               )}
-            </div>
-          )}
 
-          {exercise.type === "essay" && (
-            <div className="space-y-2">
-              <div>
-                <Label className="text-sm font-medium text-gray-700">
-                  Rubric đánh giá:
-                </Label>
-                <p className="mt-1 text-gray-700 text-sm">{exercise.rubric}</p>
+              {exercise.type === "short_answer" && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Đáp án:</Label>
+                  <p className="mt-1 text-green-600 font-medium">{exercise.correctAnswer}</p>
+                </div>
+              )}
+
+              {exercise.explanation && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Giải thích:</Label>
+                  <p className="mt-1 text-gray-600 text-sm">{exercise.explanation}</p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
+                <span>Thời gian ước tính: {exercise.estimatedTime}</span>
+                <span>Độ tuổi: {exercise.ageGroup}</span>
               </div>
+            </>
+          ) : (
+            <div className="space-y-3">
               <div>
-                <Label className="text-sm font-medium text-gray-700">
-                  Số từ tối đa:
-                </Label>
-                <p className="mt-1 text-gray-700 text-sm">
-                  {exercise.maxWords} từ
-                </p>
+                <Label className="text-sm">Chỉnh sửa câu hỏi</Label>
+                <Input value={exercise.question} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, question: e.target.value } : p))} />
               </div>
+              {exercise.type === "multiple_choice" && (
+                <div className="space-y-2">
+                  {exercise.options.map((opt: string, i: number) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="w-6">{String.fromCharCode(65 + i)}.</span>
+                      <Input value={opt} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, options: p.options.map((o: string, idx: number) => idx === i ? e.target.value : o) } : p))} />
+                      <Button size="sm" variant={exercise.correctAnswer === String.fromCharCode(65 + i) ? "secondary" : "outline"} onClick={() => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, correctAnswer: String.fromCharCode(65 + i) } : p))}>Đúng</Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-
-          {exercise.explanation && (
-            <div>
-              <Label className="text-sm font-medium text-gray-700">
-                Giải thích:
-              </Label>
-              <p className="mt-1 text-gray-600 text-sm">
-                {exercise.explanation}
-              </p>
-            </div>
-          )}
-
-          <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
-            <span>Thời gian ước tính: {exercise.estimatedTime}</span>
-            <span>Độ tuổi: {exercise.ageGroup}</span>
-          </div>
         </CardContent>
       </Card>
     );
@@ -398,10 +457,6 @@ export default function TeacherAIGenerator() {
           </div>
 
           <div className="flex gap-3">
-            <Button variant="outline">
-              <Settings className="h-4 w-4 mr-2" />
-              Cài đặt AI
-            </Button>
             {generatedContent.length > 0 && (
               <Button onClick={handleExportAll}>
                 <Download className="h-4 w-4 mr-2" />
@@ -417,12 +472,11 @@ export default function TeacherAIGenerator() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
+          <TabsList className="grid w-full grid-cols-2 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1 gap-2">
             <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
             </TabsTrigger>
-            <TabsTrigger value="templates">Mẫu có sẵn</TabsTrigger>
           </TabsList>
 
           {/* Create Tab */}
@@ -474,157 +528,221 @@ export default function TeacherAIGenerator() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-2">
-                        <Label htmlFor="ageGroup">Độ tuổi *</Label>
-                        <Select
-                          value={formData.ageGroup}
-                          onValueChange={(value) =>
-                            handleInputChange("ageGroup", value)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn độ tuổi" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {ageGroups.map((age) => (
-                              <SelectItem key={age} value={age}>
-                                {age}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="difficulty">Độ khó</Label>
-                        <Select
-                          value={formData.difficulty}
-                          onValueChange={(value) =>
-                            handleInputChange("difficulty", value)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn độ khó" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {difficulties.map((difficulty) => (
-                              <SelectItem key={difficulty} value={difficulty}>
-                                {difficulty}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                    <div className="space-y-2">
+                      <Label>Chọn bài trong lộ trình</Label>
+                      <div className="flex flex-col gap-2">
+                        {mockPathLessons.map((ls) => (
+                          <label key={ls.id} className="inline-flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={formData.selectedLessons.includes(ls.id)}
+                              onChange={(e) => {
+                                const next = e.target.checked
+                                  ? [...formData.selectedLessons, ls.id]
+                                  : formData.selectedLessons.filter((id) => id !== ls.id);
+                                handleInputChange("selectedLessons", next);
+                              }}
+                            />
+                            <span className="text-sm">{ls.title}</span>
+                          </label>
+                        ))}
                       </div>
                     </div>
 
+                    {formData.inputMode === "description" && (
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label htmlFor="ageGroup">Độ tuổi *</Label>
+                          <Select
+                            value={formData.ageGroup}
+                            onValueChange={(value) =>
+                              handleInputChange("ageGroup", value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn độ tuổi" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {ageGroups.map((age) => (
+                                <SelectItem key={age} value={age}>
+                                  {age}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="difficulty">Độ khó</Label>
+                          <Select
+                            value={formData.difficulty}
+                            onValueChange={(value) =>
+                              handleInputChange("difficulty", value)
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn độ khó" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {difficulties.map((difficulty) => (
+                                <SelectItem key={difficulty} value={difficulty}>
+                                  {difficulty}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    )}
+
+                    {formData.inputMode === "description" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="exerciseType">Loại câu hỏi</Label>
+                        <Select
+                          value={formData.exerciseType}
+                          onValueChange={(value) =>
+                            handleInputChange("exerciseType", value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn loại câu hỏi" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {exerciseTypes.map((type) => (
+                              <SelectItem key={type.value} value={type.value}>
+                                {type.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+
+                    {formData.inputMode === "description" && (
+                      <div className="space-y-2">
+                        <Label htmlFor="count">
+                          Số câu hỏi: {formData.count}
+                        </Label>
+                        <Slider
+                          value={[formData.count]}
+                          onValueChange={(value) =>
+                            handleInputChange("count", value[0])
+                          }
+                          max={20}
+                          min={1}
+                          step={1}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>1</span>
+                          <span>20</span>
+                        </div>
+                      </div>
+                    )}
+
+
                     <div className="space-y-2">
-                      <Label htmlFor="exerciseType">Loại câu hỏi</Label>
-                      <Select
-                        value={formData.exerciseType}
-                        onValueChange={(value) =>
-                          handleInputChange("exerciseType", value)
+                      <Label htmlFor="inputMode">Nguồn yêu cầu</Label>
+                      <div className="flex items-center gap-4">
+                        <label className="inline-flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="inputMode"
+                            checked={formData.inputMode === "description"}
+                            onChange={() => handleInputChange("inputMode", "description")}
+                          />
+                          <span>Mô tả yêu cầu</span>
+                        </label>
+                        <label className="inline-flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="inputMode"
+                            checked={formData.inputMode === "reference"}
+                            onChange={() => handleInputChange("inputMode", "reference")}
+                          />
+                          <span>Tải tài liệu tham khảo</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {formData.inputMode === "description" ? (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="objective">Mục tiêu bài ôn</Label>
+                          <Input
+                            id="objective"
+                            value={formData.objective}
+                            onChange={(e) => handleInputChange("objective", e.target.value)}
+                            placeholder="Ví dụ: củng cố phép cộng có nhớ, rèn phản xạ tính nhẩm"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Hoặc gửi ảnh yêu cầu</Label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0] || null;
+                              handleInputChange("objectiveImage", f);
+                            }}
+                          />
+                          {formData.objectiveImage && (
+                            <div className="mt-2">
+                              <img
+                                src={URL.createObjectURL(formData.objectiveImage)}
+                                alt="preview"
+                                className="h-24 object-contain border rounded"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="space-y-2">
+                        <Label>Tải tài liệu tham khảo</Label>
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx,.ppt,.pptx"
+                          onChange={(e) => handleInputChange("referenceDoc", e.target.files?.[0] || null)}
+                        />
+                        {formData.referenceDoc && (
+                          <div className="text-sm text-muted-foreground">Tệp đã chọn: {formData.referenceDoc.name}</div>
+                        )}
+                        <div className="text-xs text-muted-foreground">Sau khi tải lên, AI sẽ tạo bài ôn tương tự nội dung trong tài liệu.</div>
+                      </div>
+                    )}
+
+
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => handleGenerate()}
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                        disabled={
+                          isGenerating || !formData.subject || !formData.topic || !formData.ageGroup
                         }
                       >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Chọn loại câu hỏi" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {exerciseTypes.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
-                              {type.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        {isGenerating ? (
+                          <>
+                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                            Đang tạo...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Tạo bài tập bằng AI
+                          </>
+                        )}
+                      </Button>
+
+                      <Button variant="outline" onClick={() => {
+                        // open advanced modal or prefill using template
+                        setSelectedTemplate("");
+                        toast({ title: "Mẫu", description: "Chọn mẫu hoặc điều chỉnh yêu cầu trước khi tạo." });
+                      }}>
+                        <Wand2 className="h-4 w-4 mr-2" /> Tùy chỉnh
+                      </Button>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="count">
-                        Số câu hỏi: {formData.count}
-                      </Label>
-                      <Slider
-                        value={[formData.count]}
-                        onValueChange={(value) =>
-                          handleInputChange("count", value[0])
-                        }
-                        max={20}
-                        min={1}
-                        step={1}
-                        className="w-full"
-                      />
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>1</span>
-                        <span>20</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3 pt-2 border-t">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="includeExplanations"
-                          checked={formData.includeExplanations}
-                          onCheckedChange={(checked) =>
-                            handleInputChange("includeExplanations", checked)
-                          }
-                        />
-                        <Label
-                          htmlFor="includeExplanations"
-                          className="text-sm"
-                        >
-                          Bao gồm giải thích đáp án
-                        </Label>
-                      </div>
-
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="includeImages"
-                          checked={formData.includeImages}
-                          onCheckedChange={(checked) =>
-                            handleInputChange("includeImages", checked)
-                          }
-                        />
-                        <Label htmlFor="includeImages" className="text-sm">
-                          Tạo hình ảnh minh họa (nếu có thể)
-                        </Label>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="customPrompt">Yêu cầu tùy chỉnh</Label>
-                      <Textarea
-                        id="customPrompt"
-                        value={formData.customPrompt}
-                        onChange={(e) =>
-                          handleInputChange("customPrompt", e.target.value)
-                        }
-                        placeholder="Thêm yêu cầu đặc biệt cho AI..."
-                        rows={3}
-                      />
-                    </div>
-
-                    <Button
-                      onClick={handleGenerate}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-                      disabled={
-                        isGenerating ||
-                        !formData.subject ||
-                        !formData.topic ||
-                        !formData.ageGroup
-                      }
-                    >
-                      {isGenerating ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          Đang tạo...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="h-4 w-4 mr-2" />
-                          Tạo bài tập bằng AI
-                        </>
-                      )}
-                    </Button>
 
                     {isGenerating && (
                       <div className="space-y-2">
@@ -643,18 +761,26 @@ export default function TeacherAIGenerator() {
               <div className="lg:col-span-2">
                 {generatedContent.length > 0 ? (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                                    <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">
                         Bài tập được tạo ({generatedContent.length})
                       </h3>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
+                        <Button size="sm" variant="outline" onClick={() => addManualQuestion()}>
+                          <Plus className="h-4 w-4 mr-1" />
+                          Thêm câu
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => handleGenerate()}>
                           <RefreshCw className="h-4 w-4 mr-1" />
                           Tạo lại
                         </Button>
-                        <Button size="sm">
+                        <Button size="sm" onClick={() => handleSaveAll()}>
                           <Save className="h-4 w-4 mr-1" />
                           Lưu tất cả
+                        </Button>
+                        <Button size="sm" className="bg-green-600 text-white" onClick={() => handlePublishAll()}>
+                          <CheckCircle className="h-4 w-4 mr-1" />
+                          Xuất bản
                         </Button>
                       </div>
                     </div>
@@ -739,40 +865,6 @@ export default function TeacherAIGenerator() {
             )}
           </TabsContent>
 
-          {/* Templates Tab */}
-          <TabsContent value="templates" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {aiPromptTemplates.map((template) => (
-                <Card
-                  key={template.name}
-                  className="cursor-pointer hover:shadow-lg transition-shadow border-purple-200"
-                >
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <FileText className="h-5 w-5 text-purple-600" />
-                      {template.name}
-                    </CardTitle>
-                    <CardDescription>{template.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 mb-4">
-                      {template.template}
-                    </p>
-                    <Button
-                      className="w-full"
-                      onClick={() => {
-                        handleTemplateSelect(template);
-                        setActiveTab("create");
-                      }}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Sử dụng mẫu này
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
         </Tabs>
       </div>
     </TeacherLayout>

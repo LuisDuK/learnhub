@@ -172,7 +172,8 @@ export default function AdminSystemSettings() {
               Cài đặt hệ thống (Quản trị viên)
             </h1>
             <p className="text-gray-600 mt-1">
-              Quản lý cấu hình tổng quan của hệ thống KidsLearn - Chỉ dành cho quản trị viên
+              Quản lý cấu hình tổng quan của hệ thống KidsLearn - Chỉ dành cho
+              quản trị viên
             </p>
           </div>
         </div>
@@ -197,7 +198,10 @@ export default function AdminSystemSettings() {
                     id="systemName"
                     value={systemInfo.systemName}
                     onChange={(e) =>
-                      setSystemInfo({ ...systemInfo, systemName: e.target.value })
+                      setSystemInfo({
+                        ...systemInfo,
+                        systemName: e.target.value,
+                      })
                     }
                     className="mt-1"
                   />
@@ -209,7 +213,10 @@ export default function AdminSystemSettings() {
                     <div className="w-20 h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
                       <School className="h-8 w-8 text-gray-400" />
                     </div>
-                    <Button variant="outline" className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2"
+                    >
                       <Upload className="h-4 w-4" />
                       Chọn file
                     </Button>
@@ -226,14 +233,20 @@ export default function AdminSystemSettings() {
                       id="brandColor"
                       value={systemInfo.brandColor}
                       onChange={(e) =>
-                        setSystemInfo({ ...systemInfo, brandColor: e.target.value })
+                        setSystemInfo({
+                          ...systemInfo,
+                          brandColor: e.target.value,
+                        })
                       }
                       className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                     />
                     <Input
                       value={systemInfo.brandColor}
                       onChange={(e) =>
-                        setSystemInfo({ ...systemInfo, brandColor: e.target.value })
+                        setSystemInfo({
+                          ...systemInfo,
+                          brandColor: e.target.value,
+                        })
                       }
                       className="w-32"
                     />
@@ -242,7 +255,10 @@ export default function AdminSystemSettings() {
 
                 <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <Label htmlFor="supportEmail" className="font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="supportEmail"
+                      className="font-medium flex items-center gap-1"
+                    >
                       <Mail className="h-4 w-4" />
                       Email hỗ trợ
                     </Label>
@@ -251,13 +267,19 @@ export default function AdminSystemSettings() {
                       type="email"
                       value={systemInfo.supportEmail}
                       onChange={(e) =>
-                        setSystemInfo({ ...systemInfo, supportEmail: e.target.value })
+                        setSystemInfo({
+                          ...systemInfo,
+                          supportEmail: e.target.value,
+                        })
                       }
                       className="mt-1"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="hotlinePhone" className="font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="hotlinePhone"
+                      className="font-medium flex items-center gap-1"
+                    >
                       <Phone className="h-4 w-4" />
                       Số điện thoại hotline
                     </Label>
@@ -265,7 +287,10 @@ export default function AdminSystemSettings() {
                       id="hotlinePhone"
                       value={systemInfo.hotlinePhone}
                       onChange={(e) =>
-                        setSystemInfo({ ...systemInfo, hotlinePhone: e.target.value })
+                        setSystemInfo({
+                          ...systemInfo,
+                          hotlinePhone: e.target.value,
+                        })
                       }
                       className="mt-1"
                     />
@@ -273,7 +298,10 @@ export default function AdminSystemSettings() {
                 </div>
               </div>
 
-              <Button onClick={handleSaveSystemInfo} className="w-full bg-blue-600 hover:bg-blue-700">
+              <Button
+                onClick={handleSaveSystemInfo}
+                className="w-full bg-blue-600 hover:bg-blue-700"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Lưu thông tin hệ thống
               </Button>
@@ -295,7 +323,10 @@ export default function AdminSystemSettings() {
                   <Select
                     value={userSecurity.passwordPolicy}
                     onValueChange={(value) =>
-                      setUserSecurity({ ...userSecurity, passwordPolicy: value })
+                      setUserSecurity({
+                        ...userSecurity,
+                        passwordPolicy: value,
+                      })
                     }
                   >
                     <SelectTrigger className="mt-1">
@@ -303,20 +334,28 @@ export default function AdminSystemSettings() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Yếu">Yếu (ít nhất 6 ký tự)</SelectItem>
-                      <SelectItem value="Trung bình">Trung bình (8 ký tự, chữ + số)</SelectItem>
-                      <SelectItem value="Mạnh">Mạnh (12 ký tự, chữ + số + ký tự đặc biệt)</SelectItem>
+                      <SelectItem value="Trung bình">
+                        Trung bình (8 ký tự, chữ + số)
+                      </SelectItem>
+                      <SelectItem value="Mạnh">
+                        Mạnh (12 ký tự, chữ + số + ký tự đặc biệt)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
                   <Label className="font-medium">
-                    Thời gian hết hạn phiên đăng nhập: {userSecurity.sessionTimeout[0]} phút
+                    Thời gian hết hạn phiên đăng nhập:{" "}
+                    {userSecurity.sessionTimeout[0]} phút
                   </Label>
                   <Slider
                     value={userSecurity.sessionTimeout}
                     onValueChange={(value) =>
-                      setUserSecurity({ ...userSecurity, sessionTimeout: value })
+                      setUserSecurity({
+                        ...userSecurity,
+                        sessionTimeout: value,
+                      })
                     }
                     min={15}
                     max={480}
@@ -332,8 +371,12 @@ export default function AdminSystemSettings() {
 
                 <div className="flex items-center justify-between p-4 border border-orange-200 rounded-lg">
                   <div>
-                    <Label className="font-medium">Bật xác thực 2 yếu tố (2FA)</Label>
-                    <p className="text-sm text-gray-600">Yêu cầu mã OTP khi đăng nhập</p>
+                    <Label className="font-medium">
+                      Bật xác thực 2 yếu tố (2FA)
+                    </Label>
+                    <p className="text-sm text-gray-600">
+                      Yêu cầu mã OTP khi đăng nhập
+                    </p>
                   </div>
                   <Switch
                     checked={userSecurity.enable2FA}
@@ -345,19 +388,29 @@ export default function AdminSystemSettings() {
 
                 <div className="flex items-center justify-between p-4 border border-orange-200 rounded-lg">
                   <div>
-                    <Label className="font-medium">Cho phép đăng ký tài khoản mới</Label>
-                    <p className="text-sm text-gray-600">Học sinh có thể tự đăng ký tài khoản</p>
+                    <Label className="font-medium">
+                      Cho phép đăng ký tài khoản mới
+                    </Label>
+                    <p className="text-sm text-gray-600">
+                      Học sinh có thể tự đăng ký tài khoản
+                    </p>
                   </div>
                   <Switch
                     checked={userSecurity.allowNewRegistration}
                     onCheckedChange={(checked) =>
-                      setUserSecurity({ ...userSecurity, allowNewRegistration: checked })
+                      setUserSecurity({
+                        ...userSecurity,
+                        allowNewRegistration: checked,
+                      })
                     }
                   />
                 </div>
               </div>
 
-              <Button onClick={handleSaveUserSecurity} className="w-full bg-orange-600 hover:bg-orange-700">
+              <Button
+                onClick={handleSaveUserSecurity}
+                className="w-full bg-orange-600 hover:bg-orange-700"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Lưu cài đặt bảo mật
               </Button>
@@ -375,7 +428,10 @@ export default function AdminSystemSettings() {
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="lessonDuration" className="font-medium flex items-center gap-1">
+                  <Label
+                    htmlFor="lessonDuration"
+                    className="font-medium flex items-center gap-1"
+                  >
                     <Clock className="h-4 w-4" />
                     Thời lượng mặc định mỗi buổi học (phút)
                   </Label>
@@ -423,7 +479,10 @@ export default function AdminSystemSettings() {
                   <Select
                     value={learningConfig.defaultLanguage}
                     onValueChange={(value) =>
-                      setLearningConfig({ ...learningConfig, defaultLanguage: value })
+                      setLearningConfig({
+                        ...learningConfig,
+                        defaultLanguage: value,
+                      })
                     }
                   >
                     <SelectTrigger className="mt-1">
@@ -437,7 +496,9 @@ export default function AdminSystemSettings() {
                 </div>
 
                 <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                  <h4 className="font-medium text-green-800 mb-2">📚 Môn học hệ thống</h4>
+                  <h4 className="font-medium text-green-800 mb-2">
+                    📚 Môn học hệ thống
+                  </h4>
                   <div className="flex gap-2">
                     <Badge variant="secondary">Toán</Badge>
                     <Badge variant="secondary">Văn</Badge>
@@ -449,7 +510,10 @@ export default function AdminSystemSettings() {
                 </div>
               </div>
 
-              <Button onClick={handleSaveLearningConfig} className="w-full bg-green-600 hover:bg-green-700">
+              <Button
+                onClick={handleSaveLearningConfig}
+                className="w-full bg-green-600 hover:bg-green-700"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Lưu cấu hình học tập
               </Button>
@@ -468,7 +532,10 @@ export default function AdminSystemSettings() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="smtpHost" className="font-medium flex items-center gap-1">
+                    <Label
+                      htmlFor="smtpHost"
+                      className="font-medium flex items-center gap-1"
+                    >
                       <Server className="h-4 w-4" />
                       SMTP Host
                     </Label>
@@ -476,7 +543,10 @@ export default function AdminSystemSettings() {
                       id="smtpHost"
                       value={notificationConfig.smtpHost}
                       onChange={(e) =>
-                        setNotificationConfig({ ...notificationConfig, smtpHost: e.target.value })
+                        setNotificationConfig({
+                          ...notificationConfig,
+                          smtpHost: e.target.value,
+                        })
                       }
                       className="mt-1"
                     />
@@ -490,7 +560,10 @@ export default function AdminSystemSettings() {
                       type="number"
                       value={notificationConfig.smtpPort}
                       onChange={(e) =>
-                        setNotificationConfig({ ...notificationConfig, smtpPort: parseInt(e.target.value) })
+                        setNotificationConfig({
+                          ...notificationConfig,
+                          smtpPort: parseInt(e.target.value),
+                        })
                       }
                       className="mt-1"
                     />
@@ -506,7 +579,10 @@ export default function AdminSystemSettings() {
                     type="email"
                     value={notificationConfig.smtpEmail}
                     onChange={(e) =>
-                      setNotificationConfig({ ...notificationConfig, smtpEmail: e.target.value })
+                      setNotificationConfig({
+                        ...notificationConfig,
+                        smtpEmail: e.target.value,
+                      })
                     }
                     className="mt-1"
                   />
@@ -521,7 +597,10 @@ export default function AdminSystemSettings() {
                     type="password"
                     value={notificationConfig.smtpPassword}
                     onChange={(e) =>
-                      setNotificationConfig({ ...notificationConfig, smtpPassword: e.target.value })
+                      setNotificationConfig({
+                        ...notificationConfig,
+                        smtpPassword: e.target.value,
+                      })
                     }
                     className="mt-1"
                     placeholder="Nhập mật khẩu SMTP"
@@ -531,12 +610,17 @@ export default function AdminSystemSettings() {
                 <div className="flex items-center justify-between p-4 border border-purple-200 rounded-lg">
                   <div>
                     <Label className="font-medium">Bật gửi email tự động</Label>
-                    <p className="text-sm text-gray-600">Quên mật khẩu, báo cáo tiến độ học</p>
+                    <p className="text-sm text-gray-600">
+                      Quên mật khẩu, báo cáo tiến độ học
+                    </p>
                   </div>
                   <Switch
                     checked={notificationConfig.enableAutoEmails}
                     onCheckedChange={(checked) =>
-                      setNotificationConfig({ ...notificationConfig, enableAutoEmails: checked })
+                      setNotificationConfig({
+                        ...notificationConfig,
+                        enableAutoEmails: checked,
+                      })
                     }
                   />
                 </div>
@@ -544,18 +628,26 @@ export default function AdminSystemSettings() {
                 <div className="flex items-center justify-between p-4 border border-purple-200 rounded-lg">
                   <div>
                     <Label className="font-medium">Bật thông báo đẩy</Label>
-                    <p className="text-sm text-gray-600">Push notification trên trình duyệt</p>
+                    <p className="text-sm text-gray-600">
+                      Push notification trên trình duyệt
+                    </p>
                   </div>
                   <Switch
                     checked={notificationConfig.enablePushNotifications}
                     onCheckedChange={(checked) =>
-                      setNotificationConfig({ ...notificationConfig, enablePushNotifications: checked })
+                      setNotificationConfig({
+                        ...notificationConfig,
+                        enablePushNotifications: checked,
+                      })
                     }
                   />
                 </div>
               </div>
 
-              <Button onClick={handleSaveNotificationConfig} className="w-full bg-purple-600 hover:bg-purple-700">
+              <Button
+                onClick={handleSaveNotificationConfig}
+                className="w-full bg-purple-600 hover:bg-purple-700"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 Lưu cấu hình thông báo
               </Button>
@@ -581,9 +673,15 @@ export default function AdminSystemSettings() {
                 Backup dữ liệu hệ thống
               </Button>
 
-              <Dialog open={isBackupDialogOpen} onOpenChange={setIsBackupDialogOpen}>
+              <Dialog
+                open={isBackupDialogOpen}
+                onOpenChange={setIsBackupDialogOpen}
+              >
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="border-gray-300 flex items-center justify-center gap-2">
+                  <Button
+                    variant="outline"
+                    className="border-gray-300 flex items-center justify-center gap-2"
+                  >
                     <Upload className="h-4 w-4" />
                     Khôi phục dữ liệu từ file backup
                   </Button>
@@ -602,15 +700,22 @@ export default function AdminSystemSettings() {
                     </div>
                     <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
                       <p className="text-sm text-yellow-800">
-                        <strong>⚠️ Cảnh báo:</strong> Việc khôi phục sẽ ghi đè toàn bộ dữ liệu hiện tại. 
-                        Vui lòng đảm bảo đã sao lưu dữ liệu trước khi thực hiện.
+                        <strong>⚠️ Cảnh báo:</strong> Việc khôi phục sẽ ghi đè
+                        toàn bộ dữ liệu hiện tại. Vui lòng đảm bảo đã sao lưu dữ
+                        liệu trước khi thực hiện.
                       </p>
                     </div>
                     <div className="flex gap-2 justify-end">
-                      <Button variant="outline" onClick={() => setIsBackupDialogOpen(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsBackupDialogOpen(false)}
+                      >
                         Hủy
                       </Button>
-                      <Button onClick={handleRestoreFromBackup} className="bg-red-600 hover:bg-red-700">
+                      <Button
+                        onClick={handleRestoreFromBackup}
+                        className="bg-red-600 hover:bg-red-700"
+                      >
                         Khôi phục
                       </Button>
                     </div>
@@ -620,7 +725,9 @@ export default function AdminSystemSettings() {
             </div>
 
             <div>
-              <h4 className="font-medium mb-4">Danh sách các bản backup gần nhất</h4>
+              <h4 className="font-medium mb-4">
+                Danh sách các bản backup gần nhất
+              </h4>
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -634,7 +741,9 @@ export default function AdminSystemSettings() {
                 <TableBody>
                   {backups.map((backup) => (
                     <TableRow key={backup.id}>
-                      <TableCell className="font-medium">{backup.filename}</TableCell>
+                      <TableCell className="font-medium">
+                        {backup.filename}
+                      </TableCell>
                       <TableCell>{backup.date}</TableCell>
                       <TableCell>{backup.size}</TableCell>
                       <TableCell>
