@@ -103,7 +103,7 @@ const ageGroups = [
 ];
 const exerciseTypes = [
   { value: "multiple_choice", label: "Trắc nghiệm" },
-  { value: "short_answer", label: "Trả lời ngắn" },
+  { value: "short_answer", label: "Tr�� lời ngắn" },
   { value: "essay", label: "Tự luận" },
   { value: "true_false", label: "Đúng/Sai" },
   { value: "fill_blank", label: "Điền từ" },
@@ -711,14 +711,76 @@ export default function TeacherAIGenerator() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="objective">Mục tiêu bài ôn</Label>
-                      <Input
-                        id="objective"
-                        value={formData.objective}
-                        onChange={(e) => handleInputChange("objective", e.target.value)}
-                        placeholder="Ví dụ: củng cố phép cộng có nhớ, rèn phản xạ tính nhẩm"
-                      />
+                      <Label htmlFor="inputMode">Nguồn yêu cầu</Label>
+                      <div className="flex items-center gap-4">
+                        <label className="inline-flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="inputMode"
+                            checked={formData.inputMode === "description"}
+                            onChange={() => handleInputChange("inputMode", "description")}
+                          />
+                          <span>Mô tả yêu cầu</span>
+                        </label>
+                        <label className="inline-flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="inputMode"
+                            checked={formData.inputMode === "reference"}
+                            onChange={() => handleInputChange("inputMode", "reference")}
+                          />
+                          <span>Tải tài liệu tham khảo</span>
+                        </label>
+                      </div>
                     </div>
+
+                    {formData.inputMode === "description" ? (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="objective">Mục tiêu bài ôn</Label>
+                          <Input
+                            id="objective"
+                            value={formData.objective}
+                            onChange={(e) => handleInputChange("objective", e.target.value)}
+                            placeholder="Ví dụ: củng cố phép cộng có nhớ, rèn phản xạ tính nhẩm"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label>Hoặc gửi ảnh yêu cầu</Label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0] || null;
+                              handleInputChange("objectiveImage", f);
+                            }}
+                          />
+                          {formData.objectiveImage && (
+                            <div className="mt-2">
+                              <img
+                                src={URL.createObjectURL(formData.objectiveImage)}
+                                alt="preview"
+                                className="h-24 object-contain border rounded"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="space-y-2">
+                        <Label>Tải tài liệu tham khảo</Label>
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx,.ppt,.pptx"
+                          onChange={(e) => handleInputChange("referenceDoc", e.target.files?.[0] || null)}
+                        />
+                        {formData.referenceDoc && (
+                          <div className="text-sm text-muted-foreground">Tệp đã chọn: {formData.referenceDoc.name}</div>
+                        )}
+                        <div className="text-xs text-muted-foreground">Sau khi tải lên, AI sẽ tạo bài ôn tương tự nội dung trong tài liệu.</div>
+                      </div>
+                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="customPrompt">Yêu cầu tùy chỉnh</Label>
@@ -762,29 +824,6 @@ export default function TeacherAIGenerator() {
                         <Wand2 className="h-4 w-4 mr-2" /> Tùy chỉnh
                       </Button>
                     </div>
-
-                    <Button
-                      onClick={handleGenerate}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-                      disabled={
-                        isGenerating ||
-                        !formData.subject ||
-                        !formData.topic ||
-                        !formData.ageGroup
-                      }
-                    >
-                      {isGenerating ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          Đang tạo...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="h-4 w-4 mr-2" />
-                          Tạo bài tập bằng AI
-                        </>
-                      )}
-                    </Button>
 
                     {isGenerating && (
                       <div className="space-y-2">
