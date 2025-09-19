@@ -124,7 +124,7 @@ export function TeacherSidebar() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-bold text-green-700 truncate">
-              Gi��o viên Nguyễn Thị Lan
+              Giáo viên Nguyễn Thị Lan
             </p>
             <p className="text-xs text-green-600 truncate">
               Toán học - 5 năm kinh nghiệm
