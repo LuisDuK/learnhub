@@ -29,7 +29,6 @@ import AdminSystemSettings from "./pages/AdminSystemSettings";
 import AdminTeacherApproval from "./pages/AdminTeacherApproval";
 // Teacher pages
 import TeacherDashboard from "./pages/TeacherDashboard";
-import TeacherReports from "./pages/TeacherReports";
 import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAIGenerator from "./pages/TeacherAIGenerator";
 import TeacherSecurity from "./pages/TeacherSecurity";
