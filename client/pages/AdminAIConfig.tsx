@@ -867,7 +867,7 @@ export default function AdminAIConfig() {
                               {newPrompt.variables.map((variable, index) => (
                                 <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded border border-blue-200">
                                   <div className="flex-1">
-                                    <div className="font-medium text-blue-900">{{`{{${variable.name}}}`}}</div>
+                                    <div className="font-medium text-blue-900">{`{{${variable.name}}}`}</div>
                                     <div className="text-sm text-blue-600">{variable.description}</div>
                                     <div className="text-xs text-blue-500">Loại: {variable.type}</div>
                                   </div>
@@ -960,7 +960,7 @@ export default function AdminAIConfig() {
                           )}
 
                           <div className="text-sm text-blue-600 bg-blue-50 p-3 rounded">
-                            <strong>💡 Hướng dẫn:</strong> Sử dụng cú pháp {{"{{tên_biến}}"}} trong nội dung prompt. VD: {{"{{grade}}"}}, {{"{{topic}}"}}
+                            <strong>💡 Hướng dẫn:</strong> Sử dụng cú pháp {"{{tên_biến}}"} trong nội dung prompt. VD: {"{{grade}}"}, {"{{topic}}"}
                           </div>
                         </div>
 
@@ -1165,7 +1165,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI chấm bài (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Tự động chấm điểm - Cấu hình prompt với biến {{"{{student_answer}}"}}, {{"{{correct_answer}}"}}, {{"{{criteria}}"}}
+                            Tự động chấm điểm - Cấu hình prompt với biến {"{{student_answer}}"}, {"{{correct_answer}}"}, {"{{criteria}}"}
                           </p>
                         </div>
                       </div>
@@ -1180,7 +1180,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI sinh lộ trình (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Tạo lộ trình cá nhân - Sử dụng biến {{"{{goal}}"}}, {{"{{duration}}"}}, {{"{{level}}"}}, {{"{{subject}}"}}
+                            Tạo lộ trình cá nhân - Sử dụng biến {"{{goal}}"}, {"{{duration}}"}, {"{{level}}"}, {"{{subject}}"}
                           </p>
                         </div>
                       </div>
@@ -1195,7 +1195,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI tạo bài tập (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Sinh bài tập động - Điều chỉnh biến {{"{{grade}}"}}, {{"{{topic}}"}}, {{"{{difficulty}}"}}, {{"{{questions}}"}}
+                            Sinh bài tập động - Điều chỉnh biến {"{{grade}}"}, {"{{topic}}"}, {"{{difficulty}}"}, {"{{questions}}"}
                           </p>
                         </div>
                       </div>
@@ -1210,7 +1210,7 @@ export default function AdminAIConfig() {
                         <div>
                           <h3 className="font-medium">AI báo cáo tiến độ (Quản trị viên)</h3>
                           <p className="text-sm text-gray-600">
-                            Phân tích thông minh - Tùy chỉnh biến {{"{{time_period}}"}}, {{"{{metrics}}"}}, {{"{{student_group}}"}}
+                            Phân tích thông minh - Tùy chỉnh biến {"{{time_period}}"}, {"{{metrics}}"}, {"{{student_group}}"}
                           </p>
                         </div>
                       </div>
