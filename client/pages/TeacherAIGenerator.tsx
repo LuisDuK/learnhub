@@ -124,7 +124,7 @@ const aiPromptTemplates = [
       "Tạo đề kiểm tra {duration} phút về {topic} cho học sinh {ageGroup}, gồm {count} câu hỏi đa dạng từ dễ đến khó.",
   },
   {
-    name: "Bài tập thực hành",
+    name: "Bài t���p thực hành",
     description: "Tạo bài tập áp dụng thực tế",
     template:
       "Tạo {count} bài tập thực hành về {topic} cho học sinh {ageGroup}, tập trung vào ứng dụng kiến thức vào tình huống thực tế.",
@@ -488,6 +488,27 @@ export default function TeacherAIGenerator() {
                         }
                         placeholder="VD: Phép cộng trong phạm vi 20"
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Chọn bài trong lộ trình</Label>
+                      <div className="flex flex-col gap-2">
+                        {mockPathLessons.map((ls) => (
+                          <label key={ls.id} className="inline-flex items-center gap-2">
+                            <input
+                              type="checkbox"
+                              checked={formData.selectedLessons.includes(ls.id)}
+                              onChange={(e) => {
+                                const next = e.target.checked
+                                  ? [...formData.selectedLessons, ls.id]
+                                  : formData.selectedLessons.filter((id) => id !== ls.id);
+                                handleInputChange("selectedLessons", next);
+                              }}
+                            />
+                            <span className="text-sm">{ls.title}</span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
