@@ -685,38 +685,6 @@ export default function TeacherAIGenerator() {
                       </div>
                     )}
 
-                    {formData.inputMode === "description" && (
-                      <div className="space-y-3 pt-2 border-t">
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="includeExplanations"
-                            checked={formData.includeExplanations}
-                            onCheckedChange={(checked) =>
-                              handleInputChange("includeExplanations", checked)
-                            }
-                          />
-                          <Label
-                            htmlFor="includeExplanations"
-                            className="text-sm"
-                          >
-                            Bao gồm giải thích đáp án
-                          </Label>
-                        </div>
-
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="includeImages"
-                            checked={formData.includeImages}
-                            onCheckedChange={(checked) =>
-                              handleInputChange("includeImages", checked)
-                            }
-                          />
-                          <Label htmlFor="includeImages" className="text-sm">
-                            Tạo hình ảnh minh họa (nếu có thể)
-                          </Label>
-                        </div>
-                      </div>
-                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="inputMode">Nguồn yêu cầu</Label>
