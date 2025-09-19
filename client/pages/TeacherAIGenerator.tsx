@@ -63,7 +63,7 @@ const mockGeneratedExercises = [
   {
     id: 2,
     type: "short_answer",
-    question: "Hãy tính kết quả của phép tính: 6 �� 8 = ?",
+    question: "Hãy tính kết quả của phép tính: 6 × 8 = ?",
     correctAnswer: "48",
     keywords: ["48", "bốn mươi tám"],
     explanation:
@@ -143,8 +143,6 @@ export default function TeacherAIGenerator() {
     count: 5,
     duration: 30,
     customPrompt: "",
-    includeExplanations: true,
-    includeImages: false,
     language: "vietnamese",
     format: "standard",
     objective: "",
@@ -260,7 +258,7 @@ export default function TeacherAIGenerator() {
       published: false,
     };
     setGenerationHistory((h) => [item, ...h]);
-    toast({ title: "��ã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
+    toast({ title: "Đã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
   };
 
   const handleExportAll = () => {
@@ -480,7 +478,7 @@ export default function TeacherAIGenerator() {
           className="space-y-6"
         >
           <TabsList className="grid w-full grid-cols-3 items-center justify-center bg-[#F0F2F5] rounded-[14px] text-[#4D80B3] h-10 p-1">
-            <TabsTrigger value="create">Tạo b��i tập</TabsTrigger>
+            <TabsTrigger value="create">Tạo bài tập</TabsTrigger>
             <TabsTrigger value="history">
               Lịch sử ({generationHistory.length})
             </TabsTrigger>
