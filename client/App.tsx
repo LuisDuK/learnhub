@@ -100,7 +100,6 @@ function AppRoutes() {
         {/* Teacher Routes */}
         <Route path="/teacher" element={<TeacherDashboard />} />
         <Route path="/teacher/ai-generator" element={<TeacherAIGenerator />} />
-        <Route path="/teacher/reports" element={<TeacherReports />} />
         <Route path="/teacher/profile" element={<TeacherProfile />} />
         <Route path="/teacher/security" element={<TeacherSecurity />} />
         <Route path="/teacher/lessons" element={<TeacherLessons />} />
