@@ -169,6 +169,11 @@ export default function TeacherAIGenerator() {
     format: "standard",
     objective: "",
     selectedLessons: [] as string[],
+    // inputMode: 'description' (normal) or 'reference' (upload doc)
+    inputMode: "description",
+    // uploaded files (client-side only)
+    objectiveImage: null as File | null,
+    referenceDoc: null as File | null,
   });
 
   const handleInputChange = (field: string, value: any) => {
