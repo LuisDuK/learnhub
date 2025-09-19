@@ -132,16 +132,6 @@ export function TeacherSidebar() {
           </div>
         </div>
 
-        {/* Back to Student View */}
-        <Button
-          onClick={handleBackToStudent}
-          variant="outline"
-          className="w-full border-green-200 text-green-600 hover:bg-green-50 hover:text-green-700 hover:border-green-300 transition-all duration-300 rounded-xl"
-        >
-          <Home className="h-4 w-4 mr-2" />
-          Chế độ học sinh
-        </Button>
-
         {/* Logout Button */}
         <Button
           onClick={handleLogout}
