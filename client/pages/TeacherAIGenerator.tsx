@@ -452,7 +452,7 @@ export default function TeacherAIGenerator() {
               AI Sinh bài tập
             </h1>
             <p className="text-gray-600 mt-1">
-              Sử dụng AI để tạo bài tập v�� đề kiểm tra chất lượng cao
+              Sử dụng AI để tạo bài tập và đề kiểm tra chất lượng cao
             </p>
           </div>
 
