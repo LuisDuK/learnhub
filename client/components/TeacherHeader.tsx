@@ -44,12 +44,6 @@ export function TeacherHeader() {
 
   return (
     <header className="flex h-16 items-center justify-between border-b border-green-200 bg-white px-6 shadow-sm">
-      <div className="flex items-center gap-4">
-        <div className="h-9 w-9 rounded-md bg-gradient-to-br from-green-500 to-blue-500 flex items-center justify-center">
-          <GraduationCap className="h-5 w-5 text-white" />
-        </div>
-      </div>
-
       <div className="flex-1 flex justify-center">
         {pageTitle && <h2 className="text-lg font-semibold text-gray-800">{pageTitle}</h2>}
       </div>
