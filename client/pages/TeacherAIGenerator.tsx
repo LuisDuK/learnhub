@@ -110,26 +110,6 @@ const exerciseTypes = [
   { value: "matching", label: "Nối từ" },
 ];
 
-const aiPromptTemplates = [
-  {
-    name: "Bài tập cơ bản",
-    description: "Tạo bài tập ôn luyện kiến thức cơ bản",
-    template:
-      "Tạo {count} câu hỏi {type} về {topic} cho học sinh {ageGroup}, độ khó {difficulty}. Bao gồm đáp án và giải thích chi tiết.",
-  },
-  {
-    name: "Đề kiểm tra",
-    description: "Tạo đề kiểm tra hoàn chỉnh",
-    template:
-      "Tạo đề kiểm tra {duration} phút về {topic} cho h��c sinh {ageGroup}, gồm {count} câu hỏi đa dạng từ dễ đến khó.",
-  },
-  {
-    name: "Bài tập thực hành",
-    description: "Tạo bài tập áp dụng thực tế",
-    template:
-      "Tạo {count} bài tập thực hành về {topic} cho học sinh {ageGroup}, tập trung vào ứng dụng kiến thức vào tình huống thực tế.",
-  },
-];
 
 import { useToast } from "@/hooks/use-toast";
 
