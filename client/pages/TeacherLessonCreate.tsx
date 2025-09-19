@@ -165,6 +165,29 @@ export default function TeacherLessonCreate() {
   const removeQuestion = (id: string) =>
     setQuestions((qs) => qs.filter((q) => q.id !== id));
 
+  // AI helpers (client-side mock)
+  const generateAIQuestions = (count = 3) => {
+    const samples = Array.from({ length: count }).map((_, i) => ({
+      id: crypto.randomUUID(),
+      text: `AI câu hỏi mẫu ${i + 1}: Nêu ví dụ về ${title || "bài học"}`,
+      options: ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"],
+      correctIndex: 1,
+      marker: "00:30",
+    }));
+    setQuestions((q) => [...q, ...samples]);
+    toast({ title: "AI đã tạo câu hỏi", description: `Đã tạo ${count} câu hỏi mẫu bằng AI.` });
+  };
+
+  const generateAIExercises = (count = 3) => {
+    const items = Array.from({ length: count }).map((_, i) => ({
+      id: crypto.randomUUID(),
+      question: `Bài tập AI ${i + 1}: Hãy giải bài toán nhỏ liên quan đến ${title || "bài học"}`,
+      answer: "Đáp án mẫu",
+    }));
+    setExercises((ex) => [...ex, ...items]);
+    toast({ title: "AI đã tạo bài tập", description: `Đã tạo ${count} bài tập mẫu bằng AI.` });
+  };
+
   const handleFinish = () => {
     if (!canSubmit) {
       toast({ title: "Thiếu thông tin", description: "Vui lòng nhập Môn, Chương và Tiêu đề." });
@@ -410,7 +433,7 @@ export default function TeacherLessonCreate() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-semibold">Bài tập ôn tập</h3>
+                    <h3 className="font-semibold">Bài tập ôn t���p</h3>
                     <p className="text-sm text-muted-foreground">Thêm các câu hỏi ôn tập và đáp án để người học luyện tập sau bài giảng</p>
                   </div>
                 </div>
