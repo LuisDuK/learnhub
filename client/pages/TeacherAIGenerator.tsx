@@ -54,7 +54,7 @@ const mockGeneratedExercises = [
     options: ["42", "52", "32", "41"],
     correctAnswer: "A",
     explanation:
-      "25 + 17 = 42. Ta có th��� tính bằng cách cộng hàng đơn vị trước: 5 + 7 = 12, viết 2 nhớ 1. Sau đó cộng hàng chục: 2 + 1 + 1 (nhớ) = 4.",
+      "25 + 17 = 42. Ta có thể tính bằng cách cộng hàng đơn vị trước: 5 + 7 = 12, viết 2 nhớ 1. Sau đó cộng hàng chục: 2 + 1 + 1 (nhớ) = 4.",
     difficulty: "Dễ",
     subject: "Toán",
     ageGroup: "7-8 tuổi",
@@ -92,7 +92,7 @@ const mockGeneratedExercises = [
 ];
 
 const subjects = ["Toán", "Văn", "Anh"];
-const difficulties = ["Dễ", "Trung bình", "Khó", "Nâng cao"];
+const difficulties = ["D���", "Trung bình", "Khó", "Nâng cao"];
 const ageGroups = [
   "5-6 tuổi",
   "6-7 tuổi",
@@ -270,9 +270,42 @@ export default function TeacherAIGenerator() {
     a.click();
   };
 
+  const moveItem = (fromId: number, toId: number) => {
+    const fromIndex = generatedContent.findIndex((c) => c.id === fromId);
+    const toIndex = generatedContent.findIndex((c) => c.id === toId);
+    if (fromIndex === -1 || toIndex === -1) return;
+    const next = [...generatedContent];
+    const [item] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, item);
+    setGeneratedContent(next);
+  };
+
+  const startEdit = (id: number) => {
+    setEditingId(id);
+  };
+
+  const saveEdit = (id: number, patch: any) => {
+    setGeneratedContent((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+    setEditingId(null);
+    toast({ title: "Đã lưu", description: "Câu hỏi đã được cập nhật." });
+  };
+
   const renderExercise = (exercise: any, index: number) => {
+    const isEditing = editingId === exercise.id;
     return (
-      <Card key={exercise.id} className="border border-purple-200">
+      <Card
+        key={exercise.id}
+        className="border border-purple-200"
+        draggable
+        onDragStart={() => setDraggingId(exercise.id)}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={() => {
+          if (draggingId != null && draggingId !== exercise.id) {
+            moveItem(draggingId, exercise.id);
+          }
+          setDraggingId(null);
+        }}
+      >
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -280,119 +313,117 @@ export default function TeacherAIGenerator() {
               <Badge className="bg-purple-100 text-purple-800">
                 {exerciseTypes.find((t) => t.value === exercise.type)?.label}
               </Badge>
-              <Badge variant="secondary">{exercise.difficulty}</Badge>
+              {!isEditing ? (
+                <Badge variant="secondary">{exercise.difficulty}</Badge>
+              ) : (
+                <Select
+                  value={exercise.difficulty}
+                  onValueChange={(v) => saveEdit(exercise.id, { difficulty: v })}
+                >
+                  <SelectTrigger className="w-[120px]"></SelectTrigger>
+                  <SelectContent>
+                    {difficulties.map((d) => (
+                      <SelectItem key={d} value={d}>
+                        {d}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline">
-                <Edit className="h-4 w-4" />
-              </Button>
-              <Button size="sm" variant="outline">
-                <Copy className="h-4 w-4" />
-              </Button>
-              <Button size="sm" onClick={() => handleSaveExercise(exercise)}>
-                <Save className="h-4 w-4" />
-              </Button>
+              {!isEditing ? (
+                <>
+                  <Button size="sm" variant="outline" onClick={() => startEdit(exercise.id)}>
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={() => {
+                    navigator.clipboard?.writeText(JSON.stringify(exercise, null, 2));
+                    toast({ title: "Đã sao chép", description: "Câu hỏi đã được sao chép vào clipboard." });
+                  }}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" onClick={() => handleSaveExercise(exercise)}>
+                    <Save className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => setGeneratedContent((s) => s.filter((x) => x.id !== exercise.id))}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="sm" variant="outline" onClick={() => saveEdit(exercise.id, { ...exercise })}>
+                    Lưu
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => setEditingId(null)}>
+                    Huỷ
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div>
-            <Label className="text-sm font-medium text-gray-700">
-              Câu hỏi:
-            </Label>
-            <p className="mt-1 text-gray-900">{exercise.question}</p>
-          </div>
-
-          {exercise.type === "multiple_choice" && (
-            <div>
-              <Label className="text-sm font-medium text-gray-700">
-                Các lựa chọn:
-              </Label>
-              <div className="mt-2 space-y-1">
-                {exercise.options.map((option: string, optionIndex: number) => (
-                  <div key={optionIndex} className="flex items-center gap-2">
-                    <span className="font-medium text-sm w-6">
-                      {String.fromCharCode(65 + optionIndex)}.
-                    </span>
-                    <span
-                      className={
-                        String.fromCharCode(65 + optionIndex) ===
-                        exercise.correctAnswer
-                          ? "text-green-600 font-medium"
-                          : "text-gray-700"
-                      }
-                    >
-                      {option}
-                    </span>
-                    {String.fromCharCode(65 + optionIndex) ===
-                      exercise.correctAnswer && (
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                    )}
-                  </div>
-                ))}
+          {!isEditing ? (
+            <>
+              <div>
+                <Label className="text-sm font-medium text-gray-700">Câu hỏi:</Label>
+                <p className="mt-1 text-gray-900">{exercise.question}</p>
               </div>
-            </div>
-          )}
 
-          {exercise.type === "short_answer" && (
-            <div>
-              <Label className="text-sm font-medium text-gray-700">
-                Đáp án:
-              </Label>
-              <p className="mt-1 text-green-600 font-medium">
-                {exercise.correctAnswer}
-              </p>
-              {exercise.keywords && (
-                <div className="mt-2">
-                  <Label className="text-sm font-medium text-gray-700">
-                    Từ khóa chấp nhận:
-                  </Label>
-                  <div className="flex gap-1 mt-1">
-                    {exercise.keywords.map((keyword: string, i: number) => (
-                      <Badge key={i} variant="outline" className="text-xs">
-                        {keyword}
-                      </Badge>
+              {exercise.type === "multiple_choice" && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Các lựa chọn:</Label>
+                  <div className="mt-2 space-y-1">
+                    {exercise.options.map((option: string, optionIndex: number) => (
+                      <div key={optionIndex} className="flex items-center gap-2">
+                        <span className="font-medium text-sm w-6">{String.fromCharCode(65 + optionIndex)}.</span>
+                        <span className={String.fromCharCode(65 + optionIndex) === exercise.correctAnswer ? "text-green-600 font-medium" : "text-gray-700"}>{option}</span>
+                        {String.fromCharCode(65 + optionIndex) === exercise.correctAnswer && <CheckCircle className="h-4 w-4 text-green-600" />}
+                      </div>
                     ))}
                   </div>
                 </div>
               )}
-            </div>
-          )}
 
-          {exercise.type === "essay" && (
-            <div className="space-y-2">
-              <div>
-                <Label className="text-sm font-medium text-gray-700">
-                  Rubric đánh giá:
-                </Label>
-                <p className="mt-1 text-gray-700 text-sm">{exercise.rubric}</p>
+              {exercise.type === "short_answer" && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Đáp án:</Label>
+                  <p className="mt-1 text-green-600 font-medium">{exercise.correctAnswer}</p>
+                </div>
+              )}
+
+              {exercise.explanation && (
+                <div>
+                  <Label className="text-sm font-medium text-gray-700">Giải thích:</Label>
+                  <p className="mt-1 text-gray-600 text-sm">{exercise.explanation}</p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
+                <span>Thời gian ước tính: {exercise.estimatedTime}</span>
+                <span>Độ tuổi: {exercise.ageGroup}</span>
               </div>
+            </>
+          ) : (
+            <div className="space-y-3">
               <div>
-                <Label className="text-sm font-medium text-gray-700">
-                  Số từ tối đa:
-                </Label>
-                <p className="mt-1 text-gray-700 text-sm">
-                  {exercise.maxWords} từ
-                </p>
+                <Label className="text-sm">Chỉnh sửa câu hỏi</Label>
+                <Input value={exercise.question} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, question: e.target.value } : p))} />
               </div>
+              {exercise.type === "multiple_choice" && (
+                <div className="space-y-2">
+                  {exercise.options.map((opt: string, i: number) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="w-6">{String.fromCharCode(65 + i)}.</span>
+                      <Input value={opt} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, options: p.options.map((o: string, idx: number) => idx === i ? e.target.value : o) } : p))} />
+                      <Button size="sm" variant={exercise.correctAnswer === String.fromCharCode(65 + i) ? "secondary" : "outline"} onClick={() => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, correctAnswer: String.fromCharCode(65 + i) } : p))}>Đúng</Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-
-          {exercise.explanation && (
-            <div>
-              <Label className="text-sm font-medium text-gray-700">
-                Giải thích:
-              </Label>
-              <p className="mt-1 text-gray-600 text-sm">
-                {exercise.explanation}
-              </p>
-            </div>
-          )}
-
-          <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
-            <span>Thời gian ước tính: {exercise.estimatedTime}</span>
-            <span>Độ tuổi: {exercise.ageGroup}</span>
-          </div>
         </CardContent>
       </Card>
     );
@@ -757,7 +788,7 @@ export default function TeacherAIGenerator() {
                         <Lightbulb className="h-4 w-4 text-blue-600" />
                         <AlertDescription className="text-blue-800">
                           <strong>Mẹo:</strong> Hãy mô tả cụ thể chủ đề và yêu
-                          cầu để AI tạo ra bài tập chất lượng tốt nhất!
+                          cầu để AI tạo ra bài tập chất lư��ng tốt nhất!
                         </AlertDescription>
                       </Alert>
                     </CardContent>
