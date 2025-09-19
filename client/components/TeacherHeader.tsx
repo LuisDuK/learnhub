@@ -32,36 +32,8 @@ export function TeacherHeader() {
 
   return (
     <header className="flex h-16 items-center justify-between border-b border-green-200 bg-white px-6 shadow-sm">
-      {/* Page Title */}
+      {/* Right side - User Menu */}
       <div className="flex items-center gap-4">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">
-            Dashboard Giáo viên
-          </h1>
-          <p className="text-sm text-gray-600">
-            Quản lý môn học và theo dõi tiến độ học sinh
-          </p>
-        </div>
-      </div>
-
-      {/* Right side - Stats and User Menu */}
-      <div className="flex items-center gap-4">
-        {/* Quick Stats */}
-        <div className="hidden md:flex items-center gap-4">
-          <div className="flex items-center gap-2 px-3 py-1 bg-green-50 rounded-lg">
-            <BookOpen className="h-4 w-4 text-green-600" />
-            <span className="text-sm font-medium text-green-700">
-              5 môn học
-            </span>
-          </div>
-          <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-lg">
-            <Users className="h-4 w-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-700">
-              89 học sinh
-            </span>
-          </div>
-        </div>
-
         {/* Notifications */}
         <Button variant="ghost" size="sm" className="relative">
           <Bell className="h-5 w-5" />
