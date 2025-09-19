@@ -12,7 +12,6 @@ import {
   GraduationCap,
   Bot,
   User,
-  Shield,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -37,11 +36,6 @@ const menuItems = [
     title: "Thông tin cá nhân",
     icon: User,
     href: "/teacher/profile",
-  },
-  {
-    title: "Bảo mật",
-    icon: Shield,
-    href: "/teacher/security",
   },
 ];
 
