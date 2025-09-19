@@ -147,3 +147,122 @@ export interface SubmitExerciseResponse {
   maxScore: number;
   percentage: number;
 }
+
+// ------- AI Config (UC-07.x) -------
+export type AiFeatureModule = "Chatbot" | "Bài tập" | "Chấm bài" | "Lộ trình" | "Báo cáo";
+
+export interface AiPromptVariable {
+  name: string; // e.g., grade
+  type: "text" | "textarea" | "number" | "select";
+  description?: string;
+  options?: string[]; // for select
+  min?: number; // for number
+  max?: number; // for number
+}
+
+export interface AiPromptVersion {
+  version: number; // 1..n
+  name: string;
+  module: AiFeatureModule;
+  content: string;
+  variables: AiPromptVariable[];
+  createdAt: string; // ISO
+  createdBy?: string;
+}
+
+export interface AiPromptTemplate {
+  id: number;
+  name: string; // unique
+  module: AiFeatureModule;
+  content: string;
+  variables: AiPromptVariable[];
+  createdAt: string; // ISO
+  updatedAt: string; // ISO
+  deletedAt?: string | null;
+  versions: AiPromptVersion[];
+}
+
+export interface ListPromptsResponse { items: AiPromptTemplate[] }
+export interface CreatePromptRequest {
+  name: string;
+  module: AiFeatureModule;
+  content: string;
+  variables: AiPromptVariable[];
+}
+export interface UpdatePromptRequest extends CreatePromptRequest {}
+export interface CreatePromptResponse { item: AiPromptTemplate }
+
+export interface CopyPromptResponse { item: AiPromptTemplate }
+export interface PromptVersionsResponse { versions: AiPromptVersion[] }
+
+export interface RollbackPromptResponse { item: AiPromptTemplate }
+
+export interface DeletePromptResponse { success: boolean }
+
+export interface AiModelParams {
+  provider?: "openai" | "anthropic" | "other";
+  model: string;
+  temperature: number; // 0..2
+  maxTokens: number; // >0
+  top_p?: number; // 0..1
+  frequency_penalty?: number; // -2..2
+  presence_penalty?: number; // -2..2
+  stop?: string[];
+  apiKeyMasked?: string; // masked for UI
+}
+
+export interface GetModelParamsResponse { params: AiModelParams }
+export interface SaveModelParamsRequest extends AiModelParams { apiKey?: string }
+export interface SaveModelParamsResponse { ok: boolean; params: AiModelParams }
+
+// ------- Survey (UC-07.2) -------
+export type SurveyQuestionType = "likert" | "text";
+
+export interface SurveyQuestion {
+  id: string; // stable id within survey
+  type: SurveyQuestionType;
+  text: string;
+  min?: number; // for likert, default 1
+  max?: number; // for likert, default 5
+  required?: boolean;
+}
+
+export interface Survey {
+  id: number;
+  title: string;
+  description?: string;
+  questions: SurveyQuestion[]; // <= 5
+  isActive: boolean;
+  createdAt: string; // ISO
+}
+
+export interface ListSurveysResponse { items: Survey[] }
+export interface CreateSurveyRequest {
+  title: string;
+  description?: string;
+  questions: SurveyQuestion[];
+  isActive?: boolean;
+}
+export interface CreateSurveyResponse { item: Survey }
+
+export interface SurveyAnswer {
+  questionId: string;
+  value: number | string; // number for likert
+}
+
+export interface SubmitSurveyResponseRequest {
+  surveyId: number;
+  userId?: string; // optional, will be anonymized if present
+  answers: SurveyAnswer[];
+}
+
+export interface SurveyResponseItem {
+  id: number;
+  surveyId: number;
+  createdAt: string;
+  anonymizedUser?: string; // hashed id
+  answers: SurveyAnswer[];
+}
+
+export interface SubmitSurveyResponseResponse { ok: boolean }
+export interface ListSurveyResponsesResponse { items: SurveyResponseItem[] }

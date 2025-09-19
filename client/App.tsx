@@ -25,7 +25,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import AdminCourses from "./pages/AdminCourses";
 import AdminAIConfig from "./pages/AdminAIConfig";
-import AdminSystemSettings from "./pages/AdminSystemSettings";
 import AdminTeacherApproval from "./pages/AdminTeacherApproval";
 // Teacher pages
 import TeacherDashboard from "./pages/TeacherDashboard";
@@ -95,7 +94,6 @@ function AppRoutes() {
           path="/admin/teacher-approvals"
           element={<Navigate to="/admin/users?tab=approvals" replace />}
         />
-        <Route path="/admin/settings" element={<AdminSystemSettings />} />
 
         {/* Teacher Routes */}
         <Route path="/teacher" element={<TeacherDashboard />} />

@@ -37,11 +37,6 @@ const menuItems = [
     icon: Settings,
     href: "/admin/ai-config",
   },
-  {
-    title: "Cài đặt hệ thống",
-    icon: Settings,
-    href: "/admin/settings",
-  },
 ];
 
 export function AdminSidebar() {
