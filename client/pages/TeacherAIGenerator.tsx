@@ -457,10 +457,6 @@ export default function TeacherAIGenerator() {
           </div>
 
           <div className="flex gap-3">
-            <Button variant="outline">
-              <Settings className="h-4 w-4 mr-2" />
-              Cài đặt AI
-            </Button>
             {generatedContent.length > 0 && (
               <Button onClick={handleExportAll}>
                 <Download className="h-4 w-4 mr-2" />
@@ -528,7 +524,7 @@ export default function TeacherAIGenerator() {
                         onChange={(e) =>
                           handleInputChange("topic", e.target.value)
                         }
-                        placeholder="VD: Phép cộng trong phạm vi 20"
+                        placeholder="VD: Phép cộng trong ph���m vi 20"
                       />
                     </div>
 
