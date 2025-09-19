@@ -483,6 +483,105 @@ export default function TeacherLessonCreate() {
                 <Button onClick={handleFinish}>Hoàn tất</Button>
               </div>
             </TabsContent>
+            <TabsContent value="ai" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">AI tạo câu hỏi cho bài học</CardTitle>
+                      <CardDescription>Nhập yêu cầu để AI tạo câu hỏi ngay trong trang thêm/sửa bài học</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="space-y-2">
+                        <Label>Môn học</Label>
+                        <Select value={subject} onValueChange={setSubject}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Chọn môn học" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="math">Toán học</SelectItem>
+                            <SelectItem value="literature">Ngữ văn</SelectItem>
+                            <SelectItem value="english">Tiếng Anh</SelectItem>
+                            <SelectItem value="science">Khoa học</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Chủ đề / Tiêu đề</Label>
+                        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label>Chọn bài trong sách (lộ trình)</Label>
+                        <div className="flex flex-col gap-2">
+                          {mockBooks.flatMap(b => b.lessons).map(ls => (
+                            <label key={ls.id} className="inline-flex items-center gap-2">
+                              <input type="checkbox" className="form-checkbox" onChange={(e) => {
+                                // toggle selection in temp array
+                                const curr = selectedBookLessonId === ls.id ? "" : ls.id;
+                                setSelectedBookLessonId(curr);
+                              }} checked={selectedBookLessonId === ls.id} />
+                              <span className="text-sm">{ls.title}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label>Độ khó</Label>
+                          <Select value={"Trung bình"} onValueChange={() => {}}>
+                            <SelectTrigger><SelectValue placeholder="Chọn" /></SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Dễ">Dễ</SelectItem>
+                              <SelectItem value="Trung bình">Trung bình</SelectItem>
+                              <SelectItem value="Khó">Khó</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Số câu</Label>
+                          <Input type="number" value={3} onChange={() => {}} />
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button onClick={() => generateAIQuestions(3)}>🤖 T���o 3 câu bằng AI</Button>
+                        <Button onClick={() => generateAIExercises(3)}>🤖 Tạo 3 bài tập bằng AI</Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Preview câu hỏi tạo</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {questions.length === 0 ? (
+                        <div className="text-sm text-muted-foreground">Chưa có câu hỏi nào. Tạo bằng AI hoặc thêm thủ công.</div>
+                      ) : (
+                        <div className="space-y-2">
+                          {questions.map((q, i) => (
+                            <div key={q.id} className="p-3 border rounded">
+                              <div className="font-medium">Câu {i+1}: {q.text}</div>
+                              <div className="text-sm text-muted-foreground">Mốc: {q.marker}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Button variant="outline" onClick={() => setTab("exercises")}>Quay lại</Button>
+                <Button onClick={() => { setTab("exercises"); }}>Hoàn tất</Button>
+              </div>
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
