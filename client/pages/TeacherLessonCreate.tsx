@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react";
 import { TeacherLayout } from "@/components/TeacherLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
