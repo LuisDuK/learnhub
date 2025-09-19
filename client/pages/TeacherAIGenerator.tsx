@@ -54,7 +54,7 @@ const mockGeneratedExercises = [
     options: ["42", "52", "32", "41"],
     correctAnswer: "A",
     explanation:
-      "25 + 17 = 42. Ta có thể tính bằng cách cộng hàng đơn vị trước: 5 + 7 = 12, viết 2 nhớ 1. Sau đó cộng hàng chục: 2 + 1 + 1 (nhớ) = 4.",
+      "25 + 17 = 42. Ta có th��� tính bằng cách cộng hàng đơn vị trước: 5 + 7 = 12, viết 2 nhớ 1. Sau đó cộng hàng chục: 2 + 1 + 1 (nhớ) = 4.",
     difficulty: "Dễ",
     subject: "Toán",
     ageGroup: "7-8 tuổi",
@@ -124,7 +124,7 @@ const aiPromptTemplates = [
       "Tạo đề kiểm tra {duration} phút về {topic} cho học sinh {ageGroup}, gồm {count} câu hỏi đa dạng từ dễ đến khó.",
   },
   {
-    name: "Bài t���p thực hành",
+    name: "Bài tập thực hành",
     description: "Tạo bài tập áp dụng thực tế",
     template:
       "Tạo {count} bài tập thực hành về {topic} cho học sinh {ageGroup}, tập trung vào ứng dụng kiến thức vào tình huống thực tế.",
@@ -628,6 +628,16 @@ export default function TeacherAIGenerator() {
                     </div>
 
                     <div className="space-y-2">
+                      <Label htmlFor="objective">Mục tiêu bài ôn</Label>
+                      <Input
+                        id="objective"
+                        value={formData.objective}
+                        onChange={(e) => handleInputChange("objective", e.target.value)}
+                        placeholder="Ví dụ: củng cố phép cộng có nhớ, rèn phản xạ tính nhẩm"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
                       <Label htmlFor="customPrompt">Yêu cầu tùy chỉnh</Label>
                       <Textarea
                         id="customPrompt"
@@ -638,6 +648,36 @@ export default function TeacherAIGenerator() {
                         placeholder="Thêm yêu cầu đặc biệt cho AI..."
                         rows={3}
                       />
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => handleGenerate()}
+                        className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                        disabled={
+                          isGenerating || !formData.subject || !formData.topic || !formData.ageGroup
+                        }
+                      >
+                        {isGenerating ? (
+                          <>
+                            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                            Đang tạo...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Tạo bài tập bằng AI
+                          </>
+                        )}
+                      </Button>
+
+                      <Button variant="outline" onClick={() => {
+                        // open advanced modal or prefill using template
+                        setSelectedTemplate("");
+                        toast({ title: "Mẫu", description: "Chọn mẫu hoặc điều chỉnh yêu cầu trước khi tạo." });
+                      }}>
+                        <Wand2 className="h-4 w-4 mr-2" /> Tùy chỉnh
+                      </Button>
                     </div>
 
                     <Button
