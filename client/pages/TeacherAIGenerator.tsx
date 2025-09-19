@@ -160,23 +160,6 @@ export default function TeacherAIGenerator() {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleTemplateSelect = (template: any) => {
-    setSelectedTemplate(template.name);
-    const prompt = template.template
-      .replace("{count}", formData.count.toString())
-      .replace(
-        "{type}",
-        exerciseTypes.find((t) => t.value === formData.exerciseType)?.label ||
-          "câu hỏi",
-      )
-      .replace("{topic}", formData.topic || "chủ đề")
-      .replace("{ageGroup}", formData.ageGroup || "học sinh")
-      .replace("{difficulty}", formData.difficulty || "phù hợp")
-      .replace("{duration}", formData.duration.toString());
-
-    setFormData({ ...formData, customPrompt: prompt });
-  };
-
   const handleGenerate = async () => {
     if (!formData.subject || !formData.topic || !formData.ageGroup) {
       return;
