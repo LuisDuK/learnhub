@@ -243,6 +243,23 @@ export default function TeacherAIGenerator() {
     setGenerationProgress(100);
   };
 
+  const addManualQuestion = () => {
+    const newQ = {
+      id: Date.now(),
+      type: formData.exerciseType || "multiple_choice",
+      question: `Câu hỏi thủ công: ${formData.topic || "(chủ đề)"}`,
+      options: ["A","B","C","D"],
+      correctAnswer: "A",
+      explanation: "",
+      difficulty: formData.difficulty || "Trung bình",
+      subject: formData.subject || "",
+      ageGroup: formData.ageGroup || "",
+      estimatedTime: "2 phút",
+    };
+    setGeneratedContent((g) => [...g, newQ]);
+    toast({ title: "Thêm câu", description: "Đã thêm câu hỏi thủ công vào cuối danh sách." });
+  };
+
   const handleSaveExercise = (exercise: any) => {
     // Mock save to course
     toast({ title: "Đã lưu câu hỏi", description: "Câu hỏi được lưu vào kho bài tập (giả lập)." });
