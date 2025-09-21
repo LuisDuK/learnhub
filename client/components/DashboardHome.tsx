@@ -108,7 +108,7 @@ const currentCourses = [
     totalLessons: 20,
     completedLessons: 15,
     thumbnail: "/placeholder.svg",
-    category: "To��n",
+    category: "Toán",
     level: "Dễ",
     emoji: "🔢",
   },
@@ -330,9 +330,8 @@ export function DashboardHome() {
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Progress Chart */}
-        
+      <div className="grid gap-6 lg:grid-cols-2">
+       
 
         {/* Upcoming Schedule */}
         <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
