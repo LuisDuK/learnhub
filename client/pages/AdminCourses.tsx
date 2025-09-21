@@ -103,7 +103,7 @@ const mockCourses = [
   },
   {
     id: 2,
-    name: "Tiếng Việt lớp 3",
+    name: "Tiếng Vi���t lớp 3",
     description:
       "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
@@ -148,7 +148,7 @@ const mockPendingContent = [
     id: "course_3",
     type: "course",
     action: "create",
-    title: "Tiếng Anh cơ bản",
+    title: "Tiếng Anh cơ b���n",
     description: "Môn học tiếng Anh cho trẻ em từ 5-7 tuổi",
     subject: "Anh",
     difficulty: "Cơ bản",
@@ -925,9 +925,14 @@ export default function AdminCourses() {
                                       {m.type === 'image' ? (
                                         <img src={m.url} alt={m.description || 'image'} className="h-16 w-24 object-cover rounded" />
                                       ) : m.type === 'pdf' ? (
-                                        <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm">Mở PDF</a>
+                                        <div className="flex flex-col items-end">
+                                          <iframe src={m.url} title={m.description || 'pdf'} className="h-40 w-64 border rounded" />
+                                          <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm mt-1">Mở PDF</a>
+                                        </div>
                                       ) : m.type === 'audio' ? (
                                         <audio controls src={m.url} className="h-10" />
+                                      ) : m.type === 'video' ? (
+                                        <video controls src={m.url} className="h-24 w-36 object-contain rounded" />
                                       ) : (
                                         <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm">Mở liên kết</a>
                                       )}
