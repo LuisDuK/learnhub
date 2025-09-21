@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
+  CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,6 +19,13 @@ import {
   Search,
   FileText,
   Tag,
+  Bot,
+  Sparkles,
+  RefreshCw,
+  Wand2,
+  Save,
+  Copy,
+  CheckCircle,
 } from "lucide-react";
 import {
   Select,
@@ -26,6 +34,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
 
 const mockLessons = [
@@ -69,6 +87,150 @@ export default function TeacherLessons() {
   const [searchTerm, setSearchTerm] = useState("");
   const [subjectFilter, setSubjectFilter] = useState("Tất cả");
   const [statusFilter, setStatusFilter] = useState("Tất cả");
+
+  // AI generator modal state
+  const [aiOpen, setAiOpen] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState<any | null>(null);
+
+  const difficulties = ["Dễ", "Trung bình", "Khó", "Nâng cao"];
+  const ageGroups = [
+    "5-6 tuổi",
+    "6-7 tuổi",
+    "7-8 tuổi",
+    "8-9 tuổi",
+    "9-10 tuổi",
+    "10-12 tuổi",
+  ];
+  const exerciseTypes = [
+    { value: "multiple_choice", label: "Trắc nghiệm" },
+    { value: "short_answer", label: "Trả lời ngắn" },
+    { value: "essay", label: "Tự luận" },
+    { value: "true_false", label: "Đúng/Sai" },
+    { value: "fill_blank", label: "Điền từ" },
+    { value: "matching", label: "Nối từ" },
+  ];
+
+  const [aiForm, setAiForm] = useState({
+    subject: "",
+    topic: "",
+    ageGroup: "",
+    difficulty: "",
+    exerciseType: "",
+    count: 5,
+    inputMode: "description" as "description" | "reference",
+    objective: "",
+    objectiveImage: null as File | null,
+    referenceDoc: null as File | null,
+  });
+
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [generatedContent, setGeneratedContent] = useState<any[]>([]);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const mockGeneratedExercises = [
+    {
+      id: 1,
+      type: "multiple_choice",
+      question: "Trong phép cộng 25 + 17, kết quả là:",
+      options: ["42", "52", "32", "41"],
+      correctAnswer: "A",
+      explanation:
+        "25 + 17 = 42. Ta có thể tính bằng cách cộng hàng đơn vị trước: 5 + 7 = 12, viết 2 nhớ 1. Sau đó cộng hàng chục: 2 + 1 + 1 (nhớ) = 4.",
+      difficulty: "Dễ",
+      subject: "Toán",
+      ageGroup: "7-8 tuổi",
+      estimatedTime: "2 phút",
+    },
+    {
+      id: 2,
+      type: "short_answer",
+      question: "Hãy tính kết quả của phép tính: 6 × 8 = ?",
+      correctAnswer: "48",
+      keywords: ["48", "bốn m��ơi tám"],
+      explanation:
+        "6 × 8 = 48. Có thể nhớ bằng bảng cửu chương hoặc tính: 6 × (10 - 2) = 60 - 12 = 48",
+      difficulty: "Trung bình",
+      subject: "Toán",
+      ageGroup: "8-9 tuổi",
+      estimatedTime: "3 phút",
+    },
+    {
+      id: 3,
+      type: "essay",
+      question:
+        "Em hãy giải thích tại sao 0 chia cho bất kỳ số nào cũng bằng 0, nhưng không thể chia một số cho 0?",
+      rubric:
+        "Học sinh cần giải thích được: 1) 0 chia cho số khác 0 luôn bằng 0, 2) Chia cho 0 là không xác định, 3) Đưa ra ví dụ minh họa",
+      maxWords: 150,
+      keywords: ["không xác định", "quy tắc", "ví dụ"],
+      explanation:
+        "Câu hỏi này giúp học sinh hiểu được khái niệm cơ bản về phép chia và tại sao chia cho 0 là không được phép.",
+      difficulty: "Nâng cao",
+      subject: "Toán",
+      ageGroup: "10-12 tuổi",
+      estimatedTime: "10 phút",
+    },
+  ];
+
+  const openAIModalForLesson = (lesson: any) => {
+    setSelectedLesson(lesson);
+    setAiForm((prev) => ({
+      ...prev,
+      subject: lesson.subject || "",
+      topic: lesson.title || "",
+    }));
+    setGeneratedContent([]);
+    setEditingId(null);
+    setGenerationProgress(0);
+    setIsGenerating(false);
+    setAiOpen(true);
+  };
+
+  const handleGenerateAI = async () => {
+    if (!aiForm.subject || !aiForm.topic || !aiForm.ageGroup) return;
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGeneratedContent([]);
+    const steps = 5;
+    for (let i = 0; i < steps; i++) {
+      await new Promise((r) => setTimeout(r, 600));
+      setGenerationProgress(Math.round(((i + 1) / steps) * 100));
+    }
+    const generated = mockGeneratedExercises
+      .map((exercise, index) => ({
+        ...exercise,
+        id: Date.now() + index,
+        subject: aiForm.subject,
+        ageGroup: aiForm.ageGroup,
+        difficulty: aiForm.difficulty || (exercise as any).difficulty,
+      }))
+      .slice(0, aiForm.count);
+    setGeneratedContent(generated);
+    setIsGenerating(false);
+  };
+
+  const startEdit = (id: number) => setEditingId(id);
+  const saveEdit = (id: number, patch: any) => {
+    setGeneratedContent((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+    setEditingId(null);
+  };
+
+  const addManualQuestion = () => {
+    const newQ = {
+      id: Date.now(),
+      type: aiForm.exerciseType || "multiple_choice",
+      question: `Câu hỏi thủ công: ${aiForm.topic || "(chủ đề)"}`,
+      options: ["A", "B", "C", "D"],
+      correctAnswer: "A",
+      explanation: "",
+      difficulty: aiForm.difficulty || "Trung bình",
+      subject: aiForm.subject || "",
+      ageGroup: aiForm.ageGroup || "",
+      estimatedTime: "2 phút",
+    } as any;
+    setGeneratedContent((g) => [...g, newQ]);
+  };
 
   const filteredLessons = useMemo(() => {
     return mockLessons.filter((l) => {
@@ -233,6 +395,9 @@ export default function TeacherLessons() {
                   </div>
 
                   <div className="flex items-center gap-2">
+                    <Button size="sm" onClick={() => openAIModalForLesson(lesson)}>
+                      <Sparkles className="h-4 w-4 mr-2" /> AI tạo bài tập
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/lessons/new?edit=${lesson.id}`)}>
                       <Edit className="h-4 w-4 mr-2" /> Chỉnh sửa
                     </Button>
@@ -246,6 +411,278 @@ export default function TeacherLessons() {
           ))}
         </div>
       </div>
+
+      <Dialog open={aiOpen} onOpenChange={setAiOpen}>
+        <DialogContent className="max-w-5xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bot className="h-5 w-5 text-purple-600" />
+              AI tạo bài tập {selectedLesson ? `— ${selectedLesson.title}` : ""}
+            </DialogTitle>
+            <DialogDescription>
+              Điền thông tin để AI tạo bài tập phù hợp
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1 space-y-4">
+              <div className="space-y-2">
+                <Label>Môn học *</Label>
+                <Input
+                  value={aiForm.subject}
+                  onChange={(e) => setAiForm({ ...aiForm, subject: e.target.value })}
+                  placeholder="VD: Toán"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Chủ đề/Nội dung *</Label>
+                <Input
+                  value={aiForm.topic}
+                  onChange={(e) => setAiForm({ ...aiForm, topic: e.target.value })}
+                  placeholder="VD: Phép cộng phạm vi 20"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label>Độ tuổi *</Label>
+                  <Select value={aiForm.ageGroup} onValueChange={(v) => setAiForm({ ...aiForm, ageGroup: v })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn độ tuổi" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ageGroups.map((age) => (
+                        <SelectItem key={age} value={age}>{age}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Độ khó</Label>
+                  <Select value={aiForm.difficulty} onValueChange={(v) => setAiForm({ ...aiForm, difficulty: v })}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Chọn độ khó" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {difficulties.map((d) => (
+                        <SelectItem key={d} value={d}>{d}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Loại câu hỏi</Label>
+                <Select value={aiForm.exerciseType} onValueChange={(v) => setAiForm({ ...aiForm, exerciseType: v })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Chọn loại câu hỏi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {exerciseTypes.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Số câu hỏi: {aiForm.count}</Label>
+                <Slider
+                  value={[aiForm.count]}
+                  onValueChange={(v) => setAiForm({ ...aiForm, count: v[0] })}
+                  max={20}
+                  min={1}
+                  step={1}
+                />
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>1</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Nguồn yêu cầu</Label>
+                <div className="flex items-center gap-4">
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" name="inputMode" checked={aiForm.inputMode === 'description'} onChange={() => setAiForm({ ...aiForm, inputMode: 'description' })} />
+                    <span>Mô tả yêu cầu</span>
+                  </label>
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" name="inputMode" checked={aiForm.inputMode === 'reference'} onChange={() => setAiForm({ ...aiForm, inputMode: 'reference' })} />
+                    <span>Tài liệu tham khảo</span>
+                  </label>
+                </div>
+              </div>
+
+              {aiForm.inputMode === 'description' ? (
+                <div className="space-y-2">
+                  <Label>Mục tiêu bài ôn</Label>
+                  <Input
+                    value={aiForm.objective}
+                    onChange={(e) => setAiForm({ ...aiForm, objective: e.target.value })}
+                    placeholder="Ví dụ: củng cố phép cộng có nhớ"
+                  />
+                  <div className="space-y-1">
+                    <Label>Gửi ảnh yêu cầu (tuỳ chọn)</Label>
+                    <input type="file" accept="image/*" onChange={(e) => setAiForm({ ...aiForm, objectiveImage: e.target.files?.[0] || null })} />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label>Tải tài liệu tham khảo</Label>
+                  <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" onChange={(e) => setAiForm({ ...aiForm, referenceDoc: e.target.files?.[0] || null })} />
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleGenerateAI}
+                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
+                  disabled={isGenerating || !aiForm.subject || !aiForm.topic || !aiForm.ageGroup}
+                >
+                  {isGenerating ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Đang tạo...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      Tạo bài tập bằng AI
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {isGenerating && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span>Tiến độ</span>
+                    <span>{generationProgress}%</span>
+                  </div>
+                  <Progress value={generationProgress} className="h-2" />
+                </div>
+              )}
+            </div>
+
+            <div className="lg:col-span-2">
+              {generatedContent.length > 0 ? (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold">Bài tập được tạo ({generatedContent.length})</h3>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={addManualQuestion}>
+                        <Plus className="h-4 w-4 mr-1" /> Thêm câu
+                      </Button>
+                      <Button size="sm" variant="outline" onClick={handleGenerateAI}>
+                        <RefreshCw className="h-4 w-4 mr-1" /> Tạo lại
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {generatedContent.map((ex: any, index: number) => (
+                      <Card key={ex.id} className="border border-purple-200">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline">Câu {index + 1}</Badge>
+                              <Badge className="bg-purple-100 text-purple-800">
+                                {exerciseTypes.find((t) => t.value === ex.type)?.label || ex.type}
+                              </Badge>
+                              {editingId !== ex.id ? (
+                                <Badge variant="secondary">{ex.difficulty}</Badge>
+                              ) : null}
+                            </div>
+                            <div className="flex gap-2">
+                              {editingId !== ex.id ? (
+                                <>
+                                  <Button size="sm" variant="outline" onClick={() => startEdit(ex.id)}>
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button size="sm" variant="outline" onClick={() => navigator.clipboard?.writeText(JSON.stringify(ex, null, 2))}>
+                                    <Copy className="h-4 w-4" />
+                                  </Button>
+                                  <Button size="sm" variant="destructive" onClick={() => setGeneratedContent((s) => s.filter((x) => x.id !== ex.id))}>
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </>
+                              ) : (
+                                <>
+                                  <Button size="sm" variant="outline" onClick={() => saveEdit(ex.id, { ...ex })}>Lưu</Button>
+                                  <Button size="sm" variant="destructive" onClick={() => setEditingId(null)}>Huỷ</Button>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          {editingId !== ex.id ? (
+                            <>
+                              <div>
+                                <Label className="text-sm font-medium text-gray-700">Câu hỏi:</Label>
+                                <p className="mt-1 text-gray-900">{ex.question}</p>
+                              </div>
+                              {ex.type === 'multiple_choice' && (
+                                <div>
+                                  <Label className="text-sm font-medium text-gray-700">Các lựa chọn:</Label>
+                                  <div className="mt-2 space-y-1">
+                                    {ex.options?.map((option: string, i: number) => (
+                                      <div key={i} className="flex items-center gap-2">
+                                        <span className="font-medium text-sm w-6">{String.fromCharCode(65 + i)}.</span>
+                                        <span className={String.fromCharCode(65 + i) === ex.correctAnswer ? "text-green-600 font-medium" : "text-gray-700"}>{option}</span>
+                                        {String.fromCharCode(65 + i) === ex.correctAnswer && <CheckCircle className="h-4 w-4 text-green-600" />}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              {ex.explanation && (
+                                <div>
+                                  <Label className="text-sm font-medium text-gray-700">Giải thích:</Label>
+                                  <p className="mt-1 text-gray-600 text-sm">{ex.explanation}</p>
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div className="space-y-3">
+                              <div>
+                                <Label className="text-sm">Chỉnh sửa câu hỏi</Label>
+                                <Input value={ex.question} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === ex.id ? { ...p, question: e.target.value } : p))} />
+                              </div>
+                              {ex.type === 'multiple_choice' && (
+                                <div className="space-y-2">
+                                  {ex.options?.map((opt: string, i: number) => (
+                                    <div key={i} className="flex items-center gap-2">
+                                      <span className="w-6">{String.fromCharCode(65 + i)}.</span>
+                                      <Input value={opt} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === ex.id ? { ...p, options: p.options.map((o: string, idx: number) => idx === i ? e.target.value : o) } : p))} />
+                                      <Button size="sm" variant={ex.correctAnswer === String.fromCharCode(65 + i) ? "secondary" : "outline"} onClick={() => setGeneratedContent((prev) => prev.map((p) => p.id === ex.id ? { ...p, correctAnswer: String.fromCharCode(65 + i) } : p))}>Đúng</Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Card className="border-dashed border-2 border-gray-300">
+                  <CardContent className="p-8 text-center">
+                    <Bot className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-base font-medium text-gray-600 mb-2">Chưa có bài tập nào được tạo</h3>
+                    <p className="text-gray-500">Điền thông tin và nhấn "Tạo bài tập bằng AI" để bắt đầu</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </TeacherLayout>
   );
 }
