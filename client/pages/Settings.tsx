@@ -131,15 +131,7 @@ export default function Settings() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-1 bg-primary/10">
-            <TabsTrigger
-              value="reminders"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
-            >
-              <Bell className="h-4 w-4" />
-              Nhắc nhở
-            </TabsTrigger>
-          </TabsList>
+         
 
           {/* Hidden legacy tabs removed for simplified reminders-only settings */}
           {/* Legacy content hidden in reminders-only mode */}
