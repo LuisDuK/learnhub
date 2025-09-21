@@ -81,7 +81,7 @@ export default function TeacherLessonCreate() {
       id: 2,
       subject: "Ngữ văn",
       chapter: "Kể chuyện",
-      title: "Kể chuy���n theo tranh",
+      title: "Kể chuyện theo tranh",
       shortDescription: "Rèn luyện kỹ năng kể chuyện theo tranh",
       textBlocks: ["Hướng dẫn cách miêu tả nhân vật và cốt truyện"],
       media: [],
@@ -211,7 +211,7 @@ export default function TeacherLessonCreate() {
         <div className="flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-primary" />
           <h1 className="text-2xl font-bold">
-            {isEdit ? "Ch��nh sửa bài học" : "Thêm bài học mới"}
+            {isEdit ? "Chỉnh sửa bài học" : "Thêm bài học mới"}
           </h1>
           <Badge variant="secondary" className="ml-2">Giao diện toàn trang</Badge>
         </div>
@@ -547,7 +547,7 @@ export default function TeacherLessonCreate() {
                       </div>
 
                       <div className="flex gap-2">
-                        <Button onClick={() => generateAIQuestions(3)}>🤖 T���o 3 câu bằng AI</Button>
+                        <Button onClick={() => generateAIQuestions(3)}>🤖 Tạo 3 câu bằng AI</Button>
                         <Button onClick={() => generateAIExercises(3)}>🤖 Tạo 3 bài tập bằng AI</Button>
                       </div>
                     </CardContent>
