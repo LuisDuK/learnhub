@@ -55,6 +55,10 @@ const mockUsers = [
     role: "Học sinh",
     status: "Hoạt động",
     createdAt: "2024-01-10",
+    phone: "0123 456 789",
+    dateOfBirth: "2015-06-12",
+    address: "Số 12, Phố A, Quận B",
+    grade: "Khối 1",
   },
   {
     id: 2,
@@ -63,6 +67,7 @@ const mockUsers = [
     role: "Quản trị viên",
     status: "Hoạt động",
     createdAt: "2024-01-05",
+    phone: "0987 654 321",
   },
   {
     id: 3,
@@ -71,6 +76,10 @@ const mockUsers = [
     role: "Học sinh",
     status: "Tạm khóa",
     createdAt: "2024-01-20",
+    phone: "0912 345 678",
+    dateOfBirth: "2014-11-03",
+    address: "Số 5, Ngõ C, Quận D",
+    grade: "Khối 2",
   },
   {
     id: 4,
@@ -79,6 +88,18 @@ const mockUsers = [
     role: "Quản trị viên",
     status: "Hoạt động",
     createdAt: "2024-01-15",
+    phone: "0909 090 090",
+  },
+  {
+    id: 5,
+    name: "Phùng Thị Lan",
+    email: "lan.phung@example.com",
+    role: "Giáo viên",
+    status: "Hoạt động",
+    createdAt: "2024-02-01",
+    phone: "0933 222 111",
+    subjects: ["Tiếng Anh", "Tin học cơ bản"],
+    bio: "Giáo viên Tiếng Anh có 5 năm kinh nghiệm dạy trẻ em tiểu học.",
   },
 ];
 
