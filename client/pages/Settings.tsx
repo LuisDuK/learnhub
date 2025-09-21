@@ -581,7 +581,7 @@ export default function Settings() {
 
                       {/* Schedule */}
                       <div className="space-y-3">
-                        <Label className="text-secondary font-medium flex items-center gap-1">
+                        <Label className="text-primary font-medium flex items-center gap-1">
                           <Clock className="h-4 w-4" />
                           Lịch nhắc mong muốn
                         </Label>
