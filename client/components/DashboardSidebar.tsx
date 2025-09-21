@@ -32,11 +32,6 @@ const menuItems = [
     href: "/study-plan",
   },
   {
-    title: "🏆 Thành tích của bé",
-    icon: Trophy,
-    href: "/progress",
-  },
-  {
     title: "👤 Hồ sơ học sinh",
     icon: User,
     href: "/profile",
