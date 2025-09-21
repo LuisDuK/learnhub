@@ -571,12 +571,13 @@ export default function TeacherLessonCreate() {
 
             {/* AI Modal accessible from Quiz/Exercises */}
             <Dialog open={aiOpen} onOpenChange={setAiOpen}>
-              <DialogContent className="max-w-3xl">
+              <DialogContent className="max-w-6xl w-[95vw]">
                 <DialogHeader>
                   <DialogTitle>{aiMode === "quiz" ? "AI tạo câu hỏi cho bài học" : "AI tạo bài tập ôn tập"}</DialogTitle>
                   <DialogDescription>Điền thông tin để AI tạo nội dung phù hợp, kết quả sẽ chèn vào mục hiện tại.</DialogDescription>
                 </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid gap-6 lg:grid-cols-5 max-h-[70vh]">
+                  <div className="lg:col-span-2 space-y-4 overflow-y-auto pr-2">
                   <div className="space-y-2">
                     <Label>Môn học</Label>
                     <Select value={aiForm.subject} onValueChange={(v) => setAiForm({ ...aiForm, subject: v })}>
@@ -653,36 +654,42 @@ export default function TeacherLessonCreate() {
                       <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" onChange={(e) => setAiForm({ ...aiForm, referenceDoc: e.target.files?.[0] || null })} />
                     </div>
                   )}
-                </div>
+                  </div>
 
-                {aiPreview.length > 0 && (
-                  <Card className="mt-4">
-                    <CardHeader>
-                      <CardTitle>Preview nội dung sẽ chèn</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      {aiMode === "quiz" ? (
-                        <div className="space-y-2">
-                          {(aiPreview as any[]).map((q: any, i: number) => (
-                            <div key={q.id} className="p-3 border rounded">
-                              <div className="font-medium">Câu {i + 1}: {q.text}</div>
-                              <div className="text-sm text-muted-foreground">Mốc: {q.marker}</div>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          {(aiPreview as any[]).map((ex: any, i: number) => (
-                            <div key={ex.id} className="p-3 border rounded">
-                              <div className="font-medium">{ex.question}</div>
-                              <div className="text-sm text-muted-foreground">{ex.answer}</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )}
+                  <div className="lg:col-span-3 flex flex-col overflow-hidden">
+                    <Card className="h-full">
+                      <CardHeader>
+                        <CardTitle>Preview</CardTitle>
+                        <CardDescription>Xem trước nội dung AI sinh ra trước khi chèn.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="h-[calc(70vh-8rem)] overflow-y-auto space-y-3">
+                        {aiMode === "quiz" ? (
+                          aiPreview.length > 0 ? (
+                            (aiPreview as any[]).map((q: any, i: number) => (
+                              <div key={q.id} className="p-3 border rounded">
+                                <div className="font-medium">Câu {i + 1}: {q.text}</div>
+                                <div className="text-sm text-muted-foreground">Mốc: {q.marker}</div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-sm text-muted-foreground">Chưa có nội dung. Nhấn "Tạo bằng AI" để xem preview.</div>
+                          )
+                        ) : (
+                          aiPreview.length > 0 ? (
+                            (aiPreview as any[]).map((ex: any) => (
+                              <div key={ex.id} className="p-3 border rounded">
+                                <div className="font-medium">{ex.question}</div>
+                                <div className="text-sm text-muted-foreground">{ex.answer}</div>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="text-sm text-muted-foreground">Chưa có nội dung. Nhấn "Tạo bằng AI" để xem preview.</div>
+                          )
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
 
                 <div className="flex items-center justify-between pt-2">
                   <div className="flex-1 pr-4">
