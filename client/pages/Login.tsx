@@ -59,25 +59,6 @@ export default function Login() {
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
 
-  // Teacher registration states
-  const [showTeacherRegisterDialog, setShowTeacherRegisterDialog] =
-    useState(false);
-  const [teacherRegisterSuccess, setTeacherRegisterSuccess] = useState(false);
-  const [showTeacherPassword, setShowTeacherPassword] = useState(false);
-  const [showTeacherConfirmPassword, setShowTeacherConfirmPassword] =
-    useState(false);
-  const [teacherForm, setTeacherForm] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    school: "",
-    subject: "",
-    experience: "",
-    qualification: "",
-    bio: "",
-  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -756,7 +737,7 @@ export default function Login() {
                                           ? "text"
                                           : "password"
                                       }
-                                      placeholder="••••••••"
+                                      placeholder="���•••••••"
                                       value={teacherForm.confirmPassword}
                                       onChange={(e) =>
                                         setTeacherForm({
