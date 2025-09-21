@@ -153,7 +153,7 @@ const mockPendingContent = [
     subject: "Anh",
     difficulty: "Cơ bản",
     duration: "10 tuần",
-    ageGroup: "5-7 tuổi",
+    ageGroup: "5-7 tu��i",
     submittedAt: "2024-03-01",
     submittedBy: "Giáo viên Lê Thị Mai",
     status: "pending",
@@ -189,7 +189,7 @@ const mockPendingContent = [
     type: "exercise",
     action: "update",
     title: "Cập nhật bài tập: Bài tập đếm số",
-    description: "Chỉnh sửa câu hỏi trong bài tập đếm số",
+    description: "Chỉnh sửa câu hỏi trong bài t���p đếm số",
     courseId: 1,
     courseName: "Toán học cơ bản",
     submittedAt: "2024-03-03",
@@ -328,12 +328,6 @@ export default function AdminCourses() {
     setPendingContent(updatedPending);
 
     // In a real app, this would make an API call to approve/reject the content
-    console.log(
-      `${approved ? "Approved" : "Rejected"} ${item.type}: ${item.title}`,
-    );
-    if (approvalComment) {
-      console.log(`Comment: ${approvalComment}`);
-    }
 
     setSelectedPendingItem(null);
     setApprovalComment("");
