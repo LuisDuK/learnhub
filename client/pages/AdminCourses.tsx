@@ -162,7 +162,7 @@ const mockPendingContent = [
       description:
         "Môn học tiếng Anh cho trẻ em từ 5-7 tuổi với các hoạt động vui nhộn",
       objectives: "Giúp trẻ em làm quen với tiếng Anh cơ bản",
-      prerequisites: "Không yêu cầu kiến thức trước",
+      prerequisites: "Không yêu c��u kiến thức trước",
     },
   },
   {
@@ -902,267 +902,238 @@ export default function AdminCourses() {
                 </DialogHeader>
 
                 <div className="py-4 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Loại
-                      </Label>
-                      <p className="text-sm capitalize">
-                        {selectedPendingItem.type === "course"
-                          ? "Môn học"
-                          : selectedPendingItem.type === "lesson"
-                            ? "Bài giảng"
-                            : "Bài tập"}
-                      </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <div>
+                        <Label className="text-xs text-gray-500">Loại</Label>
+                        <div className="mt-1 font-medium">
+                          {selectedPendingItem.type === "course"
+                            ? "Môn học"
+                            : selectedPendingItem.type === "lesson"
+                              ? "Bài giảng"
+                              : "Bài tập"}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-gray-500">Người gửi</Label>
+                        <div className="mt-1">{selectedPendingItem.submittedBy}</div>
+                      </div>
                     </div>
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Hành động
-                      </Label>
-                      <Badge
-                        className={getActionColor(selectedPendingItem.action)}
-                      >
-                        {getActionText(selectedPendingItem.action)}
-                      </Badge>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Người gửi
-                      </Label>
-                      <p className="text-sm">
-                        {selectedPendingItem.submittedBy}
-                      </p>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Ngày gửi
-                      </Label>
-                      <p className="text-sm">
-                        {new Date(
-                          selectedPendingItem.submittedAt,
-                        ).toLocaleDateString("vi-VN")}
-                      </p>
+
+                    <div className="space-y-3">
+                      <div>
+                        <Label className="text-xs text-gray-500">Hành động</Label>
+                        <div className="mt-1">
+                          <Badge className={getActionColor(selectedPendingItem.action)}>
+                            {getActionText(selectedPendingItem.action)}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-gray-500">Ngày gửi</Label>
+                        <div className="mt-1">
+                          {new Date(selectedPendingItem.submittedAt).toLocaleDateString("vi-VN")}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
+                  <div className="pt-2 border-t border-gray-200"></div>
+
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">
-                      Mô tả
-                    </Label>
-                    <p className="text-sm mt-1">
-                      {selectedPendingItem.description}
-                    </p>
+                    <Label className="text-sm font-medium text-gray-500">Mô tả</Label>
+                    <p className="text-sm mt-1 text-gray-700">{selectedPendingItem.description}</p>
                   </div>
 
                   {selectedPendingItem.details && (
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Chi tiết
-                      </Label>
+                    <div className="bg-white border border-gray-100 rounded-lg p-4 shadow-sm">
+                      <h4 className="text-sm font-semibold mb-3">Chi tiết</h4>
 
-                      <div className="mt-2 p-3 bg-gray-50 rounded-lg space-y-3 text-sm">
-                        {/* Show free text blocks if present */}
-                        {selectedPendingItem.details?.textBlocks && (
-                          <div>
-                            <Label className="text-xs text-gray-500">Nội dung văn bản</Label>
-                            <div className="mt-1 space-y-2">
-                              {selectedPendingItem.details.textBlocks.map((tb: string, i: number) => (
-                                <p key={i} className="whitespace-pre-wrap">{tb}</p>
-                              ))}
-                            </div>
+                      {/* Show free text blocks if present */}
+                      {selectedPendingItem.details?.textBlocks && (
+                        <div className="mb-3">
+                          <Label className="text-xs text-gray-500">Nội dung văn bản</Label>
+                          <div className="mt-2 space-y-2 text-sm text-gray-700">
+                            {selectedPendingItem.details.textBlocks.map((tb: string, i: number) => (
+                              <p key={i} className="whitespace-pre-wrap">{tb}</p>
+                            ))}
                           </div>
-                        )}
+                        </div>
+                      )}
 
-                        {/* Media items: video, audio, image, pdf */}
-                        {selectedPendingItem.details?.media && selectedPendingItem.details.media.length > 0 && (
-                          <div>
-                            <Label className="text-xs text-gray-500">Tư liệu đa phương tiện</Label>
-                            <div className="mt-2 space-y-2">
-                              {selectedPendingItem.details.media.map((m: any, mi: number) => (
-                                <div key={mi} className="p-2 border rounded">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex-1 min-w-0">
-                                      <div className="font-medium truncate">{m.type.toUpperCase()}</div>
-                                      <div className="text-xs text-muted-foreground truncate">{m.description}</div>
+                      {/* Media items: video, audio, image, pdf */}
+                      {selectedPendingItem.details?.media && selectedPendingItem.details.media.length > 0 && (
+                        <div className="mb-3">
+                          <Label className="text-xs text-gray-500">Tư liệu đa phương tiện</Label>
+                          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {selectedPendingItem.details.media.map((m: any, mi: number) => (
+                              <div key={mi} className="p-2 border rounded flex items-center gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium truncate">{m.type.toUpperCase()}</div>
+                                  <div className="text-xs text-muted-foreground truncate">{m.description}</div>
+                                </div>
+                                <div className="ml-3 flex-shrink-0">
+                                  {m.type === 'image' ? (
+                                    <img src={m.url} alt={m.description || 'image'} className="h-20 w-28 object-cover rounded" />
+                                  ) : m.type === 'pdf' ? (
+                                    <div className="flex flex-col items-end">
+                                      <iframe src={m.url} title={m.description || 'pdf'} className="h-40 w-64 border rounded" />
+                                      <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm mt-1">Mở PDF</a>
                                     </div>
-                                    <div className="ml-3">
-                                      {m.type === 'image' ? (
-                                        <img src={m.url} alt={m.description || 'image'} className="h-16 w-24 object-cover rounded" />
-                                      ) : m.type === 'pdf' ? (
-                                        <div className="flex flex-col items-end">
-                                          <iframe src={m.url} title={m.description || 'pdf'} className="h-40 w-64 border rounded" />
-                                          <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm mt-1">Mở PDF</a>
+                                  ) : m.type === 'audio' ? (
+                                    <audio controls src={m.url} className="h-10" />
+                                  ) : m.type === 'video' ? (
+                                    <video controls src={m.url} className="h-28 w-40 object-contain rounded" />
+                                  ) : (
+                                    <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm">Mở liên kết</a>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Lesson details */}
+                      {selectedPendingItem.type === "lesson" && (
+                        <div className="mb-3">
+                          <div className="mb-2">
+                            <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                            <p className="mt-1 font-medium">{selectedPendingItem.details?.title}</p>
+                          </div>
+
+                          {selectedPendingItem.details?.duration && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Thời lượng</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.duration}</p>
+                            </div>
+                          )}
+
+                          {selectedPendingItem.details?.content && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Nội dung</Label>
+                              <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700">{selectedPendingItem.details?.content}</p>
+                            </div>
+                          )}
+
+                          {/* Quiz questions embedded in the lesson */}
+                          {selectedPendingItem.details?.questions && selectedPendingItem.details.questions.length > 0 && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Quiz</Label>
+                              <div className="mt-2 space-y-2">
+                                {selectedPendingItem.details.questions.map((q: any, qi: number) => (
+                                  <div key={q.id || qi} className="p-2 border rounded bg-gray-50">
+                                    <div className="font-medium">Câu {qi + 1}: {q.text}</div>
+                                    {q.marker && <div className="text-xs text-muted-foreground">Mốc: {q.marker}</div>}
+                                    <div className="mt-1 text-sm">
+                                      {q.options?.map((opt: string, oi: number) => (
+                                        <div key={oi} className={q.correctIndex === oi ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
+                                          {String.fromCharCode(65 + oi)}. {opt}
                                         </div>
-                                      ) : m.type === 'audio' ? (
-                                        <audio controls src={m.url} className="h-10" />
-                                      ) : m.type === 'video' ? (
-                                        <video controls src={m.url} className="h-24 w-36 object-contain rounded" />
-                                      ) : (
-                                        <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm">Mở liên kết</a>
-                                      )}
+                                      ))}
                                     </div>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Course details */}
-                        {selectedPendingItem.type === "course" && (
-                          <div>
-                            <div className="mb-2">
-                              <Label className="text-xs text-gray-500">Tên môn học</Label>
-                              <p className="mt-1">{selectedPendingItem.details?.name}</p>
-                            </div>
-                            <div className="mb-2">
-                              <Label className="text-xs text-gray-500">Mô tả</Label>
-                              <p className="mt-1">{selectedPendingItem.details?.description}</p>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Lesson details */}
-                        {selectedPendingItem.type === "lesson" && (
-                          <div>
-                            <div className="mb-2">
-                              <Label className="text-xs text-gray-500">Tiêu đề</Label>
-                              <p className="mt-1">{selectedPendingItem.details?.title}</p>
-                            </div>
-
-                            {selectedPendingItem.details?.duration && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Thời lượng</Label>
-                                <p className="mt-1">{selectedPendingItem.details?.duration}</p>
+                                ))}
                               </div>
-                            )}
+                            </div>
+                          )}
 
-                            {selectedPendingItem.details?.content && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Nội dung</Label>
-                                <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.content}</p>
-                              </div>
-                            )}
-
-                            {/* Quiz questions embedded in the lesson */}
-                            {selectedPendingItem.details?.questions && selectedPendingItem.details.questions.length > 0 && (
-                              <div>
-                                <Label className="text-xs text-gray-500">Quiz</Label>
-                                <div className="mt-2 space-y-2">
-                                  {selectedPendingItem.details.questions.map((q: any, qi: number) => (
-                                    <div key={q.id || qi} className="p-2 border rounded">
-                                      <div className="font-medium">Câu {qi + 1}: {q.text}</div>
-                                      {q.marker && <div className="text-xs text-muted-foreground">Mốc: {q.marker}</div>}
+                          {/* Exercises embedded in the lesson */}
+                          {selectedPendingItem.details?.exercises && selectedPendingItem.details.exercises.length > 0 && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Bài tập</Label>
+                              <div className="mt-2 space-y-2">
+                                {selectedPendingItem.details.exercises.map((ex: any, ei: number) => (
+                                  <div key={ex.id || ei} className="p-2 border rounded bg-gray-50">
+                                    <div className="font-medium">{ex.question || ex.title}</div>
+                                    {ex.options ? (
                                       <div className="mt-1 text-sm">
-                                        {q.options?.map((opt: string, oi: number) => (
-                                          <div key={oi} className={q.correctIndex === oi ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
+                                        {ex.options.map((opt: string, oi: number) => (
+                                          <div key={oi} className={ex.correctIndex === oi ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
                                             {String.fromCharCode(65 + oi)}. {opt}
                                           </div>
                                         ))}
                                       </div>
-                                    </div>
-                                  ))}
-                                </div>
+                                    ) : (
+                                      <div className="mt-1 text-sm text-muted-foreground">Đáp án: {ex.answer || ex.solution}</div>
+                                    )}
+                                  </div>
+                                ))}
                               </div>
-                            )}
-
-                            {/* Exercises embedded in the lesson */}
-                            {selectedPendingItem.details?.exercises && selectedPendingItem.details.exercises.length > 0 && (
-                              <div>
-                                <Label className="text-xs text-gray-500">Bài tập</Label>
-                                <div className="mt-2 space-y-2">
-                                  {selectedPendingItem.details.exercises.map((ex: any, ei: number) => (
-                                    <div key={ex.id || ei} className="p-2 border rounded">
-                                      <div className="font-medium">{ex.question || ex.title}</div>
-                                      {ex.options ? (
-                                        <div className="mt-1 text-sm">
-                                          {ex.options.map((opt: string, oi: number) => (
-                                            <div key={oi} className={ex.correctIndex === oi ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
-                                              {String.fromCharCode(65 + oi)}. {opt}
-                                            </div>
-                                          ))}
-                                        </div>
-                                      ) : (
-                                        <div className="mt-1 text-sm text-muted-foreground">Đáp án: {ex.answer || ex.solution}</div>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Exercise or update details standalone */}
-                        {selectedPendingItem.type === "exercise" && (
-                          <div>
-                            <div className="mb-2">
-                              <Label className="text-xs text-gray-500">Tiêu đề</Label>
-                              <p className="mt-1">{selectedPendingItem.details?.title}</p>
                             </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Exercise or update details standalone */}
+                      {selectedPendingItem.type === "exercise" && (
+                        <div className="mb-3">
+                          <div className="mb-2">
+                            <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                            <p className="mt-1 font-medium">{selectedPendingItem.details?.title}</p>
+                          </div>
+                          <div className="mb-2">
+                            <Label className="text-xs text-gray-500">Mô tả</Label>
+                            <p className="mt-1">{selectedPendingItem.details?.description}</p>
+                          </div>
+
+                          {selectedPendingItem.details?.options && (
                             <div className="mb-2">
-                              <Label className="text-xs text-gray-500">Mô tả</Label>
-                              <p className="mt-1">{selectedPendingItem.details?.description}</p>
+                              <Label className="text-xs text-gray-500">Đáp án (trắc nghiệm)</Label>
+                              <div className="mt-1 text-sm">
+                                {selectedPendingItem.details.options.map((opt: string, i: number) => (
+                                  <div key={i} className={selectedPendingItem.details.correctIndex === i ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
+                                    {String.fromCharCode(65 + i)}. {opt}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
+                          )}
 
-                            {selectedPendingItem.details?.options && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Đáp án (trắc nghiệm)</Label>
-                                <div className="mt-1 text-sm">
-                                  {selectedPendingItem.details.options.map((opt: string, i: number) => (
-                                    <div key={i} className={selectedPendingItem.details.correctIndex === i ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
-                                      {String.fromCharCode(65 + i)}. {opt}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                          {selectedPendingItem.details?.answer && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Đáp án</Label>
+                              <p className="mt-1 text-sm text-muted-foreground">{selectedPendingItem.details.answer}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
 
-                            {selectedPendingItem.details?.answer && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Đáp án</Label>
-                                <p className="mt-1 text-sm text-muted-foreground">{selectedPendingItem.details.answer}</p>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                      {/* Delete request details */}
+                      {selectedPendingItem.action === "delete" && (
+                        <div className="mb-3">
+                          {selectedPendingItem.details?.reason && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Lý do xóa</Label>
+                              <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.reason}</p>
+                            </div>
+                          )}
+                          {selectedPendingItem.details?.affectedStudents !== undefined && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Số học sinh bị ảnh hưởng</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.affectedStudents}</p>
+                            </div>
+                          )}
+                          {selectedPendingItem.details?.alternativeCourse && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Môn thay thế gợi ý</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.alternativeCourse}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
 
-                        {/* Delete request details */}
-                        {selectedPendingItem.action === "delete" && (
-                          <div>
-                            {selectedPendingItem.details?.reason && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Lý do xóa</Label>
-                                <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.reason}</p>
-                              </div>
-                            )}
-                            {selectedPendingItem.details?.affectedStudents !== undefined && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Số học sinh bị ảnh hưởng</Label>
-                                <p className="mt-1">{selectedPendingItem.details?.affectedStudents}</p>
-                              </div>
-                            )}
-                            {selectedPendingItem.details?.alternativeCourse && (
-                              <div className="mb-2">
-                                <Label className="text-xs text-gray-500">Môn thay thế gợi ý</Label>
-                                <p className="mt-1">{selectedPendingItem.details?.alternativeCourse}</p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Fallback: show raw JSON if nothing matched */}
-                        {(!["course", "lesson", "exercise"].includes(selectedPendingItem.type) && selectedPendingItem.action !== "delete") && (
-                          <pre className="text-xs text-gray-700 whitespace-pre-wrap">{JSON.stringify(selectedPendingItem.details, null, 2)}</pre>
-                        )}
-                      </div>
+                      {/* Fallback: show raw JSON if nothing matched */}
+                      {(!["course", "lesson", "exercise"].includes(selectedPendingItem.type) && selectedPendingItem.action !== "delete") && (
+                        <pre className="text-xs text-gray-700 whitespace-pre-wrap">{JSON.stringify(selectedPendingItem.details, null, 2)}</pre>
+                      )}
                     </div>
                   )}
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">
-                      Ghi chú phê duyệt (tùy chọn)
-                    </Label>
+                    <Label className="text-sm font-medium text-gray-500">Ghi chú phê duyệt (tùy chọn)</Label>
                     <textarea
                       value={approvalComment}
                       onChange={(e) => setApprovalComment(e.target.value)}
