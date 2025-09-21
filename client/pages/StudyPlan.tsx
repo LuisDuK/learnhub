@@ -1621,7 +1621,7 @@ export default function StudyPlan() {
               🧪 Bài kiểm tra đầu vào
             </DialogTitle>
             <DialogDescription>
-              Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hi���n tại
+              Hoàn thành bài kiểm tra để hệ thống đánh giá trình độ hiện tại
             </DialogDescription>
           </DialogHeader>
 
@@ -1912,7 +1912,7 @@ export default function StudyPlan() {
                       <SelectContent>
                         <SelectItem value="not-started">Chưa học</SelectItem>
                         <SelectItem value="in-progress">Đang học</SelectItem>
-                        <SelectItem value="completed">Hoàn th��nh</SelectItem>
+                        <SelectItem value="completed">Hoàn thành</SelectItem>
                       </SelectContent>
                     </Select>
                     <Button
