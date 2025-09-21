@@ -503,8 +503,8 @@ export default function Login() {
                 <div className="border-t border-gray-200 pt-6 mt-6">
                   <div className="text-center">
                     <Dialog
-                      open={showTeacherRegisterDialog}
-                      onOpenChange={setShowTeacherRegisterDialog}
+                      open={false}
+                      onOpenChange={() => {}}
                     >
                       <DialogTrigger asChild>
                         <Button
