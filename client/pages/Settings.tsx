@@ -535,7 +535,7 @@ export default function Settings() {
                     <div className="space-y-5 ml-6">
                       {/* Channels */}
                       <div className="space-y-2">
-                        <Label className="text-secondary font-medium flex items-center gap-1">
+                        <Label className="text-primary font-medium flex items-center gap-1">
                           <Bell className="h-4 w-4" />
                           Kênh nhận thông báo
                         </Label>
