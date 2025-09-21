@@ -344,6 +344,49 @@ export default function AdminUsers() {
                       <Label className="text-xs text-gray-500">ID</Label>
                       <div className="mt-1">{selectedUserDetails.id}</div>
                     </div>
+
+                    {/* Additional personal info */}
+                    {selectedUserDetails.phone && (
+                      <div>
+                        <Label className="text-xs text-gray-500">Số điện thoại</Label>
+                        <div className="mt-1">{selectedUserDetails.phone}</div>
+                      </div>
+                    )}
+
+                    {selectedUserDetails.dateOfBirth && (
+                      <div>
+                        <Label className="text-xs text-gray-500">Ngày sinh</Label>
+                        <div className="mt-1">{selectedUserDetails.dateOfBirth}</div>
+                      </div>
+                    )}
+
+                    {selectedUserDetails.address && (
+                      <div className="md:col-span-2">
+                        <Label className="text-xs text-gray-500">Địa chỉ</Label>
+                        <div className="mt-1">{selectedUserDetails.address}</div>
+                      </div>
+                    )}
+
+                    {selectedUserDetails.grade && (
+                      <div>
+                        <Label className="text-xs text-gray-500">Khối</Label>
+                        <div className="mt-1">{selectedUserDetails.grade}</div>
+                      </div>
+                    )}
+
+                    {selectedUserDetails.subjects && (
+                      <div className="md:col-span-2">
+                        <Label className="text-xs text-gray-500">Môn giảng dạy</Label>
+                        <div className="mt-1 text-sm text-gray-700">{selectedUserDetails.subjects.join(", ")}</div>
+                      </div>
+                    )}
+
+                    {selectedUserDetails.bio && (
+                      <div className="md:col-span-2">
+                        <Label className="text-xs text-gray-500">Tiểu sử</Label>
+                        <div className="mt-1 text-sm text-gray-700">{selectedUserDetails.bio}</div>
+                      </div>
+                    )}
                   </div>
 
                   <div>
