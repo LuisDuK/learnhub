@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import {
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -61,6 +63,10 @@ export default function Settings() {
     defaultGoal: "midterm",
     studyStreak: 7,
     weeklyGoalHours: 10,
+    channels: { push: true, email: false, sms: false },
+    reminderDays: ["mon", "tue", "wed", "thu", "fri"] as string[],
+    reminderTimeFrom: "18:00",
+    reminderTimeTo: "21:00",
   });
 
   const handleSaveProfile = async () => {
@@ -79,12 +85,31 @@ export default function Settings() {
     }, 1500);
   };
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("studySettings");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setStudySettings((prev) => ({
+          ...prev,
+          ...parsed,
+          channels: { push: true, email: false, sms: false, ...(parsed.channels || {}) },
+          reminderDays: Array.isArray(parsed.reminderDays) ? parsed.reminderDays : prev.reminderDays,
+          reminderTimeFrom: parsed.reminderTimeFrom || prev.reminderTimeFrom,
+          reminderTimeTo: parsed.reminderTimeTo || prev.reminderTimeTo,
+        }));
+      }
+    } catch {}
+  }, []);
+
   const handleSaveStudySettings = async () => {
     setIsLoading(true);
+    try {
+      localStorage.setItem("studySettings", JSON.stringify(studySettings));
+    } catch {}
     setTimeout(() => {
       setIsLoading(false);
-      // Show success message
-    }, 1500);
+    }, 800);
   };
 
   return (
@@ -516,41 +541,107 @@ export default function Settings() {
                   </div>
 
                   {studySettings.dailyReminder && (
-                    <div className="space-y-2 ml-6">
-                      <Label
-                        htmlFor="reminderTime"
-                        className="text-secondary font-medium flex items-center gap-1"
-                      >
-                        <Clock className="h-4 w-4" />
-                        Giờ nhắc nhở
-                      </Label>
-                      <Select
-                        value={studySettings.reminderTime}
-                        onValueChange={(value) =>
-                          setStudySettings({
-                            ...studySettings,
-                            reminderTime: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="w-48 border-secondary/20 focus:border-secondary rounded-xl">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="18:00">
-                            🕕 18:00 (6:00 PM)
-                          </SelectItem>
-                          <SelectItem value="19:00">
-                            🕖 19:00 (7:00 PM)
-                          </SelectItem>
-                          <SelectItem value="20:00">
-                            🕗 20:00 (8:00 PM)
-                          </SelectItem>
-                          <SelectItem value="21:00">
-                            🕗 21:00 (9:00 PM)
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                    <div className="space-y-5 ml-6">
+                      {/* Channels */}
+                      <div className="space-y-2">
+                        <Label className="text-secondary font-medium flex items-center gap-1">
+                          <Bell className="h-4 w-4" />
+                          Kênh nhận thông báo
+                        </Label>
+                        <div className="flex flex-wrap gap-3">
+                          <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${studySettings.channels.push ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                            <Checkbox
+                              checked={!!studySettings.channels.push}
+                              onCheckedChange={(checked) =>
+                                setStudySettings((prev) => ({
+                                  ...prev,
+                                  channels: { ...prev.channels, push: !!checked },
+                                }))
+                              }
+                            />
+                            <span>Push</span>
+                          </label>
+                          <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${studySettings.channels.email ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                            <Checkbox
+                              checked={!!studySettings.channels.email}
+                              onCheckedChange={(checked) =>
+                                setStudySettings((prev) => ({
+                                  ...prev,
+                                  channels: { ...prev.channels, email: !!checked },
+                                }))
+                              }
+                            />
+                            <span>Email</span>
+                          </label>
+                          <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${studySettings.channels.sms ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                            <Checkbox
+                              checked={!!studySettings.channels.sms}
+                              onCheckedChange={(checked) =>
+                                setStudySettings((prev) => ({
+                                  ...prev,
+                                  channels: { ...prev.channels, sms: !!checked },
+                                }))
+                              }
+                            />
+                            <span>SMS</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Schedule */}
+                      <div className="space-y-3">
+                        <Label className="text-secondary font-medium flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          Lịch nhắc mong muốn
+                        </Label>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="time"
+                              value={studySettings.reminderTimeFrom}
+                              onChange={(e) => setStudySettings({ ...studySettings, reminderTimeFrom: e.target.value })}
+                              className="w-36"
+                            />
+                            <span className="text-sm text-muted-foreground">đến</span>
+                            <Input
+                              type="time"
+                              value={studySettings.reminderTimeTo}
+                              onChange={(e) => setStudySettings({ ...studySettings, reminderTimeTo: e.target.value })}
+                              className="w-36"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {[
+                            { k: "mon", l: "Th 2" },
+                            { k: "tue", l: "Th 3" },
+                            { k: "wed", l: "Th 4" },
+                            { k: "thu", l: "Th 5" },
+                            { k: "fri", l: "Th 6" },
+                            { k: "sat", l: "Th 7" },
+                            { k: "sun", l: "CN" },
+                          ].map((d) => {
+                            const active = studySettings.reminderDays.includes(d.k);
+                            return (
+                              <button
+                                key={d.k}
+                                type="button"
+                                className={`px-3 py-1.5 rounded-lg border text-sm ${active ? "bg-primary/10 border-primary text-primary" : "bg-white border-gray-200"}`}
+                                onClick={() => {
+                                  setStudySettings((prev) => ({
+                                    ...prev,
+                                    reminderDays: active
+                                      ? prev.reminderDays.filter((x) => x !== d.k)
+                                      : [...prev.reminderDays, d.k],
+                                  }));
+                                }}
+                              >
+                                {d.l}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
