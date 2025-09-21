@@ -941,6 +941,20 @@ export default function AdminCourses() {
                     <div className="bg-white border border-gray-100 rounded-lg p-4 shadow-sm">
                       <h4 className="text-sm font-semibold mb-3">Chi tiết</h4>
 
+                      {/* If lesson: show title and duration above text blocks */}
+                      {selectedPendingItem.type === "lesson" && (
+                        <div className="mb-3">
+                          <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                          <p className="mt-1 font-medium">{selectedPendingItem.details?.title}</p>
+                          {selectedPendingItem.details?.duration && (
+                            <div className="mt-2">
+                              <Label className="text-xs text-gray-500">Thời lượng</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.duration}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       {/* Show free text blocks if present */}
                       {selectedPendingItem.details?.textBlocks && (
                         <div className="mb-3">
@@ -989,18 +1003,6 @@ export default function AdminCourses() {
                       {/* Lesson details */}
                       {selectedPendingItem.type === "lesson" && (
                         <div className="mb-3">
-                          <div className="mb-2">
-                            <Label className="text-xs text-gray-500">Tiêu đề</Label>
-                            <p className="mt-1 font-medium">{selectedPendingItem.details?.title}</p>
-                          </div>
-
-                          {selectedPendingItem.details?.duration && (
-                            <div className="mb-2">
-                              <Label className="text-xs text-gray-500">Thời lượng</Label>
-                              <p className="mt-1">{selectedPendingItem.details?.duration}</p>
-                            </div>
-                          )}
-
                           {selectedPendingItem.details?.content && (
                             <div className="mb-2">
                               <Label className="text-xs text-gray-500">Nội dung</Label>
