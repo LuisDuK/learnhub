@@ -201,40 +201,7 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Quick Actions */}
-        <Card className="border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-gray-700 flex items-center gap-2">
-              <GraduationCap className="h-5 w-5" />
-              Thao tác nhanh
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 border border-blue-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
-                <Users className="h-8 w-8 text-blue-600 mb-2" />
-                <h3 className="font-semibold text-blue-700">Thêm học sinh</h3>
-                <p className="text-sm text-gray-600">
-                  Tạo tài khoản mới cho học sinh (3 môn: Toán, Văn, Anh)
-                </p>
-              </div>
-              <div className="p-4 border border-orange-200 rounded-lg hover:bg-orange-50 cursor-pointer transition-colors">
-                <BookOpen className="h-8 w-8 text-orange-600 mb-2" />
-                <h3 className="font-semibold text-orange-700">Tạo môn học</h3>
-                <p className="text-sm text-gray-600">
-                  Thiết lập môn học mới cho học sinh
-                </p>
-              </div>
-              <div className="p-4 border border-green-200 rounded-lg hover:bg-green-50 cursor-pointer transition-colors">
-                <GraduationCap className="h-8 w-8 text-green-600 mb-2" />
-                <h3 className="font-semibold text-green-700">Xem báo cáo</h3>
-                <p className="text-sm text-gray-600">
-                  Theo dõi tiến độ học tập chi tiết
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+       
       </div>
     </AdminLayout>
   );
