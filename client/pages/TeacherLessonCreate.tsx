@@ -158,6 +158,7 @@ export default function TeacherLessonCreate() {
     objectiveImage: null as File | null,
     referenceDoc: null as File | null,
   });
+  const [aiPreview, setAiPreview] = useState<any[]>([]);
 
   const openAIModal = (mode: "quiz" | "exercise") => {
     setAiMode(mode);
@@ -189,19 +190,29 @@ export default function TeacherLessonCreate() {
         correctIndex: 1,
         marker: "00:30",
       }));
-      setQuestions((q) => [...q, ...samples]);
-      toast({ title: "AI đã tạo câu hỏi", description: `Đã tạo ${samples.length} câu hỏi.` });
+      setAiPreview(samples as any[]);
     } else {
       const items = Array.from({ length: aiForm.count }).map((_, i) => ({
         id: crypto.randomUUID(),
         question: `Bài tập ${i + 1}: ${aiForm.topic}`,
         answer: "Đáp án mẫu",
       }));
-      setExercises((ex) => [...ex, ...items]);
-      toast({ title: "AI đã tạo bài tập", description: `Đã tạo ${items.length} bài tập.` });
+      setAiPreview(items as any[]);
     }
 
     setIsGenerating(false);
+  };
+
+  const commitAIPreview = () => {
+    if (aiPreview.length === 0) return;
+    if (aiMode === "quiz") {
+      setQuestions((q) => [...q, ...(aiPreview as QuizQuestion[])]);
+      toast({ title: "Đã chèn câu hỏi", description: `Đã thêm ${aiPreview.length} câu hỏi vào quiz.` });
+    } else {
+      setExercises((ex) => [...ex, ...(aiPreview as { id: string; question: string; answer: string }[])]);
+      toast({ title: "Đã chèn bài tập", description: `Đã thêm ${aiPreview.length} b��i tập.` });
+    }
+    setAiPreview([]);
     setAiOpen(false);
   };
   const [media, setMedia] = useState<MediaItem[]>([]);
@@ -307,7 +318,6 @@ export default function TeacherLessonCreate() {
               <TabsTrigger value="materials">2. Tài liệu học tập</TabsTrigger>
               <TabsTrigger value="quiz">3. Quiz</TabsTrigger>
               <TabsTrigger value="exercises">4. Bài tập</TabsTrigger>
-              <TabsTrigger value="ai">5. AI</TabsTrigger>
             </TabsList>
 
             <TabsContent value="info" className="space-y-4">
@@ -644,6 +654,36 @@ export default function TeacherLessonCreate() {
                     </div>
                   )}
                 </div>
+
+                {aiPreview.length > 0 && (
+                  <Card className="mt-4">
+                    <CardHeader>
+                      <CardTitle>Preview nội dung sẽ chèn</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {aiMode === "quiz" ? (
+                        <div className="space-y-2">
+                          {(aiPreview as any[]).map((q: any, i: number) => (
+                            <div key={q.id} className="p-3 border rounded">
+                              <div className="font-medium">Câu {i + 1}: {q.text}</div>
+                              <div className="text-sm text-muted-foreground">Mốc: {q.marker}</div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          {(aiPreview as any[]).map((ex: any, i: number) => (
+                            <div key={ex.id} className="p-3 border rounded">
+                              <div className="font-medium">{ex.question}</div>
+                              <div className="text-sm text-muted-foreground">{ex.answer}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+
                 <div className="flex items-center justify-between pt-2">
                   <div className="flex-1 pr-4">
                     {isGenerating && (
@@ -656,110 +696,16 @@ export default function TeacherLessonCreate() {
                   <div className="flex gap-2">
                     <Button variant="outline" onClick={() => setAiOpen(false)}>Huỷ</Button>
                     <Button onClick={handleGenerateAI} disabled={isGenerating || !aiForm.subject || !aiForm.topic || !aiForm.ageGroup}>Tạo bằng AI</Button>
+                    {aiPreview.length > 0 && (
+                      <Button className="bg-green-600 text-white" onClick={commitAIPreview}>
+                        Chèn vào {aiMode === "quiz" ? "Quiz" : "Bài tập"}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </DialogContent>
             </Dialog>
 
-            <TabsContent value="ai" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">AI tạo câu hỏi cho bài học</CardTitle>
-                      <CardDescription>Nhập yêu cầu để AI tạo câu hỏi ngay trong trang thêm/sửa bài học</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-2">
-                        <Label>Môn học</Label>
-                        <Select value={subject} onValueChange={setSubject}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn môn học" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="math">Toán học</SelectItem>
-                            <SelectItem value="literature">Ngữ văn</SelectItem>
-                            <SelectItem value="english">Tiếng Anh</SelectItem>
-                            <SelectItem value="science">Khoa học</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label>Chủ đề / Tiêu đề</Label>
-                        <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label>Chọn bài trong sách (lộ trình)</Label>
-                        <div className="flex flex-col gap-2">
-                          {mockBooks.flatMap(b => b.lessons).map(ls => (
-                            <label key={ls.id} className="inline-flex items-center gap-2">
-                              <input type="checkbox" className="form-checkbox" onChange={(e) => {
-                                // toggle selection in temp array
-                                const curr = selectedBookLessonId === ls.id ? "" : ls.id;
-                                setSelectedBookLessonId(curr);
-                              }} checked={selectedBookLessonId === ls.id} />
-                              <span className="text-sm">{ls.title}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="space-y-2">
-                          <Label>Độ khó</Label>
-                          <Select value={"Trung bình"} onValueChange={() => {}}>
-                            <SelectTrigger><SelectValue placeholder="Chọn" /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Dễ">Dễ</SelectItem>
-                              <SelectItem value="Trung bình">Trung bình</SelectItem>
-                              <SelectItem value="Khó">Khó</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Số câu</Label>
-                          <Input type="number" value={3} onChange={() => {}} />
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button onClick={() => generateAIQuestions(3)}>🤖 Tạo 3 câu bằng AI</Button>
-                        <Button onClick={() => generateAIExercises(3)}>🤖 Tạo 3 bài tập b��ng AI</Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div>
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Preview câu hỏi tạo</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      {questions.length === 0 ? (
-                        <div className="text-sm text-muted-foreground">Chưa có câu hỏi nào. Tạo bằng AI hoặc thêm thủ công.</div>
-                      ) : (
-                        <div className="space-y-2">
-                          {questions.map((q, i) => (
-                            <div key={q.id} className="p-3 border rounded">
-                              <div className="font-medium">Câu {i+1}: {q.text}</div>
-                              <div className="text-sm text-muted-foreground">Mốc: {q.marker}</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-
-              <div className="flex justify-end">
-                <Button variant="outline" onClick={() => setTab("exercises")}>Quay lại</Button>
-                <Button onClick={() => { setTab("exercises"); }}>Hoàn tất</Button>
-              </div>
-            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>
