@@ -920,7 +920,7 @@ export default function StudyPlan() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
-              Lộ trình h��c tập
+              Lộ trình học tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-base md:text-lg mt-2">
@@ -2153,13 +2153,12 @@ export default function StudyPlan() {
                                 difficulty: h.difficulty,
                                 numQuestions: h.questions?.length || 0,
                               });
-                              toast({
-                                title: "Đã nạp",
-                                description: "Đã nạp bài ôn từ lịch sử.",
-                              });
+                              const data = { subject: h.subject, topic: h.topic, difficulty: h.difficulty, questions: h.questions || [], createdAt: h.createdAt };
+                              localStorage.setItem("currentPractice", JSON.stringify(data));
+                              navigate("/practice-quiz", { state: { practice: data } });
                             }}
                           >
-                            Nạp
+                            Làm bài
                           </Button>
                           <Button
                             size="sm"
@@ -2186,7 +2185,7 @@ export default function StudyPlan() {
                               );
                               toast({
                                 title: "Đã xóa",
-                                description: "Đã xóa mục lịch sử.",
+                                description: "Đã xóa m���c lịch sử.",
                               });
                             }}
                           >
@@ -2348,7 +2347,7 @@ export default function StudyPlan() {
 
           <div className="flex gap-3 pt-2">
             <Button variant="outline" onClick={() => setShowPracticePreviewDialog(false)} className="flex-1">Đóng</Button>
-            <Button onClick={() => { setShowPracticePreviewDialog(false); setShowPracticeAttemptDialog(true); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">Bắt đầu làm</Button>
+            <Button onClick={() => { const data = { subject: practiceForm.subject, topic: practiceForm.topic, difficulty: practiceForm.difficulty, questions: practiceQuestions, createdAt: new Date().toISOString() }; localStorage.setItem("currentPractice", JSON.stringify(data)); setShowPracticePreviewDialog(false); setShowPracticeAttemptDialog(false); navigate("/practice-quiz", { state: { practice: data } }); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">Bắt đầu làm</Button>
           </div>
         </DialogContent>
       </Dialog>
