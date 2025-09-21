@@ -969,10 +969,7 @@ export default function StudyPlan() {
             <CardTitle className="text-xl font-bold">
               📊 Tổng quan tiến độ
             </CardTitle>
-            <CardDescription>
-              Tỷ lệ hoàn thành lộ trình, thời gian học, điểm số và các bài trễ
-              hạn
-            </CardDescription>
+          
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
