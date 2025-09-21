@@ -170,7 +170,7 @@ const currentCourses = [
     thumbnail: "/placeholder.svg",
     category: "Anh",
     level: "Trung bình",
-    emoji: "🗣���",
+    emoji: "🗣",
   },
 ];
 
