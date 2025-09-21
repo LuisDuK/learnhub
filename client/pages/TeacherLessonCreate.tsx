@@ -5,6 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Slider } from "@/components/ui/slider";
+import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -129,6 +132,78 @@ export default function TeacherLessonCreate() {
   }, [params, loadedEdit]);
 
   const [textBlocks, setTextBlocks] = useState<string[]>([""]);
+
+  // AI modal state (used in Quiz/Exercises tabs)
+  const [aiOpen, setAiOpen] = useState(false);
+  const [aiMode, setAiMode] = useState<"quiz" | "exercise">("quiz");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const ageGroups = [
+    "5-6 tuổi",
+    "6-7 tuổi",
+    "7-8 tuổi",
+    "8-9 tuổi",
+    "9-10 tuổi",
+    "10-12 tuổi",
+  ];
+  const difficulties = ["Dễ", "Trung bình", "Khó", "Nâng cao"];
+  const [aiForm, setAiForm] = useState({
+    subject: "",
+    topic: "",
+    ageGroup: "",
+    difficulty: "",
+    count: 3,
+    inputMode: "description" as "description" | "reference",
+    objective: "",
+    objectiveImage: null as File | null,
+    referenceDoc: null as File | null,
+  });
+
+  const openAIModal = (mode: "quiz" | "exercise") => {
+    setAiMode(mode);
+    setAiForm((prev) => ({
+      ...prev,
+      subject,
+      topic: title,
+    }));
+    setIsGenerating(false);
+    setGenerationProgress(0);
+    setAiOpen(true);
+  };
+
+  const handleGenerateAI = async () => {
+    if (!aiForm.subject || !aiForm.topic || !aiForm.ageGroup) return;
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    const steps = 5;
+    for (let i = 0; i < steps; i++) {
+      await new Promise((r) => setTimeout(r, 500));
+      setGenerationProgress(Math.round(((i + 1) / steps) * 100));
+    }
+
+    if (aiMode === "quiz") {
+      const samples: QuizQuestion[] = Array.from({ length: aiForm.count }).map((_, i) => ({
+        id: crypto.randomUUID(),
+        text: `AI câu hỏi ${i + 1}: ${aiForm.topic}`,
+        options: ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"],
+        correctIndex: 1,
+        marker: "00:30",
+      }));
+      setQuestions((q) => [...q, ...samples]);
+      toast({ title: "AI đã tạo câu hỏi", description: `Đã tạo ${samples.length} câu hỏi.` });
+    } else {
+      const items = Array.from({ length: aiForm.count }).map((_, i) => ({
+        id: crypto.randomUUID(),
+        question: `Bài tập ${i + 1}: ${aiForm.topic}`,
+        answer: "Đáp án mẫu",
+      }));
+      setExercises((ex) => [...ex, ...items]);
+      toast({ title: "AI đã tạo bài tập", description: `Đã tạo ${items.length} bài tập.` });
+    }
+
+    setIsGenerating(false);
+    setAiOpen(false);
+  };
   const [media, setMedia] = useState<MediaItem[]>([]);
 
   const [includeQuiz, setIncludeQuiz] = useState(true);
@@ -378,8 +453,8 @@ export default function TeacherLessonCreate() {
                   <Button variant="outline" size="sm" onClick={addQuestion}>
                     <Plus className="h-4 w-4 mr-1" /> Thêm câu hỏi
                   </Button>
-                  <Button variant="secondary" size="sm" onClick={() => generateAIQuestions(3)}>
-                    🤖 AI sinh 3 câu
+                  <Button variant="secondary" size="sm" onClick={() => openAIModal("quiz")}>
+                    🤖 AI tạo câu hỏi
                   </Button>
                 </div>
               </div>
@@ -459,7 +534,7 @@ export default function TeacherLessonCreate() {
                     setExercises((ex) => [...ex, { id: crypto.randomUUID(), question: exerciseDraft.question, answer: exerciseDraft.answer }]);
                     setExerciseDraft({ question: "", answer: "" });
                   }}>Thêm câu hỏi ôn tập</Button>
-                  <Button variant="secondary" onClick={() => generateAIExercises(3)}>🤖 AI sinh 3 bài tập</Button>
+                  <Button variant="secondary" onClick={() => openAIModal("exercise")}>🤖 AI tạo bài tập</Button>
                 </div>
 
                 {exercises.length > 0 && (
@@ -483,6 +558,109 @@ export default function TeacherLessonCreate() {
                 <Button onClick={handleFinish}>Hoàn tất</Button>
               </div>
             </TabsContent>
+
+            {/* AI Modal accessible from Quiz/Exercises */}
+            <Dialog open={aiOpen} onOpenChange={setAiOpen}>
+              <DialogContent className="max-w-3xl">
+                <DialogHeader>
+                  <DialogTitle>{aiMode === "quiz" ? "AI tạo câu hỏi cho bài học" : "AI tạo bài tập ôn tập"}</DialogTitle>
+                  <DialogDescription>Điền thông tin để AI tạo nội dung phù hợp, kết quả sẽ chèn vào mục hiện tại.</DialogDescription>
+                </DialogHeader>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Môn học</Label>
+                    <Select value={aiForm.subject} onValueChange={(v) => setAiForm({ ...aiForm, subject: v })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn môn học" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="math">Toán học</SelectItem>
+                        <SelectItem value="literature">Ngữ văn</SelectItem>
+                        <SelectItem value="english">Tiếng Anh</SelectItem>
+                        <SelectItem value="science">Khoa học</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Chủ đề / Tiêu đề</Label>
+                    <Input value={aiForm.topic} onChange={(e) => setAiForm({ ...aiForm, topic: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Độ tuổi</Label>
+                    <Select value={aiForm.ageGroup} onValueChange={(v) => setAiForm({ ...aiForm, ageGroup: v })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn độ tuổi" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ageGroups.map((a) => (
+                          <SelectItem key={a} value={a}>{a}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Độ khó</Label>
+                    <Select value={aiForm.difficulty} onValueChange={(v) => setAiForm({ ...aiForm, difficulty: v })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn độ khó" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {difficulties.map((d) => (
+                          <SelectItem key={d} value={d}>{d}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label>Số lượng: {aiForm.count}</Label>
+                    <Slider value={[aiForm.count]} onValueChange={(v) => setAiForm({ ...aiForm, count: v[0] })} min={1} max={20} step={1} />
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label>Nguồn yêu cầu</Label>
+                    <div className="flex items-center gap-4">
+                      <label className="inline-flex items-center gap-2">
+                        <input type="radio" name="aimode" checked={aiForm.inputMode === 'description'} onChange={() => setAiForm({ ...aiForm, inputMode: 'description' })} />
+                        <span>Mô tả yêu cầu</span>
+                      </label>
+                      <label className="inline-flex items-center gap-2">
+                        <input type="radio" name="aimode" checked={aiForm.inputMode === 'reference'} onChange={() => setAiForm({ ...aiForm, inputMode: 'reference' })} />
+                        <span>Tài liệu tham khảo</span>
+                      </label>
+                    </div>
+                  </div>
+                  {aiForm.inputMode === 'description' ? (
+                    <div className="space-y-2 md:col-span-2">
+                      <Label>Mục tiêu</Label>
+                      <Input value={aiForm.objective} onChange={(e) => setAiForm({ ...aiForm, objective: e.target.value })} placeholder="Ví dụ: củng cố phép cộng có nhớ" />
+                      <div className="space-y-1">
+                        <Label>Ảnh yêu cầu (tuỳ chọn)</Label>
+                        <input type="file" accept="image/*" onChange={(e) => setAiForm({ ...aiForm, objectiveImage: e.target.files?.[0] || null })} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 md:col-span-2">
+                      <Label>Tài liệu tham khảo</Label>
+                      <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" onChange={(e) => setAiForm({ ...aiForm, referenceDoc: e.target.files?.[0] || null })} />
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center justify-between pt-2">
+                  <div className="flex-1 pr-4">
+                    {isGenerating && (
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-xs"><span>Tiến độ</span><span>{generationProgress}%</span></div>
+                        <Progress value={generationProgress} className="h-2" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setAiOpen(false)}>Huỷ</Button>
+                    <Button onClick={handleGenerateAI} disabled={isGenerating || !aiForm.subject || !aiForm.topic || !aiForm.ageGroup}>Tạo bằng AI</Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
             <TabsContent value="ai" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -548,7 +726,7 @@ export default function TeacherLessonCreate() {
 
                       <div className="flex gap-2">
                         <Button onClick={() => generateAIQuestions(3)}>🤖 Tạo 3 câu bằng AI</Button>
-                        <Button onClick={() => generateAIExercises(3)}>🤖 Tạo 3 bài tập bằng AI</Button>
+                        <Button onClick={() => generateAIExercises(3)}>🤖 Tạo 3 bài tập b��ng AI</Button>
                       </div>
                     </CardContent>
                   </Card>
