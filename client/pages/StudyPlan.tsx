@@ -247,6 +247,8 @@ type PlanVersion = {
   plan: { phases: { title: string; lessons: Lesson[]; milestone?: string }[] };
 };
 
+type PracticeQuestion = { id: number; text: string; difficulty: string; type: "multiple_choice" | "essay"; options?: string[] };
+
 export default function StudyPlan() {
   const navigate = useNavigate();
   const [selectedGoal, setSelectedGoal] = useState("midterm");
@@ -306,9 +308,7 @@ export default function StudyPlan() {
     difficulty: "medium",
     goalId: "midterm",
   });
-  const [practiceQuestions, setPracticeQuestions] = useState<
-    { id: number; text: string; difficulty: string }[]
-  >([]);
+  const [practiceQuestions, setPracticeQuestions] = useState<PracticeQuestion[]>([]);
   const [practiceSelectedLessonIds, setPracticeSelectedLessonIds] = useState<
     number[]
   >([]);
@@ -717,17 +717,40 @@ export default function StudyPlan() {
         1,
         Math.floor(Number(numQuestions) / selectedLessons.length),
       );
-      const questions: { id: number; text: string; difficulty: string }[] = [];
+      const questions: PracticeQuestion[] = [];
       selectedLessons.forEach((lesson, idx) => {
         const count =
           idx === selectedLessons.length - 1
             ? Number(numQuestions) - questions.length
             : perLesson;
         for (let i = 0; i < count; i++) {
+          const isMCQ = ((idx + i) % 3) !== 2;
+          let text = "";
+          let options: string[] | undefined;
+          if (lesson.subject === "math" && isMCQ) {
+            const a = 10 + ((lesson.id + i) % 20);
+            const b = 3 + ((lesson.id + idx) % 15);
+            const correct = a + b;
+            options = [String(correct), String(correct + 1), String(correct - 1), String(correct + 2)];
+            text = `Tính: ${a} + ${b} = ?`;
+          } else if (isMCQ) {
+            const base = stripEmojis(lesson.title);
+            options = [
+              `Ý chính liên quan đến ${topic || base}`,
+              "Chi tiết phụ trong bài",
+              "Thông tin không đúng",
+              "Ví dụ trái ngược",
+            ];
+            text = `${base} — ${topic || "chủ đề"}: Chọn phát biểu đúng`;
+          } else {
+            text = `Trình bày ngắn gọn: ${stripEmojis(lesson.title)} — ${topic || "chủ đề trọng tâm"}`;
+          }
           questions.push({
-            id: Date.now() + Math.random() * 100000 + i,
-            text: `${lesson.title} — Ôn tập: ${topic || "N���i dung"} — Câu ${i + 1}`,
+            id: Math.floor(Date.now() + Math.random() * 100000 + i),
+            text,
             difficulty,
+            type: isMCQ ? "multiple_choice" : "essay",
+            options,
           });
         }
       });
@@ -737,13 +760,42 @@ export default function StudyPlan() {
       return;
     }
 
-    const questions = Array.from({ length: Number(numQuestions) }).map(
-      (_, i) => ({
-        id: Date.now() + i,
-        text: `${subjectConfig[subject as keyof typeof subjectConfig].name} - ${topic || "Bài ôn"} - Câu hỏi ${i + 1}`,
+    const questions: PracticeQuestion[] = Array.from({ length: Number(numQuestions) }).map((_, i) => {
+      const isMCQ = (i % 3) !== 2;
+      if (subject === "math" && isMCQ) {
+        const a = 8 + (i % 15);
+        const b = 2 + ((i * 7) % 12);
+        const correct = a + b;
+        return {
+          id: Math.floor(Date.now() + i),
+          text: `Tính: ${a} + ${b} = ?`,
+          difficulty,
+          type: "multiple_choice",
+          options: [String(correct), String(correct + 1), String(correct - 1), String(correct + 2)],
+        };
+      }
+      if (isMCQ) {
+        const subjName = subjectConfig[subject as keyof typeof subjectConfig].name;
+        return {
+          id: Math.floor(Date.now() + i),
+          text: `${subjName} — ${topic || "chủ đề"}: Chọn phát biểu đúng`,
+          difficulty,
+          type: "multiple_choice",
+          options: [
+            `Ý đúng về ${topic || subjName}`,
+            "Chi tiết không chính xác",
+            "Thông tin ngoài phạm vi",
+            "Ví dụ trái ngược",
+          ],
+        };
+      }
+      return {
+        id: Math.floor(Date.now() + i),
+        text: `Tự luận: Trình bày ${topic || "chủ đề trọng tâm"} trong môn ${subjectConfig[subject as keyof typeof subjectConfig].name}`,
         difficulty,
-      }),
-    );
+        type: "essay",
+      };
+    });
     setPracticeQuestions(questions);
     setShowPracticeDialog(false);
     setShowPracticePreviewDialog(true);
@@ -752,7 +804,7 @@ export default function StudyPlan() {
   const addQuestion = () => {
     setPracticeQuestions([
       ...practiceQuestions,
-      { id: Date.now(), text: "Câu hỏi mới", difficulty: "medium" },
+      { id: Date.now(), text: "Trình bày quan điểm của em về chủ đề đã chọn.", difficulty: "medium", type: "essay" },
     ]);
   };
 
@@ -2257,9 +2309,24 @@ export default function StudyPlan() {
               <div key={q.id} className="p-3 border rounded-lg bg-white">
                 <div className="flex items-center justify-between">
                   <div className="font-semibold">Câu {i + 1}</div>
-                  <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-xs">
+                      {q.type === "multiple_choice" ? "📋 Trắc nghiệm" : "✍️ Tự luận"}
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
+                  </div>
                 </div>
                 <div className="mt-1 text-sm">{q.text}</div>
+                {q.type === "multiple_choice" && q.options && (
+                  <ul className="mt-2 space-y-1 text-sm list-disc pl-6">
+                    {q.options.map((opt, idx) => (
+                      <li key={idx}>{String.fromCharCode(65 + idx)}. {opt}</li>
+                    ))}
+                  </ul>
+                )}
+                {q.type === "essay" && (
+                  <div className="mt-2 text-xs text-muted-foreground">Dạng tự luận: học sinh sẽ nhập câu trả lời khi bắt đầu làm bài.</div>
+                )}
               </div>
             ))}
             {practiceQuestions.length === 0 && (
@@ -2287,15 +2354,34 @@ export default function StudyPlan() {
               <div key={q.id} className="p-3 border rounded-lg bg-white">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="font-semibold">Câu {i + 1}</div>
+                  <Badge variant="secondary" className="text-xs">
+                    {q.type === "multiple_choice" ? "📋 Trắc nghiệm" : "✍️ Tự luận"}
+                  </Badge>
                   <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
                 </div>
                 <div className="mb-2 text-sm">{q.text}</div>
-                <Textarea
-                  placeholder="Nhập câu trả lời..."
-                  value={practiceAnswers[q.id] || ""}
-                  onChange={(e) => setPracticeAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
-                  className="min-h-[90px]"
-                />
+                {q.type === "multiple_choice" && q.options ? (
+                  <div className="space-y-2">
+                    {q.options.map((opt, idx) => (
+                      <label key={idx} className="flex items-center gap-2 p-2 rounded border">
+                        <input
+                          type="radio"
+                          name={`pq-${q.id}`}
+                          checked={practiceAnswers[q.id] === opt}
+                          onChange={() => setPracticeAnswers((prev) => ({ ...prev, [q.id]: opt }))}
+                        />
+                        <span>{String.fromCharCode(65 + idx)}. {opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <Textarea
+                    placeholder="Nhập câu trả lời..."
+                    value={practiceAnswers[q.id] || ""}
+                    onChange={(e) => setPracticeAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                    className="min-h-[90px]"
+                  />
+                )}
               </div>
             ))}
             {practiceQuestions.length === 0 && (
