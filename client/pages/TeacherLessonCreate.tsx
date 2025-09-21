@@ -199,7 +199,14 @@ export default function TeacherLessonCreate() {
   };
 
   const handleGenerateAI = async () => {
-    if (!aiForm.subject || !aiForm.topic || !aiForm.ageGroup) return;
+    // Cho phép tạo mẫu ngay cả khi thiếu thông tin: tự áp dụng giá trị mặc định thân thiện
+    setAiForm((prev) => ({
+      ...prev,
+      subject: prev.subject || "math",
+      topic: prev.topic || title || "Bài học",
+      ageGroup: prev.ageGroup || "6-7 tuổi",
+      difficulty: prev.difficulty || "Trung bình",
+    }));
     setIsGenerating(true);
     setGenerationProgress(0);
     const steps = 5;
@@ -307,7 +314,7 @@ export default function TeacherLessonCreate() {
     const samples = Array.from({ length: count }).map((_, i) => ({
       id: crypto.randomUUID(),
       text: `AI câu hỏi mẫu ${i + 1}: Nêu ví dụ về ${title || "bài học"}`,
-      options: ["Đáp án A", "Đáp án B", "Đáp án C", "Đáp án D"],
+      options: ["Đáp án A", "Đ��p án B", "Đáp án C", "Đáp án D"],
       correctIndex: 1,
       marker: "00:30",
     }));
@@ -819,7 +826,7 @@ export default function TeacherLessonCreate() {
                 <div className="grid gap-6 lg:grid-cols-5 max-h-[70vh]">
                   <div className="lg:col-span-2 space-y-4 overflow-y-auto pr-2">
                     <div className="space-y-2">
-                      <Label>Môn học</Label>
+                      <Label>Môn h���c</Label>
                       <Select
                         value={aiForm.subject}
                         onValueChange={(v) =>
@@ -1030,12 +1037,7 @@ export default function TeacherLessonCreate() {
                     </Button>
                     <Button
                       onClick={handleGenerateAI}
-                      disabled={
-                        isGenerating ||
-                        !aiForm.subject ||
-                        !aiForm.topic ||
-                        !aiForm.ageGroup
-                      }
+                      disabled={isGenerating}
                     >
                       Tạo bằng AI
                     </Button>
