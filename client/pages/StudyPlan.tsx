@@ -897,7 +897,7 @@ export default function StudyPlan() {
               className="bg-gradient-to-r from-secondary to-accent/70 hover:from-secondary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Tạo bài ôn cá nhân hóa
+              Tạo bài ôn 
             </Button>
           </div>
         </div>
@@ -1897,7 +1897,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              📝 Tạo bài ôn cá nhân h��a
+              📝 Tạo bài ôn 
             </DialogTitle>
             <DialogDescription>
               Tạo nhanh một bài ôn theo yêu cầu của học sinh
