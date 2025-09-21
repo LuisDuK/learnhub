@@ -151,7 +151,7 @@ const seedPrompts = [
       "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao gồm {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
     module: "Bài tập" as AiFeatureModule,
     variables: [
-      { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "L��p học" },
+      { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "Lớp học" },
       { name: "topic", type: "text", description: "Chủ đề bài học" },
       { name: "difficulty", type: "select", options: ["dễ", "trung bình", "khó"], description: "Độ khó" },
       { name: "questions", type: "number", min: 1, max: 20, description: "Số câu hỏi" },
@@ -164,7 +164,7 @@ const seedPrompts = [
     id: 2,
     name: "Prompt sinh lộ trình học",
     content:
-      "Dựa trên mục tiêu học tập '{{goal}}' trong thời gian {{duration}}, hãy tạo một lộ trình học chi tiết cho học sinh {{age_group}} có trình độ {{level}}. Môn học: {{subject}}. Số buổi học: {{sessions}} buổi. Mỗi buổi {{session_duration}} phút.",
+      "Dựa trên mục tiêu học tập '{{goal}}' trong thời gian {{duration}}, hãy tạo một lộ trình học chi tiết cho học sinh {{age_group}} có trình độ {{level}}. Môn học: {{subject}}. Số buổi học: {{sessions}} buổi. Mỗi buổi {{session_duration}} ph��t.",
     module: "Lộ trình" as AiFeatureModule,
     variables: [
       { name: "goal", type: "text", description: "Mục tiêu học tập" },
@@ -181,7 +181,7 @@ const seedPrompts = [
     id: 3,
     name: "Prompt chatbot hỗ trợ",
     content:
-      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} để trả lời.",
+      "Bạn là một trợ lý AI thân thiện giúp học sinh tiểu học {{age}}. Hãy trả lời câu hỏi '{{question}}' về môn {{subject}} một cách {{tone}} và {{complexity}}. Sử dụng {{language}} ��ể trả lời.",
     module: "Chatbot" as AiFeatureModule,
     variables: [
       { name: "age", type: "select", options: ["5-7 tuổi", "6-8 tuổi", "7-9 tuổi", "8-10 tuổi"], description: "Độ tuổi học sinh" },
@@ -584,19 +584,19 @@ export default function AdminAIConfig() {
 
         <Tabs defaultValue="api-config" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4 bg-blue-50 h-10 items-center text-center">
-            <TabsTrigger value="api-config" className="flex items-center gap-2">
+            <TabsTrigger value="api-config" className="flex items-center justify-center gap-2 w-full h-full">
               <Cpu className="h-4 w-4" />
               Cấu hình API
             </TabsTrigger>
-            <TabsTrigger value="prompts" className="flex items-center gap-2">
+            <TabsTrigger value="prompts" className="flex items-center justify-center gap-2 w-full h-full">
               <MessageSquare className="h-4 w-4" />
               Prompt mẫu
             </TabsTrigger>
-            <TabsTrigger value="features" className="flex items-center gap-2">
+            <TabsTrigger value="features" className="flex items-center justify-center gap-2 w-full h-full">
               <Brain className="h-4 w-4" />
               Tính năng AI
             </TabsTrigger>
-            <TabsTrigger value="surveys" className="flex items-center gap-2">
+            <TabsTrigger value="surveys" className="flex items-center justify-center gap-2 w-full h-full">
               <ListChecks className="h-4 w-4" />
               Khảo sát
             </TabsTrigger>
@@ -845,7 +845,7 @@ export default function AdminAIConfig() {
                                   onClick={() => {
                                     if (!currentVariable.name.trim()) return alert("Vui lòng nhập tên biến");
                                     if (!currentVariable.description?.trim()) return alert("Vui lòng nhập mô tả biến");
-                                    if (!/^[a-zA-Z_][\w]*$/.test(currentVariable.name)) return alert("Tên biến chỉ gồm chữ, số, _ và không bắt đầu bằng số");
+                                    if (!/^[a-zA-Z_][\w]*$/.test(currentVariable.name)) return alert("Tên biến chỉ gồm ch��, số, _ và không bắt đầu bằng số");
                                     setNewPrompt({ ...newPrompt, variables: [...newPrompt.variables, { ...currentVariable }] });
                                     setCurrentVariable({ name: "", type: "text", description: "", options: [], min: 0, max: 100 });
                                     setShowVariableEditor(false);
