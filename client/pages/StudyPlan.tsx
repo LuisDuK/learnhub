@@ -314,6 +314,9 @@ export default function StudyPlan() {
   >([]);
 
   const [practiceHistory, setPracticeHistory] = useState<any[]>([]);
+  const [showPracticePreviewDialog, setShowPracticePreviewDialog] = useState(false);
+  const [showPracticeAttemptDialog, setShowPracticeAttemptDialog] = useState(false);
+  const [practiceAnswers, setPracticeAnswers] = useState<Record<number, string>>({});
 
   useEffect(() => {
     try {
@@ -729,6 +732,8 @@ export default function StudyPlan() {
         }
       });
       setPracticeQuestions(questions);
+      setShowPracticeDialog(false);
+      setShowPracticePreviewDialog(true);
       return;
     }
 
@@ -740,6 +745,8 @@ export default function StudyPlan() {
       }),
     );
     setPracticeQuestions(questions);
+    setShowPracticeDialog(false);
+    setShowPracticePreviewDialog(true);
   };
 
   const addQuestion = () => {
@@ -2236,6 +2243,95 @@ export default function StudyPlan() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Practice Preview Dialog */}
+      <Dialog open={showPracticePreviewDialog} onOpenChange={setShowPracticePreviewDialog}>
+        <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">📄 Đề bài ôn</DialogTitle>
+            <DialogDescription>Xem đề trước khi bắt đầu làm bài</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-2">
+            {practiceQuestions.map((q, i) => (
+              <div key={q.id} className="p-3 border rounded-lg bg-white">
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold">Câu {i + 1}</div>
+                  <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
+                </div>
+                <div className="mt-1 text-sm">{q.text}</div>
+              </div>
+            ))}
+            {practiceQuestions.length === 0 && (
+              <div className="text-sm text-muted-foreground">Chưa có câu hỏi.</div>
+            )}
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button variant="outline" onClick={() => setShowPracticePreviewDialog(false)} className="flex-1">Đóng</Button>
+            <Button onClick={() => { setShowPracticePreviewDialog(false); setShowPracticeAttemptDialog(true); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">Bắt đầu làm</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Practice Attempt Dialog */}
+      <Dialog open={showPracticeAttemptDialog} onOpenChange={setShowPracticeAttemptDialog}>
+        <DialogContent className="sm:max-w-4xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">🧠 Làm bài ôn</DialogTitle>
+            <DialogDescription>Nhập câu trả lời cho từng câu hỏi</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            {practiceQuestions.map((q, i) => (
+              <div key={q.id} className="p-3 border rounded-lg bg-white">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="font-semibold">Câu {i + 1}</div>
+                  <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
+                </div>
+                <div className="mb-2 text-sm">{q.text}</div>
+                <Textarea
+                  placeholder="Nhập câu trả lời..."
+                  value={practiceAnswers[q.id] || ""}
+                  onChange={(e) => setPracticeAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                  className="min-h-[90px]"
+                />
+              </div>
+            ))}
+            {practiceQuestions.length === 0 && (
+              <div className="text-sm text-muted-foreground">Chưa có câu hỏi.</div>
+            )}
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button variant="outline" onClick={() => setShowPracticeAttemptDialog(false)} className="flex-1">Hủy</Button>
+            <Button
+              onClick={() => {
+                const attempt = {
+                  id: `pa-${Date.now()}`,
+                  createdAt: new Date().toISOString(),
+                  subject: practiceForm.subject,
+                  topic: practiceForm.topic,
+                  difficulty: practiceForm.difficulty,
+                  questions: practiceQuestions,
+                  answers: practiceAnswers,
+                };
+                const attemptsRaw = localStorage.getItem("practiceAttempts");
+                const attempts = attemptsRaw ? JSON.parse(attemptsRaw) : [];
+                const next = [attempt, ...attempts].slice(0, 50);
+                localStorage.setItem("practiceAttempts", JSON.stringify(next));
+                toast({ title: "Đã nộp bài", description: "Bài ôn đã được lưu vào lịch sử." });
+                setShowPracticeAttemptDialog(false);
+                setPracticeAnswers({});
+              }}
+              className="flex-1 bg-gradient-to-r from-primary to-accent text-white"
+            >
+              Nộp bài
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </DashboardLayout>
   );
 }
