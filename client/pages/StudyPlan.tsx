@@ -53,6 +53,7 @@ import {
   ArrowDown,
 } from "lucide-react";
 import React, { useMemo, useEffect, useRef, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
