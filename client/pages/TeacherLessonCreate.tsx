@@ -244,7 +244,7 @@ export default function TeacherLessonCreate() {
                       <SelectValue placeholder="Chọn môn học" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="math">Toán h���c</SelectItem>
+                      <SelectItem value="math">Toán học</SelectItem>
                       <SelectItem value="literature">Ngữ văn</SelectItem>
                       <SelectItem value="english">Tiếng Anh</SelectItem>
                       <SelectItem value="science">Khoa học</SelectItem>
