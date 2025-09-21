@@ -593,13 +593,7 @@ export default function Settings() {
                               onChange={(e) => setStudySettings({ ...studySettings, reminderTimeFrom: e.target.value })}
                               className="w-36"
                             />
-                            <span className="text-sm text-muted-foreground">đến</span>
-                            <Input
-                              type="time"
-                              value={studySettings.reminderTimeTo}
-                              onChange={(e) => setStudySettings({ ...studySettings, reminderTimeTo: e.target.value })}
-                              className="w-36"
-                            />
+                           
                           </div>
                         </div>
                         <div className="flex flex-wrap gap-2 pt-1">
