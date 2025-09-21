@@ -478,7 +478,7 @@ export default function Settings() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Study Stats */}
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="text-center p-4 rounded-xl bg-primary/10 border border-primary/20">
                     <div className="text-2xl mb-2">🔥</div>
                     <div className="text-lg font-bold text-primary">
