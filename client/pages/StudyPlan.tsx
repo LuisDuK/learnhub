@@ -1487,7 +1487,7 @@ export default function StudyPlan() {
                     desiredResult: e.target.value,
                   })
                 }
-                placeholder="Ví dụ: Đạt 8 điểm kiểm tra giữa kỳ"
+                placeholder="Ví dụ: Đạt 8 điểm kiểm tra gi���a kỳ"
               />
             </div>
 
@@ -2164,6 +2164,23 @@ export default function StudyPlan() {
             </Button>
             <Button
               onClick={() => {
+                // save current practice to history
+                if (practiceQuestions.length === 0) {
+                  toast({ title: "Không có nội dung", description: "Chưa có câu hỏi để lưu." });
+                  return;
+                }
+                const item = {
+                  id: `ph-${Date.now()}`,
+                  createdAt: new Date().toISOString(),
+                  subject: practiceForm.subject,
+                  topic: practiceForm.topic,
+                  difficulty: practiceForm.difficulty,
+                  questions: practiceQuestions,
+                };
+                const next = [item, ...practiceHistory].slice(0, 50);
+                setPracticeHistory(next);
+                localStorage.setItem("practiceHistory", JSON.stringify(next));
+                toast({ title: "Đã lưu", description: "Bài ôn đã được lưu vào lịch sử." });
                 setShowPracticeDialog(false);
               }}
               className="flex-1 bg-gradient-to-r from-primary to-accent text-white rounded-xl"
