@@ -502,9 +502,6 @@ export default function Login() {
                 {/* Teacher Registration Section */}
                 <div className="border-t border-gray-200 pt-6 mt-6">
                   <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-3">
-                      Bạn là giáo viên?
-                    </div>
                     <Dialog
                       open={showTeacherRegisterDialog}
                       onOpenChange={setShowTeacherRegisterDialog}
@@ -898,7 +895,7 @@ export default function Login() {
                                         Thạc sĩ
                                       </SelectItem>
                                       <SelectItem value="tien-si">
-                                        Tiến sĩ
+                                        Ti���n sĩ
                                       </SelectItem>
                                       <SelectItem value="khac">Khác</SelectItem>
                                     </SelectContent>
