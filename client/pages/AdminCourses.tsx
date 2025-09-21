@@ -103,7 +103,7 @@ const mockCourses = [
   },
   {
     id: 2,
-    name: "Tiếng Vi���t lớp 3",
+    name: "Tiếng Việt lớp 3",
     description:
       "Học tiếng Việt qua các bài văn và câu chuyện thú vị, phát triển kỹ năng đọc hiểu.",
     image: "/placeholder.svg",
