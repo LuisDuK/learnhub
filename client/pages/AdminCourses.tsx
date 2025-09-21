@@ -224,7 +224,7 @@ const mockPendingContent = [
     type: "lesson",
     action: "create",
     title: "Bài học: Từ vựng và phát âm cơ bản",
-    description: "Bài học giới thiệu từ vựng cơ bản và luyện phát âm dành cho trẻ 5-7 tu��i",
+    description: "Bài học giới thiệu từ vựng cơ bản và luyện phát âm dành cho trẻ 5-7 tuổi",
     courseId: 999,
     courseName: "English Basics",
     submittedAt: new Date().toISOString(),
