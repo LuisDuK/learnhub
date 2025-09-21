@@ -128,6 +128,8 @@ export default function AdminUsers() {
     switch (role) {
       case "Học sinh":
         return "bg-green-100 text-green-800";
+      case "Giáo viên":
+        return "bg-amber-100 text-amber-800";
       case "Quản trị viên":
         return "bg-purple-100 text-purple-800";
       default:
@@ -183,6 +185,7 @@ export default function AdminUsers() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Học sinh">Học sinh</SelectItem>
+                      <SelectItem value="Giáo viên">Giáo viên</SelectItem>
                       <SelectItem value="Quản trị viên">Quản trị viên</SelectItem>
                     </SelectContent>
                   </Select>
@@ -213,6 +216,7 @@ export default function AdminUsers() {
             <SelectContent>
               <SelectItem value="all">Tất cả vai trò</SelectItem>
               <SelectItem value="Học sinh">Học sinh</SelectItem>
+              <SelectItem value="Giáo viên">Giáo viên</SelectItem>
               <SelectItem value="Quản trị viên">Quản trị viên</SelectItem>
             </SelectContent>
           </Select>
@@ -271,10 +275,14 @@ export default function AdminUsers() {
         </div>
 
         {/* Stats Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-green-50 p-4 rounded-lg border border-green-200">
             <div className="text-2xl font-bold text-green-600">{users.filter((u) => u.role === "Học sinh").length}</div>
             <div className="text-sm text-green-600">Học sinh</div>
+          </div>
+          <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+            <div className="text-2xl font-bold text-amber-600">{users.filter((u) => u.role === "Giáo viên").length}</div>
+            <div className="text-sm text-amber-600">Giáo viên</div>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">{users.filter((u) => u.role === "Quản trị viên").length}</div>
