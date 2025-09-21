@@ -1793,23 +1793,24 @@ export default function StudyPlan() {
               <h3 className="text-lg font-semibold">Danh sách bài học</h3>
               <Button
                 onClick={() => {
-                  const newLesson = {
-                    id: Date.now(),
-                    subject: "math",
-                    title: "Bài học mới",
-                    duration: "45 phút",
-                    status: "not-started",
-                    day: "Thứ 2",
-                    time: "14:00",
-                    week: "Tuần mới",
-                  };
-                  setLessonList([...lessonList, newLesson]);
+                  const order: Record<string, number> = { "not-started": 0, "in-progress": 1, "completed": 2 };
+                  const days = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6"];
+                  const times = ["14:00", "15:00", "16:00"];
+                  const sorted = [...lessonList].sort((a, b) => (order[a.status] ?? 99) - (order[b.status] ?? 99));
+                  const mapped = sorted.map((l, idx) => ({
+                    ...l,
+                    week: `Tuần ${Math.floor(idx / 5) + 1}`,
+                    day: days[idx % days.length],
+                    time: times[idx % times.length],
+                  }));
+                  setLessonList(mapped);
+                  toast({ title: "Đã tự động chỉnh sửa", description: "Lộ trình đã được sắp xếp lại theo trạng thái và phân lịch học tự động." });
                 }}
                 size="sm"
-                className="bg-green-600 hover:bg-green-700 text-white rounded-lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Thêm bài học
+                <Sparkles className="h-4 w-4 mr-2" />
+                Tự động chỉnh sửa
               </Button>
             </div>
 
@@ -1911,7 +1912,7 @@ export default function StudyPlan() {
                       <SelectContent>
                         <SelectItem value="not-started">Chưa học</SelectItem>
                         <SelectItem value="in-progress">Đang học</SelectItem>
-                        <SelectItem value="completed">Hoàn thành</SelectItem>
+                        <SelectItem value="completed">Hoàn th��nh</SelectItem>
                       </SelectContent>
                     </Select>
                     <Button
@@ -1947,7 +1948,7 @@ export default function StudyPlan() {
               className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
             >
               <Save className="h-4 w-4 mr-2" />
-              Lưu thay đổi
+              Lưu thay đ���i
             </Button>
           </div>
         </DialogContent>
@@ -2347,7 +2348,7 @@ export default function StudyPlan() {
 
           <div className="flex gap-3 pt-2">
             <Button variant="outline" onClick={() => setShowPracticePreviewDialog(false)} className="flex-1">Đóng</Button>
-            <Button onClick={() => { const data = { subject: practiceForm.subject, topic: practiceForm.topic, difficulty: practiceForm.difficulty, questions: practiceQuestions, createdAt: new Date().toISOString() }; localStorage.setItem("currentPractice", JSON.stringify(data)); setShowPracticePreviewDialog(false); setShowPracticeAttemptDialog(false); navigate("/practice-quiz", { state: { practice: data } }); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">Bắt đầu làm</Button>
+            <Button onClick={() => { const data = { subject: practiceForm.subject, topic: practiceForm.topic, difficulty: practiceForm.difficulty, questions: practiceQuestions, createdAt: new Date().toISOString() }; localStorage.setItem("currentPractice", JSON.stringify(data)); setShowPracticePreviewDialog(false); setShowPracticeAttemptDialog(false); navigate("/practice-quiz", { state: { practice: data } }); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">B��t đầu làm</Button>
           </div>
         </DialogContent>
       </Dialog>
