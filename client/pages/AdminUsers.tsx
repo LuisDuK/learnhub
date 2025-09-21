@@ -48,12 +48,6 @@ import {
   Loader2,
   ShieldX,
 } from "lucide-react";
-import {
-  TeacherApplication,
-  TeacherApplicationStatus,
-  TeacherApplicationsListResponse,
-} from "@shared/api";
-import { useSearchParams } from "react-router-dom";
 
 // Mock user data
 const mockUsers = [
