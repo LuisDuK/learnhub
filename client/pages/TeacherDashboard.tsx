@@ -340,33 +340,7 @@ export default function TeacherDashboard() {
           {/* Recent Activities */}
           <div>
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Hoạt động gần đây</CardTitle>
-                <CardDescription>
-                  Cập nhật mới nhất từ môn học của bạn
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-0.5">
-                      {getActivityIcon(activity.type)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900">
-                        {activity.message}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <p className="text-xs text-gray-500">{activity.time}</p>
-                        <span className="text-xs text-gray-300">•</span>
-                        <p className="text-xs text-blue-600">
-                          {activity.course}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
+              
             </Card>
 
             {/* Quick Actions */}
