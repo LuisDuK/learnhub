@@ -2105,18 +2105,7 @@ export default function StudyPlan() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-semibold">Danh sách câu hỏi</h4>
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    onClick={addQuestion}
-                    className="bg-green-600 text-white"
-                  >
-                    Thêm câu hỏi
-                  </Button>
-                </div>
-              </div>
+              
 
               {/* Practice history */}
               <div className="mb-3">
