@@ -297,6 +297,8 @@ export default function StudyPlan() {
   const [showPdfDialog, setShowPdfDialog] = useState(false);
   const [pdfSrc, setPdfSrc] = useState("");
 
+  const { toast } = useToast();
+
   const [practiceForm, setPracticeForm] = useState({
     subject: "math",
     topic: "",
@@ -310,6 +312,17 @@ export default function StudyPlan() {
   const [practiceSelectedLessonIds, setPracticeSelectedLessonIds] = useState<
     number[]
   >([]);
+
+  const [practiceHistory, setPracticeHistory] = useState<any[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("practiceHistory");
+      if (raw) setPracticeHistory(JSON.parse(raw));
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   const [entranceQuestions, setEntranceQuestions] = useState([
     { id: 1, q: "2 + 2 = ?", choices: ["3", "4", "5"], answer: 1 },
@@ -2025,7 +2038,7 @@ export default function StudyPlan() {
                   setPracticeSelectedLessonIds([]);
                 }}
               >
-                Xóa kết quả
+                X��a kết quả
               </Button>
             </div>
 
