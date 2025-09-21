@@ -151,7 +151,7 @@ const seedPrompts = [
       "Hãy tạo một bài tập toán học phù hợp với học sinh lớp {{grade}} về chủ đề {{topic}}. Bài tập cần có {{difficulty}} độ khó và bao gồm {{questions}} câu hỏi. Định dạng: {{format}}. Thời gian làm bài: {{duration}} phút.",
     module: "Bài tập" as AiFeatureModule,
     variables: [
-      { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "Lớp học" },
+      { name: "grade", type: "select", options: ["1", "2", "3", "4", "5"], description: "L��p học" },
       { name: "topic", type: "text", description: "Chủ đề bài học" },
       { name: "difficulty", type: "select", options: ["dễ", "trung bình", "khó"], description: "Độ khó" },
       { name: "questions", type: "number", min: 1, max: 20, description: "Số câu hỏi" },
@@ -204,7 +204,7 @@ const seedPrompts = [
       { name: "student_answer", type: "textarea", description: "Bài làm của học sinh" },
       { name: "correct_answer", type: "textarea", description: "Đáp án chính xác" },
       { name: "criteria", type: "textarea", description: "Tiêu chí chấm điểm" },
-      { name: "max_score", type: "number", min: 1, max: 100, description: "��iểm tối đa" },
+      { name: "max_score", type: "number", min: 1, max: 100, description: "Điểm tối đa" },
       { name: "feedback_style", type: "select", options: ["khuyến khích", "chi tiết", "tóm tắt", "xây dựng"], description: "Kiểu phản hồi" },
     ],
     createdAt: "2024-01-25",
@@ -583,7 +583,7 @@ export default function AdminAIConfig() {
         </div>
 
         <Tabs defaultValue="api-config" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-blue-50">
+          <TabsList className="grid w-full grid-cols-4 bg-blue-50 h-10 items-center text-center">
             <TabsTrigger value="api-config" className="flex items-center gap-2">
               <Cpu className="h-4 w-4" />
               Cấu hình API
