@@ -669,7 +669,7 @@ export default function AdminAIConfig() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Brain className="h-8 w-8 text-blue-600" />
-              Cấu hình AI (Chỉ Quản trị viên)
+              Cấu hình AI 
             </h1>
            
           </div>
