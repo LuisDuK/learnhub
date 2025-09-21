@@ -1019,7 +1019,7 @@ export default function StudyPlan() {
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl font-bold">
-              <Calendar className="h-6 w-6 text-secondary" />
+              
               <span>📝 Lịch trình học tập</span>
             </CardTitle>
             <CardDescription className="text-base md:text-lg text-muted-foreground">
