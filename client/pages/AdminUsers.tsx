@@ -87,10 +87,7 @@ const mockUsers = [
 
 export default function AdminUsers() {
   const { toast } = useToast();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const initialTab =
-    (searchParams.get("tab") as "users" | "approvals") || "users";
-  const [tab, setTab] = useState<"users" | "approvals">(initialTab);
+  const [tab, setTab] = useState<'users' | 'approvals'>('users');
 
   // Users state
   const [users, setUsers] = useState(mockUsers);
