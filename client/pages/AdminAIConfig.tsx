@@ -671,7 +671,7 @@ export default function AdminAIConfig() {
               <Brain className="h-8 w-8 text-blue-600" />
               Cấu hình AI (Chỉ Quản trị viên)
             </h1>
-            <p className="text-gray-600 mt-1">Quản lý cấu hình và tham số của hệ thống AI - Chỉ có quản trị viên mới có quyền điều chỉnh</p>
+           
           </div>
         </div>
 
