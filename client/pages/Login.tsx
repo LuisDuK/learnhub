@@ -99,32 +99,6 @@ export default function Login() {
     }, 1500);
   };
 
-  const handleTeacherRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulate teacher registration process
-    setTimeout(() => {
-      setIsLoading(false);
-      setTeacherRegisterSuccess(true);
-    }, 2000);
-  };
-
-  const resetTeacherForm = () => {
-    setTeacherForm({
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-      school: "",
-      subject: "",
-      experience: "",
-      qualification: "",
-      bio: "",
-    });
-    setTeacherRegisterSuccess(false);
-    setShowTeacherRegisterDialog(false);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex flex-col items-center justify-center p-4">
@@ -737,7 +711,7 @@ export default function Login() {
                                           ? "text"
                                           : "password"
                                       }
-                                      placeholder="���•••••••"
+                                      placeholder="••••••••"
                                       value={teacherForm.confirmPassword}
                                       onChange={(e) =>
                                         setTeacherForm({
