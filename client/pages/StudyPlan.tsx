@@ -1948,7 +1948,7 @@ export default function StudyPlan() {
               className="flex-1 bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-white rounded-xl"
             >
               <Save className="h-4 w-4 mr-2" />
-              Lưu thay đ���i
+              Lưu thay đổi
             </Button>
           </div>
         </DialogContent>
