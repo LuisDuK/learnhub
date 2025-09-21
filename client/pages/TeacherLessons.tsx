@@ -258,9 +258,6 @@ export default function TeacherLessons() {
             <h1 className="text-3xl font-bold flex items-center gap-3">
               <BookOpen className="h-8 w-8 text-green-600" /> Quản lý bài học
             </h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Tạo, chỉnh sửa và quản lý các bài học — giao diện toàn trang, không cần backend
-            </p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -314,7 +311,7 @@ export default function TeacherLessons() {
           <Card>
             <CardHeader className="flex items-center justify-between pb-2">
               <div>
-                <p className="text-sm font-medium">M��n học</p>
+                <p className="text-sm font-medium">Môn học</p>
               </div>
               <Tag className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
