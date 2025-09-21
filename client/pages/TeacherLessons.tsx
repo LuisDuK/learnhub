@@ -147,7 +147,7 @@ export default function TeacherLessons() {
       type: "short_answer",
       question: "Hãy tính kết quả của phép tính: 6 × 8 = ?",
       correctAnswer: "48",
-      keywords: ["48", "bốn m��ơi tám"],
+      keywords: ["48", "bốn mươi tám"],
       explanation:
         "6 × 8 = 48. Có thể nhớ bằng bảng cửu chương hoặc tính: 6 × (10 - 2) = 60 - 12 = 48",
       difficulty: "Trung bình",
