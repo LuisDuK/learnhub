@@ -42,6 +42,7 @@ import {
   Trash2,
   RotateCcw,
   Filter,
+  Eye,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -93,6 +94,15 @@ export default function AdminUsers() {
     role: "",
     password: "",
   });
+
+  // View user dialog state
+  const [selectedUserDetails, setSelectedUserDetails] = useState<any>(null);
+  const [isViewUserOpen, setIsViewUserOpen] = useState(false);
+
+  const handleViewUser = (user: any) => {
+    setSelectedUserDetails(user);
+    setIsViewUserOpen(true);
+  };
 
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
@@ -256,6 +266,9 @@ export default function AdminUsers() {
                         <Button variant="ghost" className="h-8 w-8 p-0"><MoreHorizontal className="h-4 w-4" /></Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleViewUser(user)}>
+                          <Eye className="mr-2 h-4 w-4" /> Xem thông tin
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Edit className="mr-2 h-4 w-4" /> Chỉnh sửa
                         </DropdownMenuItem>
@@ -273,6 +286,58 @@ export default function AdminUsers() {
             </TableBody>
           </Table>
         </div>
+
+        {/* View User Dialog */}
+        <Dialog open={isViewUserOpen} onOpenChange={setIsViewUserOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            {selectedUserDetails && (
+              <>
+                <DialogHeader>
+                  <DialogTitle>Thông tin cá nhân</DialogTitle>
+                  <DialogDescription className="text-gray-600">Xem thông tin cơ bản của người dùng</DialogDescription>
+                </DialogHeader>
+
+                <div className="py-4 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-500 to-orange-500 flex items-center justify-center text-white text-lg font-bold">{selectedUserDetails.name.charAt(0)}</div>
+                    <div>
+                      <div className="text-lg font-semibold">{selectedUserDetails.name}</div>
+                      <div className="text-sm text-gray-600">{selectedUserDetails.email}</div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-xs text-gray-500">Vai trò</Label>
+                      <div className="mt-1"><Badge className={getRoleColor(selectedUserDetails.role)}>{selectedUserDetails.role}</Badge></div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">Trạng thái</Label>
+                      <div className="mt-1"><Badge className={getStatusColor(selectedUserDetails.status)}>{selectedUserDetails.status}</Badge></div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">Ngày tạo</Label>
+                      <div className="mt-1">{selectedUserDetails.createdAt}</div>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-gray-500">ID</Label>
+                      <div className="mt-1">{selectedUserDetails.id}</div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label className="text-xs text-gray-500">Ghi chú</Label>
+                    <p className="mt-1 text-sm text-gray-700">Không có ghi chú.</p>
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsViewUserOpen(false)}>Đóng</Button>
+                </DialogFooter>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
