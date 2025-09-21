@@ -55,18 +55,7 @@ const teacherCourses = [
     createdAt: "2024-01-15",
     lastActivity: "2024-03-12",
   },
-  {
-    id: 3,
-    name: "Hình học cơ bản",
-    description: "Môn học về hình học cho trẻ em",
-    studentsCount: 18,
-    completionRate: 65,
-    status: "draft",
-    totalLessons: 10,
-    completedLessons: 6,
-    createdAt: "2024-03-01",
-    lastActivity: "2024-03-08",
-  },
+  
 ];
 
 // Mock data for recent activities
