@@ -212,7 +212,9 @@ export default function TeacherLessons() {
 
   const startEdit = (id: number) => setEditingId(id);
   const saveEdit = (id: number, patch: any) => {
-    setGeneratedContent((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+    setGeneratedContent((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+    );
     setEditingId(null);
   };
 
@@ -240,8 +242,10 @@ export default function TeacherLessons() {
         l.title.toLowerCase().includes(q) ||
         l.subject.toLowerCase().includes(q) ||
         l.chapter.toLowerCase().includes(q);
-      const matchesSubject = subjectFilter === "Tất cả" || l.subject === subjectFilter;
-      const matchesStatus = statusFilter === "Tất cả" || l.status === statusFilter;
+      const matchesSubject =
+        subjectFilter === "Tất cả" || l.subject === subjectFilter;
+      const matchesStatus =
+        statusFilter === "Tất cả" || l.status === statusFilter;
       return matchesSearch && matchesSubject && matchesStatus;
     });
   }, [searchTerm, subjectFilter, statusFilter]);
@@ -261,7 +265,10 @@ export default function TeacherLessons() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Button onClick={() => navigate("/teacher/lessons/new")} className="bg-gradient-to-r from-green-500 to-blue-500 text-white">
+            <Button
+              onClick={() => navigate("/teacher/lessons/new")}
+              className="bg-gradient-to-r from-green-500 to-blue-500 text-white"
+            >
               <Plus className="h-4 w-4 mr-2" /> Thêm bài học mới
             </Button>
           </div>
@@ -291,7 +298,9 @@ export default function TeacherLessons() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{published}</div>
-              <p className="text-xs text-muted-foreground">Bài học sẵn sàng cho học sinh</p>
+              <p className="text-xs text-muted-foreground">
+                Bài học sẵn sàng cho học sinh
+              </p>
             </CardContent>
           </Card>
 
@@ -304,7 +313,9 @@ export default function TeacherLessons() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{drafts}</div>
-              <p className="text-xs text-muted-foreground">Bài học cần hoàn thiện</p>
+              <p className="text-xs text-muted-foreground">
+                Bài học cần hoàn thiện
+              </p>
             </CardContent>
           </Card>
 
@@ -316,8 +327,12 @@ export default function TeacherLessons() {
               <Tag className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{new Set(mockLessons.map((l) => l.subject)).size}</div>
-              <p className="text-xs text-muted-foreground">Số môn chứa bài học</p>
+              <div className="text-2xl font-bold">
+                {new Set(mockLessons.map((l) => l.subject)).size}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Số môn chứa bài học
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -355,7 +370,11 @@ export default function TeacherLessons() {
               <SelectContent>
                 {statuses.map((s) => (
                   <SelectItem key={s} value={s}>
-                    {s === "Tất cả" ? "Tất cả" : s === "published" ? "Đã xuất bản" : "Bản nháp"}
+                    {s === "Tất cả"
+                      ? "Tất cả"
+                      : s === "published"
+                        ? "Đã xuất bản"
+                        : "Bản nháp"}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -375,13 +394,27 @@ export default function TeacherLessons() {
 
                   <div className="min-w-0">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-lg truncate">{lesson.title}</h3>
-                      <Badge variant={lesson.status === "published" ? undefined : "secondary"}>
-                        {lesson.status === "published" ? "Đã xuất bản" : "Bản nháp"}
+                      <h3 className="font-semibold text-lg truncate">
+                        {lesson.title}
+                      </h3>
+                      <Badge
+                        variant={
+                          lesson.status === "published"
+                            ? undefined
+                            : "secondary"
+                        }
+                      >
+                        {lesson.status === "published"
+                          ? "Đã xuất bản"
+                          : "Bản nháp"}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">{lesson.chapter} • {lesson.subject}</p>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{lesson.shortDescription}</p>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {lesson.chapter} • {lesson.subject}
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                      {lesson.shortDescription}
+                    </p>
                   </div>
                 </div>
 
@@ -392,7 +425,13 @@ export default function TeacherLessons() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => navigate(`/teacher/lessons/new?edit=${lesson.id}`)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        navigate(`/teacher/lessons/new?edit=${lesson.id}`)
+                      }
+                    >
                       <Edit className="h-4 w-4 mr-2" /> Chỉnh sửa
                     </Button>
                     <Button variant="destructive" size="sm">
@@ -405,7 +444,6 @@ export default function TeacherLessons() {
           ))}
         </div>
       </div>
-
     </TeacherLayout>
   );
 }
