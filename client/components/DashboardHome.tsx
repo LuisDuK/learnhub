@@ -330,74 +330,7 @@ export function DashboardHome() {
         </Card>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2 center">
-       
-
-        {/* Upcoming Schedule */}
-        <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              🗓️ Lịch học sắp tới
-              <Calendar className="h-5 w-5 text-accent animate-bounce" />
-            </CardTitle>
-            <CardDescription>
-              Những buổi học thú vị đang chờ bé! 🎉
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {upcomingLessons.map((lesson) => {
-              const status = getScheduleStatus(lesson);
-              return (
-                <div
-                  key={lesson.id}
-                  className="flex items-start gap-3 p-3 rounded-xl border border-primary/10 bg-gradient-to-r from-primary/5 to-accent/5 hover:scale-105 transition-transform duration-200"
-                >
-                  <div className="flex flex-col items-center min-w-0">
-                    <div className="text-2xl">{lesson.emoji}</div>
-                    <div className="text-xs font-medium text-muted-foreground">
-                      {lesson.date}
-                    </div>
-                    <div className="text-sm font-semibold text-primary">
-                      {lesson.time}
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium truncate">
-                      {lesson.title}
-                    </h4>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {lesson.course}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Badge
-                        variant={
-                          lesson.type === "live" ? "default" : "secondary"
-                        }
-                        className="text-xs"
-                      >
-                        {lesson.type === "live" ? "🔴 Trực tiếp" : "📹 Video"}
-                      </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        ⏱️ {lesson.duration}
-                      </span>
-                      {status.late ? (
-                        <Badge variant="destructive" className="text-xs">
-                          ⛔ Trễ lịch
-                        </Badge>
-                      ) : status.ongoing ? (
-                        <Badge variant="outline" className="text-xs">
-                          🟢 Đang diễn ra
-                        </Badge>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
-      </div>
-
+     
       {/* Current Courses Grid */}
       <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
         <CardHeader>
