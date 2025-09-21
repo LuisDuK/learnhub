@@ -501,9 +501,7 @@ export default function Settings() {
                     <div className="text-lg font-bold text-accent">
                       {studySettings.weeklyGoalHours}h
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      Mục tiêu tuần
-                    </div>
+                   
                   </div>
                   <div className="text-center p-4 rounded-xl bg-secondary/10 border border-secondary/20">
                     <div className="text-2xl mb-2">🎯</div>
