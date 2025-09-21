@@ -213,7 +213,7 @@ const mockPendingContent = [
     submittedBy: "Giáo viên Trần Văn Dũng",
     status: "pending",
     details: {
-      reason: "Môn học không còn phù hợp với chương trình mới",
+      reason: "Môn học không c��n phù hợp với chương trình mới",
       affectedStudents: 25,
       alternativeCourse: "Khoa học vui nhộn",
     },
@@ -895,10 +895,120 @@ export default function AdminCourses() {
                       <Label className="text-sm font-medium text-gray-500">
                         Chi tiết
                       </Label>
-                      <div className="mt-2 p-3 bg-gray-50 rounded-lg">
-                        <pre className="text-xs text-gray-700 whitespace-pre-wrap">
-                          {JSON.stringify(selectedPendingItem.details, null, 2)}
-                        </pre>
+
+                      <div className="mt-2 p-3 bg-gray-50 rounded-lg space-y-2 text-sm">
+                        {/* Course details */}
+                        {selectedPendingItem.type === "course" && (
+                          <div>
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Tên môn học</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.name}</p>
+                            </div>
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Mô tả</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.description}</p>
+                            </div>
+                            {selectedPendingItem.details?.objectives && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Mục tiêu</Label>
+                                <p className="mt-1">{selectedPendingItem.details?.objectives}</p>
+                              </div>
+                            )}
+                            {selectedPendingItem.details?.prerequisites && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Yêu cầu trước</Label>
+                                <p className="mt-1">{selectedPendingItem.details?.prerequisites}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Lesson details */}
+                        {selectedPendingItem.type === "lesson" && (
+                          <div>
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.title}</p>
+                            </div>
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Mô tả</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.description}</p>
+                            </div>
+                            {selectedPendingItem.details?.type && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Kiểu bài</Label>
+                                <p className="mt-1 capitalize">{selectedPendingItem.details?.type}</p>
+                              </div>
+                            )}
+                            {selectedPendingItem.details?.duration && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Thời lượng</Label>
+                                <p className="mt-1">{selectedPendingItem.details?.duration}</p>
+                              </div>
+                            )}
+                            {selectedPendingItem.details?.content && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Nội dung</Label>
+                                <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.content}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Exercise or update details */}
+                        {selectedPendingItem.type === "exercise" && (
+                          <div>
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.title}</p>
+                            </div>
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Mô tả</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.description}</p>
+                            </div>
+                            {selectedPendingItem.details?.difficulty && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Độ khó</Label>
+                                <p className="mt-1">{selectedPendingItem.details?.difficulty}</p>
+                              </div>
+                            )}
+                            {selectedPendingItem.details?.changes && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Thay đổi</Label>
+                                <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.changes}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Delete request details */}
+                        {selectedPendingItem.action === "delete" && (
+                          <div>
+                            {selectedPendingItem.details?.reason && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Lý do xóa</Label>
+                                <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.reason}</p>
+                              </div>
+                            )}
+                            {selectedPendingItem.details?.affectedStudents !== undefined && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Số học sinh bị ảnh hưởng</Label>
+                                <p className="mt-1">{selectedPendingItem.details?.affectedStudents}</p>
+                              </div>
+                            )}
+                            {selectedPendingItem.details?.alternativeCourse && (
+                              <div className="mb-2">
+                                <Label className="text-xs text-gray-500">Môn thay thế gợi ý</Label>
+                                <p className="mt-1">{selectedPendingItem.details?.alternativeCourse}</p>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Fallback: show raw JSON if nothing matched */}
+                        {(!["course", "lesson", "exercise"].includes(selectedPendingItem.type) && selectedPendingItem.action !== "delete") && (
+                          <pre className="text-xs text-gray-700 whitespace-pre-wrap">{JSON.stringify(selectedPendingItem.details, null, 2)}</pre>
+                        )}
                       </div>
                     </div>
                   )}
