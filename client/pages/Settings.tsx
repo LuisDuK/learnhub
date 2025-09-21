@@ -276,7 +276,7 @@ export default function Settings() {
                         <SelectValue placeholder="Chọn lớp" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Lớp 3A">📚 Lớp 3A</SelectItem>
+                        <SelectItem value="Lớp 3A">📚 L��p 3A</SelectItem>
                         <SelectItem value="Lớp 4A">📚 Lớp 4A</SelectItem>
                         <SelectItem value="Lớp 5A">📚 Lớp 5A</SelectItem>
                         <SelectItem value="Lớp 6A">📚 Lớp 6A</SelectItem>
@@ -366,7 +366,7 @@ export default function Settings() {
                     <Input
                       id="confirmPassword"
                       type="password"
-                      placeholder="Nhập lại mật khẩu mới"
+                      placeholder="Nhập lại m��t khẩu mới"
                       className="border-accent/20 focus:border-accent rounded-xl"
                     />
                   </div>
@@ -520,7 +520,7 @@ export default function Settings() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label className="text-secondary font-medium flex items-center gap-2">
+                      <Label className="text-primary font-semibold flex items-center gap-2">
                         <Bell className="h-4 w-4" />
                         Nhắc nhở học tập hằng ngày
                       </Label>
@@ -647,64 +647,6 @@ export default function Settings() {
 
                 <Separator />
 
-                {/* Default Goal */}
-                <div className="space-y-2">
-                  <Label className="text-secondary font-medium flex items-center gap-1">
-                    <Target className="h-4 w-4" />
-                    Mục tiêu mặc định
-                  </Label>
-                  <Select
-                    value={studySettings.defaultGoal}
-                    onValueChange={(value) =>
-                      setStudySettings({ ...studySettings, defaultGoal: value })
-                    }
-                  >
-                    <SelectTrigger className="border-secondary/20 focus:border-secondary rounded-xl">
-                      <SelectValue placeholder="Chọn mục tiêu" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="midterm">🎯 Thi giữa kỳ</SelectItem>
-                      <SelectItem value="final">📝 Thi cuối kỳ</SelectItem>
-                      <SelectItem value="vocabulary">
-                        📖 Ôn tập từ vựng
-                      </SelectItem>
-                      <SelectItem value="grammar">
-                        📚 Ôn tập ngữ pháp
-                      </SelectItem>
-                      <SelectItem value="practice">🏋️ Luyện thi</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Separator />
-
-                {/* Weekly Goal Hours */}
-                <div className="space-y-2">
-                  <Label className="text-secondary font-medium flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    Mục tiêu học tập hàng tuần (giờ)
-                  </Label>
-                  <Select
-                    value={studySettings.weeklyGoalHours.toString()}
-                    onValueChange={(value) =>
-                      setStudySettings({
-                        ...studySettings,
-                        weeklyGoalHours: parseInt(value),
-                      })
-                    }
-                  >
-                    <SelectTrigger className="border-secondary/20 focus:border-secondary rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">⏰ 5 giờ/tuần</SelectItem>
-                      <SelectItem value="8">⏰ 8 giờ/tuần</SelectItem>
-                      <SelectItem value="10">⏰ 10 giờ/tuần</SelectItem>
-                      <SelectItem value="12">⏰ 12 giờ/tuần</SelectItem>
-                      <SelectItem value="15">⏰ 15 giờ/tuần</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
 
                 <div className="flex justify-end">
                   <Button
