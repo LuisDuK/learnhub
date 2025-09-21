@@ -33,7 +33,7 @@ const menuItems = [
     href: "/admin/subjects",
   },
   {
-    title: "Cấu hình AI (Quản trị viên)",
+    title: "Cấu hình AI",
     icon: Settings,
     href: "/admin/ai-config",
   },
