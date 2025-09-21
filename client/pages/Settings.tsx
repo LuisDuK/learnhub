@@ -496,13 +496,7 @@ export default function Settings() {
                       Ngày liên tiếp
                     </div>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-accent/10 border border-accent/20">
-                    <div className="text-2xl mb-2">⏰</div>
-                    <div className="text-lg font-bold text-accent">
-                      {studySettings.weeklyGoalHours}h
-                    </div>
-                   
-                  </div>
+                 
                   <div className="text-center p-4 rounded-xl bg-secondary/10 border border-secondary/20">
                     <div className="text-2xl mb-2">🎯</div>
                     <div className="text-lg font-bold text-secondary">85%</div>
