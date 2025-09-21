@@ -370,45 +370,7 @@ export default function TeacherDashboard() {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-xl">Thao tác nhanh</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/ai-generator")}
-                >
-                  <Bot className="h-4 w-4 mr-2" />
-                  Tạo bài tập bằng AI
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/lessons/new")}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm bài học mới
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/reports")}
-                >
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Xem báo cáo chi tiết
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/profile")}
-                >
-                  <GraduationCap className="h-4 w-4 mr-2" />
-                  Cập nhật hồ sơ
-                </Button>
-              </CardContent>
-            </Card>
+           
           </div>
         </div>
       </div>
