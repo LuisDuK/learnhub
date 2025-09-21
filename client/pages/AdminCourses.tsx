@@ -224,7 +224,7 @@ const mockPendingContent = [
     type: "lesson",
     action: "create",
     title: "Bài học: Từ vựng và phát âm cơ bản",
-    description: "Bài học giới thiệu từ vựng cơ bản và luyện phát âm dành cho trẻ 5-7 tuổi",
+    description: "Bài học giới thiệu từ vựng cơ bản và luyện phát âm dành cho trẻ 5-7 tu��i",
     courseId: 999,
     courseName: "English Basics",
     submittedAt: new Date().toISOString(),
@@ -241,11 +241,6 @@ const mockPendingContent = [
         "Phần chính: Học từ vựng về gia đình (father, mother, sister, brother) và các màu sắc (red, blue, green).",
       ],
       media: [
-        {
-          type: "pdf",
-          url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-          description: "Tài liệu tham khảo (mẫu)",
-        },
         {
           type: "video",
           url: "https://www.w3schools.com/html/mov_bbb.mp4",
