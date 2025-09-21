@@ -332,33 +332,7 @@ export function DashboardHome() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Progress Chart */}
-        <Card className="lg:col-span-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-primary/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              📊 Tiến độ học tập của bé
-              <Sparkles className="h-5 w-5 text-primary animate-pulse" />
-            </CardTitle>
-            <CardDescription>
-              Xem bé đã học được bao nhiêu bài rồi nhé! 🌟
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px]">
-              <BarChart data={progressData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar
-                  dataKey="completed"
-                  fill="var(--color-completed)"
-                  radius={8}
-                />
-                <Bar dataKey="total" fill="var(--color-total)" radius={8} />
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+        
 
         {/* Upcoming Schedule */}
         <Card className="border-accent/20 shadow-lg bg-gradient-to-br from-white to-accent/5">
