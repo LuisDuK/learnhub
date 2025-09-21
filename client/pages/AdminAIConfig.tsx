@@ -204,94 +204,13 @@ const seedPrompts = [
       { name: "student_answer", type: "textarea", description: "Bài làm của học sinh" },
       { name: "correct_answer", type: "textarea", description: "Đáp án chính xác" },
       { name: "criteria", type: "textarea", description: "Tiêu chí chấm điểm" },
-      { name: "max_score", type: "number", min: 1, max: 100, description: "Điểm tối đa" },
+      { name: "max_score", type: "number", min: 1, max: 100, description: "��iểm tối đa" },
       { name: "feedback_style", type: "select", options: ["khuyến khích", "chi tiết", "tóm tắt", "xây dựng"], description: "Kiểu phản hồi" },
     ],
     createdAt: "2024-01-25",
   },
 ].map(withInitialVersion);
 
-const mockAILogs = [
-  {
-    id: 1,
-    timestamp: "2024-01-28 14:30:25",
-    user: "Nguyễn Minh Đức",
-    module: "Bài tập",
-    tokensUsed: 150,
-    status: "Thành công",
-    cost: "0.003$",
-    details: "Tạo bài tập toán lớp 3 về phép cộng và trừ",
-    conversation: null,
-  },
-  {
-    id: 2,
-    timestamp: "2024-01-28 14:25:12",
-    user: "Trần Thị Mai",
-    module: "Chatbot",
-    tokensUsed: 85,
-    status: "Thành công",
-    cost: "0.002$",
-    details: "Hỗ trợ giải bài tập toán",
-    conversation: [
-      { role: "user", content: "Em không hiểu bài toán này: 25 + 17 = ?", time: "14:25:12" },
-      {
-        role: "assistant",
-        content:
-          "Chào em! Cô sẽ giúp em giải bài toán này nhé. 25 + 17 ta tính như sau:\n\n25 + 17\n= 20 + 5 + 10 + 7\n= 20 + 10 + 5 + 7\n= 30 + 12\n= 42\n\nVậy 25 + 17 = 42. Em hiểu chưa?",
-        time: "14:25:15",
-      },
-      { role: "user", content: "Dạ em hiểu rồi! Cảm ơn cô ạ", time: "14:25:18" },
-    ],
-  },
-  {
-    id: 3,
-    timestamp: "2024-01-28 14:20:45",
-    user: "Admin AI",
-    module: "Lộ trình",
-    tokensUsed: 320,
-    status: "Lỗi",
-    cost: "0.000$",
-    details: "Tạo lộ trình học toán cho học sinh lớp 2",
-    conversation: null,
-  },
-  {
-    id: 4,
-    timestamp: "2024-01-28 14:15:33",
-    user: "Lê Văn Hùng",
-    module: "Chatbot",
-    tokensUsed: 125,
-    status: "Thành công",
-    cost: "0.002$",
-    details: "Hỗ trợ học từ vựng tiếng Anh",
-    conversation: [
-      { role: "user", content: "How do you say 'con chó' in English?", time: "14:15:33" },
-      {
-        role: "assistant",
-        content:
-          "Hello! 'Con chó' in English is 'dog' 🐕\n\nHere are some examples:\n- This is a dog. (Đây là một con chó)\n- I love dogs. (Tôi yêu những con chó)\n- The dog is cute. (Con chó này dễ thương)\n\nWould you like to learn more animal names?",
-        time: "14:15:36",
-      },
-      { role: "user", content: "Yes! What about 'con mèo'?", time: "14:15:40" },
-      {
-        role: "assistant",
-        content:
-          "Great! 'Con mèo' in English is 'cat' 🐱\n\nExamples:\n- I have a cat. (Tôi có một con mèo)\n- The cat is sleeping. (Con mèo đang ngủ)\n- Cats are cute! (Mèo rất dễ thương!)",
-        time: "14:15:42",
-      },
-    ],
-  },
-  {
-    id: 5,
-    timestamp: "2024-01-28 14:10:15",
-    user: "Nguyễn Thị Hoa",
-    module: "Chấm bài",
-    tokensUsed: 200,
-    status: "Thành công",
-    cost: "0.004$",
-    details: "Chấm bài tự luận môn Văn lớp 4",
-    conversation: null,
-  },
-];
 
 function extractTemplateVars(text: string) {
   const re = /\{\{\s*([a-zA-Z_][\w]*)\s*\}\}/g;
@@ -343,10 +262,6 @@ export default function AdminAIConfig() {
   const [isEditingPrompt, setIsEditingPrompt] = useState(false);
   const [editingPromptId, setEditingPromptId] = useState<number | null>(null);
   const [showVariableEditor, setShowVariableEditor] = useState(false);
-  const [moduleFilter, setModuleFilter] = useState("Tất cả");
-  const [statusFilter, setStatusFilter] = useState("Tất cả");
-  const [selectedLog, setSelectedLog] = useState<any>(null);
-  const [isLogDetailDialogOpen, setIsLogDetailDialogOpen] = useState(false);
   const [versionsDialogFor, setVersionsDialogFor] = useState<AiPromptTemplate | null>(null);
 
   // Survey state (UC-07.2)
@@ -560,14 +475,6 @@ export default function AdminAIConfig() {
     setAiFeatures((prev) => ({ ...prev, [feature]: enabled }));
   };
 
-  const exportLogs = () => {
-    alert("Đang xuất báo cáo CSV...");
-  };
-
-  const showLogDetail = (log: any) => {
-    setSelectedLog(log);
-    setIsLogDetailDialogOpen(true);
-  };
 
   const getModuleColor = (module: string) => {
     switch (module) {
@@ -692,10 +599,6 @@ export default function AdminAIConfig() {
             <TabsTrigger value="surveys" className="flex items-center gap-2">
               <ListChecks className="h-4 w-4" />
               Khảo sát
-            </TabsTrigger>
-            <TabsTrigger value="logs" className="flex items-center gap-2">
-              <Activity className="h-4 w-4" />
-              Log AI
             </TabsTrigger>
           </TabsList>
 
@@ -1425,194 +1328,8 @@ export default function AdminAIConfig() {
             </Card>
           </TabsContent>
 
-          {/* AI Logs Tab */}
-          <TabsContent value="logs">
-            <Card className="border-orange-200">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2 text-orange-700">
-                    <Activity className="h-5 w-5" />
-                    Theo dõi Log AI - Tất cả hoạt động AI
-                  </CardTitle>
-                  <Button onClick={exportLogs} variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    Xuất CSV
-                  </Button>
-                </div>
-                <div className="flex items-center gap-4 mt-4">
-                  <div className="flex items-center gap-2">
-                    <Label>Lọc theo Module:</Label>
-                    <Select value={moduleFilter} onValueChange={setModuleFilter}>
-                      <SelectTrigger className="w-40">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Tất cả">Tất cả</SelectItem>
-                        <SelectItem value="Bài tập">Bài tập</SelectItem>
-                        <SelectItem value="Lộ trình">Lộ trình</SelectItem>
-                        <SelectItem value="Chatbot">Chatbot</SelectItem>
-                        <SelectItem value="Chấm bài">Chấm bài</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Label>Lọc theo Trạng thái:</Label>
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
-                      <SelectTrigger className="w-40">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Tất cả">Tất cả</SelectItem>
-                        <SelectItem value="Thành công">Thành công</SelectItem>
-                        <SelectItem value="Lỗi">Lỗi</SelectItem>
-                        <SelectItem value="Đang xử lý">Đang xử lý</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Thời gian</TableHead>
-                      <TableHead>Người dùng</TableHead>
-                      <TableHead>Module</TableHead>
-                      <TableHead>Nội dung</TableHead>
-                      <TableHead>Token</TableHead>
-                      <TableHead>Trạng thái & Hành động</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockAILogs
-                      .filter((log) => moduleFilter === "Tất cả" || log.module === moduleFilter)
-                      .filter((log) => statusFilter === "Tất cả" || log.status === statusFilter)
-                      .map((log) => (
-                        <TableRow key={log.id}>
-                          <TableCell className="font-mono text-sm">{log.timestamp}</TableCell>
-                          <TableCell>{log.user}</TableCell>
-                          <TableCell>
-                            <Badge className={getModuleColor(log.module)}>{log.module}</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="max-w-xs">
-                              <p className="text-sm text-gray-700 truncate" title={log.details}>
-                                {log.details || "Không có mô tả"}
-                              </p>
-                              {log.conversation && (
-                                <Badge variant="outline" className="mt-1 text-xs">💬 {log.conversation.length} tin nhắn</Badge>
-                              )}
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-mono text-blue-600">{log.tokensUsed}</TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Badge className={getStatusColor(log.status)}>{log.status}</Badge>
-                              <Button variant="ghost" size="sm" onClick={() => showLogDetail(log)} className="text-blue-600 hover:text-blue-800">
-                                {log.conversation ? "💬 Xem hội thoại" : "🔍 Xem chi tiết"}
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-
-                <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <div className="text-2xl font-bold text-blue-600">1,245</div>
-                    <div className="text-sm text-blue-600">Tổng request hôm nay</div>
-                  </div>
-                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <div className="text-2xl font-bold text-green-600">98.5%</div>
-                    <div className="text-sm text-green-600">Tỉ lệ thành công</div>
-                  </div>
-                  <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                    <div className="text-2xl font-bold text-orange-600">45,678</div>
-                    <div className="text-sm text-orange-600">Token sử dụng</div>
-                  </div>
-                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                    <div className="text-2xl font-bold text-purple-600">45,678</div>
-                    <div className="text-sm text-purple-600">Token hôm nay</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
         </Tabs>
 
-        {/* Log Detail Dialog */}
-        <Dialog open={isLogDetailDialogOpen} onOpenChange={setIsLogDetailDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2">📊 Chi tiết hoạt động AI</DialogTitle>
-              <DialogDescription>Thông tin chi tiết về hoạt động AI và cuộc hội thoại</DialogDescription>
-            </DialogHeader>
-
-            {selectedLog && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">🕰️ Thời gian:</span>
-                      <span className="text-sm font-mono">{selectedLog.timestamp}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">👤 Người dùng:</span>
-                      <span className="text-sm">{selectedLog.user}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">💻 Module:</span>
-                      <Badge className={getModuleColor(selectedLog.module)}>{selectedLog.module}</Badge>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">🎩 Token tiêu thụ:</span>
-                      <span className="text-sm font-mono text-blue-600">{selectedLog.tokensUsed}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">🎆 Hệ thống:</span>
-                      <span className="text-sm text-green-600">Free (Không tính phí)</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-600">✅ Trạng thái:</span>
-                      <Badge className={getStatusColor(selectedLog.status)}>{selectedLog.status}</Badge>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h4 className="font-medium text-blue-800 mb-2">📝 Mô tả:</h4>
-                  <p className="text-sm text-blue-700">{selectedLog.details || "Không có mô tả"}</p>
-                </div>
-
-                {selectedLog.conversation && selectedLog.conversation.length > 0 && (
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-gray-800 flex items-center gap-2">💬 Cuộc hội thoại ({selectedLog.conversation.length} tin nhắn):</h4>
-                    <div className="max-h-64 overflow-y-auto space-y-3 p-4 bg-gray-50 rounded-lg border">
-                      {selectedLog.conversation.map((msg: any, index: number) => (
-                        <div key={index} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                          <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === "user" ? "bg-blue-500 text-white" : "bg-white border border-gray-200"}`}>
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-medium">{msg.role === "user" ? "👤 Học sinh" : "🤖 AI Assistant"}</span>
-                              <span className="text-xs opacity-70">{msg.time}</span>
-                            </div>
-                            <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsLogDetailDialogOpen(false)}>Đóng</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </div>
     </AdminLayout>
   );
