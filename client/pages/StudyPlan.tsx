@@ -2060,27 +2060,67 @@ export default function StudyPlan() {
               <div className="mb-3">
                 <Label className="text-sm">Lịch sử bài ôn đã tạo</Label>
                 {practiceHistory.length === 0 ? (
-                  <div className="text-sm text-muted-foreground mt-2">Chưa có lịch sử.</div>
+                  <div className="text-sm text-muted-foreground mt-2">
+                    Chưa có lịch sử.
+                  </div>
                 ) : (
                   <div className="mt-2 space-y-2">
                     {practiceHistory.map((h) => (
-                      <div key={h.id} className="flex items-center justify-between p-2 border rounded bg-white">
+                      <div
+                        key={h.id}
+                        className="flex items-center justify-between p-2 border rounded bg-white"
+                      >
                         <div>
-                          <div className="font-medium">{h.subject} — {h.topic || "(Không có chủ đề)"}</div>
-                          <div className="text-xs text-muted-foreground">{new Date(h.createdAt).toLocaleString()} • {h.questions?.length || 0} câu</div>
+                          <div className="font-medium">
+                            {h.subject} — {h.topic || "(Không có chủ đề)"}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(h.createdAt).toLocaleString()} •{" "}
+                            {h.questions?.length || 0} câu
+                          </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Button size="sm" variant="outline" onClick={() => {
-                            setPracticeQuestions(h.questions || []);
-                            setPracticeForm({ ...practiceForm, subject: h.subject, topic: h.topic, difficulty: h.difficulty, numQuestions: h.questions?.length || 0 });
-                            toast({ title: "Đã nạp", description: "Đã nạp bài ôn từ lịch sử." });
-                          }}>Nạp</Button>
-                          <Button size="sm" variant="ghost" className="text-red-600" onClick={() => {
-                            const next = practiceHistory.filter((x) => x.id !== h.id);
-                            setPracticeHistory(next);
-                            localStorage.setItem("practiceHistory", JSON.stringify(next));
-                            toast({ title: "Đã xóa", description: "Đã xóa mục lịch sử." });
-                          }}>Xóa</Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setPracticeQuestions(h.questions || []);
+                              setPracticeForm({
+                                ...practiceForm,
+                                subject: h.subject,
+                                topic: h.topic,
+                                difficulty: h.difficulty,
+                                numQuestions: h.questions?.length || 0,
+                              });
+                              toast({
+                                title: "Đã nạp",
+                                description: "Đã nạp bài ôn từ lịch sử.",
+                              });
+                            }}
+                          >
+                            Nạp
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-red-600"
+                            onClick={() => {
+                              const next = practiceHistory.filter(
+                                (x) => x.id !== h.id,
+                              );
+                              setPracticeHistory(next);
+                              localStorage.setItem(
+                                "practiceHistory",
+                                JSON.stringify(next),
+                              );
+                              toast({
+                                title: "Đã xóa",
+                                description: "Đã xóa mục lịch sử.",
+                              });
+                            }}
+                          >
+                            Xóa
+                          </Button>
                         </div>
                       </div>
                     ))}
@@ -2166,7 +2206,10 @@ export default function StudyPlan() {
               onClick={() => {
                 // save current practice to history
                 if (practiceQuestions.length === 0) {
-                  toast({ title: "Không có nội dung", description: "Chưa có câu hỏi để lưu." });
+                  toast({
+                    title: "Không có nội dung",
+                    description: "Chưa có câu hỏi để lưu.",
+                  });
                   return;
                 }
                 const item = {
@@ -2180,7 +2223,10 @@ export default function StudyPlan() {
                 const next = [item, ...practiceHistory].slice(0, 50);
                 setPracticeHistory(next);
                 localStorage.setItem("practiceHistory", JSON.stringify(next));
-                toast({ title: "Đã lưu", description: "Bài ôn đã được lưu vào lịch sử." });
+                toast({
+                  title: "Đã lưu",
+                  description: "Bài ôn đã được lưu vào lịch sử.",
+                });
                 setShowPracticeDialog(false);
               }}
               className="flex-1 bg-gradient-to-r from-primary to-accent text-white rounded-xl"
