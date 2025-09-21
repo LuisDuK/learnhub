@@ -59,25 +59,6 @@ export default function Login() {
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
 
-  // Teacher registration states
-  const [showTeacherRegisterDialog, setShowTeacherRegisterDialog] =
-    useState(false);
-  const [teacherRegisterSuccess, setTeacherRegisterSuccess] = useState(false);
-  const [showTeacherPassword, setShowTeacherPassword] = useState(false);
-  const [showTeacherConfirmPassword, setShowTeacherConfirmPassword] =
-    useState(false);
-  const [teacherForm, setTeacherForm] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
-    school: "",
-    subject: "",
-    experience: "",
-    qualification: "",
-    bio: "",
-  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,32 +99,6 @@ export default function Login() {
     }, 1500);
   };
 
-  const handleTeacherRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Simulate teacher registration process
-    setTimeout(() => {
-      setIsLoading(false);
-      setTeacherRegisterSuccess(true);
-    }, 2000);
-  };
-
-  const resetTeacherForm = () => {
-    setTeacherForm({
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-      school: "",
-      subject: "",
-      experience: "",
-      qualification: "",
-      bio: "",
-    });
-    setTeacherRegisterSuccess(false);
-    setShowTeacherRegisterDialog(false);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex flex-col items-center justify-center p-4">
@@ -547,12 +502,9 @@ export default function Login() {
                 {/* Teacher Registration Section */}
                 <div className="border-t border-gray-200 pt-6 mt-6">
                   <div className="text-center">
-                    <div className="text-sm text-gray-600 mb-3">
-                      Bạn là giáo viên?
-                    </div>
                     <Dialog
-                      open={showTeacherRegisterDialog}
-                      onOpenChange={setShowTeacherRegisterDialog}
+                      open={false}
+                      onOpenChange={() => {}}
                     >
                       <DialogTrigger asChild>
                         <Button
@@ -943,7 +895,7 @@ export default function Login() {
                                         Thạc sĩ
                                       </SelectItem>
                                       <SelectItem value="tien-si">
-                                        Tiến sĩ
+                                        Ti���n sĩ
                                       </SelectItem>
                                       <SelectItem value="khac">Khác</SelectItem>
                                     </SelectContent>

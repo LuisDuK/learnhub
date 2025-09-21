@@ -199,7 +199,14 @@ export default function TeacherLessonCreate() {
   };
 
   const handleGenerateAI = async () => {
-    if (!aiForm.subject || !aiForm.topic || !aiForm.ageGroup) return;
+    // Cho phép tạo mẫu ngay cả khi thiếu thông tin: tự áp dụng giá trị mặc định thân thiện
+    setAiForm((prev) => ({
+      ...prev,
+      subject: prev.subject || "math",
+      topic: prev.topic || title || "Bài học",
+      ageGroup: prev.ageGroup || "6-7 tuổi",
+      difficulty: prev.difficulty || "Trung bình",
+    }));
     setIsGenerating(true);
     setGenerationProgress(0);
     const steps = 5;
@@ -258,13 +265,22 @@ export default function TeacherLessonCreate() {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
 
   // Exercises (practice questions) - client side only
-  const [exercises, setExercises] = useState<
-    { id: string; question: string; answer: string }[]
-  >([]);
+  type ExerciseItem = {
+    id: string;
+    type?: "short" | "multiple_choice";
+    question: string;
+    answer?: string;
+    options?: string[];
+    correctIndex?: number;
+  };
+  const [exercises, setExercises] = useState<ExerciseItem[]>([]);
   const [exerciseDraft, setExerciseDraft] = useState<{
+    type: "short" | "multiple_choice";
     question: string;
     answer: string;
-  }>({ question: "", answer: "" });
+    options: string[];
+    correctIndex: number;
+  }>({ type: "short", question: "", answer: "", options: ["", "", "", ""], correctIndex: 0 });
 
   const canSubmit = subject && title && chapter;
 
@@ -709,27 +725,72 @@ export default function TeacherLessonCreate() {
                     placeholder="Nhập câu hỏi"
                     value={exerciseDraft.question}
                     onChange={(e) =>
-                      setExerciseDraft({
-                        ...exerciseDraft,
-                        question: e.target.value,
-                      })
+                      setExerciseDraft({ ...exerciseDraft, question: e.target.value })
                     }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Đáp án</Label>
-                  <Textarea
-                    rows={2}
-                    placeholder="Nhập đáp án/ gợi ý"
-                    value={exerciseDraft.answer}
-                    onChange={(e) =>
-                      setExerciseDraft({
-                        ...exerciseDraft,
-                        answer: e.target.value,
-                      })
-                    }
-                  />
+                  <Label>Loại câu hỏi</Label>
+                  <div className="flex items-center gap-4">
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="exerciseType"
+                        checked={exerciseDraft.type === "short"}
+                        onChange={() => setExerciseDraft({ ...exerciseDraft, type: "short" })}
+                      />
+                      <span>Câu trả lời ngắn</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="exerciseType"
+                        checked={exerciseDraft.type === "multiple_choice"}
+                        onChange={() => setExerciseDraft({ ...exerciseDraft, type: "multiple_choice" })}
+                      />
+                      <span>Trắc nghiệm</span>
+                    </label>
+                  </div>
                 </div>
+                {exerciseDraft.type === "multiple_choice" ? (
+                  <div className="space-y-2">
+                    <Label>Đáp án (Trắc nghiệm)</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {exerciseDraft.options.map((opt, i) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="exerciseCorrect"
+                            checked={exerciseDraft.correctIndex === i}
+                            onChange={() => setExerciseDraft({ ...exerciseDraft, correctIndex: i })}
+                          />
+                          <Input
+                            value={opt}
+                            onChange={(e) =>
+                              setExerciseDraft({
+                                ...exerciseDraft,
+                                options: exerciseDraft.options.map((o, idx) => (idx === i ? e.target.value : o)),
+                              })
+                            }
+                            placeholder={`Đáp án ${i + 1}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <Label>Đáp án</Label>
+                    <Textarea
+                      rows={2}
+                      placeholder="Nhập đáp án/ gợi ý"
+                      value={exerciseDraft.answer}
+                      onChange={(e) =>
+                        setExerciseDraft({ ...exerciseDraft, answer: e.target.value })
+                      }
+                    />
+                  </div>
+                )}
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -742,15 +803,16 @@ export default function TeacherLessonCreate() {
                   <Button
                     onClick={() => {
                       if (!exerciseDraft.question) return;
-                      setExercises((ex) => [
-                        ...ex,
-                        {
-                          id: crypto.randomUUID(),
-                          question: exerciseDraft.question,
-                          answer: exerciseDraft.answer,
-                        },
-                      ]);
-                      setExerciseDraft({ question: "", answer: "" });
+                      const newItem: ExerciseItem = {
+                        id: crypto.randomUUID(),
+                        type: exerciseDraft.type,
+                        question: exerciseDraft.question,
+                        answer: exerciseDraft.type === "short" ? exerciseDraft.answer : undefined,
+                        options: exerciseDraft.type === "multiple_choice" ? exerciseDraft.options : undefined,
+                        correctIndex: exerciseDraft.type === "multiple_choice" ? exerciseDraft.correctIndex : undefined,
+                      };
+                      setExercises((ex) => [...ex, newItem]);
+                      setExerciseDraft({ type: "short", question: "", answer: "", options: ["", "", "", ""], correctIndex: 0 });
                     }}
                   >
                     Thêm câu hỏi ôn tập
@@ -772,12 +834,18 @@ export default function TeacherLessonCreate() {
                         className="p-3 border rounded-md flex items-start justify-between"
                       >
                         <div className="min-w-0">
-                          <div className="font-medium truncate">
-                            {ex.question}
-                          </div>
-                          <div className="text-sm text-muted-foreground truncate">
-                            {ex.answer}
-                          </div>
+                          <div className="font-medium truncate">{ex.question}</div>
+                          {ex.type === "multiple_choice" ? (
+                            <div className="text-sm text-muted-foreground">
+                              {ex.options?.map((opt, i) => (
+                                <div key={i} className={ex.correctIndex === i ? "font-medium" : "text-sm text-muted-foreground"}>
+                                  {String.fromCharCode(65 + i)}. {opt}
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="text-sm text-muted-foreground truncate">{ex.answer}</div>
+                          )}
                         </div>
                         <Button
                           variant="destructive"
@@ -1030,12 +1098,7 @@ export default function TeacherLessonCreate() {
                     </Button>
                     <Button
                       onClick={handleGenerateAI}
-                      disabled={
-                        isGenerating ||
-                        !aiForm.subject ||
-                        !aiForm.topic ||
-                        !aiForm.ageGroup
-                      }
+                      disabled={isGenerating}
                     >
                       Tạo bằng AI
                     </Button>

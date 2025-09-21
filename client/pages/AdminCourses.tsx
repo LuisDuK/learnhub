@@ -153,7 +153,7 @@ const mockPendingContent = [
     subject: "Anh",
     difficulty: "Cơ bản",
     duration: "10 tuần",
-    ageGroup: "5-7 tuổi",
+    ageGroup: "5-7 tu��i",
     submittedAt: "2024-03-01",
     submittedBy: "Giáo viên Lê Thị Mai",
     status: "pending",
@@ -162,7 +162,7 @@ const mockPendingContent = [
       description:
         "Môn học tiếng Anh cho trẻ em từ 5-7 tuổi với các hoạt động vui nhộn",
       objectives: "Giúp trẻ em làm quen với tiếng Anh cơ bản",
-      prerequisites: "Không yêu cầu kiến thức trước",
+      prerequisites: "Không yêu c��u kiến thức trước",
     },
   },
   {
@@ -189,7 +189,7 @@ const mockPendingContent = [
     type: "exercise",
     action: "update",
     title: "Cập nhật bài tập: Bài tập đếm số",
-    description: "Chỉnh sửa câu hỏi trong bài tập đếm số",
+    description: "Chỉnh sửa câu hỏi trong bài t���p đếm số",
     courseId: 1,
     courseName: "Toán học cơ bản",
     submittedAt: "2024-03-03",
@@ -216,6 +216,60 @@ const mockPendingContent = [
       reason: "Môn học không còn phù hợp với chương trình mới",
       affectedStudents: 25,
       alternativeCourse: "Khoa học vui nhộn",
+    },
+  },
+  // Demo placeholder item (realistic sample) for admin preview
+  {
+    id: "lesson_demo",
+    type: "lesson",
+    action: "create",
+    title: "Bài học: Từ vựng và phát âm cơ bản",
+    description: "Bài học giới thiệu từ vựng cơ bản và luyện phát âm dành cho trẻ 5-7 tuổi",
+    courseId: 999,
+    courseName: "English Basics",
+    submittedAt: new Date().toISOString(),
+    submittedBy: "Giáo viên Nguyễn Văn A",
+    status: "pending",
+    details: {
+      title: "Từ vựng: Gia đình và màu sắc",
+      description: "Giới thiệu từ vựng về gia đình và màu sắc, kèm hoạt động lặp lại và bài tập ngắn.",
+      type: "video",
+      duration: "8 phút",
+      content: "Nội dung bài học gồm phần mở đầu, hướng dẫn phát âm, và hoạt động tương tác để củng cố từ vựng.",
+      textBlocks: [
+        "Mở đầu: Chào mừng các em đến với bài học tiếng Anh cơ bản.",
+        "Phần chính: Học từ vựng về gia đình (father, mother, sister, brother) và các màu sắc (red, blue, green).",
+      ],
+      media: [
+        {
+          type: "video",
+          url: "https://www.w3schools.com/html/mov_bbb.mp4",
+          description: "Video hướng dẫn phát âm",
+        },
+      ],
+      questions: [
+        {
+          id: "q1",
+          text: "Từ tiếng Anh cho 'mẹ' là gì?",
+          options: ["father", "mother", "sister", "brother"],
+          correctIndex: 1,
+          marker: "00:30",
+        },
+        {
+          id: "q2",
+          text: "Màu nào tương ứng với 'blue'?",
+          options: ["Đỏ", "Xanh", "Vàng", "Trắng"],
+          correctIndex: 1,
+          marker: "01:15",
+        },
+      ],
+      exercises: [
+        {
+          id: "ex1",
+          question: "Viết từ 'mother' và dịch sang tiếng Việt.",
+          answer: "mother - mẹ",
+        },
+      ],
     },
   },
 ];
@@ -274,12 +328,6 @@ export default function AdminCourses() {
     setPendingContent(updatedPending);
 
     // In a real app, this would make an API call to approve/reject the content
-    console.log(
-      `${approved ? "Approved" : "Rejected"} ${item.type}: ${item.title}`,
-    );
-    if (approvalComment) {
-      console.log(`Comment: ${approvalComment}`);
-    }
 
     setSelectedPendingItem(null);
     setApprovalComment("");
@@ -838,75 +886,240 @@ export default function AdminCourses() {
                 </DialogHeader>
 
                 <div className="py-4 space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Loại
-                      </Label>
-                      <p className="text-sm capitalize">
-                        {selectedPendingItem.type === "course"
-                          ? "Môn học"
-                          : selectedPendingItem.type === "lesson"
-                            ? "Bài giảng"
-                            : "Bài tập"}
-                      </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-3">
+                      <div>
+                        <Label className="text-xs text-gray-500">Loại</Label>
+                        <div className="mt-1 font-medium">
+                          {selectedPendingItem.type === "course"
+                            ? "Môn học"
+                            : selectedPendingItem.type === "lesson"
+                              ? "Bài giảng"
+                              : "Bài tập"}
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-gray-500">Người gửi</Label>
+                        <div className="mt-1">{selectedPendingItem.submittedBy}</div>
+                      </div>
                     </div>
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Hành động
-                      </Label>
-                      <Badge
-                        className={getActionColor(selectedPendingItem.action)}
-                      >
-                        {getActionText(selectedPendingItem.action)}
-                      </Badge>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Người gửi
-                      </Label>
-                      <p className="text-sm">
-                        {selectedPendingItem.submittedBy}
-                      </p>
-                    </div>
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Ngày gửi
-                      </Label>
-                      <p className="text-sm">
-                        {new Date(
-                          selectedPendingItem.submittedAt,
-                        ).toLocaleDateString("vi-VN")}
-                      </p>
+
+                    <div className="space-y-3">
+                      <div>
+                        <Label className="text-xs text-gray-500">Hành động</Label>
+                        <div className="mt-1">
+                          <Badge className={getActionColor(selectedPendingItem.action)}>
+                            {getActionText(selectedPendingItem.action)}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-xs text-gray-500">Ngày gửi</Label>
+                        <div className="mt-1">
+                          {new Date(selectedPendingItem.submittedAt).toLocaleDateString("vi-VN")}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
+                  <div className="pt-2 border-t border-gray-200"></div>
+
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">
-                      Mô tả
-                    </Label>
-                    <p className="text-sm mt-1">
-                      {selectedPendingItem.description}
-                    </p>
+                    <Label className="text-sm font-medium text-gray-500">Mô tả</Label>
+                    <p className="text-sm mt-1 text-gray-700">{selectedPendingItem.description}</p>
                   </div>
 
                   {selectedPendingItem.details && (
-                    <div>
-                      <Label className="text-sm font-medium text-gray-500">
-                        Chi tiết
-                      </Label>
-                      <div className="mt-2 p-3 bg-gray-50 rounded-lg">
-                        <pre className="text-xs text-gray-700 whitespace-pre-wrap">
-                          {JSON.stringify(selectedPendingItem.details, null, 2)}
-                        </pre>
-                      </div>
+                    <div className="bg-white border border-gray-100 rounded-lg p-4 shadow-sm">
+                      <h4 className="text-sm font-semibold mb-3">Chi tiết</h4>
+
+                      {/* If lesson: show title and duration above text blocks */}
+                      {selectedPendingItem.type === "lesson" && (
+                        <div className="mb-3">
+                          <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                          <p className="mt-1 font-medium">{selectedPendingItem.details?.title}</p>
+                          {selectedPendingItem.details?.duration && (
+                            <div className="mt-2">
+                              <Label className="text-xs text-gray-500">Thời lượng</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.duration}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Show free text blocks if present */}
+                      {selectedPendingItem.details?.textBlocks && (
+                        <div className="mb-3">
+                          <Label className="text-xs text-gray-500">Nội dung văn bản</Label>
+                          <div className="mt-2 space-y-2 text-sm text-gray-700">
+                            {selectedPendingItem.details.textBlocks.map((tb: string, i: number) => (
+                              <p key={i} className="whitespace-pre-wrap">{tb}</p>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Media items: video, audio, image, pdf */}
+                      {selectedPendingItem.details?.media && selectedPendingItem.details.media.length > 0 && (
+                        <div className="mb-3">
+                          <Label className="text-xs text-gray-500">Tư liệu đa phương tiện</Label>
+                          <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {selectedPendingItem.details.media.map((m: any, mi: number) => (
+                              <div key={mi} className="p-2 border rounded flex items-center gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium truncate">{m.type.toUpperCase()}</div>
+                                  <div className="text-xs text-muted-foreground truncate">{m.description}</div>
+                                </div>
+                                <div className="ml-3 flex-shrink-0">
+                                  {m.type === 'image' ? (
+                                    <img src={m.url} alt={m.description || 'image'} className="h-20 w-28 object-cover rounded" />
+                                  ) : m.type === 'pdf' ? (
+                                    <div className="flex flex-col items-end">
+                                      <iframe src={m.url} title={m.description || 'pdf'} className="h-40 w-64 border rounded" />
+                                      <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm mt-1">Mở PDF</a>
+                                    </div>
+                                  ) : m.type === 'audio' ? (
+                                    <audio controls src={m.url} className="h-10" />
+                                  ) : m.type === 'video' ? (
+                                    <video controls src={m.url} className="h-28 w-40 object-contain rounded" />
+                                  ) : (
+                                    <a href={m.url} target="_blank" rel="noreferrer" className="text-blue-600 underline text-sm">Mở liên kết</a>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Lesson details */}
+                      {selectedPendingItem.type === "lesson" && (
+                        <div className="mb-3">
+                          {selectedPendingItem.details?.content && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Nội dung</Label>
+                              <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700">{selectedPendingItem.details?.content}</p>
+                            </div>
+                          )}
+
+                          {/* Quiz questions embedded in the lesson */}
+                          {selectedPendingItem.details?.questions && selectedPendingItem.details.questions.length > 0 && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Quiz</Label>
+                              <div className="mt-2 space-y-2">
+                                {selectedPendingItem.details.questions.map((q: any, qi: number) => (
+                                  <div key={q.id || qi} className="p-2 border rounded bg-gray-50">
+                                    <div className="font-medium">Câu {qi + 1}: {q.text}</div>
+                                    {q.marker && <div className="text-xs text-muted-foreground">Mốc: {q.marker}</div>}
+                                    <div className="mt-1 text-sm">
+                                      {q.options?.map((opt: string, oi: number) => (
+                                        <div key={oi} className={q.correctIndex === oi ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
+                                          {String.fromCharCode(65 + oi)}. {opt}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Exercises embedded in the lesson */}
+                          {selectedPendingItem.details?.exercises && selectedPendingItem.details.exercises.length > 0 && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Bài tập</Label>
+                              <div className="mt-2 space-y-2">
+                                {selectedPendingItem.details.exercises.map((ex: any, ei: number) => (
+                                  <div key={ex.id || ei} className="p-2 border rounded bg-gray-50">
+                                    <div className="font-medium">{ex.question || ex.title}</div>
+                                    {ex.options ? (
+                                      <div className="mt-1 text-sm">
+                                        {ex.options.map((opt: string, oi: number) => (
+                                          <div key={oi} className={ex.correctIndex === oi ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
+                                            {String.fromCharCode(65 + oi)}. {opt}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <div className="mt-1 text-sm text-muted-foreground">Đáp án: {ex.answer || ex.solution}</div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Exercise or update details standalone */}
+                      {selectedPendingItem.type === "exercise" && (
+                        <div className="mb-3">
+                          <div className="mb-2">
+                            <Label className="text-xs text-gray-500">Tiêu đề</Label>
+                            <p className="mt-1 font-medium">{selectedPendingItem.details?.title}</p>
+                          </div>
+                          <div className="mb-2">
+                            <Label className="text-xs text-gray-500">Mô tả</Label>
+                            <p className="mt-1">{selectedPendingItem.details?.description}</p>
+                          </div>
+
+                          {selectedPendingItem.details?.options && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Đáp án (trắc nghiệm)</Label>
+                              <div className="mt-1 text-sm">
+                                {selectedPendingItem.details.options.map((opt: string, i: number) => (
+                                  <div key={i} className={selectedPendingItem.details.correctIndex === i ? 'font-semibold text-green-700' : 'text-sm text-muted-foreground'}>
+                                    {String.fromCharCode(65 + i)}. {opt}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {selectedPendingItem.details?.answer && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Đáp án</Label>
+                              <p className="mt-1 text-sm text-muted-foreground">{selectedPendingItem.details.answer}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Delete request details */}
+                      {selectedPendingItem.action === "delete" && (
+                        <div className="mb-3">
+                          {selectedPendingItem.details?.reason && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Lý do xóa</Label>
+                              <p className="mt-1 whitespace-pre-wrap">{selectedPendingItem.details?.reason}</p>
+                            </div>
+                          )}
+                          {selectedPendingItem.details?.affectedStudents !== undefined && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Số học sinh bị ảnh hưởng</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.affectedStudents}</p>
+                            </div>
+                          )}
+                          {selectedPendingItem.details?.alternativeCourse && (
+                            <div className="mb-2">
+                              <Label className="text-xs text-gray-500">Môn thay thế gợi ý</Label>
+                              <p className="mt-1">{selectedPendingItem.details?.alternativeCourse}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Fallback: show raw JSON if nothing matched */}
+                      {(!["course", "lesson", "exercise"].includes(selectedPendingItem.type) && selectedPendingItem.action !== "delete") && (
+                        <pre className="text-xs text-gray-700 whitespace-pre-wrap">{JSON.stringify(selectedPendingItem.details, null, 2)}</pre>
+                      )}
                     </div>
                   )}
 
                   <div>
-                    <Label className="text-sm font-medium text-gray-500">
-                      Ghi chú phê duyệt (tùy chọn)
-                    </Label>
+                    <Label className="text-sm font-medium text-gray-500">Ghi chú phê duyệt (tùy chọn)</Label>
                     <textarea
                       value={approvalComment}
                       onChange={(e) => setApprovalComment(e.target.value)}

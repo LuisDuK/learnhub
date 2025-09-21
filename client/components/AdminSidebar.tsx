@@ -33,7 +33,7 @@ const menuItems = [
     href: "/admin/subjects",
   },
   {
-    title: "Cấu hình AI (Quản trị viên)",
+    title: "Cấu hình AI",
     icon: Settings,
     href: "/admin/ai-config",
   },
@@ -123,15 +123,6 @@ export function AdminSidebar() {
           </div>
         </div>
 
-        {/* Back to Student View */}
-        <Button
-          onClick={handleBackToStudent}
-          variant="outline"
-          className="w-full border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 transition-all duration-300 rounded-xl"
-        >
-          <Home className="h-4 w-4 mr-2" />
-          Chế độ học sinh
-        </Button>
 
         {/* Logout Button */}
         <Button

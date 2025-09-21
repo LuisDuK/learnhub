@@ -85,7 +85,7 @@ const mockGeneratedExercises = [
     explanation:
       "Câu hỏi này giúp học sinh hiểu ��ược khái niệm cơ bản về phép chia và tại sao chia cho 0 là không được phép.",
     difficulty: "Nâng cao",
-    subject: "Toán",
+    subject: "To��n",
     ageGroup: "10-12 tuổi",
     estimatedTime: "10 phút",
   },
@@ -228,7 +228,6 @@ export default function TeacherAIGenerator() {
   const handleSaveExercise = (exercise: any) => {
     // Mock save to course
     toast({ title: "Đã lưu câu hỏi", description: "Câu hỏi được lưu vào kho bài tập (giả lập)." });
-    console.log("Saving exercise:", exercise);
   };
 
   const handlePublishAll = () => {
