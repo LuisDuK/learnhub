@@ -317,6 +317,8 @@ export default function StudyPlan() {
   const [showPracticePreviewDialog, setShowPracticePreviewDialog] = useState(false);
   const [showPracticeAttemptDialog, setShowPracticeAttemptDialog] = useState(false);
   const [practiceAnswers, setPracticeAnswers] = useState<Record<number, string>>({});
+  const [showPracticeHistoryDetailDialog, setShowPracticeHistoryDetailDialog] = useState(false);
+  const [practiceHistoryDetail, setPracticeHistoryDetail] = useState<any | null>(null);
 
   useEffect(() => {
     try {
@@ -918,7 +920,7 @@ export default function StudyPlan() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl md:text-4xl font-extrabold leading-tight bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent flex items-center gap-3">
-              Lộ trình học tập
+              Lộ trình h��c tập
               <Sparkles className="h-8 w-8 text-primary animate-pulse" />
             </h1>
             <p className="text-gray-600 text-base md:text-lg mt-2">
@@ -2161,6 +2163,16 @@ export default function StudyPlan() {
                           </Button>
                           <Button
                             size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setPracticeHistoryDetail(h);
+                              setShowPracticeHistoryDetailDialog(true);
+                            }}
+                          >
+                            Xem chi tiết
+                          </Button>
+                          <Button
+                            size="sm"
                             variant="ghost"
                             className="text-red-600"
                             onClick={() => {
@@ -2414,6 +2426,47 @@ export default function StudyPlan() {
             >
               Nộp bài
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Practice History Detail Dialog */}
+      <Dialog open={showPracticeHistoryDetailDialog} onOpenChange={setShowPracticeHistoryDetailDialog}>
+        <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-primary">📚 Chi tiết bài ôn</DialogTitle>
+            <DialogDescription>
+              {(practiceHistoryDetail?.subject || "").toUpperCase()} — {practiceHistoryDetail?.topic || "(Không có chủ đề)"} • {practiceHistoryDetail?.questions?.length || 0} câu
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-2">
+            {(practiceHistoryDetail?.questions || []).map((q: any, i: number) => (
+              <div key={q.id || i} className="p-3 border rounded-lg bg-white">
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold">Câu {i + 1}</div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-xs">{q.type === "multiple_choice" ? "📋 Trắc nghiệm" : "✍️ Tự luận"}</Badge>
+                    <Badge variant="outline" className="text-xs">{q.difficulty || "medium"}</Badge>
+                  </div>
+                </div>
+                <div className="mt-1 text-sm">{q.text}</div>
+                {q.type === "multiple_choice" && Array.isArray(q.options) && (
+                  <ul className="mt-2 space-y-1 text-sm list-disc pl-6">
+                    {q.options.map((opt: string, idx: number) => (
+                      <li key={idx}>{String.fromCharCode(65 + idx)}. {opt}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+            {(practiceHistoryDetail?.questions || []).length === 0 && (
+              <div className="text-sm text-muted-foreground">Không có câu hỏi trong mục này.</div>
+            )}
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button variant="outline" onClick={() => setShowPracticeHistoryDetailDialog(false)} className="flex-1">Đóng</Button>
           </div>
         </DialogContent>
       </Dialog>
