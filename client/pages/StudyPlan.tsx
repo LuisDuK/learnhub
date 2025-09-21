@@ -61,7 +61,7 @@ const studyGoals = [
   { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
-  { id: "vocabulary", label: "📖 Mở r��ng từ vựng", duration: "6 tuần" },
+  { id: "vocabulary", label: "📖 Mở rộng từ vựng", duration: "6 tuần" },
 ];
 
 const weeklyPlan = [
