@@ -148,7 +148,7 @@ const mockPendingContent = [
     id: "course_3",
     type: "course",
     action: "create",
-    title: "Tiếng Anh cơ b���n",
+    title: "Tiếng Anh cơ bản",
     description: "Môn học tiếng Anh cho trẻ em từ 5-7 tuổi",
     subject: "Anh",
     difficulty: "Cơ bản",
@@ -213,9 +213,73 @@ const mockPendingContent = [
     submittedBy: "Giáo viên Trần Văn Dũng",
     status: "pending",
     details: {
-      reason: "Môn học không c��n phù hợp với chương trình mới",
+      reason: "Môn học không còn phù hợp với chương trình mới",
       affectedStudents: 25,
       alternativeCourse: "Khoa học vui nhộn",
+    },
+  },
+  // Demo item with full media, quiz and exercises for admin preview
+  {
+    id: "lesson_demo",
+    type: "lesson",
+    action: "create",
+    title: "Bài học demo: Các dạng câu hỏi và tư liệu",
+    description: "Demo bài học có media, quiz và bài tập để admin kiểm tra",
+    courseId: 999,
+    courseName: "Demo Course",
+    submittedAt: new Date().toISOString(),
+    submittedBy: "Giáo viên Demo",
+    status: "pending",
+    details: {
+      title: "Bài học demo: Làm quen với nội dung",
+      description: "Bài học demo mô tả cách thêm media, quiz và bài tập",
+      type: "video",
+      duration: "10 phút",
+      content: "Đây là phần nội dung chính của bài học demo.\nBao gồm các đoạn văn để hiển thị.",
+      textBlocks: [
+        "Đoạn giới thiệu: Đây là demo nội dung văn bản.",
+        "Đoạn hướng dẫn: Hướng dẫn thực hiện hoạt động...",
+      ],
+      media: [
+        {
+          type: "image",
+          url: "https://cdn.builder.io/api/v1/image/assets%2F3178c0bbf5d64e32906afe2d8af514ea%2F36c2f9bee60c4f91b88975d338c5ee18?format=webp&width=800",
+          description: "Ảnh minh họa demo",
+        },
+        {
+          type: "pdf",
+          url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+          description: "Tài liệu PDF hướng dẫn",
+        },
+        {
+          type: "video",
+          url: "https://www.w3schools.com/html/mov_bbb.mp4",
+          description: "Video hướng dẫn demo",
+        },
+      ],
+      questions: [
+        {
+          id: "dq1",
+          text: "Câu hỏi demo: 1+1 bằng mấy?",
+          options: ["1", "2", "3", "4"],
+          correctIndex: 1,
+          marker: "00:15",
+        },
+        {
+          id: "dq2",
+          text: "Câu hỏi demo: Màu trời là gì?",
+          options: ["Xanh", "Đỏ", "Vàng", "Đen"],
+          correctIndex: 0,
+          marker: "00:30",
+        },
+      ],
+      exercises: [
+        {
+          id: "de1",
+          question: "Bài tập ôn tập: Tính 5+7",
+          answer: "12",
+        },
+      ],
     },
   },
 ];
