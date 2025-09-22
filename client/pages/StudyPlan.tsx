@@ -34,6 +34,7 @@ import StudyPlanLayout from "@/components/StudyPlanLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Calendar,
@@ -318,7 +319,7 @@ export default function StudyPlan() {
     difficulty: "medium",
     goalId: "midterm",
     ageGroup: "",
-    exerciseType: "multiple_choice",
+    exerciseTypes: ["multiple_choice", "essay"],
     inputMode: "description",
     objective: "",
     objectiveImage: null as File | null,
@@ -742,8 +743,11 @@ export default function StudyPlan() {
             ? Number(numQuestions) - questions.length
             : perLesson;
         for (let i = 0; i < count; i++) {
-          const prefer = practiceForm.exerciseType;
-          const isMCQ = prefer === "multiple_choice" ? true : prefer === "essay" ? false : ((idx + i) % 3) !== 2;
+          const types = practiceForm.exerciseTypes || [];
+          const both = types.includes("multiple_choice") && types.includes("essay");
+          const onlyMcq = types.length === 1 && types[0] === "multiple_choice";
+          const onlyEssay = types.length === 1 && types[0] === "essay";
+          const isMCQ = both ? ((idx + i) % 2) === 0 : onlyMcq ? true : onlyEssay ? false : ((idx + i) % 3) !== 2;
           let text = "";
           let options: string[] | undefined;
           if (lesson.subject === "math" && isMCQ) {
@@ -780,8 +784,11 @@ export default function StudyPlan() {
     }
 
     const questions: PracticeQuestion[] = Array.from({ length: Number(numQuestions) }).map((_, i) => {
-      const prefer = practiceForm.exerciseType;
-      const isMCQ = prefer === "multiple_choice" ? true : prefer === "essay" ? false : (i % 3) !== 2;
+      const types = practiceForm.exerciseTypes || [];
+      const both = types.includes("multiple_choice") && types.includes("essay");
+      const onlyMcq = types.length === 1 && types[0] === "multiple_choice";
+      const onlyEssay = types.length === 1 && types[0] === "essay";
+      const isMCQ = both ? (i % 2) === 0 : onlyMcq ? true : onlyEssay ? false : (i % 3) !== 2;
       if (subject === "math" && isMCQ) {
         const a = 8 + (i % 15);
         const b = 2 + ((i * 7) % 12);
@@ -2060,19 +2067,25 @@ export default function StudyPlan() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label>Loại câu hỏi</Label>
-                <Select
-                  value={practiceForm.exerciseType}
-                  onValueChange={(v) => setPracticeForm({ ...practiceForm, exerciseType: v })}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Chọn loại câu hỏi" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {exerciseTypes.map((t) => (
-                      <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex flex-wrap gap-2">
+                  {exerciseTypes.map((t) => {
+                    const checked = (practiceForm.exerciseTypes || []).includes(t.value);
+                    return (
+                      <label key={t.value} className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${checked ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={(c) => {
+                            const arr = practiceForm.exerciseTypes || [];
+                            const next = c ? [...arr, t.value] : arr.filter((v) => v !== t.value);
+                            setPracticeForm({ ...practiceForm, exerciseTypes: next });
+                          }}
+                        />
+                        <span>{t.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+                <p className="text-xs text-muted-foreground">Có thể chọn nhiều loại để trộn đề.</p>
               </div>
 
               <div className="space-y-2">
@@ -2166,7 +2179,7 @@ export default function StudyPlan() {
                 onClick={generatePractice}
                 className="bg-gradient-to-r from-primary to-accent text-white"
               >
-                Tạo bài ôn
+                T��o bài ôn
               </Button>
               <Button
                 variant="outline"
