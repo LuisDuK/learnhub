@@ -976,37 +976,7 @@ export default function Login() {
                               </div>
                             </div>
 
-                            {/* Submit Button */}
-                            <div className="border-t border-gray-200 pt-4">
-                              <Button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-lg h-12 text-lg"
-                                disabled={isLoading}
-                              >
-                                {isLoading ? (
-                                  <div className="flex items-center gap-2">
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    Đang tạo tài khoản...
-                                  </div>
-                                ) : (
-                                  <>
-                                    <GraduationCap className="h-5 w-5 mr-2" />
-                                    🎓 Đăng ký giáo viên
-                                  </>
-                                )}
-                              </Button>
-
-                              {/* Teacher Registration Notice */}
-                              <Alert className="border-green-200 bg-green-50 mt-4">
-                                <FileText className="h-4 w-4 text-green-600" />
-                                <AlertDescription className="text-green-800 text-sm">
-                                  📋 <strong>Lưu ý:</strong> Tài khoản giáo viên
-                                  cần được phê duyệt bởi quản trị viên trước khi
-                                  có thể sử dụng. Quá trình này thường mất 24-48
-                                  giờ.
-                                </AlertDescription>
-                              </Alert>
-                            </div>
+                            
                           </form>
                         )}
                       </DialogContent>
