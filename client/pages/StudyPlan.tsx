@@ -78,15 +78,7 @@ const weeklyPlan = [
         day: "Thứ 2",
         time: "14:00",
       },
-      {
-        id: 2,
-        subject: "literature",
-        title: "Bài thơ Quê hương",
-        duration: "60 phút",
-        status: "completed",
-        day: "Thứ 3",
-        time: "15:00",
-      },
+      
       {
         id: 3,
         subject: "english",
