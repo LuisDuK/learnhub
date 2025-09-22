@@ -174,7 +174,7 @@ export default function StudentProfile() {
         {isEditing && (
           <Card>
             <CardHeader>
-              <CardTitle>Chỉnh sửa hồ sơ</CardTitle>
+             
               <CardDescription>Cập nhật thông tin cá nhân</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
