@@ -205,7 +205,7 @@ export default function TeacherProfile() {
             </Card>
 
             <Card>
-              <CardHeader><CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Tài liệu chứng chỉ</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2">Tài liệu chứng chỉ</CardTitle></CardHeader>
               <CardContent className="space-y-3">
                 {isEditing && (
                   <div className="space-y-3 border rounded-lg p-3">
