@@ -124,10 +124,7 @@ export default function StudentProfile() {
 
         {/* Thông tin học sinh - hiển thị kiểu như trang giáo viên */}
         <Card>
-          <CardHeader>
-            <CardTitle>Thông tin học sinh</CardTitle>
-            <CardDescription>Chi tiết hồ sơ cá nhân</CardDescription>
-          </CardHeader>
+
           <CardContent className="space-y-6">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
