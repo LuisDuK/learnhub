@@ -91,18 +91,7 @@ export default function StudentProfile() {
             </Avatar>
             <div className="flex-1">
               <h2 className="text-2xl font-semibold">{data.fullName}</h2>
-              <div className="mt-2 flex flex-wrap gap-2 text-sm text-muted-foreground">
-                <span className="inline-flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />{" "}
-                  {new Date(data.dateOfBirth).toLocaleDateString("vi-VN")}
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <School className="h-4 w-4" /> {data.school}
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <Info className="h-4 w-4" /> {data.className}
-                </span>
-              </div>
+              {/* Thông tin chi tiết được đưa xuống thẻ bên dưới, không hiển thị trên thanh này nữa */}
               <div className="mt-3 flex gap-2">
                 <Badge variant="secondary">Học sinh</Badge>
                 <Badge variant="outline">Đang theo học</Badge>
@@ -127,128 +116,129 @@ export default function StudentProfile() {
                   <Button onClick={handleSave}>Lưu thay đổi</Button>
                 </div>
               ) : (
-                <Button onClick={() => setIsEditing(true)}>Chỉnh sửa</Button>
+                <Button onClick={() => { setForm({ ...(data as any), newPassword: "", confirmPassword: "" }); setIsEditing(true); }}>Chỉnh sửa</Button>
               )}
             </div>
           </CardContent>
         </Card>
 
-        {/* Edit form */}
-        {isEditing && (
-          <Card>
-            <CardHeader>
-              <CardDescription>Cập nhật thông tin cá nhân</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="fullName" className="flex items-center gap-1">
-                    <User className="h-4 w-4" /> Họ và tên
-                  </Label>
+        {/* Thông tin học sinh - hiển thị kiểu như trang giáo viên */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Thông tin học sinh</CardTitle>
+            <CardDescription>Chi tiết hồ sơ cá nhân</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Họ và tên</Label>
+                {isEditing ? (
                   <Input
-                    id="fullName"
                     value={form.fullName}
                     onChange={(e) => setForm({ ...form, fullName: e.target.value })}
                   />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="dob" className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" /> Ngày sinh
-                  </Label>
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded">{data.fullName}</div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label>Ngày sinh</Label>
+                {isEditing ? (
                   <Input
-                    id="dob"
                     type="date"
                     value={form.dateOfBirth}
                     onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })}
                   />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="address" className="flex items-center gap-1">
-                    <MapPin className="h-4 w-4" /> Địa chỉ
-                  </Label>
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded">
+                    {new Date(data.dateOfBirth).toLocaleDateString("vi-VN")}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label>Lớp</Label>
+                {isEditing ? (
                   <Input
-                    id="address"
-                    value={(form as any).address || ""}
-                    onChange={(e) => setForm({ ...form, address: e.target.value } as any)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="className" className="flex items-center gap-1">
-                    <Info className="h-4 w-4" /> Lớp
-                  </Label>
-                  <Input
-                    id="className"
                     value={form.className}
                     onChange={(e) => setForm({ ...form, className: e.target.value })}
                   />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="school" className="flex items-center gap-1">
-                    <School className="h-4 w-4" /> Trường
-                  </Label>
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded">{data.className}</div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label>Trường</Label>
+                {isEditing ? (
                   <Input
-                    id="school"
                     value={form.school}
                     onChange={(e) => setForm({ ...form, school: e.target.value })}
                   />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="avatar" className="flex items-center gap-1">
-                    Ảnh đại diện (URL)
-                  </Label>
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded">{data.school}</div>
+                )}
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label>Địa chỉ</Label>
+                {isEditing ? (
                   <Input
-                    id="avatar"
+                    value={(form as any).address || ""}
+                    onChange={(e) =>
+                      setForm({ ...(form as any), address: e.target.value })
+                    }
+                  />
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded">{data.address}</div>
+                )}
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label>Ảnh đại diện (URL)</Label>
+                {isEditing ? (
+                  <Input
                     value={form.avatar}
                     onChange={(e) => setForm({ ...form, avatar: e.target.value })}
                   />
-                </div>
+                ) : (
+                  <div className="p-2 bg-gray-50 rounded break-all">{data.avatar}</div>
+                )}
               </div>
+            </div>
 
-              <Separator />
-
-              <div className="grid gap-3 md:grid-cols-3">
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword" className="flex items-center gap-1">
-                    <Key className="h-4 w-4" /> Mật khẩu mới
-                  </Label>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    value={(form as any).newPassword}
-                    onChange={(e) => setForm({ ...(form as any), newPassword: e.target.value })}
-                  />
+            {isEditing && (
+              <>
+                <Separator />
+                <div className="grid gap-3 md:grid-cols-3">
+                  <div className="space-y-2">
+                    <Label className="flex items-center gap-1">
+                      <Key className="h-4 w-4" /> Mật khẩu mới
+                    </Label>
+                    <Input
+                      type="password"
+                      value={(form as any).newPassword}
+                      onChange={(e) =>
+                        setForm({ ...(form as any), newPassword: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Xác nhận mật khẩu</Label>
+                    <Input
+                      type="password"
+                      value={(form as any).confirmPassword}
+                      onChange={(e) =>
+                        setForm({ ...(form as any), confirmPassword: e.target.value })
+                      }
+                    />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    value={(form as any).confirmPassword}
-                    onChange={(e) =>
-                      setForm({ ...(form as any), confirmPassword: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setIsEditing(false);
-                      setForm({
-                        ...(data as any),
-                        newPassword: "",
-                        confirmPassword: "",
-                      });
-                    }}
-                  >
-                    Hủy
-                  </Button>
-                  <Button onClick={handleSave}>Lưu thay đổi</Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+              </>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Contact */}
         <Card>
