@@ -946,7 +946,17 @@ export default function StudyPlan() {
             </p>
           </div>
           <div className="flex gap-3">
-            
+            <Button
+              onClick={() => {
+                localStorage.removeItem("studyGoalSet");
+                localStorage.removeItem("studyGoal");
+                setShowGoalDialog(true);
+              }}
+              variant="outline"
+              className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl"
+            >
+              🔄 Reset lộ trình học
+            </Button>
             <Button
               onClick={startCreatePlan}
               variant="outline"
@@ -2044,26 +2054,7 @@ export default function StudyPlan() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2 col-span-2">
-                <Label>Liên kết với mục tiêu</Label>
-                <Select
-                  value={practiceForm.goalId}
-                  onValueChange={(v) =>
-                    setPracticeForm({ ...practiceForm, goalId: v })
-                  }
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {studyGoals.map((g) => (
-                      <SelectItem key={g.id} value={g.id}>
-                        {g.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            
             </div>
 
             <div className="space-y-4">
