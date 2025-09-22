@@ -150,7 +150,6 @@ export default function TeacherProfile() {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           
-
           <TabsContent value="personal" className="space-y-6">
             <Card>
               <CardHeader><CardTitle className="flex items-center gap-2"><User className="h-5 w-5" />Thông tin cơ bản</CardTitle></CardHeader>
