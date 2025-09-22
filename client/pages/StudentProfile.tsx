@@ -8,19 +8,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, User, School, Target, Info, Key, MapPin } from "lucide-react";
+import { Calendar, User, School, Info, Key, MapPin } from "lucide-react";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { DashboardLayout } from "@/components/DashboardLayout";
@@ -32,7 +23,6 @@ interface StudentProfileData {
   school: string;
   address: string;
   avatar: string;
-  studyGoals: string[];
 }
 
 const mockStudent: StudentProfileData = {
@@ -42,16 +32,10 @@ const mockStudent: StudentProfileData = {
   school: "Tiểu học Chu Văn An",
   address: "123 Đường ABC, Quận 1, TP.HCM",
   avatar: "/placeholder.svg",
-  studyGoals: [
-    "Hoàn thành Toán lớp 3 với điểm > 9.0",
-    "Đọc hiểu tốt các đoạn văn ngắn",
-    "Giao tiếp tiếng Anh cơ bản",
-  ],
 };
 
 export default function StudentProfile() {
   const [data, setData] = useState<StudentProfileData>(mockStudent);
-  const [openGoalIdx, setOpenGoalIdx] = useState<number | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
     ...mockStudent,
@@ -98,8 +82,6 @@ export default function StudentProfile() {
   return (
     <DashboardLayout>
       <div className="space-y-6 p-6">
-       
-
         {/* Overview */}
         <Card>
           <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center gap-6">
@@ -124,18 +106,6 @@ export default function StudentProfile() {
               <div className="mt-3 flex gap-2">
                 <Badge variant="secondary">Học sinh</Badge>
                 <Badge variant="outline">Đang theo học</Badge>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
-              <div className="text-center">
-                <div className="text-xl font-bold text-primary">
-                  {data.studyGoals.length}
-                </div>
-                <div className="text-xs text-muted-foreground">Mục tiêu</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-primary">1</div>
-                <div className="text-xs text-muted-foreground">Thông tin trường</div>
               </div>
             </div>
             <div className="ml-auto">
@@ -167,7 +137,6 @@ export default function StudentProfile() {
         {isEditing && (
           <Card>
             <CardHeader>
-             
               <CardDescription>Cập nhật thông tin cá nhân</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -261,105 +230,41 @@ export default function StudentProfile() {
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setIsEditing(false);
-                    setForm({
-                      ...(data as any),
-                      newPassword: "",
-                      confirmPassword: "",
-                    });
-                  }}
-                >
-                  Hủy
-                </Button>
-                <Button onClick={handleSave}>Lưu thay đổi</Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsEditing(false);
+                      setForm({
+                        ...(data as any),
+                        newPassword: "",
+                        confirmPassword: "",
+                      });
+                    }}
+                  >
+                    Hủy
+                  </Button>
+                  <Button onClick={handleSave}>Lưu thay đổi</Button>
+                </div>
               </div>
-              </div>
-
-              
             </CardContent>
           </Card>
         )}
 
-        {/* Tabs */}
-        <Tabs defaultValue="goals" className="space-y-6">
-         
-
-          {/* Goals */}
-          <TabsContent value="goals">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" /> Mục tiêu học tập
-                </CardTitle>
-                <CardDescription>
-                  Danh sách mục tiêu hiện tại của học sinh
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {data.studyGoals.map((g, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-card/50"
-                  >
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-primary/10 text-primary">#{idx + 1}</Badge>
-                      <span>{g}</span>
-                    </div>
-                    <Dialog
-                      open={openGoalIdx === idx}
-                      onOpenChange={(o) => setOpenGoalIdx(o ? idx : null)}
-                    >
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
-                          Xem chi tiết
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Chi tiết mục tiêu #{idx + 1}</DialogTitle>
-                          <DialogDescription>
-                            Mục tiêu cụ thể và gợi ý thực hiện
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-2">
-                          <p className="font-medium">{g}</p>
-                          <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
-                            <li>Chia nhỏ thành các mốc theo tuần</li>
-                            <li>Theo dõi tiến độ trên trang Tiến độ</li>
-                            <li>Nhận nhắc nhở phù hợp lịch học</li>
-                          </ul>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Contact */}
-          <TabsContent value="contact">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  Thông tin liên hệ
-                </CardTitle>
-                <CardDescription>Thông tin liên hệ của nhà trường</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="p-3 rounded-lg border">
-                  <div className="font-medium">Trường</div>
-                  <div className="text-sm text-muted-foreground">
-                    {data.school} • Phòng giáo vụ
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+        {/* Contact */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">Thông tin liên hệ</CardTitle>
+            <CardDescription>Thông tin liên hệ của nhà trường</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="p-3 rounded-lg border">
+              <div className="font-medium">Trường</div>
+              <div className="text-sm text-muted-foreground">
+                {data.school} • Phòng giáo vụ
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );
