@@ -139,7 +139,8 @@ export default function TeacherAIGenerator() {
     topic: "",
     ageGroup: "",
     difficulty: "",
-    exerciseType: "",
+    exerciseType: "", // legacy single select (kept for compatibility)
+    exerciseTypes: ["multiple_choice", "essay"] as string[],
     count: 5,
     duration: 30,
     language: "vietnamese",
@@ -181,7 +182,11 @@ export default function TeacherAIGenerator() {
     }
 
     // Generate mock exercises based on form data
+    const allowed = (formData.exerciseTypes && formData.exerciseTypes.length)
+      ? formData.exerciseTypes
+      : exerciseTypes.map((t) => t.value);
     const generated = mockGeneratedExercises
+      .filter((exercise) => allowed.includes(exercise.type))
       .map((exercise, index) => ({
         ...exercise,
         id: Date.now() + index,
@@ -209,9 +214,10 @@ export default function TeacherAIGenerator() {
   };
 
   const addManualQuestion = () => {
+    const pickedType = (formData.exerciseTypes && formData.exerciseTypes[0]) || formData.exerciseType || "multiple_choice";
     const newQ = {
       id: Date.now(),
-      type: formData.exerciseType || "multiple_choice",
+      type: pickedType,
       question: `Câu hỏi thủ công: ${formData.topic || "(chủ đề)"}`,
       options: ["A","B","C","D"],
       correctAnswer: "A",
@@ -256,7 +262,7 @@ export default function TeacherAIGenerator() {
       published: false,
     };
     setGenerationHistory((h) => [item, ...h]);
-    toast({ title: "Đã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
+    toast({ title: "Đã lưu", description: "Bộ bài ôn ��ã được lưu (giả lập)." });
   };
 
   const handleExportAll = () => {
@@ -596,24 +602,26 @@ export default function TeacherAIGenerator() {
 
                     {formData.inputMode === "description" && (
                       <div className="space-y-2">
-                        <Label htmlFor="exerciseType">Loại câu hỏi</Label>
-                        <Select
-                          value={formData.exerciseType}
-                          onValueChange={(value) =>
-                            handleInputChange("exerciseType", value)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn loại câu hỏi" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {exerciseTypes.map((type) => (
-                              <SelectItem key={type.value} value={type.value}>
-                                {type.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Label>Loại câu hỏi</Label>
+                        <div className="flex flex-wrap gap-2">
+                          {exerciseTypes.map((t) => {
+                            const checked = (formData.exerciseTypes || []).includes(t.value);
+                            return (
+                              <label key={t.value} className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${checked ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                                <Checkbox
+                                  checked={checked}
+                                  onCheckedChange={(c) => {
+                                    const arr = formData.exerciseTypes || [];
+                                    const next = c ? [...arr, t.value] : arr.filter((v: string) => v !== t.value);
+                                    handleInputChange("exerciseTypes", next);
+                                  }}
+                                />
+                                <span>{t.label}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                        <p className="text-xs text-muted-foreground">Có thể chọn nhiều loại để trộn đề.</p>
                       </div>
                     )}
 
