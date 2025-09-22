@@ -260,9 +260,7 @@ export default function StudentProfile() {
                     }
                   />
                 </div>
-              </div>
-
-              <div className="flex justify-end gap-2">
+                <div className="flex justify-end gap-2">
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -278,6 +276,9 @@ export default function StudentProfile() {
                 </Button>
                 <Button onClick={handleSave}>Lưu thay đổi</Button>
               </div>
+              </div>
+
+              
             </CardContent>
           </Card>
         )}
