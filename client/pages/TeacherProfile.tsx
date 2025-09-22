@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import { TeacherLayout } from "@/components/TeacherLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -205,7 +206,7 @@ export default function TeacherProfile() {
             </Card>
 
             <Card>
-              <CardHeader><CardTitle className="flex items-center gap-2"><Label>Tài liệu chứng chỉ<Label></CardTitle></CardHeader>
+              <CardHeader><CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5" />Tài liệu chứng chỉ</CardTitle></CardHeader>
               <CardContent className="space-y-3">
                 {isEditing && (
                   <div className="space-y-3 border rounded-lg p-3">
