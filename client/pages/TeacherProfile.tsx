@@ -106,21 +106,6 @@ export default function TeacherProfile() {
   return (
     <TeacherLayout>
       <div className="space-y-6">
-        <div className="flex items-center justify-end">
-          <div className="flex gap-3">
-            {isEditing ? (
-              <>
-                <Button variant="outline" onClick={handleCancel}>Hủy</Button>
-                <Button onClick={handleSave} disabled={isSaving}>
-                  {isSaving ? (<><Clock className="h-4 w-4 mr-2 animate-spin" />Đang lưu...</>) : (<><Save className="h-4 w-4 mr-2" />Lưu thay đổi</>)}
-                </Button>
-              </>
-            ) : (
-              <Button onClick={handleEdit}><Edit className="h-4 w-4 mr-2" />Chỉnh sửa</Button>
-            )}
-          </div>
-        </div>
-
         {saveSuccess && (
           <Alert className="border-green-200 bg-green-50"><CheckCircle className="h-4 w-4 text-green-600" /><AlertDescription className="text-green-800">Thông tin đã được lưu.</AlertDescription></Alert>
         )}
@@ -140,9 +125,25 @@ export default function TeacherProfile() {
               </div>
 
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-gray-900">{currentData.fullName}</h2>
-                <p className="text-gray-600">{currentData.subject}</p>
-                <p className="text-sm text-gray-500">{currentData.school}</p>
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">{currentData.fullName}</h2>
+                    <p className="text-gray-600">{currentData.subject}</p>
+                    <p className="text-sm text-gray-500">{currentData.school}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    {isEditing ? (
+                      <>
+                        <Button variant="outline" size="sm" onClick={handleCancel}>Hủy</Button>
+                        <Button size="sm" onClick={handleSave} disabled={isSaving}>
+                          {isSaving ? (<><Clock className="h-4 w-4 mr-2 animate-spin" />Đang lưu...</>) : (<><Save className="h-4 w-4 mr-2" />Lưu thay đổi</>)}
+                        </Button>
+                      </>
+                    ) : (
+                      <Button size="sm" onClick={handleEdit}><Edit className="h-4 w-4 mr-2" />Chỉnh sửa</Button>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
