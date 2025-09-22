@@ -97,7 +97,7 @@ const weeklyPlan = [
         day: "Thứ 2",
         time: "14:00",
       },
-      
+
       {
         id: 3,
         subject: "english",
@@ -258,7 +258,13 @@ type PlanVersion = {
   plan: { phases: { title: string; lessons: Lesson[]; milestone?: string }[] };
 };
 
-type PracticeQuestion = { id: number; text: string; difficulty: string; type: "multiple_choice" | "essay"; options?: string[] };
+type PracticeQuestion = {
+  id: number;
+  text: string;
+  difficulty: string;
+  type: "multiple_choice" | "essay";
+  options?: string[];
+};
 
 export default function StudyPlan() {
   const navigate = useNavigate();
@@ -325,17 +331,26 @@ export default function StudyPlan() {
     objectiveImage: null as File | null,
     referenceDoc: null as File | null,
   });
-  const [practiceQuestions, setPracticeQuestions] = useState<PracticeQuestion[]>([]);
+  const [practiceQuestions, setPracticeQuestions] = useState<
+    PracticeQuestion[]
+  >([]);
   const [practiceSelectedLessonIds, setPracticeSelectedLessonIds] = useState<
     number[]
   >([]);
 
   const [practiceHistory, setPracticeHistory] = useState<any[]>([]);
-  const [showPracticePreviewDialog, setShowPracticePreviewDialog] = useState(false);
-  const [showPracticeAttemptDialog, setShowPracticeAttemptDialog] = useState(false);
-  const [practiceAnswers, setPracticeAnswers] = useState<Record<number, string>>({});
-  const [showPracticeHistoryDetailDialog, setShowPracticeHistoryDetailDialog] = useState(false);
-  const [practiceHistoryDetail, setPracticeHistoryDetail] = useState<any | null>(null);
+  const [showPracticePreviewDialog, setShowPracticePreviewDialog] =
+    useState(false);
+  const [showPracticeAttemptDialog, setShowPracticeAttemptDialog] =
+    useState(false);
+  const [practiceAnswers, setPracticeAnswers] = useState<
+    Record<number, string>
+  >({});
+  const [showPracticeHistoryDetailDialog, setShowPracticeHistoryDetailDialog] =
+    useState(false);
+  const [practiceHistoryDetail, setPracticeHistoryDetail] = useState<
+    any | null
+  >(null);
 
   useEffect(() => {
     try {
@@ -744,17 +759,29 @@ export default function StudyPlan() {
             : perLesson;
         for (let i = 0; i < count; i++) {
           const types = practiceForm.exerciseTypes || [];
-          const both = types.includes("multiple_choice") && types.includes("essay");
+          const both =
+            types.includes("multiple_choice") && types.includes("essay");
           const onlyMcq = types.length === 1 && types[0] === "multiple_choice";
           const onlyEssay = types.length === 1 && types[0] === "essay";
-          const isMCQ = both ? ((idx + i) % 2) === 0 : onlyMcq ? true : onlyEssay ? false : ((idx + i) % 3) !== 2;
+          const isMCQ = both
+            ? (idx + i) % 2 === 0
+            : onlyMcq
+              ? true
+              : onlyEssay
+                ? false
+                : (idx + i) % 3 !== 2;
           let text = "";
           let options: string[] | undefined;
           if (lesson.subject === "math" && isMCQ) {
             const a = 10 + ((lesson.id + i) % 20);
             const b = 3 + ((lesson.id + idx) % 15);
             const correct = a + b;
-            options = [String(correct), String(correct + 1), String(correct - 1), String(correct + 2)];
+            options = [
+              String(correct),
+              String(correct + 1),
+              String(correct - 1),
+              String(correct + 2),
+            ];
             text = `Tính: ${a} + ${b} = ?`;
           } else if (isMCQ) {
             const base = stripEmojis(lesson.title);
@@ -783,12 +810,20 @@ export default function StudyPlan() {
       return;
     }
 
-    const questions: PracticeQuestion[] = Array.from({ length: Number(numQuestions) }).map((_, i) => {
+    const questions: PracticeQuestion[] = Array.from({
+      length: Number(numQuestions),
+    }).map((_, i) => {
       const types = practiceForm.exerciseTypes || [];
       const both = types.includes("multiple_choice") && types.includes("essay");
       const onlyMcq = types.length === 1 && types[0] === "multiple_choice";
       const onlyEssay = types.length === 1 && types[0] === "essay";
-      const isMCQ = both ? (i % 2) === 0 : onlyMcq ? true : onlyEssay ? false : (i % 3) !== 2;
+      const isMCQ = both
+        ? i % 2 === 0
+        : onlyMcq
+          ? true
+          : onlyEssay
+            ? false
+            : i % 3 !== 2;
       if (subject === "math" && isMCQ) {
         const a = 8 + (i % 15);
         const b = 2 + ((i * 7) % 12);
@@ -798,11 +833,17 @@ export default function StudyPlan() {
           text: `Tính: ${a} + ${b} = ?`,
           difficulty,
           type: "multiple_choice",
-          options: [String(correct), String(correct + 1), String(correct - 1), String(correct + 2)],
+          options: [
+            String(correct),
+            String(correct + 1),
+            String(correct - 1),
+            String(correct + 2),
+          ],
         };
       }
       if (isMCQ) {
-        const subjName = subjectConfig[subject as keyof typeof subjectConfig].name;
+        const subjName =
+          subjectConfig[subject as keyof typeof subjectConfig].name;
         return {
           id: Math.floor(Date.now() + i),
           text: `${subjName} — ${topic || "chủ đề"}: Chọn phát biểu đúng`,
@@ -831,7 +872,12 @@ export default function StudyPlan() {
   const addQuestion = () => {
     setPracticeQuestions([
       ...practiceQuestions,
-      { id: Date.now(), text: "Trình bày quan điểm của em về chủ đề đã chọn.", difficulty: "medium", type: "essay" },
+      {
+        id: Date.now(),
+        text: "Trình bày quan điểm của em về chủ đề đã chọn.",
+        difficulty: "medium",
+        type: "essay",
+      },
     ]);
   };
 
@@ -983,7 +1029,7 @@ export default function StudyPlan() {
               className="bg-gradient-to-r from-secondary to-accent/70 hover:from-secondary/80 hover:to-accent/80 text-white font-bold rounded-xl shadow-lg"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Tạo bài ôn 
+              Tạo bài ôn
             </Button>
           </div>
         </div>
@@ -994,7 +1040,6 @@ export default function StudyPlan() {
             <CardTitle className="text-xl font-bold">
               📊 Tổng quan tiến độ
             </CardTitle>
-          
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -1041,10 +1086,8 @@ export default function StudyPlan() {
         <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl font-bold">
-              
               <span>📝 Lịch trình học tập</span>
             </CardTitle>
-          
           </CardHeader>
           <CardContent className="space-y-8">
             {[...new Set(lessonList.map((l) => l.week))].map((w, weekIndex) => {
@@ -1813,10 +1856,16 @@ export default function StudyPlan() {
               <h3 className="text-lg font-semibold">Danh sách bài học</h3>
               <Button
                 onClick={() => {
-                  const order: Record<string, number> = { "not-started": 0, "in-progress": 1, "completed": 2 };
+                  const order: Record<string, number> = {
+                    "not-started": 0,
+                    "in-progress": 1,
+                    completed: 2,
+                  };
                   const days = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6"];
                   const times = ["14:00", "15:00", "16:00"];
-                  const sorted = [...lessonList].sort((a, b) => (order[a.status] ?? 99) - (order[b.status] ?? 99));
+                  const sorted = [...lessonList].sort(
+                    (a, b) => (order[a.status] ?? 99) - (order[b.status] ?? 99),
+                  );
                   const mapped = sorted.map((l, idx) => ({
                     ...l,
                     week: `Tuần ${Math.floor(idx / 5) + 1}`,
@@ -1824,7 +1873,11 @@ export default function StudyPlan() {
                     time: times[idx % times.length],
                   }));
                   setLessonList(mapped);
-                  toast({ title: "Đã tự động chỉnh sửa", description: "Lộ trình đã được sắp xếp lại theo trạng thái và phân lịch học tự động." });
+                  toast({
+                    title: "Đã tự động chỉnh sửa",
+                    description:
+                      "Lộ trình đã được sắp xếp lại theo trạng thái và phân lịch học tự động.",
+                  });
                 }}
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
@@ -1979,7 +2032,7 @@ export default function StudyPlan() {
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary">
-              📝 Tạo bài ôn 
+              📝 Tạo bài ôn
             </DialogTitle>
             <DialogDescription>
               Tạo nhanh một bài ôn theo yêu cầu của học sinh
@@ -2021,26 +2074,35 @@ export default function StudyPlan() {
                 <Label>Số câu hỏi: {practiceForm.numQuestions}</Label>
                 <Slider
                   value={[practiceForm.numQuestions]}
-                  onValueChange={(v) => setPracticeForm({ ...practiceForm, numQuestions: v[0] })}
+                  onValueChange={(v) =>
+                    setPracticeForm({ ...practiceForm, numQuestions: v[0] })
+                  }
                   max={20}
                   min={1}
                   step={1}
                   className="w-full"
                 />
-                <div className="flex justify-between text-xs text-gray-500"><span>1</span><span>20</span></div>
+                <div className="flex justify-between text-xs text-gray-500">
+                  <span>1</span>
+                  <span>20</span>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label>Độ tuổi</Label>
                 <Select
                   value={practiceForm.ageGroup}
-                  onValueChange={(v) => setPracticeForm({ ...practiceForm, ageGroup: v })}
+                  onValueChange={(v) =>
+                    setPracticeForm({ ...practiceForm, ageGroup: v })
+                  }
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Chọn độ tuổi" />
                   </SelectTrigger>
                   <SelectContent>
                     {ageGroups.map((age) => (
-                      <SelectItem key={age} value={age}>{age}</SelectItem>
+                      <SelectItem key={age} value={age}>
+                        {age}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -2049,7 +2111,9 @@ export default function StudyPlan() {
                 <Label>Độ khó</Label>
                 <Select
                   value={practiceForm.difficulty}
-                  onValueChange={(v) => setPracticeForm({ ...practiceForm, difficulty: v })}
+                  onValueChange={(v) =>
+                    setPracticeForm({ ...practiceForm, difficulty: v })
+                  }
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Chọn độ khó" />
@@ -2061,7 +2125,6 @@ export default function StudyPlan() {
                   </SelectContent>
                 </Select>
               </div>
-            
             </div>
 
             <div className="space-y-4">
@@ -2069,15 +2132,25 @@ export default function StudyPlan() {
                 <Label>Loại câu hỏi</Label>
                 <div className="flex flex-wrap gap-2">
                   {exerciseTypes.map((t) => {
-                    const checked = (practiceForm.exerciseTypes || []).includes(t.value);
+                    const checked = (practiceForm.exerciseTypes || []).includes(
+                      t.value,
+                    );
                     return (
-                      <label key={t.value} className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${checked ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                      <label
+                        key={t.value}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${checked ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}
+                      >
                         <Checkbox
                           checked={checked}
                           onCheckedChange={(c) => {
                             const arr = practiceForm.exerciseTypes || [];
-                            const next = c ? [...arr, t.value] : arr.filter((v) => v !== t.value);
-                            setPracticeForm({ ...practiceForm, exerciseTypes: next });
+                            const next = c
+                              ? [...arr, t.value]
+                              : arr.filter((v) => v !== t.value);
+                            setPracticeForm({
+                              ...practiceForm,
+                              exerciseTypes: next,
+                            });
                           }}
                         />
                         <span>{t.label}</span>
@@ -2085,18 +2158,40 @@ export default function StudyPlan() {
                     );
                   })}
                 </div>
-                <p className="text-xs text-muted-foreground">Có thể chọn nhiều loại để trộn đề.</p>
+                <p className="text-xs text-muted-foreground">
+                  Có thể chọn nhiều loại để trộn đề.
+                </p>
               </div>
 
               <div className="space-y-2">
                 <Label>Nguồn yêu cầu</Label>
                 <div className="flex items-center gap-4">
                   <label className="inline-flex items-center gap-2">
-                    <input type="radio" name="practiceInputMode" checked={practiceForm.inputMode === "description"} onChange={() => setPracticeForm({ ...practiceForm, inputMode: "description" })} />
+                    <input
+                      type="radio"
+                      name="practiceInputMode"
+                      checked={practiceForm.inputMode === "description"}
+                      onChange={() =>
+                        setPracticeForm({
+                          ...practiceForm,
+                          inputMode: "description",
+                        })
+                      }
+                    />
                     <span>Mô tả yêu cầu</span>
                   </label>
                   <label className="inline-flex items-center gap-2">
-                    <input type="radio" name="practiceInputMode" checked={practiceForm.inputMode === "reference"} onChange={() => setPracticeForm({ ...practiceForm, inputMode: "reference" })} />
+                    <input
+                      type="radio"
+                      name="practiceInputMode"
+                      checked={practiceForm.inputMode === "reference"}
+                      onChange={() =>
+                        setPracticeForm({
+                          ...practiceForm,
+                          inputMode: "reference",
+                        })
+                      }
+                    />
                     <span>Tải tài liệu tham khảo</span>
                   </label>
                 </div>
@@ -2108,7 +2203,12 @@ export default function StudyPlan() {
                     <Label>Mục tiêu bài ôn</Label>
                     <Input
                       value={practiceForm.objective}
-                      onChange={(e) => setPracticeForm({ ...practiceForm, objective: e.target.value })}
+                      onChange={(e) =>
+                        setPracticeForm({
+                          ...practiceForm,
+                          objective: e.target.value,
+                        })
+                      }
                       placeholder="Ví dụ: củng cố phép cộng có nhớ..."
                     />
                   </div>
@@ -2117,11 +2217,20 @@ export default function StudyPlan() {
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={(e) => setPracticeForm({ ...practiceForm, objectiveImage: e.target.files?.[0] || null })}
+                      onChange={(e) =>
+                        setPracticeForm({
+                          ...practiceForm,
+                          objectiveImage: e.target.files?.[0] || null,
+                        })
+                      }
                     />
                     {practiceForm.objectiveImage && (
                       <div className="mt-2">
-                        <img src={URL.createObjectURL(practiceForm.objectiveImage)} alt="preview" className="h-24 object-contain border rounded" />
+                        <img
+                          src={URL.createObjectURL(practiceForm.objectiveImage)}
+                          alt="preview"
+                          className="h-24 object-contain border rounded"
+                        />
                       </div>
                     )}
                   </div>
@@ -2129,11 +2238,25 @@ export default function StudyPlan() {
               ) : (
                 <div className="space-y-2">
                   <Label>Tải tài liệu tham khảo</Label>
-                  <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" onChange={(e) => setPracticeForm({ ...practiceForm, referenceDoc: e.target.files?.[0] || null })} />
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx"
+                    onChange={(e) =>
+                      setPracticeForm({
+                        ...practiceForm,
+                        referenceDoc: e.target.files?.[0] || null,
+                      })
+                    }
+                  />
                   {practiceForm.referenceDoc && (
-                    <div className="text-sm text-muted-foreground">Tệp đã chọn: {practiceForm.referenceDoc.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                      Tệp đã chọn: {practiceForm.referenceDoc.name}
+                    </div>
                   )}
-                  <div className="text-xs text-muted-foreground">Sau khi tải lên, hệ thống sẽ tạo bài ôn tương tự nội dung trong tài liệu.</div>
+                  <div className="text-xs text-muted-foreground">
+                    Sau khi tải lên, hệ thống sẽ tạo bài ôn tương tự nội dung
+                    trong tài liệu.
+                  </div>
                 </div>
               )}
             </div>
@@ -2193,8 +2316,6 @@ export default function StudyPlan() {
             </div>
 
             <div>
-              
-
               {/* Practice history */}
               <div className="mb-3">
                 <Label className="text-sm">Lịch sử bài ôn đã tạo</Label>
@@ -2231,9 +2352,20 @@ export default function StudyPlan() {
                                 difficulty: h.difficulty,
                                 numQuestions: h.questions?.length || 0,
                               });
-                              const data = { subject: h.subject, topic: h.topic, difficulty: h.difficulty, questions: h.questions || [], createdAt: h.createdAt };
-                              localStorage.setItem("currentPractice", JSON.stringify(data));
-                              navigate("/practice-quiz", { state: { practice: data } });
+                              const data = {
+                                subject: h.subject,
+                                topic: h.topic,
+                                difficulty: h.difficulty,
+                                questions: h.questions || [],
+                                createdAt: h.createdAt,
+                              };
+                              localStorage.setItem(
+                                "currentPractice",
+                                JSON.stringify(data),
+                              );
+                              navigate("/practice-quiz", {
+                                state: { practice: data },
+                              });
                             }}
                           >
                             Làm bài
@@ -2386,11 +2518,18 @@ export default function StudyPlan() {
       </Dialog>
 
       {/* Practice Preview Dialog */}
-      <Dialog open={showPracticePreviewDialog} onOpenChange={setShowPracticePreviewDialog}>
+      <Dialog
+        open={showPracticePreviewDialog}
+        onOpenChange={setShowPracticePreviewDialog}
+      >
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-primary">📄 Đề bài ôn</DialogTitle>
-            <DialogDescription>Xem đề trước khi bắt đầu làm bài</DialogDescription>
+            <DialogTitle className="text-2xl font-bold text-primary">
+              📄 Đề bài ôn
+            </DialogTitle>
+            <DialogDescription>
+              Xem đề trước khi bắt đầu làm bài
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2">
@@ -2400,42 +2539,83 @@ export default function StudyPlan() {
                   <div className="font-semibold">Câu {i + 1}</div>
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary" className="text-xs">
-                      {q.type === "multiple_choice" ? "📋 Trắc nghiệm" : "✍️ Tự luận"}
+                      {q.type === "multiple_choice"
+                        ? "📋 Trắc nghiệm"
+                        : "✍️ Tự luận"}
                     </Badge>
-                    <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {q.difficulty}
+                    </Badge>
                   </div>
                 </div>
                 <div className="mt-1 text-sm">{q.text}</div>
                 {q.type === "multiple_choice" && q.options && (
                   <ul className="mt-2 space-y-1 text-sm list-disc pl-6">
                     {q.options.map((opt, idx) => (
-                      <li key={idx}>{String.fromCharCode(65 + idx)}. {opt}</li>
+                      <li key={idx}>
+                        {String.fromCharCode(65 + idx)}. {opt}
+                      </li>
                     ))}
                   </ul>
                 )}
                 {q.type === "essay" && (
-                  <div className="mt-2 text-xs text-muted-foreground">Dạng tự luận: học sinh sẽ nhập câu trả lời khi bắt đầu làm bài.</div>
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    Dạng tự luận: học sinh sẽ nhập câu trả lời khi bắt đầu làm
+                    bài.
+                  </div>
                 )}
               </div>
             ))}
             {practiceQuestions.length === 0 && (
-              <div className="text-sm text-muted-foreground">Chưa có câu hỏi.</div>
+              <div className="text-sm text-muted-foreground">
+                Chưa có câu hỏi.
+              </div>
             )}
           </div>
 
           <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={() => setShowPracticePreviewDialog(false)} className="flex-1">Đóng</Button>
-            <Button onClick={() => { const data = { subject: practiceForm.subject, topic: practiceForm.topic, difficulty: practiceForm.difficulty, questions: practiceQuestions, createdAt: new Date().toISOString() }; localStorage.setItem("currentPractice", JSON.stringify(data)); setShowPracticePreviewDialog(false); setShowPracticeAttemptDialog(false); navigate("/practice-quiz", { state: { practice: data } }); }} className="flex-1 bg-gradient-to-r from-primary to-accent text-white">B��t đầu làm</Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowPracticePreviewDialog(false)}
+              className="flex-1"
+            >
+              Đóng
+            </Button>
+            <Button
+              onClick={() => {
+                const data = {
+                  subject: practiceForm.subject,
+                  topic: practiceForm.topic,
+                  difficulty: practiceForm.difficulty,
+                  questions: practiceQuestions,
+                  createdAt: new Date().toISOString(),
+                };
+                localStorage.setItem("currentPractice", JSON.stringify(data));
+                setShowPracticePreviewDialog(false);
+                setShowPracticeAttemptDialog(false);
+                navigate("/practice-quiz", { state: { practice: data } });
+              }}
+              className="flex-1 bg-gradient-to-r from-primary to-accent text-white"
+            >
+              B��t đầu làm
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Practice Attempt Dialog */}
-      <Dialog open={showPracticeAttemptDialog} onOpenChange={setShowPracticeAttemptDialog}>
+      <Dialog
+        open={showPracticeAttemptDialog}
+        onOpenChange={setShowPracticeAttemptDialog}
+      >
         <DialogContent className="sm:max-w-4xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-primary">🧠 Làm bài ôn</DialogTitle>
-            <DialogDescription>Nhập câu trả lời cho từng câu hỏi</DialogDescription>
+            <DialogTitle className="text-2xl font-bold text-primary">
+              🧠 Làm bài ôn
+            </DialogTitle>
+            <DialogDescription>
+              Nhập câu trả lời cho từng câu hỏi
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-2">
@@ -2444,22 +2624,36 @@ export default function StudyPlan() {
                 <div className="flex items-center gap-2 mb-2">
                   <div className="font-semibold">Câu {i + 1}</div>
                   <Badge variant="secondary" className="text-xs">
-                    {q.type === "multiple_choice" ? "📋 Trắc nghiệm" : "✍️ Tự luận"}
+                    {q.type === "multiple_choice"
+                      ? "📋 Trắc nghiệm"
+                      : "✍️ Tự luận"}
                   </Badge>
-                  <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
+                  <Badge variant="outline" className="text-xs">
+                    {q.difficulty}
+                  </Badge>
                 </div>
                 <div className="mb-2 text-sm">{q.text}</div>
                 {q.type === "multiple_choice" && q.options ? (
                   <div className="space-y-2">
                     {q.options.map((opt, idx) => (
-                      <label key={idx} className="flex items-center gap-2 p-2 rounded border">
+                      <label
+                        key={idx}
+                        className="flex items-center gap-2 p-2 rounded border"
+                      >
                         <input
                           type="radio"
                           name={`pq-${q.id}`}
                           checked={practiceAnswers[q.id] === opt}
-                          onChange={() => setPracticeAnswers((prev) => ({ ...prev, [q.id]: opt }))}
+                          onChange={() =>
+                            setPracticeAnswers((prev) => ({
+                              ...prev,
+                              [q.id]: opt,
+                            }))
+                          }
                         />
-                        <span>{String.fromCharCode(65 + idx)}. {opt}</span>
+                        <span>
+                          {String.fromCharCode(65 + idx)}. {opt}
+                        </span>
                       </label>
                     ))}
                   </div>
@@ -2467,19 +2661,32 @@ export default function StudyPlan() {
                   <Textarea
                     placeholder="Nhập câu trả lời..."
                     value={practiceAnswers[q.id] || ""}
-                    onChange={(e) => setPracticeAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                    onChange={(e) =>
+                      setPracticeAnswers((prev) => ({
+                        ...prev,
+                        [q.id]: e.target.value,
+                      }))
+                    }
                     className="min-h-[90px]"
                   />
                 )}
               </div>
             ))}
             {practiceQuestions.length === 0 && (
-              <div className="text-sm text-muted-foreground">Chưa có câu hỏi.</div>
+              <div className="text-sm text-muted-foreground">
+                Chưa có câu hỏi.
+              </div>
             )}
           </div>
 
           <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={() => setShowPracticeAttemptDialog(false)} className="flex-1">Hủy</Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowPracticeAttemptDialog(false)}
+              className="flex-1"
+            >
+              Hủy
+            </Button>
             <Button
               onClick={() => {
                 const attempt = {
@@ -2495,7 +2702,10 @@ export default function StudyPlan() {
                 const attempts = attemptsRaw ? JSON.parse(attemptsRaw) : [];
                 const next = [attempt, ...attempts].slice(0, 50);
                 localStorage.setItem("practiceAttempts", JSON.stringify(next));
-                toast({ title: "Đã nộp bài", description: "Bài ôn đã được lưu vào lịch sử." });
+                toast({
+                  title: "Đã nộp bài",
+                  description: "Bài ôn đã được lưu vào lịch sử.",
+                });
                 setShowPracticeAttemptDialog(false);
                 setPracticeAnswers({});
               }}
@@ -2508,46 +2718,70 @@ export default function StudyPlan() {
       </Dialog>
 
       {/* Practice History Detail Dialog */}
-      <Dialog open={showPracticeHistoryDetailDialog} onOpenChange={setShowPracticeHistoryDetailDialog}>
+      <Dialog
+        open={showPracticeHistoryDetailDialog}
+        onOpenChange={setShowPracticeHistoryDetailDialog}
+      >
         <DialogContent className="sm:max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-primary">📚 Chi tiết bài ôn</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-primary">
+              📚 Chi tiết bài ôn
+            </DialogTitle>
             <DialogDescription>
-              {(practiceHistoryDetail?.subject || "").toUpperCase()} — {practiceHistoryDetail?.topic || "(Không có chủ đề)"} • {practiceHistoryDetail?.questions?.length || 0} câu
+              {(practiceHistoryDetail?.subject || "").toUpperCase()} —{" "}
+              {practiceHistoryDetail?.topic || "(Không có chủ đề)"} •{" "}
+              {practiceHistoryDetail?.questions?.length || 0} câu
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-3 py-2">
-            {(practiceHistoryDetail?.questions || []).map((q: any, i: number) => (
-              <div key={q.id || i} className="p-3 border rounded-lg bg-white">
-                <div className="flex items-center justify-between">
-                  <div className="font-semibold">Câu {i + 1}</div>
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">{q.type === "multiple_choice" ? "📋 Trắc nghiệm" : "✍️ Tự luận"}</Badge>
-                    <Badge variant="outline" className="text-xs">{q.difficulty || "medium"}</Badge>
+            {(practiceHistoryDetail?.questions || []).map(
+              (q: any, i: number) => (
+                <div key={q.id || i} className="p-3 border rounded-lg bg-white">
+                  <div className="flex items-center justify-between">
+                    <div className="font-semibold">Câu {i + 1}</div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">
+                        {q.type === "multiple_choice"
+                          ? "📋 Trắc nghiệm"
+                          : "✍️ Tự luận"}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        {q.difficulty || "medium"}
+                      </Badge>
+                    </div>
                   </div>
+                  <div className="mt-1 text-sm">{q.text}</div>
+                  {q.type === "multiple_choice" && Array.isArray(q.options) && (
+                    <ul className="mt-2 space-y-1 text-sm list-disc pl-6">
+                      {q.options.map((opt: string, idx: number) => (
+                        <li key={idx}>
+                          {String.fromCharCode(65 + idx)}. {opt}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <div className="mt-1 text-sm">{q.text}</div>
-                {q.type === "multiple_choice" && Array.isArray(q.options) && (
-                  <ul className="mt-2 space-y-1 text-sm list-disc pl-6">
-                    {q.options.map((opt: string, idx: number) => (
-                      <li key={idx}>{String.fromCharCode(65 + idx)}. {opt}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
+              ),
+            )}
             {(practiceHistoryDetail?.questions || []).length === 0 && (
-              <div className="text-sm text-muted-foreground">Không có câu hỏi trong mục này.</div>
+              <div className="text-sm text-muted-foreground">
+                Không có câu hỏi trong mục này.
+              </div>
             )}
           </div>
 
           <div className="flex gap-3 pt-2">
-            <Button variant="outline" onClick={() => setShowPracticeHistoryDetailDialog(false)} className="flex-1">Đóng</Button>
+            <Button
+              variant="outline"
+              onClick={() => setShowPracticeHistoryDetailDialog(false)}
+              className="flex-1"
+            >
+              Đóng
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
-
     </DashboardLayout>
   );
 }
