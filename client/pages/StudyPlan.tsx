@@ -59,7 +59,7 @@ import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
-  { id: "midterm", label: "🎯 Ôn t��p thi giữa kỳ", duration: "2 tuần" },
+  { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở rộng từ vựng", duration: "6 tuần" },
@@ -946,17 +946,7 @@ export default function StudyPlan() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button
-              onClick={() => {
-                localStorage.removeItem("studyGoalSet");
-                localStorage.removeItem("studyGoal");
-                setShowGoalDialog(true);
-              }}
-              variant="outline"
-              className="border-orange-300 text-orange-600 hover:bg-orange-50 font-bold rounded-xl"
-            >
-              🔄 Reset lộ trình học
-            </Button>
+            
             <Button
               onClick={startCreatePlan}
               variant="outline"
