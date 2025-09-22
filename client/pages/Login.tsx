@@ -409,23 +409,7 @@ export default function Login() {
                       </div>
                     </Button>
 
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handleSocialLogin("microsoft")}
-                      className="border-gray-300 hover:bg-gray-50 rounded-xl h-12"
-                      disabled={isLoading}
-                    >
-                      <div className="flex items-center gap-2">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24">
-                          <path fill="#f25022" d="M1 1h10v10H1z" />
-                          <path fill="#00a4ef" d="M13 1h10v10H13z" />
-                          <path fill="#7fba00" d="M1 13h10v10H1z" />
-                          <path fill="#ffb900" d="M13 13h10v10H13z" />
-                        </svg>
-                        <span className="font-medium">Microsoft</span>
-                      </div>
-                    </Button>
+                   
                   </div>
                 </div>
               </TabsContent>
