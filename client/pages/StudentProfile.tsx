@@ -291,14 +291,7 @@ export default function StudentProfile() {
 
         {/* Tabs */}
         <Tabs defaultValue="goals" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="goals" className="flex items-center gap-2">
-              <Target className="h-4 w-4" /> Mục tiêu học tập
-            </TabsTrigger>
-            <TabsTrigger value="contact" className="flex items-center gap-2">
-              Thông tin liên hệ
-            </TabsTrigger>
-          </TabsList>
+         
 
           {/* Goals */}
           <TabsContent value="goals">
