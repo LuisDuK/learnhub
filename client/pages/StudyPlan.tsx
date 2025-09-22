@@ -33,6 +33,7 @@ import {
 import StudyPlanLayout from "@/components/StudyPlanLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Calendar,
@@ -58,10 +59,27 @@ import { useNavigate } from "react-router-dom";
 
 // Mock study plan data focusing on Math, Literature, English
 const studyGoals = [
-  { id: "midterm", label: "🎯 Ôn tập thi giữa kỳ", duration: "2 tuần" },
+  { id: "midterm", label: "🎯 Ôn t��p thi giữa kỳ", duration: "2 tuần" },
   { id: "grammar", label: "📚 Ôn tập ngữ pháp", duration: "3 tuần" },
   { id: "exam", label: "📝 Luyện thi cuối kỳ", duration: "4 tuần" },
   { id: "vocabulary", label: "📖 Mở rộng từ vựng", duration: "6 tuần" },
+];
+
+const ageGroups = [
+  "5-6 tuổi",
+  "6-7 tuổi",
+  "7-8 tuổi",
+  "8-9 tuổi",
+  "9-10 tuổi",
+  "10-12 tuổi",
+];
+const exerciseTypes = [
+  { value: "multiple_choice", label: "Trắc nghiệm" },
+  { value: "short_answer", label: "Trả lời ngắn" },
+  { value: "essay", label: "Tự luận" },
+  { value: "true_false", label: "Đúng/Sai" },
+  { value: "fill_blank", label: "Điền từ" },
+  { value: "matching", label: "Nối từ" },
 ];
 
 const weeklyPlan = [
@@ -299,6 +317,12 @@ export default function StudyPlan() {
     numQuestions: 5,
     difficulty: "medium",
     goalId: "midterm",
+    ageGroup: "",
+    exerciseType: "multiple_choice",
+    inputMode: "description",
+    objective: "",
+    objectiveImage: null as File | null,
+    referenceDoc: null as File | null,
   });
   const [practiceQuestions, setPracticeQuestions] = useState<PracticeQuestion[]>([]);
   const [practiceSelectedLessonIds, setPracticeSelectedLessonIds] = useState<
@@ -718,7 +742,8 @@ export default function StudyPlan() {
             ? Number(numQuestions) - questions.length
             : perLesson;
         for (let i = 0; i < count; i++) {
-          const isMCQ = ((idx + i) % 3) !== 2;
+          const prefer = practiceForm.exerciseType;
+          const isMCQ = prefer === "multiple_choice" ? true : prefer === "essay" ? false : ((idx + i) % 3) !== 2;
           let text = "";
           let options: string[] | undefined;
           if (lesson.subject === "math" && isMCQ) {
@@ -755,7 +780,8 @@ export default function StudyPlan() {
     }
 
     const questions: PracticeQuestion[] = Array.from({ length: Number(numQuestions) }).map((_, i) => {
-      const isMCQ = (i % 3) !== 2;
+      const prefer = practiceForm.exerciseType;
+      const isMCQ = prefer === "multiple_choice" ? true : prefer === "essay" ? false : (i % 3) !== 2;
       if (subject === "math" && isMCQ) {
         const a = 8 + (i % 15);
         const b = 2 + ((i * 7) % 12);
@@ -1985,28 +2011,41 @@ export default function StudyPlan() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Số câu hỏi</Label>
-                <Input
-                  type="number"
-                  value={String(practiceForm.numQuestions)}
-                  onChange={(e) =>
-                    setPracticeForm({
-                      ...practiceForm,
-                      numQuestions: Number(e.target.value),
-                    })
-                  }
+                <Label>Số câu hỏi: {practiceForm.numQuestions}</Label>
+                <Slider
+                  value={[practiceForm.numQuestions]}
+                  onValueChange={(v) => setPracticeForm({ ...practiceForm, numQuestions: v[0] })}
+                  max={20}
+                  min={1}
+                  step={1}
+                  className="w-full"
                 />
+                <div className="flex justify-between text-xs text-gray-500"><span>1</span><span>20</span></div>
+              </div>
+              <div className="space-y-2">
+                <Label>Độ tuổi</Label>
+                <Select
+                  value={practiceForm.ageGroup}
+                  onValueChange={(v) => setPracticeForm({ ...practiceForm, ageGroup: v })}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Chọn độ tuổi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ageGroups.map((age) => (
+                      <SelectItem key={age} value={age}>{age}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label>Độ khó</Label>
                 <Select
                   value={practiceForm.difficulty}
-                  onValueChange={(v) =>
-                    setPracticeForm({ ...practiceForm, difficulty: v })
-                  }
+                  onValueChange={(v) => setPracticeForm({ ...practiceForm, difficulty: v })}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Chọn độ khó" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="easy">Dễ</SelectItem>
@@ -2035,6 +2074,74 @@ export default function StudyPlan() {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Loại câu hỏi</Label>
+                <Select
+                  value={practiceForm.exerciseType}
+                  onValueChange={(v) => setPracticeForm({ ...practiceForm, exerciseType: v })}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Chọn loại câu hỏi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {exerciseTypes.map((t) => (
+                      <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Nguồn yêu cầu</Label>
+                <div className="flex items-center gap-4">
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" name="practiceInputMode" checked={practiceForm.inputMode === "description"} onChange={() => setPracticeForm({ ...practiceForm, inputMode: "description" })} />
+                    <span>Mô tả yêu cầu</span>
+                  </label>
+                  <label className="inline-flex items-center gap-2">
+                    <input type="radio" name="practiceInputMode" checked={practiceForm.inputMode === "reference"} onChange={() => setPracticeForm({ ...practiceForm, inputMode: "reference" })} />
+                    <span>Tải tài liệu tham khảo</span>
+                  </label>
+                </div>
+              </div>
+
+              {practiceForm.inputMode === "description" ? (
+                <>
+                  <div className="space-y-2">
+                    <Label>Mục tiêu bài ôn</Label>
+                    <Input
+                      value={practiceForm.objective}
+                      onChange={(e) => setPracticeForm({ ...practiceForm, objective: e.target.value })}
+                      placeholder="Ví dụ: củng cố phép cộng có nhớ..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Hoặc gửi ảnh yêu cầu</Label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setPracticeForm({ ...practiceForm, objectiveImage: e.target.files?.[0] || null })}
+                    />
+                    {practiceForm.objectiveImage && (
+                      <div className="mt-2">
+                        <img src={URL.createObjectURL(practiceForm.objectiveImage)} alt="preview" className="h-24 object-contain border rounded" />
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <Label>Tải tài liệu tham khảo</Label>
+                  <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" onChange={(e) => setPracticeForm({ ...practiceForm, referenceDoc: e.target.files?.[0] || null })} />
+                  {practiceForm.referenceDoc && (
+                    <div className="text-sm text-muted-foreground">Tệp đã chọn: {practiceForm.referenceDoc.name}</div>
+                  )}
+                  <div className="text-xs text-muted-foreground">Sau khi tải lên, hệ thống sẽ tạo bài ôn tương tự nội dung trong tài liệu.</div>
+                </div>
+              )}
             </div>
 
             <div className="border-t pt-4">
