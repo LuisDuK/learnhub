@@ -240,7 +240,7 @@ export default function StudentProfile() {
         {/* Contact */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">Thông tin liên hệ</CardTitle>
+          
             <CardDescription>Thông tin liên hệ của nhà trường</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
