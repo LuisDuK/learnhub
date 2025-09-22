@@ -734,13 +734,7 @@ export default function TeacherAIGenerator() {
                         )}
                       </Button>
 
-                      <Button variant="outline" onClick={() => {
-                        // open advanced modal or prefill using template
-                        setSelectedTemplate("");
-                        toast({ title: "Mẫu", description: "Chọn mẫu hoặc điều chỉnh yêu cầu trước khi tạo." });
-                      }}>
-                        <Wand2 className="h-4 w-4 mr-2" /> Tùy chỉnh
-                      </Button>
+                  
                     </div>
 
                     {isGenerating && (
