@@ -98,14 +98,7 @@ export default function StudentProfile() {
   return (
     <DashboardLayout>
       <div className="space-y-6 p-6">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <User className="h-7 w-7 text-primary" /> Hồ sơ học sinh
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Xem và chỉnh sửa thông tin, mục tiêu học tập
-          </p>
-        </div>
+       
 
         {/* Overview */}
         <Card>
