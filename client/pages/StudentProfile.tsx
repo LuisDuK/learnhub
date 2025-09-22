@@ -243,12 +243,22 @@ export default function StudentProfile() {
           
             <CardDescription>Thông tin liên hệ của nhà trường</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="p-3 rounded-lg border">
-              <div className="font-medium">Trường</div>
-              <div className="text-sm text-muted-foreground">
-                {data.school} • Phòng giáo vụ
-              </div>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>Trường</Label>
+              {isEditing ? (
+                <Input
+                  value={form.school}
+                  onChange={(e) => setForm({ ...form, school: e.target.value })}
+                />
+              ) : (
+                <div className="p-3 rounded-lg border">
+                  <div className="font-medium">Trường</div>
+                  <div className="text-sm text-muted-foreground">
+                    {data.school} • Phòng giáo vụ
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
