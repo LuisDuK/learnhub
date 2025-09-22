@@ -110,7 +110,6 @@ const exerciseTypes = [
   { value: "matching", label: "Nối từ" },
 ];
 
-
 import { useToast } from "@/hooks/use-toast";
 
 export default function TeacherAIGenerator() {
@@ -139,7 +138,8 @@ export default function TeacherAIGenerator() {
     topic: "",
     ageGroup: "",
     difficulty: "",
-    exerciseType: "",
+    exerciseType: "", // legacy single select (kept for compatibility)
+    exerciseTypes: ["multiple_choice", "essay"] as string[],
     count: 5,
     duration: 30,
     language: "vietnamese",
@@ -181,7 +181,12 @@ export default function TeacherAIGenerator() {
     }
 
     // Generate mock exercises based on form data
+    const allowed =
+      formData.exerciseTypes && formData.exerciseTypes.length
+        ? formData.exerciseTypes
+        : exerciseTypes.map((t) => t.value);
     const generated = mockGeneratedExercises
+      .filter((exercise) => allowed.includes(exercise.type))
       .map((exercise, index) => ({
         ...exercise,
         id: Date.now() + index,
@@ -209,11 +214,15 @@ export default function TeacherAIGenerator() {
   };
 
   const addManualQuestion = () => {
+    const pickedType =
+      (formData.exerciseTypes && formData.exerciseTypes[0]) ||
+      formData.exerciseType ||
+      "multiple_choice";
     const newQ = {
       id: Date.now(),
-      type: formData.exerciseType || "multiple_choice",
+      type: pickedType,
       question: `Câu hỏi thủ công: ${formData.topic || "(chủ đề)"}`,
-      options: ["A","B","C","D"],
+      options: ["A", "B", "C", "D"],
       correctAnswer: "A",
       explanation: "",
       difficulty: formData.difficulty || "Trung bình",
@@ -222,12 +231,18 @@ export default function TeacherAIGenerator() {
       estimatedTime: "2 phút",
     };
     setGeneratedContent((g) => [...g, newQ]);
-    toast({ title: "Thêm câu", description: "Đã thêm câu hỏi thủ công vào cuối danh sách." });
+    toast({
+      title: "Thêm câu",
+      description: "Đã thêm câu hỏi thủ công vào cuối danh sách.",
+    });
   };
 
   const handleSaveExercise = (exercise: any) => {
     // Mock save to course
-    toast({ title: "Đã lưu câu hỏi", description: "Câu hỏi được lưu vào kho bài tập (giả lập)." });
+    toast({
+      title: "Đã lưu câu hỏi",
+      description: "Câu hỏi được lưu vào kho bài tập (giả lập).",
+    });
   };
 
   const handlePublishAll = () => {
@@ -242,7 +257,10 @@ export default function TeacherAIGenerator() {
       published: true,
     };
     setGenerationHistory((h) => [item, ...h]);
-    toast({ title: "Đã xuất bản", description: "Bài ôn đ�� được xuất bản (giả lập)." });
+    toast({
+      title: "Đã xuất bản",
+      description: "Bài ôn đ�� được xuất bản (giả lập).",
+    });
   };
 
   const handleSaveAll = () => {
@@ -256,7 +274,10 @@ export default function TeacherAIGenerator() {
       published: false,
     };
     setGenerationHistory((h) => [item, ...h]);
-    toast({ title: "Đã lưu", description: "Bộ bài ôn đã được lưu (giả lập)." });
+    toast({
+      title: "Đã lưu",
+      description: "Bộ bài ôn ��ã được lưu (giả lập).",
+    });
   };
 
   const handleExportAll = () => {
@@ -296,7 +317,9 @@ export default function TeacherAIGenerator() {
   };
 
   const saveEdit = (id: number, patch: any) => {
-    setGeneratedContent((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+    setGeneratedContent((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+    );
     setEditingId(null);
     toast({ title: "Đã lưu", description: "Câu hỏi đã được cập nhật." });
   };
@@ -329,7 +352,9 @@ export default function TeacherAIGenerator() {
               ) : (
                 <Select
                   value={exercise.difficulty}
-                  onValueChange={(v) => saveEdit(exercise.id, { difficulty: v })}
+                  onValueChange={(v) =>
+                    saveEdit(exercise.id, { difficulty: v })
+                  }
                 >
                   <SelectTrigger className="w-[120px]"></SelectTrigger>
                   <SelectContent>
@@ -345,28 +370,60 @@ export default function TeacherAIGenerator() {
             <div className="flex gap-2">
               {!isEditing ? (
                 <>
-                  <Button size="sm" variant="outline" onClick={() => startEdit(exercise.id)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => startEdit(exercise.id)}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => {
-                    navigator.clipboard?.writeText(JSON.stringify(exercise, null, 2));
-                    toast({ title: "Đã sao ch��p", description: "Câu hỏi đã được sao chép vào clipboard." });
-                  }}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      navigator.clipboard?.writeText(
+                        JSON.stringify(exercise, null, 2),
+                      );
+                      toast({
+                        title: "Đã sao ch��p",
+                        description: "Câu hỏi đã được sao chép vào clipboard.",
+                      });
+                    }}
+                  >
                     <Copy className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" onClick={() => handleSaveExercise(exercise)}>
+                  <Button
+                    size="sm"
+                    onClick={() => handleSaveExercise(exercise)}
+                  >
                     <Save className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => setGeneratedContent((s) => s.filter((x) => x.id !== exercise.id))}>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() =>
+                      setGeneratedContent((s) =>
+                        s.filter((x) => x.id !== exercise.id),
+                      )
+                    }
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </>
               ) : (
                 <>
-                  <Button size="sm" variant="outline" onClick={() => saveEdit(exercise.id, { ...exercise })}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => saveEdit(exercise.id, { ...exercise })}
+                  >
                     Lưu
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => setEditingId(null)}>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setEditingId(null)}
+                  >
                     Huỷ
                   </Button>
                 </>
@@ -378,36 +435,67 @@ export default function TeacherAIGenerator() {
           {!isEditing ? (
             <>
               <div>
-                <Label className="text-sm font-medium text-gray-700">Câu hỏi:</Label>
+                <Label className="text-sm font-medium text-gray-700">
+                  Câu hỏi:
+                </Label>
                 <p className="mt-1 text-gray-900">{exercise.question}</p>
               </div>
 
               {exercise.type === "multiple_choice" && (
                 <div>
-                  <Label className="text-sm font-medium text-gray-700">Các lựa chọn:</Label>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Các lựa chọn:
+                  </Label>
                   <div className="mt-2 space-y-1">
-                    {exercise.options.map((option: string, optionIndex: number) => (
-                      <div key={optionIndex} className="flex items-center gap-2">
-                        <span className="font-medium text-sm w-6">{String.fromCharCode(65 + optionIndex)}.</span>
-                        <span className={String.fromCharCode(65 + optionIndex) === exercise.correctAnswer ? "text-green-600 font-medium" : "text-gray-700"}>{option}</span>
-                        {String.fromCharCode(65 + optionIndex) === exercise.correctAnswer && <CheckCircle className="h-4 w-4 text-green-600" />}
-                      </div>
-                    ))}
+                    {exercise.options.map(
+                      (option: string, optionIndex: number) => (
+                        <div
+                          key={optionIndex}
+                          className="flex items-center gap-2"
+                        >
+                          <span className="font-medium text-sm w-6">
+                            {String.fromCharCode(65 + optionIndex)}.
+                          </span>
+                          <span
+                            className={
+                              String.fromCharCode(65 + optionIndex) ===
+                              exercise.correctAnswer
+                                ? "text-green-600 font-medium"
+                                : "text-gray-700"
+                            }
+                          >
+                            {option}
+                          </span>
+                          {String.fromCharCode(65 + optionIndex) ===
+                            exercise.correctAnswer && (
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                          )}
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
               )}
 
               {exercise.type === "short_answer" && (
                 <div>
-                  <Label className="text-sm font-medium text-gray-700">Đáp án:</Label>
-                  <p className="mt-1 text-green-600 font-medium">{exercise.correctAnswer}</p>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Đáp án:
+                  </Label>
+                  <p className="mt-1 text-green-600 font-medium">
+                    {exercise.correctAnswer}
+                  </p>
                 </div>
               )}
 
               {exercise.explanation && (
                 <div>
-                  <Label className="text-sm font-medium text-gray-700">Giải thích:</Label>
-                  <p className="mt-1 text-gray-600 text-sm">{exercise.explanation}</p>
+                  <Label className="text-sm font-medium text-gray-700">
+                    Giải thích:
+                  </Label>
+                  <p className="mt-1 text-gray-600 text-sm">
+                    {exercise.explanation}
+                  </p>
                 </div>
               )}
 
@@ -420,15 +508,66 @@ export default function TeacherAIGenerator() {
             <div className="space-y-3">
               <div>
                 <Label className="text-sm">Chỉnh sửa câu hỏi</Label>
-                <Input value={exercise.question} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, question: e.target.value } : p))} />
+                <Input
+                  value={exercise.question}
+                  onChange={(e) =>
+                    setGeneratedContent((prev) =>
+                      prev.map((p) =>
+                        p.id === exercise.id
+                          ? { ...p, question: e.target.value }
+                          : p,
+                      ),
+                    )
+                  }
+                />
               </div>
               {exercise.type === "multiple_choice" && (
                 <div className="space-y-2">
                   {exercise.options.map((opt: string, i: number) => (
                     <div key={i} className="flex items-center gap-2">
-                      <span className="w-6">{String.fromCharCode(65 + i)}.</span>
-                      <Input value={opt} onChange={(e) => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, options: p.options.map((o: string, idx: number) => idx === i ? e.target.value : o) } : p))} />
-                      <Button size="sm" variant={exercise.correctAnswer === String.fromCharCode(65 + i) ? "secondary" : "outline"} onClick={() => setGeneratedContent((prev) => prev.map((p) => p.id === exercise.id ? { ...p, correctAnswer: String.fromCharCode(65 + i) } : p))}>Đúng</Button>
+                      <span className="w-6">
+                        {String.fromCharCode(65 + i)}.
+                      </span>
+                      <Input
+                        value={opt}
+                        onChange={(e) =>
+                          setGeneratedContent((prev) =>
+                            prev.map((p) =>
+                              p.id === exercise.id
+                                ? {
+                                    ...p,
+                                    options: p.options.map(
+                                      (o: string, idx: number) =>
+                                        idx === i ? e.target.value : o,
+                                    ),
+                                  }
+                                : p,
+                            ),
+                          )
+                        }
+                      />
+                      <Button
+                        size="sm"
+                        variant={
+                          exercise.correctAnswer === String.fromCharCode(65 + i)
+                            ? "secondary"
+                            : "outline"
+                        }
+                        onClick={() =>
+                          setGeneratedContent((prev) =>
+                            prev.map((p) =>
+                              p.id === exercise.id
+                                ? {
+                                    ...p,
+                                    correctAnswer: String.fromCharCode(65 + i),
+                                  }
+                                : p,
+                            ),
+                          )
+                        }
+                      >
+                        Đúng
+                      </Button>
                     </div>
                   ))}
                 </div>
@@ -465,7 +604,6 @@ export default function TeacherAIGenerator() {
           </div>
         </div>
 
-
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
@@ -484,15 +622,6 @@ export default function TeacherAIGenerator() {
               {/* Generation Form */}
               <div className="lg:col-span-1">
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Wand2 className="h-5 w-5 text-purple-600" />
-                      Thông tin bài tập
-                    </CardTitle>
-                    <CardDescription>
-                      Điền thông tin để AI tạo bài tập phù hợp
-                    </CardDescription>
-                  </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="subject">Môn học *</Label>
@@ -531,14 +660,19 @@ export default function TeacherAIGenerator() {
                       <Label>Chọn bài trong lộ trình</Label>
                       <div className="flex flex-col gap-2">
                         {mockPathLessons.map((ls) => (
-                          <label key={ls.id} className="inline-flex items-center gap-2">
+                          <label
+                            key={ls.id}
+                            className="inline-flex items-center gap-2"
+                          >
                             <input
                               type="checkbox"
                               checked={formData.selectedLessons.includes(ls.id)}
                               onChange={(e) => {
                                 const next = e.target.checked
                                   ? [...formData.selectedLessons, ls.id]
-                                  : formData.selectedLessons.filter((id) => id !== ls.id);
+                                  : formData.selectedLessons.filter(
+                                      (id) => id !== ls.id,
+                                    );
                                 handleInputChange("selectedLessons", next);
                               }}
                             />
@@ -596,24 +730,37 @@ export default function TeacherAIGenerator() {
 
                     {formData.inputMode === "description" && (
                       <div className="space-y-2">
-                        <Label htmlFor="exerciseType">Loại câu hỏi</Label>
-                        <Select
-                          value={formData.exerciseType}
-                          onValueChange={(value) =>
-                            handleInputChange("exerciseType", value)
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Chọn loại câu hỏi" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {exerciseTypes.map((type) => (
-                              <SelectItem key={type.value} value={type.value}>
-                                {type.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Label>Loại câu hỏi</Label>
+                        <div className="flex flex-wrap gap-2">
+                          {exerciseTypes.map((t) => {
+                            const checked = (
+                              formData.exerciseTypes || []
+                            ).includes(t.value);
+                            return (
+                              <label
+                                key={t.value}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${checked ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}
+                              >
+                                <Checkbox
+                                  checked={checked}
+                                  onCheckedChange={(c) => {
+                                    const arr = formData.exerciseTypes || [];
+                                    const next = c
+                                      ? [...arr, t.value]
+                                      : arr.filter(
+                                          (v: string) => v !== t.value,
+                                        );
+                                    handleInputChange("exerciseTypes", next);
+                                  }}
+                                />
+                                <span>{t.label}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          Có thể chọn nhiều loại để trộn đề.
+                        </p>
                       </div>
                     )}
 
@@ -639,7 +786,6 @@ export default function TeacherAIGenerator() {
                       </div>
                     )}
 
-
                     <div className="space-y-2">
                       <Label htmlFor="inputMode">Nguồn yêu cầu</Label>
                       <div className="flex items-center gap-4">
@@ -648,7 +794,9 @@ export default function TeacherAIGenerator() {
                             type="radio"
                             name="inputMode"
                             checked={formData.inputMode === "description"}
-                            onChange={() => handleInputChange("inputMode", "description")}
+                            onChange={() =>
+                              handleInputChange("inputMode", "description")
+                            }
                           />
                           <span>Mô tả yêu cầu</span>
                         </label>
@@ -657,7 +805,9 @@ export default function TeacherAIGenerator() {
                             type="radio"
                             name="inputMode"
                             checked={formData.inputMode === "reference"}
-                            onChange={() => handleInputChange("inputMode", "reference")}
+                            onChange={() =>
+                              handleInputChange("inputMode", "reference")
+                            }
                           />
                           <span>Tải tài liệu tham khảo</span>
                         </label>
@@ -671,7 +821,9 @@ export default function TeacherAIGenerator() {
                           <Input
                             id="objective"
                             value={formData.objective}
-                            onChange={(e) => handleInputChange("objective", e.target.value)}
+                            onChange={(e) =>
+                              handleInputChange("objective", e.target.value)
+                            }
                             placeholder="Ví dụ: củng cố phép cộng có nhớ, rèn phản xạ tính nhẩm"
                           />
                         </div>
@@ -689,7 +841,9 @@ export default function TeacherAIGenerator() {
                           {formData.objectiveImage && (
                             <div className="mt-2">
                               <img
-                                src={URL.createObjectURL(formData.objectiveImage)}
+                                src={URL.createObjectURL(
+                                  formData.objectiveImage,
+                                )}
                                 alt="preview"
                                 className="h-24 object-contain border rounded"
                               />
@@ -703,22 +857,34 @@ export default function TeacherAIGenerator() {
                         <input
                           type="file"
                           accept=".pdf,.doc,.docx,.ppt,.pptx"
-                          onChange={(e) => handleInputChange("referenceDoc", e.target.files?.[0] || null)}
+                          onChange={(e) =>
+                            handleInputChange(
+                              "referenceDoc",
+                              e.target.files?.[0] || null,
+                            )
+                          }
                         />
                         {formData.referenceDoc && (
-                          <div className="text-sm text-muted-foreground">Tệp đã chọn: {formData.referenceDoc.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            Tệp đã chọn: {formData.referenceDoc.name}
+                          </div>
                         )}
-                        <div className="text-xs text-muted-foreground">Sau khi tải lên, AI sẽ tạo bài ôn tương tự nội dung trong tài liệu.</div>
+                        <div className="text-xs text-muted-foreground">
+                          Sau khi tải lên, AI sẽ tạo bài ôn tương tự nội dung
+                          trong tài liệu.
+                        </div>
                       </div>
                     )}
-
 
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handleGenerate()}
                         className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                         disabled={
-                          isGenerating || !formData.subject || !formData.topic || !formData.ageGroup
+                          isGenerating ||
+                          !formData.subject ||
+                          !formData.topic ||
+                          !formData.ageGroup
                         }
                       >
                         {isGenerating ? (
@@ -732,14 +898,6 @@ export default function TeacherAIGenerator() {
                             Tạo bài tập bằng AI
                           </>
                         )}
-                      </Button>
-
-                      <Button variant="outline" onClick={() => {
-                        // open advanced modal or prefill using template
-                        setSelectedTemplate("");
-                        toast({ title: "Mẫu", description: "Chọn mẫu hoặc điều chỉnh yêu cầu trước khi tạo." });
-                      }}>
-                        <Wand2 className="h-4 w-4 mr-2" /> Tùy chỉnh
                       </Button>
                     </div>
 
@@ -760,16 +918,24 @@ export default function TeacherAIGenerator() {
               <div className="lg:col-span-2">
                 {generatedContent.length > 0 ? (
                   <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold">
                         Bài tập được tạo ({generatedContent.length})
                       </h3>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => addManualQuestion()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => addManualQuestion()}
+                        >
                           <Plus className="h-4 w-4 mr-1" />
                           Thêm câu
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleGenerate()}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleGenerate()}
+                        >
                           <RefreshCw className="h-4 w-4 mr-1" />
                           Tạo lại
                         </Button>
@@ -777,7 +943,11 @@ export default function TeacherAIGenerator() {
                           <Save className="h-4 w-4 mr-1" />
                           Lưu tất cả
                         </Button>
-                        <Button size="sm" className="bg-green-600 text-white" onClick={() => handlePublishAll()}>
+                        <Button
+                          size="sm"
+                          className="bg-green-600 text-white"
+                          onClick={() => handlePublishAll()}
+                        >
                           <CheckCircle className="h-4 w-4 mr-1" />
                           Xuất bản
                         </Button>
@@ -863,7 +1033,6 @@ export default function TeacherAIGenerator() {
               </Card>
             )}
           </TabsContent>
-
         </Tabs>
       </div>
     </TeacherLayout>

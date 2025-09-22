@@ -700,18 +700,7 @@ export default function Courses() {
               🗑️ Xóa tất cả bộ lọc
             </Button>
 
-            {/* Fun motivational section */}
-            <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl p-4 border border-primary/20 text-center">
-              <div className="text-4xl mb-2">🌟</div>
-              <p className="text-sm font-bold text-primary mb-1">
-                Học nhiều sẽ thông minh!
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Bé đã học{" "}
-                {mockCourses.filter((c) => c.status === "completed").length} môn
-                học rồi đấy! 🎉
-              </p>
-            </div>
+           
           </div>
         </div>
       </div>

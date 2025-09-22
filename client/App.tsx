@@ -19,6 +19,7 @@ import Learn from "./pages/Learn";
 import Exercise from "./pages/Exercise";
 import ExerciseResults from "./pages/ExerciseResults";
 import Quiz from "./pages/Quiz";
+import PracticeQuiz from "./pages/PracticeQuiz";
 import NotFound from "./pages/NotFound";
 // Admin pages
 import AdminDashboard from "./pages/AdminDashboard";
@@ -84,6 +85,7 @@ function AppRoutes() {
           element={<ExerciseResults />}
         />
         <Route path="/lesson/:lessonId/quiz/:id" element={<Quiz />} />
+        <Route path="/practice-quiz" element={<PracticeQuiz />} />
 
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminDashboard />} />

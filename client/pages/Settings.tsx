@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import {
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -61,6 +62,10 @@ export default function Settings() {
     defaultGoal: "midterm",
     studyStreak: 7,
     weeklyGoalHours: 10,
+    channels: { push: true, email: false, sms: false },
+    reminderDays: ["mon", "tue", "wed", "thu", "fri"] as string[],
+    reminderTimeFrom: "18:00",
+    reminderTimeTo: "21:00",
   });
 
   const handleSaveProfile = async () => {
@@ -79,12 +84,31 @@ export default function Settings() {
     }, 1500);
   };
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("studySettings");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setStudySettings((prev) => ({
+          ...prev,
+          ...parsed,
+          channels: { push: true, email: false, sms: false, ...(parsed.channels || {}) },
+          reminderDays: Array.isArray(parsed.reminderDays) ? parsed.reminderDays : prev.reminderDays,
+          reminderTimeFrom: parsed.reminderTimeFrom || prev.reminderTimeFrom,
+          reminderTimeTo: parsed.reminderTimeTo || prev.reminderTimeTo,
+        }));
+      }
+    } catch {}
+  }, []);
+
   const handleSaveStudySettings = async () => {
     setIsLoading(true);
+    try {
+      localStorage.setItem("studySettings", JSON.stringify(studySettings));
+    } catch {}
     setTimeout(() => {
       setIsLoading(false);
-      // Show success message
-    }, 1500);
+    }, 800);
   };
 
   return (
@@ -107,15 +131,7 @@ export default function Settings() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-1 bg-primary/10">
-            <TabsTrigger
-              value="reminders"
-              className="data-[state=active]:bg-primary data-[state=active]:text-white flex items-center gap-2"
-            >
-              <Bell className="h-4 w-4" />
-              Nhắc nhở
-            </TabsTrigger>
-          </TabsList>
+         
 
           {/* Hidden legacy tabs removed for simplified reminders-only settings */}
           {/* Legacy content hidden in reminders-only mode */}
@@ -252,7 +268,7 @@ export default function Settings() {
                         <SelectValue placeholder="Chọn lớp" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Lớp 3A">📚 Lớp 3A</SelectItem>
+                        <SelectItem value="Lớp 3A">📚 L��p 3A</SelectItem>
                         <SelectItem value="Lớp 4A">📚 Lớp 4A</SelectItem>
                         <SelectItem value="Lớp 5A">📚 Lớp 5A</SelectItem>
                         <SelectItem value="Lớp 6A">📚 Lớp 6A</SelectItem>
@@ -342,7 +358,7 @@ export default function Settings() {
                     <Input
                       id="confirmPassword"
                       type="password"
-                      placeholder="Nhập lại mật khẩu mới"
+                      placeholder="Nhập lại m��t khẩu mới"
                       className="border-accent/20 focus:border-accent rounded-xl"
                     />
                   </div>
@@ -451,18 +467,10 @@ export default function Settings() {
           {/* Map study settings content into reminders tab for this simplified mode */}
           <TabsContent value="reminders" className="space-y-6">
             <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <SettingsIcon className="h-5 w-5 text-secondary" />
-                  Cài đặt nhắc nhở
-                </CardTitle>
-                <CardDescription>
-                  Tùy chỉnh thông báo và thời gian nhắc nhở học tập
-                </CardDescription>
-              </CardHeader>
+        
               <CardContent className="space-y-6">
                 {/* Study Stats */}
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="text-center p-4 rounded-xl bg-primary/10 border border-primary/20">
                     <div className="text-2xl mb-2">🔥</div>
                     <div className="text-lg font-bold text-primary">
@@ -472,15 +480,7 @@ export default function Settings() {
                       Ngày liên tiếp
                     </div>
                   </div>
-                  <div className="text-center p-4 rounded-xl bg-accent/10 border border-accent/20">
-                    <div className="text-2xl mb-2">⏰</div>
-                    <div className="text-lg font-bold text-accent">
-                      {studySettings.weeklyGoalHours}h
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Mục tiêu tuần
-                    </div>
-                  </div>
+                 
                   <div className="text-center p-4 rounded-xl bg-secondary/10 border border-secondary/20">
                     <div className="text-2xl mb-2">🎯</div>
                     <div className="text-lg font-bold text-secondary">85%</div>
@@ -496,7 +496,7 @@ export default function Settings() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
-                      <Label className="text-secondary font-medium flex items-center gap-2">
+                      <Label className="text-primary font-semibold flex items-center gap-2">
                         <Bell className="h-4 w-4" />
                         Nhắc nhở học tập hằng ngày
                       </Label>
@@ -516,105 +516,107 @@ export default function Settings() {
                   </div>
 
                   {studySettings.dailyReminder && (
-                    <div className="space-y-2 ml-6">
-                      <Label
-                        htmlFor="reminderTime"
-                        className="text-secondary font-medium flex items-center gap-1"
-                      >
-                        <Clock className="h-4 w-4" />
-                        Giờ nhắc nhở
-                      </Label>
-                      <Select
-                        value={studySettings.reminderTime}
-                        onValueChange={(value) =>
-                          setStudySettings({
-                            ...studySettings,
-                            reminderTime: value,
-                          })
-                        }
-                      >
-                        <SelectTrigger className="w-48 border-secondary/20 focus:border-secondary rounded-xl">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="18:00">
-                            🕕 18:00 (6:00 PM)
-                          </SelectItem>
-                          <SelectItem value="19:00">
-                            🕖 19:00 (7:00 PM)
-                          </SelectItem>
-                          <SelectItem value="20:00">
-                            🕗 20:00 (8:00 PM)
-                          </SelectItem>
-                          <SelectItem value="21:00">
-                            🕗 21:00 (9:00 PM)
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                    <div className="space-y-5 ml-6">
+                      {/* Channels */}
+                      <div className="space-y-2">
+                        <Label className="text-primary font-medium flex items-center gap-1">
+                          <Bell className="h-4 w-4" />
+                          Kênh nhận thông báo
+                        </Label>
+                        <div className="flex flex-wrap gap-3">
+                          <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${studySettings.channels.push ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                            <Checkbox
+                              checked={!!studySettings.channels.push}
+                              onCheckedChange={(checked) =>
+                                setStudySettings((prev) => ({
+                                  ...prev,
+                                  channels: { ...prev.channels, push: !!checked },
+                                }))
+                              }
+                            />
+                            <span>Push</span>
+                          </label>
+                          <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${studySettings.channels.email ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                            <Checkbox
+                              checked={!!studySettings.channels.email}
+                              onCheckedChange={(checked) =>
+                                setStudySettings((prev) => ({
+                                  ...prev,
+                                  channels: { ...prev.channels, email: !!checked },
+                                }))
+                              }
+                            />
+                            <span>Email</span>
+                          </label>
+                          <label className={`flex items-center gap-2 px-3 py-2 rounded-lg border ${studySettings.channels.sms ? "bg-secondary/10 border-secondary text-secondary" : "bg-white border-gray-200"}`}>
+                            <Checkbox
+                              checked={!!studySettings.channels.sms}
+                              onCheckedChange={(checked) =>
+                                setStudySettings((prev) => ({
+                                  ...prev,
+                                  channels: { ...prev.channels, sms: !!checked },
+                                }))
+                              }
+                            />
+                            <span>SMS</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Schedule */}
+                      <div className="space-y-3">
+                        <Label className="text-primary font-medium flex items-center gap-1">
+                          <Clock className="h-4 w-4" />
+                          Lịch nhắc mong muốn
+                        </Label>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <Input
+                              type="time"
+                              value={studySettings.reminderTimeFrom}
+                              onChange={(e) => setStudySettings({ ...studySettings, reminderTimeFrom: e.target.value })}
+                              className="w-36"
+                            />
+                           
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          {[
+                            { k: "mon", l: "Th 2" },
+                            { k: "tue", l: "Th 3" },
+                            { k: "wed", l: "Th 4" },
+                            { k: "thu", l: "Th 5" },
+                            { k: "fri", l: "Th 6" },
+                            { k: "sat", l: "Th 7" },
+                            { k: "sun", l: "CN" },
+                          ].map((d) => {
+                            const active = studySettings.reminderDays.includes(d.k);
+                            return (
+                              <button
+                                key={d.k}
+                                type="button"
+                                className={`px-3 py-1.5 rounded-lg border text-sm ${active ? "bg-primary/10 border-primary text-primary" : "bg-white border-gray-200"}`}
+                                onClick={() => {
+                                  setStudySettings((prev) => ({
+                                    ...prev,
+                                    reminderDays: active
+                                      ? prev.reminderDays.filter((x) => x !== d.k)
+                                      : [...prev.reminderDays, d.k],
+                                  }));
+                                }}
+                              >
+                                {d.l}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
 
                 <Separator />
 
-                {/* Default Goal */}
-                <div className="space-y-2">
-                  <Label className="text-secondary font-medium flex items-center gap-1">
-                    <Target className="h-4 w-4" />
-                    Mục tiêu mặc định
-                  </Label>
-                  <Select
-                    value={studySettings.defaultGoal}
-                    onValueChange={(value) =>
-                      setStudySettings({ ...studySettings, defaultGoal: value })
-                    }
-                  >
-                    <SelectTrigger className="border-secondary/20 focus:border-secondary rounded-xl">
-                      <SelectValue placeholder="Chọn mục tiêu" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="midterm">🎯 Thi giữa kỳ</SelectItem>
-                      <SelectItem value="final">📝 Thi cuối kỳ</SelectItem>
-                      <SelectItem value="vocabulary">
-                        📖 Ôn tập từ vựng
-                      </SelectItem>
-                      <SelectItem value="grammar">
-                        📚 Ôn tập ngữ pháp
-                      </SelectItem>
-                      <SelectItem value="practice">🏋️ Luyện thi</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Separator />
-
-                {/* Weekly Goal Hours */}
-                <div className="space-y-2">
-                  <Label className="text-secondary font-medium flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    Mục tiêu học tập hàng tuần (giờ)
-                  </Label>
-                  <Select
-                    value={studySettings.weeklyGoalHours.toString()}
-                    onValueChange={(value) =>
-                      setStudySettings({
-                        ...studySettings,
-                        weeklyGoalHours: parseInt(value),
-                      })
-                    }
-                  >
-                    <SelectTrigger className="border-secondary/20 focus:border-secondary rounded-xl">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">⏰ 5 giờ/tuần</SelectItem>
-                      <SelectItem value="8">⏰ 8 giờ/tuần</SelectItem>
-                      <SelectItem value="10">⏰ 10 giờ/tuần</SelectItem>
-                      <SelectItem value="12">⏰ 12 giờ/tuần</SelectItem>
-                      <SelectItem value="15">⏰ 15 giờ/tuần</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
 
                 <div className="flex justify-end">
                   <Button

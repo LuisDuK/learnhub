@@ -55,18 +55,7 @@ const teacherCourses = [
     createdAt: "2024-01-15",
     lastActivity: "2024-03-12",
   },
-  {
-    id: 3,
-    name: "Hình học cơ bản",
-    description: "Môn học về hình học cho trẻ em",
-    studentsCount: 18,
-    completionRate: 65,
-    status: "draft",
-    totalLessons: 10,
-    completedLessons: 6,
-    createdAt: "2024-03-01",
-    lastActivity: "2024-03-08",
-  },
+  
 ];
 
 // Mock data for recent activities
@@ -340,75 +329,11 @@ export default function TeacherDashboard() {
           {/* Recent Activities */}
           <div>
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl">Hoạt động gần đây</CardTitle>
-                <CardDescription>
-                  Cập nhật mới nhất từ môn học của bạn
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {recentActivities.map((activity) => (
-                  <div key={activity.id} className="flex items-start gap-3">
-                    <div className="flex-shrink-0 mt-0.5">
-                      {getActivityIcon(activity.type)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900">
-                        {activity.message}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <p className="text-xs text-gray-500">{activity.time}</p>
-                        <span className="text-xs text-gray-300">•</span>
-                        <p className="text-xs text-blue-600">
-                          {activity.course}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
+              
             </Card>
 
             {/* Quick Actions */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle className="text-xl">Thao tác nhanh</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/ai-generator")}
-                >
-                  <Bot className="h-4 w-4 mr-2" />
-                  Tạo bài tập bằng AI
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/lessons/new")}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm bài học mới
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/reports")}
-                >
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Xem báo cáo chi tiết
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start"
-                  onClick={() => navigate("/teacher/profile")}
-                >
-                  <GraduationCap className="h-4 w-4 mr-2" />
-                  Cập nhật hồ sơ
-                </Button>
-              </CardContent>
-            </Card>
+           
           </div>
         </div>
       </div>
