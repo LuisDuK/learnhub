@@ -338,9 +338,7 @@ export function DashboardHome() {
             🎯 Các môn học đang theo
             <Zap className="h-5 w-5 text-secondary animate-pulse" />
           </CardTitle>
-          <CardDescription>
-            Tiếp tục hành trình học tập thú vị của bé! 🚀
-          </CardDescription>
+
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
