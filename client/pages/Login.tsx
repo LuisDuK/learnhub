@@ -58,6 +58,56 @@ export default function Login() {
   const [forgotPasswordSent, setForgotPasswordSent] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
+  // Teacher registration UI state
+  const [teacherRegisterSuccess, setTeacherRegisterSuccess] = useState(false);
+  const [showTeacherPassword, setShowTeacherPassword] = useState(false);
+  const [showTeacherConfirmPassword, setShowTeacherConfirmPassword] = useState(false);
+  const [teacherForm, setTeacherForm] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    school: "",
+    subject: "",
+    experience: "",
+    qualification: "",
+    bio: "",
+  });
+
+  const resetTeacherForm = () => {
+    setTeacherForm({
+      fullName: "",
+      phone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      school: "",
+      subject: "",
+      experience: "",
+      qualification: "",
+      bio: "",
+    });
+    setTeacherRegisterSuccess(false);
+    setShowTeacherPassword(false);
+    setShowTeacherConfirmPassword(false);
+  };
+
+  const handleTeacherRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    // Very basic client-side validations
+    if (teacherForm.password !== teacherForm.confirmPassword) {
+      setIsLoading(false);
+      return;
+    }
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setTeacherRegisterSuccess(true);
+    }, 1500);
+  };
 
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -604,7 +654,7 @@ export default function Login() {
                                     htmlFor="teacherPhone"
                                     className="text-green-700 font-medium"
                                   >
-                                    Số điện thoại *
+                                    S��� điện thoại *
                                   </Label>
                                   <Input
                                     id="teacherPhone"
