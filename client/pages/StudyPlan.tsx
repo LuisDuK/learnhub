@@ -1011,9 +1011,7 @@ export default function StudyPlan() {
               
               <span>📝 Lịch trình học tập</span>
             </CardTitle>
-            <CardDescription className="text-base md:text-lg text-muted-foreground">
-              Timeline chi tiết các bài học theo tuần
-            </CardDescription>
+          
           </CardHeader>
           <CardContent className="space-y-8">
             {[...new Set(lessonList.map((l) => l.week))].map((w, weekIndex) => {
