@@ -490,15 +490,7 @@ export default function TeacherAIGenerator() {
               {/* Generation Form */}
               <div className="lg:col-span-1">
                 <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Wand2 className="h-5 w-5 text-purple-600" />
-                      Thông tin bài tập
-                    </CardTitle>
-                    <CardDescription>
-                      Điền thông tin để AI tạo bài tập phù hợp
-                    </CardDescription>
-                  </CardHeader>
+                  
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="subject">Môn học *</Label>
