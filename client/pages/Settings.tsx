@@ -467,15 +467,7 @@ export default function Settings() {
           {/* Map study settings content into reminders tab for this simplified mode */}
           <TabsContent value="reminders" className="space-y-6">
             <Card className="border-secondary/20 shadow-lg bg-gradient-to-br from-white to-secondary/5">
-              <CardHeader>
-                <CardTitle className="text-primary font-semibold flex items-center gap-2">
-                  <SettingsIcon className="h-5 w-5 text-secondary" />
-                  Cài đặt nhắc nhở
-                </CardTitle>
-                <CardDescription>
-                  Tùy chỉnh thông báo và thời gian nhắc nhở học tập
-                </CardDescription>
-              </CardHeader>
+        
               <CardContent className="space-y-6">
                 {/* Study Stats */}
                 <div className="grid gap-4 md:grid-cols-2">
