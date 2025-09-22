@@ -69,7 +69,11 @@ export default function StudentProfile() {
       return;
     }
     setTimeout(() => {
-      const { newPassword: _np, confirmPassword: _cp, ...payload } = form as any;
+      const {
+        newPassword: _np,
+        confirmPassword: _cp,
+        ...payload
+      } = form as any;
       setData(payload);
       setIsEditing(false);
       toast({
@@ -116,7 +120,18 @@ export default function StudentProfile() {
                   <Button onClick={handleSave}>Lưu thay đổi</Button>
                 </div>
               ) : (
-                <Button onClick={() => { setForm({ ...(data as any), newPassword: "", confirmPassword: "" }); setIsEditing(true); }}>Chỉnh sửa</Button>
+                <Button
+                  onClick={() => {
+                    setForm({
+                      ...(data as any),
+                      newPassword: "",
+                      confirmPassword: "",
+                    });
+                    setIsEditing(true);
+                  }}
+                >
+                  Chỉnh sửa
+                </Button>
               )}
             </div>
           </CardContent>
@@ -124,7 +139,6 @@ export default function StudentProfile() {
 
         {/* Thông tin học sinh - hiển thị kiểu như trang giáo viên */}
         <Card>
-
           <CardContent className="space-y-6">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
@@ -132,7 +146,9 @@ export default function StudentProfile() {
                 {isEditing ? (
                   <Input
                     value={form.fullName}
-                    onChange={(e) => setForm({ ...form, fullName: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, fullName: e.target.value })
+                    }
                   />
                 ) : (
                   <div className="p-2 bg-gray-50 rounded">{data.fullName}</div>
@@ -145,7 +161,9 @@ export default function StudentProfile() {
                   <Input
                     type="date"
                     value={form.dateOfBirth}
-                    onChange={(e) => setForm({ ...form, dateOfBirth: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, dateOfBirth: e.target.value })
+                    }
                   />
                 ) : (
                   <div className="p-2 bg-gray-50 rounded">
@@ -159,7 +177,9 @@ export default function StudentProfile() {
                 {isEditing ? (
                   <Input
                     value={form.className}
-                    onChange={(e) => setForm({ ...form, className: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, className: e.target.value })
+                    }
                   />
                 ) : (
                   <div className="p-2 bg-gray-50 rounded">{data.className}</div>
@@ -171,7 +191,9 @@ export default function StudentProfile() {
                 {isEditing ? (
                   <Input
                     value={form.school}
-                    onChange={(e) => setForm({ ...form, school: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, school: e.target.value })
+                    }
                   />
                 ) : (
                   <div className="p-2 bg-gray-50 rounded">{data.school}</div>
@@ -197,10 +219,14 @@ export default function StudentProfile() {
                 {isEditing ? (
                   <Input
                     value={form.avatar}
-                    onChange={(e) => setForm({ ...form, avatar: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, avatar: e.target.value })
+                    }
                   />
                 ) : (
-                  <div className="p-2 bg-gray-50 rounded break-all">{data.avatar}</div>
+                  <div className="p-2 bg-gray-50 rounded break-all">
+                    {data.avatar}
+                  </div>
                 )}
               </div>
             </div>
@@ -217,7 +243,10 @@ export default function StudentProfile() {
                       type="password"
                       value={(form as any).newPassword}
                       onChange={(e) =>
-                        setForm({ ...(form as any), newPassword: e.target.value })
+                        setForm({
+                          ...(form as any),
+                          newPassword: e.target.value,
+                        })
                       }
                     />
                   </div>
@@ -227,7 +256,10 @@ export default function StudentProfile() {
                       type="password"
                       value={(form as any).confirmPassword}
                       onChange={(e) =>
-                        setForm({ ...(form as any), confirmPassword: e.target.value })
+                        setForm({
+                          ...(form as any),
+                          confirmPassword: e.target.value,
+                        })
                       }
                     />
                   </div>
@@ -240,7 +272,6 @@ export default function StudentProfile() {
         {/* Contact */}
         <Card>
           <CardHeader>
-          
             <CardDescription>Thông tin liên hệ của nhà trường</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
