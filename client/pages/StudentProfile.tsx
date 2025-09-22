@@ -237,7 +237,7 @@ export default function StudentProfile() {
 
               <Separator />
 
-              <div className="grid gap-2 md:grid-cols-3">
+              <div className="grid gap-1 md:grid-cols-3">
                 <div className="space-y-2">
                   <Label htmlFor="newPassword" className="flex items-center gap-1">
                     <Key className="h-4 w-4" /> Mật khẩu mới
