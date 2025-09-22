@@ -54,10 +54,7 @@ export function TeacherHeader() {
           <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 p-0 text-xs text-white">3</Badge>
         </Button>
 
-        <Button variant="ghost" size="sm" className="relative">
-          <MessageSquare className="h-5 w-5" />
-          <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-green-500 p-0 text-xs text-white">7</Badge>
-        </Button>
+
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
