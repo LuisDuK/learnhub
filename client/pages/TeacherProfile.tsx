@@ -166,10 +166,7 @@ export default function TeacherProfile() {
                     {isEditing ? <Input type="date" value={currentData.dateOfBirth} onChange={(e) => handleInputChange('dateOfBirth', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded">{new Date(currentData.dateOfBirth).toLocaleDateString('vi-VN')}</div>}
                   </div>
 
-                  <div className="space-y-2 md:col-span-2">
-                    <Label>Ảnh đại diện (URL)</Label>
-                    {isEditing ? <Input value={currentData.avatar} onChange={(e) => handleInputChange('avatar', e.target.value)} /> : <div className="p-2 bg-gray-50 rounded break-all">{currentData.avatar}</div>}
-                  </div>
+                 
 
                   <div className="space-y-2 md:col-span-2">
                     <Label>Trường</Label>
